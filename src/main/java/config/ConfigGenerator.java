@@ -5,6 +5,9 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
 
 import common.Common;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +15,9 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 public class ConfigGenerator {
+
+    protected static final Logger logger = LoggerFactory.getLogger("ConfigGenerator");
+
     public boolean updateConfig(Serializable configuration, String newFile){
         // Load the original config file
         File defaultConfigFile = new File(Common.configFiled);
@@ -22,12 +28,13 @@ public class ConfigGenerator {
         for(Field field : fields ){
             String fieldName = field.getName();
             // parse to right format
-            fieldName = fieldName.replaceAll("_",".");
+            fieldName = fieldName.replace("_",".");
             Object value = null;
             try {
                 value = field.get(configuration); // get the value
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
+//                e.printStackTrace();
             }
             // generate the config string in typesafe's format
             if (value!=null) {
@@ -39,17 +46,25 @@ public class ConfigGenerator {
         Config newConfig = modifiedConfig.withFallback(defaultConfig);
         String configStr = newConfig.root().render(ConfigRenderOptions.defaults().setOriginComments(false).setComments(false).setJson(false));
         File tempConfigFile = new File(newFile);
+        FileWriter fileWriter = null;
         try{
             tempConfigFile.delete();
             tempConfigFile.createNewFile();
-            FileWriter fileWriter = new FileWriter(tempConfigFile);
+            fileWriter = new FileWriter(tempConfigFile);
             fileWriter.write(configStr);
             fileWriter.flush();
-            fileWriter.close();
+//            fileWriter.close();
         }
         catch (IOException e){
-            e.printStackTrace();
+            logger.error(e.getMessage());
+//            e.printStackTrace();
             return false;
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
         }
         return true;
     }

@@ -30,7 +30,7 @@ public class GenesisWitnessConfig implements Serializable {
 
   public GenesisWitnessConfig() {}
 
-  public void setGenesisBlockWitnesses(ArrayList<WitnessEntity> genesisWitness) {
+  public void setGenesisBlockWitnesses(List<WitnessEntity> genesisWitness) {
     this.genesis_block_witnesses = new ArrayList<>();
     genesisWitness.forEach(witness ->
         {

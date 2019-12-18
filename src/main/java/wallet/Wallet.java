@@ -1,5 +1,6 @@
 package wallet;
 
+import static common.LogConfig.LOG;
 import static java.util.Arrays.copyOfRange;
 import static org.tron.common.utils.ByteArray.toHexString;
 import static org.tron.core.Wallet.getAddressPreFixByte;
@@ -7,6 +8,7 @@ import static org.tron.core.Wallet.getAddressPreFixByte;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -25,6 +27,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.spongycastle.crypto.digests.SHA256Digest;
 import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator;
@@ -85,7 +88,7 @@ public class Wallet {
   }
 
   public static WalletFile create(byte[] password, ECKey ecKeyPair, int n, int p)
-      throws CipherException {
+          throws CipherException {
 
     byte[] salt = generateRandomBytes(32);
 
@@ -97,7 +100,7 @@ public class Wallet {
     byte[] privateKeyBytes = ecKeyPair.getPrivKeyBytes();
 
     byte[] cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey,
-        privateKeyBytes);
+            privateKeyBytes);
 
     byte[] mac = generateMac(derivedKey, cipherText);
 
@@ -105,17 +108,17 @@ public class Wallet {
   }
 
   private static byte[] generateDerivedScryptKey(
-      byte[] password, byte[] salt, int n, int r, int p, int dkLen) throws CipherException {
+          byte[] password, byte[] salt, int n, int r, int p, int dkLen) {
     return SCrypt.generate(password, salt, n, r, p, dkLen);
   }
 
   public static WalletFile createStandard(byte[] password, ECKey ecKeyPair)
-      throws CipherException {
+          throws CipherException {
     return create(password, ecKeyPair, N_STANDARD, P_STANDARD);
   }
 
   public static WalletFile createLight(byte[] password, ECKey ecKeyPair)
-      throws CipherException {
+          throws CipherException {
     return create(password, ecKeyPair, N_LIGHT, P_LIGHT);
   }
 
@@ -143,7 +146,7 @@ public class Wallet {
   }
 
   private static String generateWalletFile(WalletFile walletFile, File destinationDirectory)
-      throws IOException {
+          throws IOException {
     String fileName = getWalletFileName(walletFile);
     File destination = new File(destinationDirectory, fileName);
 
@@ -153,7 +156,7 @@ public class Wallet {
 
   private static String getWalletFileName(WalletFile walletFile) {
     DateTimeFormatter format = DateTimeFormatter.ofPattern(
-        "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
+            "'UTC--'yyyy-MM-dd'T'HH-mm-ss.nVV'--'");
     ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
 
     return now.format(format) + walletFile.getAddress() + ".json";
@@ -169,8 +172,8 @@ public class Wallet {
   }
 
   private static WalletFile createWalletFile(
-      ECKey ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
-      int n, int p) {
+          ECKey ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
+          int n, int p) {
 
     WalletFile walletFile = new WalletFile();
     walletFile.setAddress(encode58Check(ecKeyPair.getAddress()));
@@ -202,7 +205,7 @@ public class Wallet {
   }
 
   private static byte[] performCipherOperation(
-      int mode, byte[] iv, byte[] encryptKey, byte[] text) throws CipherException {
+          int mode, byte[] iv, byte[] encryptKey, byte[] text) throws CipherException {
 
     try {
       IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
@@ -212,8 +215,8 @@ public class Wallet {
       cipher.init(mode, secretKeySpec, ivParameterSpec);
       return cipher.doFinal(text);
     } catch (NoSuchPaddingException | NoSuchAlgorithmException
-        | InvalidAlgorithmParameterException | InvalidKeyException
-        | BadPaddingException | IllegalBlockSizeException e) {
+            | InvalidAlgorithmParameterException | InvalidKeyException
+            | BadPaddingException | IllegalBlockSizeException e) {
       throw new CipherException("Error performing cipher operation", e);
     }
   }
@@ -249,12 +252,12 @@ public class Wallet {
     return bytes;
   }
 
-  static public byte[] getPrivateBytes(String filePath) throws CipherException, IOException {
+  public static byte[] getPrivateBytes(String filePath) throws CipherException, IOException {
     WalletFile walletFile = loadWalletFile(filePath);
     return decrypt2PrivateBytes(new byte[]{}, walletFile);
   }
 
-  static public String getPrivateString(String filePath) throws CipherException, IOException {
+  public static String getPrivateString(String filePath) throws CipherException, IOException {
     return toHexString(getPrivateBytes(filePath));
   }
 
@@ -262,7 +265,7 @@ public class Wallet {
     File wallet = new File(filePath);
     if (wallet == null) {
       throw new IOException(
-          "No keystore file found, please use registerwallet or importwallet first!");
+              "No keystore file found, please use registerwallet or importwallet first!");
     }
     return readWalletFile(wallet);
   }
@@ -272,7 +275,7 @@ public class Wallet {
   }
 
   public static byte[] decrypt2PrivateBytes(byte[] password, WalletFile walletFile)
-      throws CipherException {
+          throws CipherException {
 
     validate(walletFile);
 
@@ -287,7 +290,7 @@ public class Wallet {
     WalletFile.KdfParams kdfParams = crypto.getKdfparams();
     if (kdfParams instanceof WalletFile.ScryptKdfParams) {
       WalletFile.ScryptKdfParams scryptKdfParams =
-          (WalletFile.ScryptKdfParams) crypto.getKdfparams();
+              (WalletFile.ScryptKdfParams) crypto.getKdfparams();
       int dklen = scryptKdfParams.getDklen();
       int n = scryptKdfParams.getN();
       int p = scryptKdfParams.getP();
@@ -296,7 +299,7 @@ public class Wallet {
       derivedKey = generateDerivedScryptKey(password, salt, n, r, p, dklen);
     } else if (kdfParams instanceof WalletFile.Aes128CtrKdfParams) {
       WalletFile.Aes128CtrKdfParams aes128CtrKdfParams =
-          (WalletFile.Aes128CtrKdfParams) crypto.getKdfparams();
+              (WalletFile.Aes128CtrKdfParams) crypto.getKdfparams();
       int c = aes128CtrKdfParams.getC();
       String prf = aes128CtrKdfParams.getPrf();
       byte[] salt = ByteArray.fromHexString(aes128CtrKdfParams.getSalt());
@@ -319,7 +322,7 @@ public class Wallet {
   }
 
   private static byte[] generateAes128CtrDerivedKey(
-      byte[] password, byte[] salt, int c, String prf) throws CipherException {
+          byte[] password, byte[] salt, int c, String prf) throws CipherException {
 
     if (!prf.equals("hmac-sha256")) {
       throw new CipherException("Unsupported prf:" + prf);
@@ -335,10 +338,10 @@ public class Wallet {
 
   public static byte[] hexs2Bytes(byte[] a) {
     if (ArrayUtils.isEmpty(a)) {
-      return null;
+      return new byte[0];
     }
     if ((a.length & 0x01) != 0) {
-      return null;
+      return new byte[0];
     }
     byte[] result = new byte[a.length / 2];
     for (int i = 0; i < result.length; i++) {
@@ -351,7 +354,7 @@ public class Wallet {
       } else if (h >= 'A' && h <= 'F') {
         result[i] = (byte) ((h - 'A' + 10) << 4);
       } else {
-        return null;
+        return new byte[0];
       }
 
       if (l >= '0' && l <= '9') {
@@ -361,9 +364,9 @@ public class Wallet {
       } else if (l >= 'A' && l <= 'F') {
         result[i] += (l - 'A' + 10);
       } else {
-        return null;
+        return new byte[0];
       }
-      h = l = 0;
+//      h = l = 0;
     }
     return result;
   }
@@ -375,25 +378,29 @@ public class Wallet {
     } else {
       eCkey = ECKey.fromPrivate(privateKey);
     }
-    System.out.println("Private Key: " + ByteArray.toHexString(eCkey.getPrivKeyBytes()));
+    String privateKeyFormatString = String.format("Private Key: %s", toHexString(eCkey.getPrivKeyBytes()));
+    LOG.info(privateKeyFormatString);
+
 
     byte[] publicKey0 = eCkey.getPubKey();
     byte[] publicKey1 = private2PublicDemo(eCkey.getPrivKeyBytes());
-    if (!Arrays.equals(publicKey0, publicKey1)){
+    if (!Arrays.equals(publicKey0, publicKey1)) {
       throw new CipherException("publickey error");
     }
-    System.out.println("Public Key: " + ByteArray.toHexString(publicKey0));
+    String publicKeyFormatString = String.format("Public Key: %s", toHexString(publicKey0));
+    LOG.info(publicKeyFormatString);
 
     byte[] address0 = eCkey.getAddress();
     byte[] address1 = public2AddressDemo(publicKey0);
-    if (!Arrays.equals(address0, address1)){
+    if (!Arrays.equals(address0, address1)) {
       throw new CipherException("address error");
     }
-    System.out.println("Address: " + ByteArray.toHexString(address0));
+    String addressFormatString = String.format("Address: %s", ByteArray.toHexString(address0));
+    LOG.info(addressFormatString);
 
     String base58checkAddress0 = encode58Check(address0);
     String base58checkAddress1 = address2Encode58CheckDemo(address0);
-    if (!base58checkAddress0.equals(base58checkAddress1)){
+    if (!base58checkAddress0.equals(base58checkAddress1)) {
       throw new CipherException("base58checkAddress error");
     }
 
@@ -408,7 +415,8 @@ public class Wallet {
 
   private static byte[] public2AddressDemo(byte[] publicKey) {
     byte[] hash = Hash.sha3(copyOfRange(publicKey, 1, publicKey.length));
-    System.out.println("sha3 = " + ByteArray.toHexString(hash));
+    String sha3FormatString = String.format("sha3 = %s", ByteArray.toHexString(hash));
+    LOG.info(sha3FormatString);
     byte[] address = copyOfRange(hash, 11, hash.length);
     address[0] = getAddressPreFixByte();
     return address;
@@ -416,17 +424,21 @@ public class Wallet {
 
   public static String address2Encode58CheckDemo(byte[] input) {
     byte[] hash0 = Sha256Hash.hash(input);
-    System.out.println("sha256_0: " + ByteArray.toHexString(hash0));
+    String sha256_0FormatString = String.format("sha256_0: %s", ByteArray.toHexString(hash0));
+    LOG.info(sha256_0FormatString);
 
     byte[] hash1 = Sha256Hash.hash(hash0);
-    System.out.println("sha256_1: " + ByteArray.toHexString(hash1));
+    String sha256_1FormatString = String.format("sha256_1: %s", ByteArray.toHexString(hash0));
+    LOG.info(sha256_1FormatString);
 
     byte[] inputCheck = new byte[input.length + 4];
-    System.out.println("checkSum: " + ByteArray.toHexString(copyOfRange(hash1, 0, 4)));
+    String checkSumFormatString = String.format("checkSum: %s", ByteArray.toHexString(copyOfRange(hash1, 0, 4)));
+    LOG.info(checkSumFormatString);
 
     System.arraycopy(input, 0, inputCheck, 0, input.length);
     System.arraycopy(hash1, 0, inputCheck, input.length, 4);
-    System.out.println("addchecksum: " + ByteArray.toHexString(inputCheck));
+    String addCheckSumFormatString = String.format("addCheckSum: %s", ByteArray.toHexString(inputCheck));
+    LOG.info(addCheckSumFormatString);
 
     return Base58.encode(inputCheck);
   }

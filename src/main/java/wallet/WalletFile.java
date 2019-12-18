@@ -3,13 +3,6 @@ package wallet;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.io.IOException;
 import org.tron.common.crypto.ECKey;
 import org.tron.keystore.CipherException;
 
@@ -23,6 +16,7 @@ public class WalletFile {
   private int version;
 
   public WalletFile() {
+    //Do nothing
   }
 
   public String getAddress() {
@@ -119,6 +113,7 @@ public class WalletFile {
     private String mac;
 
     public Crypto() {
+      //Do nothing
     }
 
     public String getCipher() {
@@ -238,6 +233,7 @@ public class WalletFile {
     private String iv;
 
     public CipherParams() {
+      //Do nothing
     }
 
     public String getIv() {
@@ -284,6 +280,7 @@ public class WalletFile {
     private String salt;
 
     public Aes128CtrKdfParams() {
+      //Do nothing
     }
 
     public int getDklen() {
@@ -362,6 +359,7 @@ public class WalletFile {
     private String salt;
 
     public ScryptKdfParams() {
+      //Do nothing
     }
 
     public int getDklen() {
