@@ -7,26 +7,26 @@ import static wallet.Wallet.hexs2Bytes;
 import static wallet.Wallet.private2Address;
 
 import common.Common;
-import common.LogConfig;
+//import common.LogConfig;
 import config.SeedNodeConfig;
-import java.util.List;
+
+//import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import common.Util;
 import entity.WitnessEntity;
 import config.GenesisWitnessConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.tron.keystore.CipherException;
 import response.Response;
 import config.ConfigGenerator;
@@ -42,18 +42,18 @@ public class NodeController {
     ConfigGenerator configGenerator = new ConfigGenerator();
 
     ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
-    for (int i = 0; i< nodes.size(); i++) {
+    for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       boolean isSR = (Boolean) node.get(Common.isSRFiled);
 
-      if (isSR == true) {
+      if (isSR) {
         witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
-            (String)node.get(Common.urlFiled), (String)node.get(Common.voteCountFiled)));
+                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
       }
     }
-    GenesisWitnessConfig witnessConfig =  new GenesisWitnessConfig();
+    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
     witnessConfig.setGenesisBlockWitnesses(witnessnodes);
-    if (configGenerator.updateConfig(witnessConfig, Common.configFiled) == false) {
+    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
       LOG.error("update witness config file failed");
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
     }
@@ -65,15 +65,15 @@ public class NodeController {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  private JSONArray  removeNodeInfo(JSONArray nodes, Long id, boolean flag) {
+  private JSONArray removeNodeInfo(JSONArray nodes, Long id, boolean flag) {
     JSONArray newNodes = new JSONArray();
-    for (int i = 0; i< nodes.size(); i++) {
+    for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       Long nodeID = (Long) node.get(Common.idFiled);
-      if (nodeID == id) {
+      if (nodeID.equals(id)) {
         String privateKeyFile = (String) node.get(Common.privateKeyFiled);
         File file = new File(String.format("%s/%s", Common.walletFiled, privateKeyFile));
-        if(file.exists() && flag){
+        if (file.exists() && flag) {
           file.delete();
         }
       } else {
@@ -84,7 +84,7 @@ public class NodeController {
   }
 
   private boolean isIpExist(JSONArray nodes, String ip) {
-    for (int i = 0; i< nodes.size(); i++) {
+    for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       String nodeIp = (String) node.get(Common.ipFiled);
       if (nodeIp.equals(ip)) {
@@ -94,21 +94,21 @@ public class NodeController {
     return false;
   }
 
-  @RequestMapping(method = RequestMethod.POST, value = "/nodeInfo")
+  @PostMapping(value = "/nodeInfo")
   public JSONObject addNode(
-      @RequestParam(value = "id", required = false, defaultValue = "1") Long id,
-      @RequestParam(value = "userName", required = false, defaultValue = "node1") String userName,
-      @RequestParam(value = "ip", required = false, defaultValue = "127.0.0.1") String ip,
-      @RequestParam(value = "port", required = false, defaultValue = "8090") int port,
-      @RequestParam(value = "isSR", required = false, defaultValue = "false") boolean isSR,
-      @RequestParam(value = "url", required = false, defaultValue = "") String url,
-      @RequestParam(value = "privateKey", required = false, defaultValue = "") String privateKey,
-      @RequestParam(value = "voteCount", required = false, defaultValue = "104") String voteCount,
-      @RequestParam(value = "needSyncCheck", required = false, defaultValue = "true") boolean needSyncCheck
+          @RequestParam(value = "id", required = false, defaultValue = "1") Long id,
+          @RequestParam(value = "userName", required = false, defaultValue = "node1") String userName,
+          @RequestParam(value = "ip", required = false, defaultValue = "127.0.0.1") String ip,
+          @RequestParam(value = "port", required = false, defaultValue = "8090") int port,
+          @RequestParam(value = "isSR", required = false, defaultValue = "false") boolean isSR,
+          @RequestParam(value = "url", required = false, defaultValue = "") String url,
+          @RequestParam(value = "privateKey", required = false, defaultValue = "") String privateKey,
+          @RequestParam(value = "voteCount", required = false, defaultValue = "104") String voteCount,
+          @RequestParam(value = "needSyncCheck", required = false, defaultValue = "true") boolean needSyncCheck
   ) {
 
     JSONObject json = readJsonFile();
-    JSONArray nodes = (JSONArray)json.get(Common.nodesFiled);
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
     }
@@ -133,7 +133,7 @@ public class NodeController {
         newNode.put(Common.privateKeyFiled, path);
         newNode.put(Common.publicKeyFiled, publicKey);
       } catch (CipherException | IOException e) {
-        LOG.error(e.toString()) ;
+        LOG.error(e.toString());
         return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.savePrivateKeyFailed).toJSONObject();
       }
     }
@@ -151,27 +151,27 @@ public class NodeController {
     return updateNodesInfo(nodes, json);
   }
 
-  @RequestMapping(method = RequestMethod.PUT, value = "/nodeInfo")
+  @PutMapping(value = "/nodeInfo")
   public JSONObject updateNode(
-      @RequestParam(value = "id", required = true, defaultValue = "1") Long id,
-      @RequestParam(value = "userName", required = false, defaultValue = "") String userName,
-      @RequestParam(value = "ip", required = false, defaultValue = "") String ip,
-      @RequestParam(value = "port", required = false, defaultValue = "") int port,
-      @RequestParam(value = "isSR", required = false, defaultValue = "") boolean isSR,
-      @RequestParam(value = "privateKey", required = false, defaultValue = "") String key,
-      @RequestParam(value = "url", required = false, defaultValue = "") String url,
-      @RequestParam(value = "voteCount", required = false, defaultValue = "104") String voteCount,
-      @RequestParam(value = "needSyncCheck", required = false, defaultValue = "true") boolean needSyncCheck
+          @RequestParam(value = "id", required = true, defaultValue = "1") Long id,
+          @RequestParam(value = "userName", required = false, defaultValue = "") String userName,
+          @RequestParam(value = "ip", required = false, defaultValue = "") String ip,
+          @RequestParam(value = "port", required = false, defaultValue = "") int port,
+          @RequestParam(value = "isSR", required = false, defaultValue = "") boolean isSR,
+          @RequestParam(value = "privateKey", required = false, defaultValue = "") String key,
+          @RequestParam(value = "url", required = false, defaultValue = "") String url,
+          @RequestParam(value = "voteCount", required = false, defaultValue = "104") String voteCount,
+          @RequestParam(value = "needSyncCheck", required = false, defaultValue = "true") boolean needSyncCheck
   ) {
 
     JSONObject json = readJsonFile();
-    JSONArray nodes = (JSONArray)json.get(Common.nodesFiled);
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
 
-    boolean flag = key.length()!= 0;
+    boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
     if (key.length() != 0) {
       String path;
@@ -182,7 +182,7 @@ public class NodeController {
         node.put(Common.privateKeyFiled, path);
         node.put(Common.publicKeyFiled, publicKey);
       } catch (CipherException | IOException e) {
-        LOG.error(e.toString()) ;
+        LOG.error(e.toString());
         return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.savePrivateKeyFailed).toJSONObject();
       }
     }
@@ -201,9 +201,9 @@ public class NodeController {
   }
 
 
-  @RequestMapping(method = RequestMethod.GET, value = "/nodeInfo")
+  @GetMapping(value ="/nodeInfo" )
   public JSONObject getNode(
-      @RequestParam(value = "id", required = true, defaultValue = "1") Long id
+          @RequestParam(value = "id", required = true, defaultValue = "1") Long id
   ) {
 
     JSONObject json = readJsonFile();
@@ -219,7 +219,7 @@ public class NodeController {
     return new Response(ResultCode.OK.code, node).toJSONObject();
   }
 
-  @RequestMapping(method = RequestMethod.GET, value = "/allNodeInfo")
+  @GetMapping(value = "/allNodeInfo")
   public JSONObject getAllNode(
   ) {
 
@@ -228,18 +228,18 @@ public class NodeController {
     return new Response(ResultCode.OK.code, nodes).toJSONObject();
   }
 
-  @RequestMapping(method = RequestMethod.POST, value = "/initConfig")
+  @PostMapping(value = "/initConfig")
   public JSONObject initConfig() {
     ConfigGenerator configGenerator = new ConfigGenerator();
-    if (configGenerator.updateConfig(new SeedNodeConfig(new ArrayList<>()), Common.configFiled) == false) {
+    if (!configGenerator.updateConfig(new SeedNodeConfig(new ArrayList<>()), Common.configFiled)) {
       LOG.error("update seed node config file failed");
     }
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @RequestMapping(method = RequestMethod.DELETE, value = "/nodeInfo")
+  @DeleteMapping(value = "/nodeInfo")
   public JSONObject deleteNode(
-      @RequestParam(value = "id", required = true, defaultValue = "1") Long id
+          @RequestParam(value = "id", required = true, defaultValue = "1") Long id
   ) {
 
     JSONObject json = readJsonFile();
