@@ -2,7 +2,7 @@
 Modified time: 2019-11-08 20:27:30 * @setting genesis setting */
 
 <template>
-  <div class="viewBranchDialog">
+  <div class="import-plugin">
     <el-dialog
       :title="dialogTitle"
       @open="openDialogFun"

@@ -78,12 +78,12 @@ export const menuRoutes = [
   },
 
   {
-    path: '/plugin/list',
+    path: '/import_plugin',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import('@/views/pluginList'),
+        component: () => import('@/views/import-plugin'),
         meta: {
           icon: 'plugins',
           roles: ['admin', 'plugin', 'deploy'],

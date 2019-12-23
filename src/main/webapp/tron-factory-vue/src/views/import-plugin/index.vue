@@ -1,30 +1,26 @@
-/* * @Author: lxm * @Date: 2019-08-28 15:27:13 * @Last Modified by: lxm * @Last
-Modified time: 2019-11-14 15:13:54 * @tron plugin list */
+<!--
+  @description configure manage
+  @Author: Jason.Kang
+  @create_date: 2019-12-23
+-->
 <template>
-  <div class="app-container">
+  <div class="app-container import-plugin">
+
+    <el-steps :active="currentStep" align-center type="mini">
+      <el-step @click.native="handleSkipStep(1)" :title="$t('tronPluginConsensusModule')"></el-step>
+      <el-step @click.native="handleSkipStep(2)" :title="$t('tronPluginTransactionModule')"></el-step>
+      <el-step @click.native="handleSkipStep(3)" :title="$t('tronPluginDatabaseModule')"></el-step>
+      <el-step @click.native="handleSkipStep(4)" :title="$t('tronPluginCryptoModule')"></el-step>
+    </el-steps>
+
+    <component
+      :is="stepMapConfig[currentStep]"
+      :plugin-info="pluginInfo"
+      :init-config-info="initPluginInfo"
+      @prev-step="handlePrevStep"
+      @next-step="handleNextStep" />
+
     <div class="tron-content">
-      <div class="tron-filter-section">
-        <div>
-          <el-steps :active="currentStep" align-center type="mini">
-            <el-step
-              @click.native="stepClickFun(1)"
-              :title="$t('tronPluginConsensusModule')"
-            ></el-step>
-            <el-step
-              @click.native="stepClickFun(2)"
-              :title="$t('tronPluginTransactionModule')"
-            ></el-step>
-            <el-step
-              @click.native="stepClickFun(3)"
-              :title="$t('tronPluginDatabaseModule')"
-            ></el-step>
-            <el-step
-              @click.native="stepClickFun(4)"
-              :title="$t('tronPluginCryptoModule')"
-            ></el-step>
-          </el-steps>
-        </div>
-      </div>
       <el-form
         ref="pluginOnsensusDialogForm"
         :model="pluginOnsensusForm"
@@ -257,8 +253,12 @@ Modified time: 2019-11-14 15:13:54 * @tron plugin list */
   </div>
 </template>
 <script>
+import ConsensusModule from './components/ConsensusModule'
+import TransactionModule from './components/TransactionModule'
+import DatabaseModule from './components/DatabaseModule'
+import CryptoModule from './components/CryptoModule'
 export default {
-  name: 'pluginlist',
+  name: 'import-plugin',
   computed: {
     pluginRules() {
       const rules = {
@@ -311,7 +311,28 @@ export default {
   },
   data() {
     return {
+      pluginInfo: {
+        consensus: {},
+        customTransaction: {},
+        transaction: [], // transaction module list
+        dbEngine: {},
+        crypto: {},
+      },
+
       currentStep: 1,
+      // key is current step
+      // value is current component name
+      stepMapConfig: {
+        1: 'ConsensusModule',
+        2: 'TransactionModule',
+        3: 'DatabaseModule',
+        4: 'CryptoModule',
+      },
+      stepRange: {
+        min: 1,
+        max: 4,
+      },
+
       baseContentShow: true,
       moreSetting: false,
       transcationContentShow: true,
@@ -447,16 +468,49 @@ export default {
     }
   },
   created() {
+    this.initPluginInfo()
     this.pluginConfigFun()
     this.getCurrentStepFun()
   },
   methods: {
-    stepClickFun(step) {
+    // get plugin info
+    initPluginInfo () {
+      return new Promise(resolve => {
+        this.$_api.settingApi.getConfigInfo({}, (err, res = {}) => {
+          if (err) return
+
+          this.configInfo = { ...this.configInfo, ...res }
+          resolve(this.configInfo)
+        })
+      })
+    },
+
+    handleSkipStep(step) {
       this.currentStep = step
       this.$store.dispatch('tronSetting/getCurrentPluginStepConfig', {
         step,
       })
       this.pluginConfigFun()
+    },
+
+    // skip prev step
+    handlePrevStep () {
+      let step = this.currentStep - 1
+      this.currentStep = step >= this.stepRange.min ? step : this.stepRange.min
+    },
+
+    // skip next step
+    handleNextStep () {
+      let step = this.currentStep + 1
+
+      if (!this.checkP2PConfigSeedNode(step)) return
+
+      if (step <= this.stepRange.max) {
+        this.currentStep = step
+        this.initConfigInfo()
+      } else {
+        this.$router.push({ path: "/import_plugin" })
+      }
     },
     pluginConfigFun() {
       this.$_api.pluginApi

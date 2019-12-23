@@ -150,7 +150,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .genesis-config {
-  margin-top: 40px;
   padding-right: 80px;
 }
 .textCenter {

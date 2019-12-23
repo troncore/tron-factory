@@ -27,5 +27,5 @@ module.exports = {
     // https://cli.vuejs.org/config/#chainwebpack
   },
   css: {},
-  lintOnSave: isDevelopmentEnv,
+  lintOnSave: false,
 }

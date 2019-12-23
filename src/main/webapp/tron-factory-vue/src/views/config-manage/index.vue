@@ -1,10 +1,10 @@
 <!--
-@description configure manage
-@Author: Jason.Kang
-@create_date: 2019-12-19
+  @description configure manage
+  @Author: Jason.Kang
+  @create_date: 2019-12-19
 -->
 <template>
-  <div class="app-container">
+  <div class="app-container config-manage">
     <el-steps :active="currentStep" align-center type="mini">
       <el-step @click.native="handleSkipStep(1)" :title="$t('tronSettingGenesis')"></el-step>
       <el-step @click.native="handleSkipStep(2)" :title="$t('tronSettingBase')"></el-step>
@@ -110,11 +110,11 @@ export default {
         this.currentStep = step
         this.initConfigInfo()
       } else {
-        this.$router.push({ path: "/plugin/list" })
+        this.$router.push({ path: "/import_plugin" })
       }
     },
 
-    // check p2p config seed node need selected
+    // check p2p config seed node is selected
     checkP2PConfigSeedNode (step) {
       if (step <= 5) return true
 
