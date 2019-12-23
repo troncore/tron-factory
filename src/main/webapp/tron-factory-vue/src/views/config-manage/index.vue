@@ -4,7 +4,7 @@
   @create_date: 2019-12-19
 -->
 <template>
-  <div class="app-container config-manage">
+  <div class="app-container page-view config-manage">
     <el-steps :active="currentStep" align-center type="mini">
       <el-step @click.native="handleSkipStep(1)" :title="$t('tronSettingGenesis')"></el-step>
       <el-step @click.native="handleSkipStep(2)" :title="$t('tronSettingBase')"></el-step>

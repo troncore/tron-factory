@@ -97,12 +97,12 @@ export const menuRoutes = [
   },
 
   {
-    path: '/deploy/list',
+    path: '/deploy_nodes',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import('@/views/deployList'),
+        component: () => import('@/views/deploy-nodes'),
         meta: {
           roles: ['admin', 'deploy'],
         },

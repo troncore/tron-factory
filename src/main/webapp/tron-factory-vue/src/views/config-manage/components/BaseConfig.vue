@@ -63,7 +63,7 @@
 
     <div  class="box-footer align-right">
       <el-button type="primary" size="small" @click="handleCancel">{{ $t('tronSettingPreviousStep') }}</el-button>
-      <el-button type="primary" size="small" @click="handleSubmit('baseSettingDialogForm')">{{ $t('tronSettingNextStep') }}</el-button>
+      <el-button type="primary" size="small" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -218,8 +218,8 @@ export default {
   },
 
   methods: {
-    handleSubmit(formName) {
-      this.$refs[formName].validate(valid => {
+    handleSubmit() {
+      this.$refs['base-config-form'].validate(valid => {
         if (valid) {
           let params = {
             chainId: this.form.chainId,

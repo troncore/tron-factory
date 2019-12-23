@@ -1,13 +1,109 @@
 <template>
+  <div class="database-module">
 
+    <el-card class="box-body" shadow="hover">
+      <div @click="contentShow = !contentShow">
+        <i :class="contentShow? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
+        {{ $t('tronPluginConsensusModule') }}
+      </div>
+
+      <el-form
+        v-if="contentShow"
+        ref="form-box"
+        class="form-box"
+        :model="form"
+        :rules="formRules"
+        label-position="left">
+
+        <el-form-item prop="dbEngine">
+          <el-radio-group v-model="form.dbEngine">
+            <el-radio disabled :label="'leveldb'">leveldb</el-radio>
+            <el-radio disabled :label="'rocksdb'">rocksdb</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+      </el-form>
+    </el-card>
+
+    <div class="box-footer align-right">
+      <el-button size="small" type="primary" @click="handleCancel">{{ $t('tronSettingPreviousStep') }}</el-button>
+      <el-button size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
-  export default {
-    name: "DatabaseModule"
-  }
+export default {
+  name: 'database-module',
+  props: {
+    pluginInfo: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      form: {
+        dbEngine: 'leveldb',
+      },
+      contentShow: true,
+      loading: false,
+
+      formRules: {
+        dbEngine: [{ required: true, message: this.$t('tronSettingPlaceholder'), trigger: 'blur', },],
+      },
+    }
+  },
+
+  watch: {
+    pluginInfo: {
+      handler (val = {}) {
+        this.form.dbEngine = val.dbEngine || 'leveldb'
+      },
+      immediate: true,
+    },
+  },
+
+  methods: {
+    handleCancel () {
+      this.$emit('prev-step')
+    },
+
+    handleSubmit() {
+      this.$refs['form-box'].validate(valid => {
+        if (valid) {
+          let params = {
+            dbEngine: this.form.dbEngine
+          }
+
+          this.loading = true
+          this.$_api.pluginApi.dbEngineApi(params, (err, res) => {
+            this.loading = false
+            if (err) return
+
+            this.$message.success(this.$t('tronPluginDatabaseSaveSuccess'))
+            this.$emit('next-step')
+          })
+        }
+      })
+    },
+  },
+}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.database-module {
+  padding-right: 80px;
 
+  .form-box  {
+    padding: 20px 0 0 20px;
+  }
+
+  .box-footer {
+    &.align-right {
+      margin-top: 40px;
+      text-align: right;
+    }
+  }
+}
 </style>
