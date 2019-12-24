@@ -161,7 +161,7 @@ export default {
             }
 
             // check all deployed node whether if finish deployed
-            if (!Object.values(res).includes('deploy finish')) {
+            if (Object.values(res).every(val => val === 'deploy finish')) {
               this.batchDeployLoading = false
               clearInterval(timeID)
             }
