@@ -15,8 +15,7 @@
           :data="list"
           tooltip-effect="dark"
           style="width: 100%"
-          border
-        >
+          border>
           <el-table-column prop="id" label="ID" align="center" />
 
           <el-table-column prop="userName" :label="$t('tronNodeName')" align="center" />
@@ -65,8 +64,7 @@
       :is-adding="nodeObj.isAdding"
       :node-list="list"
       :node-detail="nodeObj.detail"
-      @success="getNodeList"
-    />
+      @success="getNodeList"/>
   </div>
 </template>
 <script>

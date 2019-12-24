@@ -28,52 +28,42 @@ export const menuRoutes = [
       {
         path: '',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index'),
-        meta: {
-          title: 'tronSettingMenuDashboard',
-        },
       },
     ],
     meta: {
       name: 'Dashboard',
-      icon: 'dashboard',
+      icon: 'el-icon-guide',
     },
   },
+
   {
     path: '/node_list',
     component: Layout,
-    meta: {
-      title: 'tronSettingMenuNode',
-      name: 'tronSettingMenuNodeList',
-      icon: 'tree',
-    },
     children: [
       {
         path: '',
-        component: () => import('@/views/node-list'),
-        meta: {
-          title: 'tronSettingMenuNodeList',
-          roles: ['admin', 'node', 'setting', 'plugin', 'deploy'],
-        },
+        component: () => import(/* webpackChunkName: "node-list" */ '@/views/node-list'),
       },
     ],
+    meta: {
+      name: 'tronSettingMenuNodeList',
+      icon: 'el-icon-s-operation',
+    },
   },
+
   {
     path: '/config_manage',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import('@/views/config-manage'),
-        meta: {
-          title: 'tronSettingMenuSetting',
-          roles: ['admin', 'setting', 'plugin', 'deploy'],
-        },
+        component: () => import(/* webpackChunkName: "config-manage" */ '@/views/config-manage'),
       },
     ],
     meta: {
       title: 'tronSettingMenuSetting',
       name: 'tronSettingMenuSetting',
-      icon: 'setting',
+      icon: 'el-icon-setting',
     },
   },
 
@@ -83,16 +73,12 @@ export const menuRoutes = [
     children: [
       {
         path: '',
-        component: () => import('@/views/import-plugin'),
-        meta: {
-          icon: 'plugins',
-          roles: ['admin', 'plugin', 'deploy'],
-        },
+        component: () => import(/* webpackChunkName: "import-plugin" */ '@/views/import-plugin'),
       },
     ],
     meta: {
       name: 'tronSettingMenuPlugin',
-      icon: 'plugins',
+      icon: 'el-icon-upload',
     },
   },
 
@@ -102,25 +88,21 @@ export const menuRoutes = [
     children: [
       {
         path: '',
-        component: () => import('@/views/deploy-nodes'),
-        meta: {
-          roles: ['admin', 'deploy'],
-        },
+        component: () => import(/* webpackChunkName: "deploy-nodes" */ '@/views/deploy-nodes'),
       },
     ],
     meta: {
       name: 'tronSettingMenuDeployment',
-      icon: 'deployment',
-      roles: ['admin', 'deploy'],
+      icon: 'el-icon-share',
     },
   },
+
   {
     path: 'https://tronscan.org/',
     component: Layout,
     meta: {
       name: 'tronscanMenu',
-      icon: 'link',
-      roles: ['admin', 'deploy'],
+      icon: 'el-icon-link',
     },
   },
 ]

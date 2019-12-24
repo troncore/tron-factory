@@ -1,6 +1,6 @@
 <template>
   <el-menu-item :index="routePath">
-    <i class="el-icon-menu" />
+    <i :class="route.meta.icon" />
     <span slot="title">{{ $t(route.meta.name) }}</span>
   </el-menu-item>
 </template>
