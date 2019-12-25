@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div class="page-view get-start">
     <el-row>
       <div class="tronContent">
         <h1 class="tronTitle">one-click-deployment</h1>
@@ -24,11 +24,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 import PanelGroup from './components/PanelGroup'
 export default {
-  name: 'Dashboard',
+  name: 'get-start',
   created() {},
   components: {
     PanelGroup,
@@ -51,14 +49,11 @@ export default {
       }
     },
   },
-  computed: {
-    ...mapGetters(['name', 'token']),
-  },
 }
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
+.get-start {
   &-container {
     margin: 30px;
   }

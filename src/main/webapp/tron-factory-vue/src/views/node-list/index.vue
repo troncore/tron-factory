@@ -46,14 +46,7 @@
       </div>
 
       <div class="mgt20">
-        <el-button
-          size="small"
-          style="float:right"
-          :type="allStepsBtnType"
-          :disabled="allStepsBtnDisable"
-          @click="handleNextStep"
-          >{{ $t('tronNodeNextStep') }}</el-button
-        >
+        <el-button size="small" style="float:right" :type="allStepsBtnType" :disabled="allStepsBtnDisable" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
       </div>
     </div>
 

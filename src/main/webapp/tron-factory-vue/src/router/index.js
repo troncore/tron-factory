@@ -7,13 +7,13 @@ Vue.use(VueRouter)
 export const baseRoutes = [
   {
     path: '/',
-    redirect: '/dashboard',
+    redirect: '/get-start',
   },
 ]
 export const NotFoundRoutes = [
   {
     path: '*',
-    component: () => import('@/views/404'),
+    component: () => import('../views/404'),
     meta: {
       name: '404',
       hidden: true,
@@ -22,27 +22,27 @@ export const NotFoundRoutes = [
 ]
 export const menuRoutes = [
   {
-    path: '/dashboard',
+    path: '/get-start',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index'),
+        component: () => import(/* webpackChunkName: "get-start" */ '../views/get-start')
       },
     ],
     meta: {
-      name: 'Dashboard',
+      name: 'getStart.name',
       icon: 'el-icon-guide',
     },
   },
 
-  {
+ /* {
     path: '/node_list',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "node-list" */ '@/views/node-list'),
+        component: () => import(/!* webpackChunkName: "node-list" *!/ '@/views/node-list'),
       },
     ],
     meta: {
@@ -57,7 +57,7 @@ export const menuRoutes = [
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "config-manage" */ '@/views/config-manage'),
+        component: () => import(/!* webpackChunkName: "config-manage" *!/ '@/views/config-manage'),
       },
     ],
     meta: {
@@ -73,7 +73,7 @@ export const menuRoutes = [
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "import-plugin" */ '@/views/import-plugin'),
+        component: () => import(/!* webpackChunkName: "import-plugin" *!/ '@/views/import-plugin'),
       },
     ],
     meta: {
@@ -88,7 +88,7 @@ export const menuRoutes = [
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "deploy-nodes" */ '@/views/deploy-nodes'),
+        component: () => import(/!* webpackChunkName: "deploy-nodes" *!/ '@/views/deploy-nodes'),
       },
     ],
     meta: {
@@ -104,7 +104,7 @@ export const menuRoutes = [
       name: 'tronscanMenu',
       icon: 'el-icon-link',
     },
-  },
+  },*/
 ]
 
 const routes = [...baseRoutes, ...menuRoutes, ...NotFoundRoutes]

@@ -5,7 +5,7 @@
  */
 
 const siteConfig = {
-  title: 'One Click Deployment',
+  title: 'Tron Factory',
 
   /**
    * @description Whether fix the header

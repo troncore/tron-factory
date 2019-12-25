@@ -13,7 +13,7 @@ const $axios = Axios.create({
   // timeout: 200000,
 })
 
-// if the server reponses success, just deal with the useless data
+// if the server responses success, just deal with the useless data
 function responseSuccess(response, callback) {
   if (response.data && (response.data.code < 300 || response.data.code === 304)) {
     callback(null, response.data.data)

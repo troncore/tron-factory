@@ -1,6 +1,3 @@
-/* * @Author: lxm * @Date: 2019-10-21 15:25:02 * @Last Modified by: lxm * @Last
-Modified time: 2019-11-13 16:12:45 * @dashboard-index */
-
 <template>
   <div>
     <el-row :gutter="0" class="panel-group">
