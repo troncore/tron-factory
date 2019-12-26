@@ -4,13 +4,11 @@
       ref="el-menu"
       :default-active="activeMenu"
       :collapse="isCollapseSidebar"
-      :text-color="variables.menuText"
-      :unique-opened="false"
-      :active-text-color="variables.menuActiveText"
-      :collapse-transition="false"
       mode="vertical"
       @select="handleSelectMenu">
+
       <side-menu-item v-for="route in permission_routes" :key="route.name" :route="route" />
+
     </el-menu>
   </div>
 </template>
@@ -36,9 +34,6 @@ export default {
     variables() {
       return variables
     },
-    isCollapse() {
-      return !this.sidebar.opened
-    },
   },
   methods: {
     handleSelectMenu(index) {
@@ -58,12 +53,10 @@ export default {
 <style lang="scss" scoped>
 .sidebar-view {
   height: 100%;
-  width: 255px;
-  transition: width 0.28s;
   background-color: #fff;
   box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
   .el-menu:not(.el-menu--collapse) {
-    width: 255px;
+    width: 250px;
     height: 100%;
     overflow: auto;
   }

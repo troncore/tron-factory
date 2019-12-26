@@ -59,6 +59,7 @@ export default {
   }
   .app-body {
     display: flex;
+    max-width: 1920px;
     height: calc(100vh - 60px);
   }
   .app-sidebar {

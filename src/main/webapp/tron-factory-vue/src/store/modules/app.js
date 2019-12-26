@@ -1,11 +1,12 @@
 import Cookies from 'js-cookie'
 
+
 const state = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false,
   },
-  isCollapseSidebar: !!localStorage.getItem('isCollapseSidebar'),
+  isCollapseSidebar: localStorage.getItem('isCollapseSidebar') === 'true',
   device: '',
 }
 
