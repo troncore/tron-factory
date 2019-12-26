@@ -1,21 +1,17 @@
 <template>
-  <div>
-    <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu
-        ref="el-menu"
-        :default-active="activeMenu"
-        :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :unique-opened="false"
-        :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
-        mode="vertical"
-        @select="handleSelectMenu"
-      >
-        <side-menu-item v-for="route in permission_routes" :key="route.name" :route="route" />
-      </el-menu>
-    </el-scrollbar>
+  <div class="sidebar-view">
+    <el-menu
+      ref="el-menu"
+      :default-active="activeMenu"
+      :collapse="isCollapseSidebar"
+      :text-color="variables.menuText"
+      :unique-opened="false"
+      :active-text-color="variables.menuActiveText"
+      :collapse-transition="false"
+      mode="vertical"
+      @select="handleSelectMenu">
+      <side-menu-item v-for="route in permission_routes" :key="route.name" :route="route" />
+    </el-menu>
   </div>
 </template>
 
@@ -28,6 +24,9 @@ export default {
   components: { SideMenuItem },
   computed: {
     ...mapGetters(['permission_routes', 'sidebar']),
+    ...mapGetters('app', [
+      'isCollapseSidebar'
+    ]),
     routes() {
       return this.$router.options.routes
     },
@@ -56,3 +55,17 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+.sidebar-view {
+  height: 100%;
+  width: 255px;
+  transition: width 0.28s;
+  background-color: #fff;
+  box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
+  .el-menu:not(.el-menu--collapse) {
+    width: 255px;
+    height: 100%;
+    overflow: auto;
+  }
+}
+</style>

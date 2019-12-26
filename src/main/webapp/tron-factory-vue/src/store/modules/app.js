@@ -2,15 +2,24 @@ import Cookies from 'js-cookie'
 
 const state = {
   sidebar: {
-    opened: Cookies.get('sidebarStatus')
-      ? !!+Cookies.get('sidebarStatus')
-      : true,
+    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false,
   },
-  device: 'desktop',
+  isCollapseSidebar: !!localStorage.getItem('isCollapseSidebar'),
+  device: '',
+}
+
+const getters = {
+  isCollapseSidebar (state) {
+    return state.isCollapseSidebar
+  }
 }
 
 const mutations = {
+  toggleCollapseSidebar (state) {
+    state.isCollapseSidebar = !state.isCollapseSidebar
+    localStorage.setItem('isCollapseSidebar', state.isCollapseSidebar)
+  },
   TOGGLE_SIDEBAR: state => {
     state.sidebar.opened = !state.sidebar.opened
     state.sidebar.withoutAnimation = false
@@ -25,9 +34,6 @@ const mutations = {
     state.sidebar.opened = false
     state.sidebar.withoutAnimation = withoutAnimation
   },
-  TOGGLE_DEVICE: (state, device) => {
-    state.device = device
-  },
 }
 
 const actions = {
@@ -37,14 +43,12 @@ const actions = {
   closeSideBar({ commit }, { withoutAnimation }) {
     commit('CLOSE_SIDEBAR', withoutAnimation)
   },
-  toggleDevice({ commit }, device) {
-    commit('TOGGLE_DEVICE', device)
-  },
 }
 
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions,
 }

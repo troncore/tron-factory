@@ -1,30 +1,38 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
+  <div class="app-wrapper">
     <div class="app-header">
-      <div :class="{ 'fixed-header': fixedHeader }">
-        <navbar />
-      </div>
+      <header-nav></header-nav>
     </div>
-    <div style="padding:0">
-      <sidebar class="sidebar-container" />
-      <div class="main-container">
-        <app-main />
+
+    <div class="app-body">
+      <div class="app-sidebar">
+        <sidebar />
+      </div>
+
+      <div class="app-main">
+        <transition name="fade-transform" mode="out-in">
+          <router-view />
+        </transition>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
+import { Sidebar, AppMain } from './components'
+import HeaderNav from "./components/HeaderNav";
+
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Layout',
   components: {
-    Navbar,
+    HeaderNav,
     Sidebar,
     AppMain,
   },
   computed: {
+
     sidebar() {
       return this.$store.state.app.sidebar
     },
@@ -45,26 +53,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/styles/mixin.scss';
-@import '~@/styles/variables.scss';
-
 .app-wrapper {
-  @include clearfix;
-  position: relative;
-  height: 100%;
-  width: 100%;
+  .app-header {
+    height: 60px;
+  }
+  .app-body {
+    display: flex;
+    height: calc(100vh - 60px);
+  }
+  .app-sidebar {
+    display: inline-block;
+    flex-basis: auto;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .app-main {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+  }
 }
 
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: 100%;
-  transition: width 0.28s;
-}
-
-.hideSidebar .fixed-header {
-  width: calc(100% - 0);
-}
 </style>
