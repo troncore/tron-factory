@@ -1,6 +1,10 @@
 /**
  * https://cli.vuejs.org/config/
  */
+const path = require('path')
+function resolve (dir) {
+ return  path.resolve(__dirname, dir)
+}
 const isDevelopmentEnv = process.env.NODE_ENV !== 'production'
 
 module.exports = {
@@ -22,7 +26,13 @@ module.exports = {
       open: true,
     },
   },
-  configureWebpack: {},
+  configureWebpack: {
+    resolve: {
+      alias: {
+        '@': resolve('src')
+      }
+    }
+  },
   chainWebpack: () => {
     // https://cli.vuejs.org/config/#chainwebpack
   },

@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import { HeaderNav, AsideNav, } from './components'
+import HeaderNav from './components/HeaderNav'
+import AsideNav from './components/AsideNav'
 
 export default {
   name: 'Layout',
@@ -33,6 +34,8 @@ export default {
 <style lang="scss" scoped>
 .app-wrapper {
   .app-header {
+    position: relative;
+    z-index: 1;
     height: 60px;
   }
 

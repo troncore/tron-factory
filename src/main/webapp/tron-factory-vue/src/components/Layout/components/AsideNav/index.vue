@@ -2,7 +2,7 @@
   <div class="aside-nav">
     <el-menu
       ref="el-menu"
-      :default-active="activeMenu"
+      :default-active="$route.path"
       :collapse="isCollapseAside"
       mode="vertical"
       @select="handleSelectMenu">
@@ -15,26 +15,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import variables from '@/styles/variables.scss'
 import SideMenuItem from './SideMenuItem'
 
 export default {
   name: 'aside-nav',
   components: { SideMenuItem },
   computed: {
-    ...mapGetters(['permission_routes', 'sidebar']),
+    ...mapGetters(['permission_routes']),
     ...mapGetters('app', [
       'isCollapseAside'
     ]),
-    routes() {
-      return this.$router.options.routes
-    },
-    activeMenu() {
-      return this.$route.path
-    },
-    variables() {
-      return variables
-    },
   },
   methods: {
     handleSelectMenu(index) {
@@ -52,14 +42,33 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+$theme-color: #386AF6;
 .aside-nav {
   height: 100%;
   background-color: #fff;
   box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
-  .el-menu:not(.el-menu--collapse) {
-    width: 250px;
+
+  .el-menu {
+    padding-top: 40px;
     height: 100%;
-    overflow: auto;
+    border: none;
+    &:not(.el-menu--collapse) {
+      width: 250px;
+      overflow: auto;
+    }
+
+    /deep/ .el-menu-item{
+      font-size: 16px;
+      font-weight: bold;
+
+      &.is-active {
+        border-left: 4px solid $theme-color;
+        background-color: rgba(56, 106, 246, .1);
+      }
+      &.disabled {
+        color: #475F7B;
+      }
+    }
   }
 }
 </style>
