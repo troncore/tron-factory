@@ -6,20 +6,20 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false,
   },
-  isCollapseSidebar: localStorage.getItem('isCollapseSidebar') === 'true',
+  isCollapseAside: localStorage.getItem('isCollapseAside') === 'true',
   device: '',
 }
 
 const getters = {
-  isCollapseSidebar (state) {
-    return state.isCollapseSidebar
+  isCollapseAside (state) {
+    return state.isCollapseAside
   }
 }
 
 const mutations = {
-  toggleCollapseSidebar (state) {
-    state.isCollapseSidebar = !state.isCollapseSidebar
-    localStorage.setItem('isCollapseSidebar', state.isCollapseSidebar)
+  toggleCollapseAside (state) {
+    state.isCollapseAside = !state.isCollapseAside
+    localStorage.setItem('isCollapseAside', state.isCollapseAside)
   },
   TOGGLE_SIDEBAR: state => {
     state.sidebar.opened = !state.sidebar.opened

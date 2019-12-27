@@ -1,6 +1,6 @@
 <template>
   <div class="header-view header-nav">
-    <hamburger :is-active="isCollapseSidebar" class="hamburger-container" @toggleClick="toggleCollapseSidebar"/>
+    <hamburger :is-active="isCollapseAside" class="hamburger-container" @toggleClick="toggleCollapseAside"/>
     <div class="breadcrumb-logo">
       <router-link to="/"><img src="@/assets/logo.png" alt /></router-link>
     </div>
@@ -36,7 +36,7 @@
     },
     computed: {
       ...mapGetters('app', [
-        'isCollapseSidebar'
+        'isCollapseAside'
       ]),
     },
     created () {
@@ -44,7 +44,7 @@
     },
     methods: {
       ...mapMutations('app', [
-        'toggleCollapseSidebar'
+        'toggleCollapseAside'
       ]),
       toggleSideBar() {
         this.$store.dispatch('app/toggleSideBar')

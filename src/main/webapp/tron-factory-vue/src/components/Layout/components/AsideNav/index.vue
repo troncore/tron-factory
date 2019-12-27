@@ -1,9 +1,9 @@
 <template>
-  <div class="sidebar-view">
+  <div class="aside-nav">
     <el-menu
       ref="el-menu"
       :default-active="activeMenu"
-      :collapse="isCollapseSidebar"
+      :collapse="isCollapseAside"
       mode="vertical"
       @select="handleSelectMenu">
 
@@ -19,11 +19,12 @@ import variables from '@/styles/variables.scss'
 import SideMenuItem from './SideMenuItem'
 
 export default {
+  name: 'aside-nav',
   components: { SideMenuItem },
   computed: {
     ...mapGetters(['permission_routes', 'sidebar']),
     ...mapGetters('app', [
-      'isCollapseSidebar'
+      'isCollapseAside'
     ]),
     routes() {
       return this.$router.options.routes
@@ -51,7 +52,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.sidebar-view {
+.aside-nav {
   height: 100%;
   background-color: #fff;
   box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
