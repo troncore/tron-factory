@@ -1,18 +1,18 @@
 <template>
   <div class="page-view get-start">
 
-    <div class="header-box">
+    <div class="page-header">
       <div class="title">{{ $t('getStart.webTitle') }}</div>
       <div class="description">{{ $t('getStart.description') }}</div>
       <div class="description-more">{{ $t('getStart.descriptionMore') }}</div>
     </div>
 
-    <div class="main-box">
+    <div class="page-main">
       <div class="start-deploy" @click="handleStartSettingDeploy">{{ $t('getStart.getStartDeploy') }}</div>
       <div class="view-document" @click="handleViewDocument">{{ $t('getStart.viewDocument') }}</div>
     </div>
 
-    <div class="footer-box">
+    <div class="page-footer">
       <div class="title"><span>{{ $t('getStart.forNewUserTitle') }}</span></div>
       <div class="guide-list">
         <div class="guide-item">
@@ -82,11 +82,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ @import "~@/assets/styles/base";
  $media1680: 1680px;
 .get-start {
   padding: 160px 100px 0;
+  @media screen and (max-width: $media1680){
+    padding-top: 100px;
+  }
 
-  .header-box {
+  .page-header {
     text-align: center;
     .title {
       margin-bottom: 10px;
@@ -103,7 +107,7 @@ export default {
     }
   }
 
-  .main-box {
+  .page-main {
     margin: 70px 0 120px 0;
     text-align: center;
     @media screen and (max-width: $media1680){
@@ -117,7 +121,7 @@ export default {
       font-size: 36px;
       text-align: center;
       color: white;
-      background-color: #386AF6;
+      background-color: theme-color();
       box-shadow: 0 12px 20px 0 rgba(1,1,71,0.10);
       border-radius: 6px;
       cursor: pointer;
@@ -132,13 +136,13 @@ export default {
     .view-document {
       display: inline-block;
       font-size: 16px;
-      color: #386AF6;
+      color: theme-color();
       cursor: pointer;
       text-decoration: underline;
     }
   }
 
-  .footer-box {
+  .page-footer {
     .title {
       display: flex;
       align-items: center;
@@ -218,7 +222,7 @@ export default {
         }
 
         &:hover {
-          background-color: #386AF6;
+          background-color: theme-color();
           box-shadow: 0 12px 20px 0 rgba(1, 1, 71, 0.10);
 
           .guide-item__body-title {

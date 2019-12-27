@@ -42,7 +42,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-$theme-color: #386AF6;
+@import "~@/assets/styles/base";
 .aside-nav {
   height: 100%;
   background-color: #fff;
@@ -59,11 +59,19 @@ $theme-color: #386AF6;
 
     /deep/ .el-menu-item{
       font-size: 16px;
-      font-weight: bold;
+      color: #666;
+      border-left: 4px solid transparent;
+      &:focus,
+      &:hover {
+        color: theme-color();
+        background-color: theme-color(.1);
+      }
 
       &.is-active {
-        border-left: 4px solid $theme-color;
-        background-color: rgba(56, 106, 246, .1);
+        color: theme-color();
+        border-color: theme-color();
+        border-left: 4px solid theme-color();
+        background-color: theme-color(.1);
       }
       &.disabled {
         color: #475F7B;

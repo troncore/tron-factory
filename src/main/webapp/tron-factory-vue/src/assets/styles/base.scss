@@ -1,0 +1,4 @@
+
+@function theme-color($alpha: 1) {
+  @return rgba(56, 106, 246, $alpha)
+}

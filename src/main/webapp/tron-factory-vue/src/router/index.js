@@ -13,7 +13,7 @@ export const baseRoutes = [
 export const NotFoundRoutes = [
   {
     path: '*',
-    component: () => import('../views/404'),
+    component: () => import(/* webpackChunkName: "404" */ '@/views/404'),
     meta: {
       name: '404',
       hidden: true,
@@ -27,7 +27,7 @@ export const menuRoutes = [
     children: [
       {
         path: '',
-        component: () => import(/* webpackChunkName: "get-start" */ '../views/get-start')
+        component: () => import(/* webpackChunkName: "get-start" */ '@/views/get-start')
       },
     ],
     meta: {
@@ -35,6 +35,20 @@ export const menuRoutes = [
       icon: 'el-icon-guide',
     },
   },
+  {
+    path: '/node_list',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import(/* webpackChunkName: "node-list" */ '@/views/node-list'),
+      },
+    ],
+    meta: {
+      name: 'tronSettingMenuNodeList',
+      icon: 'el-icon-s-operation',
+    },
+  }
 
  /* {
     path: '/node_list',
