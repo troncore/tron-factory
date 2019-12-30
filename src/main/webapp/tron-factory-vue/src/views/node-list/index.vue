@@ -175,33 +175,6 @@ export default {
   }
 
   /deep/ .el-table {
-
-    .operator-btns {
-
-    }
-    .defined-header-row-tr {
-      th {
-        padding: 0;
-        height: 36px;
-        font-weight: bold;
-        color: #1f2d3d;
-        background-color: #e5e9f1;
-        border-right-color: white;
-
-        &:nth-last-child(2) {
-          border-right-color: #e5e9f1;
-        }
-      }
-    }
-
-    .defined-row-tr {
-      td {
-        padding: 4px 0;
-      }
-    }
-  }
-
-  /deep/ .el-table {
     .el-table__body {
       .operator-btns .cell {
         display: flex;
