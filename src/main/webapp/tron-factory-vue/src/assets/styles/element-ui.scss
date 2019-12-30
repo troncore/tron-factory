@@ -89,13 +89,23 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       }
     }
   }
+  .el-dialog__body {
+    padding: 50px 70px 20px;
+  }
+  .el-dialog__footer {
+    padding-bottom: 50px;
+  }
   .dialog-footer {
     .im-button {
+      margin-right: 30px;
       padding: 0;
       width: 200px;
       height: 50px;
       line-height: 50px;
       font-size: 18px;
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }

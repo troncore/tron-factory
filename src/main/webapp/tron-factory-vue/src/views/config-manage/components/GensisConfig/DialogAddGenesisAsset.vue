@@ -1,39 +1,49 @@
 <template>
   <el-dialog
     :visible.sync="dialogVisible"
-    :title="$t('tronAssetSetting')"
-    width="600px"
+    custom-class="im-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    width="680px"
+    top="200px"
     center>
+    <div slot="title" class="dialog-header">
+      <div class="title">{{ $t('tronAssetSetting') }}</div>
+      <div class="title-info">以下均为必填项</div>
+    </div>
 
-    <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="120px" label-position="left">
-      <el-form-item label="accountName" prop="accountName">
-        <el-input v-model.trim="form.accountName" size="small" :maxlength="50" :placeholder="$t('tronAccountNamePlaceholder')"></el-input>
-      </el-form-item>
+    <div class="dialog-content">
+      <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="120px" label-position="left">
+        <el-form-item label="accountName" prop="accountName">
+          <el-input v-model.trim="form.accountName" :maxlength="50" :placeholder="$t('tronAccountNamePlaceholder')"></el-input>
+        </el-form-item>
 
-      <el-form-item label="accountType" prop="accountType">
-        <el-select size="small" v-model="form.accountType" :placeholder="$t('tronNodeSRPlaceholder')">
-          <el-option
-            v-for="item in accountTypeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
+        <el-form-item label="accountType" prop="accountType">
+          <el-select v-model="form.accountType" :placeholder="$t('tronNodeSRPlaceholder')">
+            <el-option
+              v-for="item in accountTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
-      <el-form-item label="address" prop="address">
-        <el-input v-model.trim="form.address" size="small" :maxlength="50" :placeholder="$t('tronAddressPlaceholder')"></el-input>
-      </el-form-item>
+        <el-form-item label="address" prop="address">
+          <el-input v-model.trim="form.address" :maxlength="50" :placeholder="$t('tronAddressPlaceholder')"></el-input>
+        </el-form-item>
 
-      <el-form-item label="balance" prop="balance">
-        <el-input v-model.trim="form.balance" size="small" :maxlength="22" :placeholder="$t('tronBalancePlaceholder')"></el-input>
-      </el-form-item>
+        <el-form-item label="balance" prop="balance">
+          <el-input v-model.trim="form.balance" :maxlength="22" :placeholder="$t('tronBalancePlaceholder')"></el-input>
+        </el-form-item>
+      </el-form>
 
-      <el-form-item label-width="0" class="textRight">
-        <el-button size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
-        <el-button size="small" @click="dialogVisible = false">{{ $t('tronSettingCancel') }}</el-button>
-      </el-form-item>
-    </el-form>
+    </div>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button class="im-button" size="small" @click="dialogVisible = false">{{ $t('tronSettingCancel') }}</el-button>
+      <el-button class="im-button" size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
+    </div>
   </el-dialog>
 </template>
 <script>

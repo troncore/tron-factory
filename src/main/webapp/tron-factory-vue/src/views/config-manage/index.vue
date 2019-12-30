@@ -5,14 +5,15 @@
 -->
 <template>
   <div class="app-container page-view config-manage">
-    <el-steps :active="currentStep" align-center type="mini">
-      <el-step @click.native="handleSkipStep(1)" :title="$t('tronSettingGenesis')"></el-step>
-      <el-step @click.native="handleSkipStep(2)" :title="$t('tronSettingBase')"></el-step>
-      <el-step @click.native="handleSkipStep(3)" :title="$t('tronSettingHttp')"></el-step>
-      <el-step @click.native="handleSkipStep(4)" :title="$t('tronSettingDb')"></el-step>
-      <el-step @click.native="handleSkipStep(5)" :title="$t('tronSettingP2p')"></el-step>
-      <el-step @click.native="handleSkipStep(6)" :title="$t('tronCrossChain')"></el-step>
-    </el-steps>
+
+    <div class="im-steps">
+      <div :class="['im-step genesis', { active: 1 <= currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronSettingGenesis') }}</span></div>
+      <div :class="['im-step base', { active: 2 <= currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronSettingBase') }}</span></div>
+      <div :class="['im-step network', { active: 3 <= currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronSettingHttp') }}</span></div>
+      <div :class="['im-step database', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronSettingDb') }}</span></div>
+      <div :class="['im-step p2p', { active: 5 <= currentStep }]" @click="handleSkipStep(5)"><span>{{ $t('tronSettingP2p') }}</span></div>
+      <div :class="['im-step cross-chain', { active: 6 <= currentStep }]" @click="handleSkipStep(6)"><span>{{ $t('tronCrossChain') }}</span></div>
+    </div>
 
     <component
       :is="stepMapConfig[currentStep]"
@@ -129,6 +130,119 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+$media1680: 1680px;
+
+.config-manage {
+  .im-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 60px auto 0;
+    @media screen and (max-width: $media1680){
+      margin-top: 30px;
+    }
+
+    .im-step {
+      &:not(:last-child) {
+        flex: 1;
+      }
+      position: relative;
+      padding-top: 120px;
+      height: 260px;
+      cursor: pointer;
+      @media screen and (max-width: $media1680){
+        height: 220px;
+      }
+      &:last-child {
+        width: 120px;
+      }
+      span {
+        display: inline-block;
+        width: 120px;
+        text-align: center;
+        color: #999;
+      }
+      &:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 122px;
+        height: 120px;
+        background-repeat: no-repeat;
+        background-size: 94px auto;
+        background-position: center center;
+      }
+      &.active:before {
+        background-size: 100% auto;
+      }
+      &.active span {
+        color: #333;
+      }
+
+      &.genesis:before {
+        background-image: url(~@/assets/images/icon-chuangshi-disabled.png);
+      }
+      &.genesis.active:before {
+        background-image: url(~@/assets/images/icon-chuangshi-active.png);
+      }
+
+      &.base:before {
+        background-image: url(~@/assets/images/icon-jichu-disabled.png);
+      }
+      &.base.active:before {
+        background-image: url(~@/assets/images/icon-jichu-active.png);
+      }
+
+      &.network:before {
+        background-image: url(~@/assets/images/icon-lianjie-disabled.png);
+      }
+      &.network.active:before {
+        background-image: url(~@/assets/images/icon-lianjie-active.png);
+      }
+
+      &.database:before {
+        background-image: url(~@/assets/images/icon-shujuku-disabled.png);
+      }
+      &.database.active:before {
+        background-image: url(~@/assets/images/icon-shujuku-active.png);
+      }
+
+      &.p2p:before {
+        background-image: url(~@/assets/images/icon-p2p-disabled.png);
+      }
+      &.p2p.active:before {
+        background-image: url(~@/assets/images/icon-p2p-active.png);
+      }
+
+      &.cross-chain:before {
+        background-image: url(~@/assets/images/icon-kualian-disabled.png);
+      }
+      &.cross-chain.active:before {
+        background-image: url(~@/assets/images/icon-kualian-active.png);
+      }
+
+      &:after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        right: calc((100% - 120px) / 2);
+        top: 60px;
+        transform: translate(50%, -50%);
+        width: 48px;
+        height: 35px;
+        background-image: url(~@/assets/images/icon-stepjiantou.png);
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+      }
+
+      &:last-child:after {
+        display: none;
+      }
+    }
+  }
+}
 .el-steps {
   margin-bottom: 20px;
 }

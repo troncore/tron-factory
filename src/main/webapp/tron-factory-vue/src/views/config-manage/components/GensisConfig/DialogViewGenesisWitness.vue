@@ -1,24 +1,34 @@
 <template>
   <el-dialog
-    center
-    width="700px"
-    :title="$t('tronWitenessSetting')"
-    :visible.sync="dialogVisible">
-    <el-form
-      ref="witenessDialogForm"
-      :model="witnessInfo"
-      label-width="120px"
-      label-position="left">
-      <el-form-item label="address" prop="address">
-        {{ witnessInfo.address }}
-      </el-form-item>
-      <el-form-item label="url" prop="url">
-        {{ witnessInfo.url }}
-      </el-form-item>
-      <el-form-item label="voteCount" prop="voteCount">
-        {{ witnessInfo.voteCount }}
-      </el-form-item>
-    </el-form>
+    :visible.sync="dialogVisible"
+    custom-class="im-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    width="680px"
+    top="200px"
+    center>
+
+    <div slot="title" class="dialog-header">
+      <div class="title">{{ $t('tronWitenessSetting') }}</div>
+    </div>
+
+    <div class="dialog-content">
+
+      <el-form :model="witnessInfo" label-width="120px" label-position="left">
+        <el-form-item label="address" prop="address">
+          {{ witnessInfo.address }}
+        </el-form-item>
+
+        <el-form-item label="url" prop="url">
+          {{ witnessInfo.url }}
+        </el-form-item>
+
+        <el-form-item label="voteCount" prop="voteCount">
+          {{ witnessInfo.voteCount }}
+        </el-form-item>
+      </el-form>
+
+    </div>
   </el-dialog>
 </template>
 

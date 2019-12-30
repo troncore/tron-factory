@@ -1,39 +1,28 @@
 <template>
   <div class="genesis-config">
-    <el-card shadow="hover">
-      <div class="box-header" @click="showContent = !showContent">
-        <i :class="showContent ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
-        {{ $t('tronSettingGenesis') }}
-      </div>
+    <el-card>
+      <div class="box-header title">{{ $t('tronSettingGenesis') }}</div>
 
-      <div class="box-body" v-if="showContent">
-        <el-row :gutter="30">
-          <el-col :span="12">
-            <div class="asset">
-              <el-button class="newAsset" @click="handleAddAsset">new asset</el-button>
-              <el-row v-for="(item, index) in genesisBlockAssets" :key="index">
-                <div class="assetList">
-                  <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }}</el-button>
-                  <i class="closeIcon el-icon-circle-close" @click="handleDeleteAssets(index)"></i>
-                </div>
-              </el-row>
-            </div>
-          </el-col>
+      <div class="box-body">
+        <div class="asset-list">
+          <el-button type="text" class="add-asset" @click="handleAddAsset">Add Asset</el-button>
+          <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
+            <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }}</el-button>
+            <i class="delete-btn el-icon-circle-close" @click="handleDeleteAssets(index)"></i>
+          </div>
+        </div>
 
-          <el-col :span="12">
-            <div class="witeness">
-              <el-button class="newWiteness" disabled>witness</el-button>
-              <el-row v-for="(item, index) in genesisBlockWitnesses" :key="index">
-                <el-button @click="handleViewWitness(item, index)" style="width:100%">{{ item.address }}</el-button>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
+        <div class="asset-list">
+          <el-button type="text" class="add-asset" disabled>Witness</el-button>
+          <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
+            <el-button @click="handleViewWitness(item, index)" style="width:100%">{{ item.address }}</el-button>
+          </div>
+        </div>
       </div>
     </el-card>
 
     <div class="box-footer right">
-      <el-button size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+      <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
     </div>
 
     <!-- add asset-->
@@ -150,61 +139,67 @@ export default {
 </script>
 <style lang="scss" scoped>
 .genesis-config {
-  padding-right: 80px;
-}
-.textCenter {
-  text-align: center;
-}
-.box-footer {
-  &.right {
-    margin-top: 40px;
-    text-align: right;
+  .box-header {
+    &.title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #081C56;
+    }
   }
-}
-.box-body {
-  margin-top: 40px;
-}
-.asset,
-.witeness {
-  position: relative;
-  margin: 0 auto;
-  // max-width: 600px;
-  min-height: 200px;
-  padding: 20px 15px;
-  border: 1px solid #ccc;
-  button {
-    margin-top: 15px;
-  }
-}
+  .box-body {
+    display: flex;
 
-.asset {
-  .newAsset {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
-    top: -20px;
+    margin-top: 40px;
+    .asset-list {
+      flex: 1;
+      margin-right: 30px;
+      position: relative;
+      padding: 80px 100px 50px;
+      border: 1px solid rgba(151, 151, 151, .2);
+      border-radius: 5px;
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .add-asset {
+        position: absolute;
+        top: 12px;
+        left: 50px;
+        font-size: 18px;
+      }
+      .asset-item {
+        position: relative;
+        margin-bottom: 30px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        .el-button {
+          padding: 0;
+          height: 50px;
+          line-height: 50px;
+        }
+        .delete-btn {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translate(0, -50%);
+          cursor: pointer;
+        }
+      }
+    }
   }
-}
-.witeness {
-  .newWiteness {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
-    top: -20px;
+  /deep/ .el-card {
+    .el-card__body {
+      padding: 30px;
+    }
   }
-}
-.assetDialogForm {
-  padding: 0 30px 0 20px;
-}
-.assetList {
-  position: relative;
-  // background: pink;
-  .closeIcon {
-    position: absolute;
-    right: -8px;
-    top: 8px;
+
+  .box-footer {
+    &.right {
+      margin-top: 40px;
+      text-align: right;
+    }
   }
+
 }
 </style>
