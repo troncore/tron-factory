@@ -250,10 +250,16 @@ export default {
     }
   }
 
-  .el-form-item {
+  /deep/ .el-form-item {
     display: inline-block;
     margin-right: 150px;
     width: 350px;
+
+    .el-form-item__label {
+      padding: 0;
+      font-size: 16px;
+      color: rgba(8, 28, 86, .7);
+    }
   }
 
   .box-footer {

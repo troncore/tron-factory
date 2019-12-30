@@ -80,15 +80,13 @@ export const menuRoutes = [
     },
   },
 
-/*
-
   {
     path: '/deploy_nodes',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import(/!* webpackChunkName: "deploy-nodes" *!/ '@/views/deploy-nodes'),
+        component: () => import(/* webpackChunkName: "deploy-nodes" */ '@/views/deploy-nodes'),
       },
     ],
     meta: {
@@ -104,7 +102,7 @@ export const menuRoutes = [
       name: 'tronscanMenu',
       icon: 'el-icon-link',
     },
-  },*/
+  },
 ]
 
 const routes = [...baseRoutes, ...menuRoutes, ...NotFoundRoutes]

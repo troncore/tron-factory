@@ -237,6 +237,8 @@ export default {
 
     .el-form-item__label {
       padding: 0;
+      font-size: 16px;
+      color: rgba(8, 28, 86, .7);
     }
   }
   .box-footer {
