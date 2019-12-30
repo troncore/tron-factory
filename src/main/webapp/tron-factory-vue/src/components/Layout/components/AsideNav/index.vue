@@ -35,7 +35,7 @@ export default {
         this.$router.push({
           path: index,
           query: {},
-        })
+        }).catch(err => err)
       }
     },
   },

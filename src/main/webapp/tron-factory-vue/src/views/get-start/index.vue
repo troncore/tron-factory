@@ -65,7 +65,7 @@ export default {
       this.$_api.dashboard.oneClickApi({}, err => {
         if (err) return
 
-        this.$router.push('/node_list')
+        this.$router.push('/node-list')
       })
     },
 

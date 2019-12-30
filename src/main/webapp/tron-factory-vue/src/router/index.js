@@ -36,7 +36,7 @@ export const menuRoutes = [
     },
   },
   {
-    path: '/node_list',
+    path: '/node-list',
     component: Layout,
     children: [
       {
@@ -48,30 +48,15 @@ export const menuRoutes = [
       name: 'tronSettingMenuNodeList',
       icon: 'el-icon-s-operation',
     },
-  }
-
- /* {
-    path: '/node_list',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        component: () => import(/!* webpackChunkName: "node-list" *!/ '@/views/node-list'),
-      },
-    ],
-    meta: {
-      name: 'tronSettingMenuNodeList',
-      icon: 'el-icon-s-operation',
-    },
   },
 
   {
-    path: '/config_manage',
+    path: '/config-manage',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import(/!* webpackChunkName: "config-manage" *!/ '@/views/config-manage'),
+        component: () => import(/* webpackChunkName: "config-manage" */ '@/views/config-manage'),
       },
     ],
     meta: {
@@ -81,7 +66,7 @@ export const menuRoutes = [
     },
   },
 
-  {
+/*  {
     path: '/import_plugin',
     component: Layout,
     children: [

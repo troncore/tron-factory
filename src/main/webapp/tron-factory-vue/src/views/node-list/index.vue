@@ -1,7 +1,7 @@
 <template>
   <div class="page-view node-list">
     <div class="page-header">
-      <el-button icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
+      <el-button class="im-button larger" icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
     </div>
 
     <el-card class="page-main custom-card">
@@ -28,18 +28,18 @@
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('tronNodeOperate')" width="200">
+        <el-table-column class-name="operator-btns" :label="$t('tronNodeOperate')" width="200">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleClickEditBtn(scope.row)">{{ $t('tronNodeModify') }}</el-button>
-            <el-button type="text" @click="handleDeleteNode(scope.row.id)">{{ $t('tronNodeDelete')}}</el-button>
+            <el-button type="text" @click="handleClickEditBtn(scope.row)"><i class="el-icon-edit"></i></el-button>
+            <span class="divider">|</span>
+            <el-button type="text" @click="handleDeleteNode(scope.row.id)"><i class="el-icon-delete"></i></el-button>
           </template>
         </el-table-column>
-
       </el-table>
     </el-card>
 
     <div class="page-footer align-right">
-      <el-button :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
+      <el-button class="im-button large" :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
     </div>
 
     <!-- node add and edit  -->
@@ -54,14 +54,17 @@
 </template>
 <script>
 import AddOrEditNodeDialog from './components/AddOrEditNodeDialog'
+import ImDialog from "../../components/ImDialog/src/index";
 
 export default {
   name: 'node-list',
   components: {
+    ImDialog,
     AddOrEditNodeDialog,
   },
   data() {
     return {
+      testVisible: false,
       tableData: [],
       listLoading: false,
       nextBtnType: 'info',
@@ -131,6 +134,10 @@ export default {
         confirmButtonText: this.$t('tronNodeDetermine'),
         cancelButtonText: this.$t('tronNodeCancel'),
         type: 'warning',
+        center: true,
+        customClass: 'im-message-box',
+        cancelButtonClass: 'im-message-cancel-button',
+        confirmButtonClass: 'im-message-confirm-button',
       }).then(() => {
         this.$_api.nodeApi.deleteNote({ id }, err => {
           if (err) return
@@ -151,7 +158,7 @@ export default {
       this.$_api.nodeApi.initConfigApi({}, err => {
         if (err) return
 
-        this.$router.push({ path: '/config_manage' })
+        this.$router.push({ path: '/config-manage' })
       })
     },
   },
@@ -165,6 +172,53 @@ export default {
 
   .page-footer {
     margin-top: 30px;
+  }
+
+  /deep/ .el-table {
+
+    .operator-btns {
+
+    }
+    .defined-header-row-tr {
+      th {
+        padding: 0;
+        height: 36px;
+        font-weight: bold;
+        color: #1f2d3d;
+        background-color: #e5e9f1;
+        border-right-color: white;
+
+        &:nth-last-child(2) {
+          border-right-color: #e5e9f1;
+        }
+      }
+    }
+
+    .defined-row-tr {
+      td {
+        padding: 4px 0;
+      }
+    }
+  }
+
+  /deep/ .el-table {
+    .el-table__body {
+      .operator-btns .cell {
+        display: flex;
+        align-items: center;
+
+        .el-button {
+          padding: 10px 0;
+        }
+        .divider {
+          margin: 10px;
+          color: #a5adb9;
+        }
+        i {
+          font-size: 18px;
+        }
+      }
+    }
   }
 }
 </style>

@@ -46,3 +46,13 @@ div, span {
   box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
   border-radius: 5px;
 }
+
+
+.im-icon-info {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-image: url(~@/assets/images/icon-explain.png);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
