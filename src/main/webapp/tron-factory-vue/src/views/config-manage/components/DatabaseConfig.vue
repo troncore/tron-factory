@@ -1,19 +1,15 @@
 <template>
   <div class="database-config">
-    <el-card class="box-body" shadow="hover">
-      <el-form ref="database-config-form" :rules="formRules" :model="form" label-width="250px" label-position="left">
-        <div @click="showContent = !showContent">
-          <i :class="showContent ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"/>
-          {{ $t('tronSettingDb') }}
-        </div>
-
-        <template v-if="showContent">
-          <el-form-item class="mgt20" :label="$t('tronSettingwriteSynchronously')" prop="storage_db_sync">
+    <el-card>
+      <div class="box-header title">{{ $t('tronSettingHttp') }}</div>
+      <div class="box-body">
+        <el-form ref="database-config-form" :rules="formRules" :model="form" label-position="top">
+          <el-form-item :label="$t('tronSettingwriteSynchronously')" prop="storage_db_sync">
             <el-switch v-model="form.storage_db_sync"></el-switch>
           </el-form-item>
 
           <el-form-item :label="$t('tronSettingOpenTransaction')" prop="storage_transHistory_switch">
-            <el-switch active-value="on" inactive-value="off" v-model="form.storage_transHistory_switch"></el-switch>
+            <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
           </el-form-item>
 
           <el-form-item :label="$t('tronSelectDatabaseConfiguration')" prop="storage_db_engine">
@@ -30,13 +26,13 @@
           <el-form-item :label="$t('tronSettingNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
             <el-switch v-model="form.storage_needToUpdateAsset"></el-switch>
           </el-form-item>
-        </template>
-      </el-form>
+        </el-form>
+      </div>
     </el-card>
 
     <div class="box-footer align-right">
-      <el-button size="small" type="primary" @click="handleCancel">{{ $t('tronSettingPreviousStep') }}</el-button>
-      <el-button size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -70,9 +66,15 @@ export default {
     }
   },
 
-  created () {
-    this.form = { ...this.configInfo.dbConfig }
+  watch: {
+    configInfo: {
+      handler (val = {}) {
+        this.form = { ...val.dbConfig }
+      },
+      immediate: true,
+    },
   },
+
   methods: {
     handleSubmit() {
       this.$refs['database-config-form'].validate(valid => {
@@ -106,15 +108,33 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .database-config {
-  padding-right: 80px;
-
-  .el-form-item {
-    width: 600px;
+  /deep/ .el-card {
+    .el-card__body {
+      padding: 30px;
+    }
   }
 
+  .box-header {
+    margin-bottom: 30px;
+    &.title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #081C56;
+    }
+  }
+
+  /deep/ .el-form-item {
+    display: inline-block;
+    margin-right: 150px;
+    width: 350px;
+
+    .el-form-item__label {
+      padding: 0;
+    }
+  }
   .box-footer {
+    margin-top: 40px;
     &.align-right {
-      margin-top: 40px;
       text-align: right;
     }
   }

@@ -65,14 +65,13 @@ export const menuRoutes = [
       icon: 'el-icon-setting',
     },
   },
-
-/*  {
-    path: '/import_plugin',
+  {
+    path: '/import-plugin',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import(/!* webpackChunkName: "import-plugin" *!/ '@/views/import-plugin'),
+        component: () => import(/* webpackChunkName: "import-plugin" */ '@/views/import-plugin'),
       },
     ],
     meta: {
@@ -80,6 +79,8 @@ export const menuRoutes = [
       icon: 'el-icon-upload',
     },
   },
+
+/*
 
   {
     path: '/deploy_nodes',

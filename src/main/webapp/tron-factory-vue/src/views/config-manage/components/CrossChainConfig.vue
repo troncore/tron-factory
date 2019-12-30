@@ -1,58 +1,43 @@
 <template>
   <div class="cross-chain-config">
-    <el-card class="box-body" shadow="hover">
+    <el-card>
+      <div class="box-header title">{{ $t('tronCrossChain') }}</div>
 
-      <el-form ref="cross-chain-config-form" :model="form" :rules="crossChainRules" label-width="200px" label-position="left">
-        <div @click="showContent = !showContent">
-          <i :class="showContent ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
-          {{ $t('tronCrossChain') }}
-        </div>
-
-        <template v-if="showContent">
+      <div class="box-body">
+        <el-form ref="cross-chain-config-form" :model="form" :rules="crossChainRules" label-position="top">
           <el-form-item label="enableCrossChain" prop="enableCrossChain" class="baseFormItem mgt20">
-            <el-switch disabled size="small" v-model="form.enableCrossChain"></el-switch>
+            <el-switch disabled  v-model="form.enableCrossChain"></el-switch>
           </el-form-item>
 
+          <br/>
+
           <el-form-item label="maxValidatorNumber" prop="maxValidatorNumber" class="baseFormItem">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.maxValidatorNumber"
-              :placeholder="$t('tronMaxValidatorNumberPlaceholder')"
-              disabled
-            ></el-input>
+            <el-input v-model.trim="form.maxValidatorNumber" :maxlength="50" :placeholder="$t('tronMaxValidatorNumberPlaceholder')" disabled></el-input>
           </el-form-item>
 
           <el-form-item label="minValidatorNumber" prop="minValidatorNumber" class="baseFormItem">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.minValidatorNumber"
-              :placeholder="$t('tronMinValidatorNumberPlaceholder')"
-              disabled>
-            </el-input>
+            <el-input v-model.trim="form.minValidatorNumber" :maxlength="50" :placeholder="$t('tronMinValidatorNumberPlaceholder')" disabled></el-input>
           </el-form-item>
 
           <el-form-item label="crossChainFee" prop="crossChainFee" class="baseFormItem">
             <el-input-number
-              size="small"
-              controls-position="right"
+              v-model.trim="form.crossChainFee"
               :min="0"
               :step="0.01"
               :maxlength="50"
-              v-model.trim="form.crossChainFee"
+              controls-position="right"
               :placeholder="$t('tronSettingPlaceholder')"
               disabled>
             </el-input-number>
           </el-form-item>
-        </template>
-      </el-form>
+        </el-form>
 
+      </div>
     </el-card>
 
     <div class="box-footer align-right">
-      <el-button size="small" type="primary" @click="handleCancel">{{ $t('tronSettingPreviousStep') }}</el-button>
-      <el-button size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -70,6 +55,13 @@ export default {
       required: true,
     }
   },
+  data() {
+    return {
+      form: {},
+      loading: false,
+    }
+  },
+
   computed: {
     crossChainRules() {
       const validNum = (rule, value, callback) => {
@@ -186,16 +178,14 @@ export default {
       return rules
     },
   },
-  data() {
-    return {
-      form: {},
-      showContent: true,
-      loading: false,
-    }
-  },
 
-  created () {
-    this.form = { ...this.configInfo.crossChainConfig }
+  watch: {
+    configInfo: {
+      handler (val = {}) {
+        this.form = { ...val.crossChainConfig }
+      },
+      immediate: true,
+    },
   },
 
   methods: {
@@ -225,14 +215,33 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .cross-chain-config {
-  padding-right: 80px;
+  /deep/ .el-card {
+    .el-card__body {
+      padding: 30px;
+    }
+  }
 
-  .el-form-item {
-    width: 600px;
+  .box-header {
+    margin-bottom: 30px;
+    &.title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #081C56;
+    }
+  }
+
+  /deep/ .el-form-item {
+    display: inline-block;
+    margin-right: 150px;
+    width: 350px;
+
+    .el-form-item__label {
+      padding: 0;
+    }
   }
   .box-footer {
+    margin-top: 40px;
     &.align-right {
-      margin-top: 40px;
       text-align: right;
     }
   }

@@ -1,69 +1,45 @@
 <template>
   <div class="base-config">
+    <el-card>
+      <div class="box-header title">{{ $t('tronSettingBase') }}</div>
 
-    <el-card class="box-body" shadow="hover">
-      <el-form ref="base-config-form" :rules="baseRules" :model="form" label-width="230px" label-position="left">
-        <div @click="showContent = !showContent">
-          <i :class="showContent ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
-          {{ $t('tronSettingBase') }}
-        </div>
-
-        <template v-if="showContent">
-          <el-form-item label="chainId" prop="chainId" class="baseFormItem mgt20">
-            <el-input :placeholder="$t('tronChainIdPlaceholder')" size="small" :maxlength="50" v-model.trim="form.chainId"></el-input>
+      <div class="box-body">
+        <el-form ref="base-config-form" :rules="baseRules" :model="form">
+          <el-form-item label="chainId" prop="chainId">
+            <el-input v-model.trim="form.chainId" :maxlength="50" :placeholder="$t('tronChainIdPlaceholder')"></el-input>
           </el-form-item>
 
-          <el-form-item label="chainName" prop="chainName" class="baseFormItem">
-            <el-input v-model.trim="form.chainName" size="small" :maxlength="50" :placeholder="$t('tronChainNamePlaceholder')"></el-input>
+          <el-form-item label="chainName" prop="chainName">
+            <el-input v-model.trim="form.chainName" :maxlength="50" :placeholder="$t('tronChainNamePlaceholder')"></el-input>
           </el-form-item>
 
-          <el-form-item class="baseFormItem" label="MaintenanceTimeInterval" prop="block_maintenanceTimeInterval">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.block_maintenanceTimeInterval"
-              :placeholder="$t('tronblockBlockMaintenanceTimeIntervalPlaceholder')">
-            </el-input>
+          <el-form-item label="MaintenanceTimeInterval" prop="block_maintenanceTimeInterval">
+            <el-input v-model.trim="form.block_maintenanceTimeInterval" :maxlength="50" :placeholder="$t('tronblockBlockMaintenanceTimeIntervalPlaceholder')"></el-input>
           </el-form-item>
 
-          <el-button type="text" size="small" @click="moreSetting = !moreSetting">{{ $t('tronMoreSetting') }}</el-button>
+          <div class="more-form">
+            <el-button type="text">{{ $t('tronMoreSetting') }}</el-button>
+          </div>
 
-          <template v-if="moreSetting">
-            <el-form-item label="blockProposalExpireTime" prop="block_proposalExpireTime" class="baseFormItem">
-              <el-input
-                size="small"
-                :maxlength="50"
-                v-model.trim="form.block_proposalExpireTime"
-                :placeholder="$t('tronblockProducedTimeOutePlaceholder')">
-              </el-input>
-            </el-form-item>
+          <el-form-item label="blockProposalExpireTime" prop="block_proposalExpireTime">
+            <el-input v-model.trim="form.block_proposalExpireTime" :maxlength="50" :placeholder="$t('tronblockProducedTimeOutePlaceholder')"></el-input>
+          </el-form-item>
 
-            <el-form-item class="baseFormItem" label="nodeBlockProducedTimeOut" prop="node_blockProducedTimeOut">
-              <el-input
-                size="small"
-                :maxlength="50"
-                v-model.trim="form.node_blockProducedTimeOut"
-                :placeholder="$t('tronblockNodeBlockProducedTimeOutPlaceholder')">
-              </el-input>
-            </el-form-item>
+          <el-form-item label="nodeBlockProducedTimeOut" prop="node_blockProducedTimeOut">
+            <el-input v-model.trim="form.node_blockProducedTimeOut" :maxlength="50" :placeholder="$t('tronblockNodeBlockProducedTimeOutPlaceholder')"></el-input>
+          </el-form-item>
 
-            <el-form-item class="baseFormItem" label="nodeMinParticipationRate" prop="node_minParticipationRate">
-              <el-input
-                size="small"
-                :maxlength="50"
-                v-model.trim="form.node_minParticipationRate"
-                :placeholder="$t('tronblockNodeMinParticipationRatePlaceholder')">
-              </el-input>
-            </el-form-item>
-          </template>
+          <el-form-item label="nodeMinParticipationRate" prop="node_minParticipationRate">
+            <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" :placeholder="$t('tronblockNodeMinParticipationRatePlaceholder')"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
 
-        </template>
-      </el-form>
     </el-card>
 
     <div  class="box-footer align-right">
-      <el-button type="primary" size="small" @click="handleCancel">{{ $t('tronSettingPreviousStep') }}</el-button>
-      <el-button type="primary" size="small" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -84,9 +60,6 @@ export default {
   data() {
     return {
       form: {},
-      showContent: true,
-      moreSetting: false,
-
       loading: false,
     }
   },
@@ -212,9 +185,13 @@ export default {
       return rules
     },
   },
-
-  created () {
-    this.form = { ...this.configInfo.baseSettingConfig }
+  watch: {
+    configInfo: {
+      handler (val = {}) {
+        this.form = { ...val.baseSettingConfig }
+      },
+      immediate: true,
+    },
   },
 
   methods: {
@@ -250,15 +227,38 @@ export default {
 </script>
 <style lang="scss" scoped>
 .base-config {
-  padding-right: 80px;
+  /deep/ .el-card {
+    .el-card__body {
+      padding: 30px;
+    }
+  }
+
+  .box-header {
+    margin-bottom: 30px;
+    &.title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #081C56;
+    }
+  }
+
+  .more-form {
+    margin-top: 20px;
+    .el-button {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
 
   .el-form-item {
-    width: 580px;
+    display: inline-block;
+    margin-right: 150px;
+    width: 350px;
   }
 
   .box-footer {
+    margin-top: 40px;
     &.align-right {
-      margin-top: 40px;
       text-align: right;
     }
   }

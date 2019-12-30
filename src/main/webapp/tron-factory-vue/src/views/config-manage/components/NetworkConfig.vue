@@ -1,65 +1,36 @@
 <template>
   <div class="network-config">
-    <el-card class="box-body" shadow="hover">
-      <el-form ref="network-config-form" :rules="networkRules" :model="form" label-width="200px" label-position="left">
+    <el-card>
+      <div class="box-header title">{{ $t('tronSettingHttp') }}</div>
 
-        <div @click="showContent = !showContent">
-          <i :class="showContent ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"></i>
-          {{ $t('tronSettingHttp') }}
-        </div>
-
-        <template v-if="showContent">
+      <div class="box-body">
+        <el-form ref="network-config-form" :rules="networkRules" :model="form">
           <el-form-item label="maxHttpConnectNumber" prop="node_maxHttpConnectNumber" class="baseFormItem mgt20">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.node_maxHttpConnectNumber"
-              :placeholder="$t('tronmaxHttpConnectNumberPlaceholder')">
-            </el-input>
+            <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" :placeholder="$t('tronmaxHttpConnectNumberPlaceholder')"></el-input>
           </el-form-item>
 
           <el-form-item class="baseFormItem" label="httpFullNodePort" prop="node_http_fullNodePort">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.node_http_fullNodePort"
-              :placeholder="$t('tronhttpFullNodePortPlaceholder')">
-            </el-input>
+            <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" :placeholder="$t('tronhttpFullNodePortPlaceholder')"></el-input>
           </el-form-item>
 
           <el-form-item class="baseFormItem" label="httpSolidityPort" prop="node_http_solidityPort">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.node_http_solidityPort"
-              :placeholder="$t('tronhttpHttpSolidityPortPlaceholder')">
-            </el-input>
+            <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" :placeholder="$t('tronhttpHttpSolidityPortPlaceholder')"></el-input>
           </el-form-item>
 
           <el-form-item class="baseFormItem" label="rpcPort" prop="node_rpc_port">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.node_rpc_port"
-              :placeholder="$t('tronhttpRpcPortPlaceholder')">
-            </el-input>
+            <el-input v-model.trim="form.node_rpc_port" :maxlength="50" :placeholder="$t('tronhttpRpcPortPlaceholder')"></el-input>
           </el-form-item>
 
           <el-form-item class="baseFormItem" label="rpcSolidityPort" prop="node_rpc_solidityPort">
-            <el-input
-              size="small"
-              :maxlength="50"
-              v-model.trim="form.node_rpc_solidityPort"
-              :placeholder="$t('tronhttpRpcSolidityPortPlaceholder')">
-            </el-input>
+            <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" :placeholder="$t('tronhttpRpcSolidityPortPlaceholder')"></el-input>
           </el-form-item>
-        </template>
-      </el-form>
+        </el-form>
+      </div>
     </el-card>
 
     <div class="box-footer align-right">
-      <el-button size="small" type="primary" @click="handleCancel">{{ $t('tronSettingPreviousStep') }}</el-button>
-      <el-button size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -75,6 +46,19 @@ export default {
     initConfigInfo: {
       type: Function,
       required: true,
+    }
+  },
+  data() {
+    return {
+      form: {
+        node_maxHttpConnectNumber: '',
+        node_http_solidityPort: '',
+        node_http_fullNodePort: '',
+        node_rpc_port: '',
+        node_rpc_solidityPort: '',
+      },
+
+      loading: false,
     }
   },
   computed: {
@@ -190,23 +174,13 @@ export default {
       return rules
     },
   },
-  data() {
-    return {
-      showContent: true,
-      form: {
-        node_maxHttpConnectNumber: '',
-        node_http_solidityPort: '',
-        node_http_fullNodePort: '',
-        node_rpc_port: '',
-        node_rpc_solidityPort: '',
+  watch: {
+    configInfo: {
+      handler (val = {}) {
+        this.form = { ...val.networkConfig }
       },
-
-      loading: false,
-    }
-  },
-
-  created () {
-    this.form = { ...this.configInfo.networkConfig }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -243,15 +217,30 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .network-config {
-  padding-right: 80px;
+  /deep/ .el-card {
+    .el-card__body {
+      padding: 30px;
+    }
+  }
+
+  .box-header {
+    margin-bottom: 30px;
+    &.title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #081C56;
+    }
+  }
 
   .el-form-item {
-    width: 600px;
+    display: inline-block;
+    margin-right: 150px;
+    width: 350px;
   }
 
   .box-footer {
+    margin-top: 40px;
     &.align-right {
-      margin-top: 40px;
       text-align: right;
     }
   }

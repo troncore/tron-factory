@@ -111,7 +111,7 @@ export default {
         this.currentStep = step
         this.initConfigInfo()
       } else {
-        this.$router.push({ path: "/import_plugin" })
+        this.$router.push({ path: "/import-plugin" })
       }
     },
 

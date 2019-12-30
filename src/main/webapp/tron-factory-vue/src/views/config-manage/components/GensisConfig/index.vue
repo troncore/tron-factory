@@ -21,11 +21,11 @@
       </div>
     </el-card>
 
-    <div class="box-footer right">
-      <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingNextStep') }}</el-button>
+    <div class="box-footer align-right">
+      <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
 
-    <!-- add asset-->
+    <!-- add or edit asset-->
     <add-asset-dialog
       v-if="assetDialogVisible"
       :visible.sync="assetDialogVisible"
@@ -64,8 +64,6 @@ export default {
   },
   data() {
     return {
-      showContent: true,
-
       // for asset
       isAddingAsset: true,
       assetDialogVisible: false,
@@ -139,7 +137,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .genesis-config {
+  /deep/ .el-card {
+    .el-card__body {
+      padding: 30px;
+    }
+  }
   .box-header {
+    margin-bottom: 30px;
     &.title {
       font-size: 20px;
       font-weight: bold;
@@ -148,8 +152,6 @@ export default {
   }
   .box-body {
     display: flex;
-
-    margin-top: 40px;
     .asset-list {
       flex: 1;
       margin-right: 30px;
@@ -188,15 +190,10 @@ export default {
       }
     }
   }
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
 
   .box-footer {
-    &.right {
-      margin-top: 40px;
+    margin-top: 40px;
+    &.align-right {
       text-align: right;
     }
   }
