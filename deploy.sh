@@ -12,6 +12,6 @@ while true; do
 done
 nohup java -jar target/deployment-0.0.1-SNAPSHOT.jar&
 sleep 10
-echo "ok!"
-cd src/main/webapp/tron-factory-vue && nohup yarn start&
+echo "service ok!"
+#cd src/main/webapp/tron-factory-vue && nohup yarn start&
 
