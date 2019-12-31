@@ -103,11 +103,10 @@ $media1680: 1680px;
 .import-plugin {
   .im-steps {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin: 60px auto 0;
+    margin: 60px auto 110px;
     @media screen and (max-width: $media1680){
-      margin-top: 30px;
+      margin: 30px auto 60px;
     }
 
     .im-step {
@@ -116,11 +115,7 @@ $media1680: 1680px;
       }
       position: relative;
       padding-top: 120px;
-      height: 260px;
       cursor: pointer;
-      @media screen and (max-width: $media1680){
-        height: 220px;
-      }
       &:last-child {
         width: 120px;
       }
