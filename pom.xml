@@ -110,7 +110,7 @@
               <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${basedir}/src/main/webapp/tron-factory-vue/dist</directory>
+                  <directory>${basedir}/src/main/webapp/tron-factory-vue-old/dist</directory>
                 </resource>
               </resources>
             </configuration>
