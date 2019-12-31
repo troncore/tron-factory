@@ -55,6 +55,7 @@
 <script>
 import AddOrEditNodeDialog from './components/AddOrEditNodeDialog'
 import ImDialog from "../../components/ImDialog/src/index";
+import { mapMutations } from "vuex";
 
 export default {
   name: 'node-list',
@@ -81,6 +82,9 @@ export default {
     this.getNodeList()
   },
   methods: {
+    ...mapMutations('user', {
+      updateAuthMenu: 'SET_AUTH_MENU',
+    }),
     // get table data
     getNodeList() {
       this.$_api.nodeApi.allNodeInfo({}, (err, res = []) => {
@@ -158,6 +162,7 @@ export default {
       this.$_api.nodeApi.initConfigApi({}, err => {
         if (err) return
 
+        this.updateAuthMenu({name: 'config-manage'})
         this.$router.push({ path: '/config-manage' })
       })
     },

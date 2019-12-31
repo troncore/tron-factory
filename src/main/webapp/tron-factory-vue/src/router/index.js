@@ -20,68 +20,77 @@ export const NotFoundRoutes = [
     },
   },
 ]
-export const menuRoutes = [
+export const authMenuRoutes = [
   {
     path: '/get-start',
     component: Layout,
+    meta: {
+      name: 'get-start', // for path
+      title: 'getStart.name', // for menu
+      disabled: false,
+      icon: 'el-icon-guide',
+    },
     children: [
       {
         path: '',
         component: () => import(/* webpackChunkName: "get-start" */ '@/views/get-start')
       },
     ],
-    meta: {
-      name: 'getStart.name',
-      icon: 'el-icon-guide',
-    },
   },
+
   {
     path: '/node-list',
     component: Layout,
+    meta: {
+      name: 'node-list',
+      title: 'tronSettingMenuNodeList',
+      disabled: true,
+      icon: 'el-icon-s-operation',
+    },
     children: [
       {
         path: '',
         component: () => import(/* webpackChunkName: "node-list" */ '@/views/node-list'),
       },
     ],
-    meta: {
-      name: 'tronSettingMenuNodeList',
-      icon: 'el-icon-s-operation',
-    },
   },
 
   {
     path: '/config-manage',
     component: Layout,
+    meta: {
+      name: 'config-manage',
+      title: 'tronSettingMenuSetting',
+      disabled: true,
+      icon: 'el-icon-setting',
+    },
     children: [
       {
         path: '',
         component: () => import(/* webpackChunkName: "config-manage" */ '@/views/config-manage'),
       },
     ],
-    meta: {
-      title: 'tronSettingMenuSetting',
-      name: 'tronSettingMenuSetting',
-      icon: 'el-icon-setting',
-    },
   },
+
   {
     path: '/import-plugin',
     component: Layout,
+    meta: {
+      name: 'import-plugin',
+      title: 'tronSettingMenuPlugin',
+      disabled: true,
+      icon: 'el-icon-upload',
+    },
     children: [
       {
         path: '',
         component: () => import(/* webpackChunkName: "import-plugin" */ '@/views/import-plugin'),
       },
     ],
-    meta: {
-      name: 'tronSettingMenuPlugin',
-      icon: 'el-icon-upload',
-    },
   },
 
   {
-    path: '/deploy_nodes',
+    path: '/deploy-nodes',
     component: Layout,
     children: [
       {
@@ -90,16 +99,22 @@ export const menuRoutes = [
       },
     ],
     meta: {
-      name: 'tronSettingMenuDeployment',
+      name: 'deploy-nodes',
+      title: 'tronSettingMenuDeployment',
+      disabled: true,
       icon: 'el-icon-share',
     },
   },
-
+]
+export const menuRoutes = [
+  ...authMenuRoutes,
   {
     path: 'https://tronscan.org/',
     component: Layout,
     meta: {
-      name: 'tronscanMenu',
+      name: 'tronscan',
+      title: 'tronscanMenu',
+      disabled: false,
       icon: 'el-icon-link',
     },
   },

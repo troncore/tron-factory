@@ -31,6 +31,7 @@ import NetworkConfig from './components/NetworkConfig'
 import DatabaseConfig from './components/DatabaseConfig'
 import P2pConfig from './components/P2pConfig'
 import CrossChainConfig from './components/CrossChainConfig'
+import { mapMutations } from "vuex";
 
 export default {
   name: 'config-manage',
@@ -77,6 +78,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations('user', {
+      updateAuthMenu: 'SET_AUTH_MENU',
+    }),
     // get configure info
     initConfigInfo () {
       return new Promise(resolve => {
@@ -111,6 +115,7 @@ export default {
         this.currentStep = step
         this.initConfigInfo()
       } else {
+        this.updateAuthMenu({name: 'import-plugin'})
         this.$router.push({ path: "/import-plugin" })
       }
     },

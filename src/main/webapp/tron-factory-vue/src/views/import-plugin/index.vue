@@ -27,6 +27,8 @@ import TransactionModule from './components/TransactionModule'
 import DatabaseModule from './components/DatabaseModule'
 import CryptoModule from './components/CryptoModule'
 
+import { mapMutations } from "vuex";
+
 export default {
   name: 'import-plugin',
   components: {
@@ -61,6 +63,9 @@ export default {
   },
 
   methods: {
+    ...mapMutations('user', {
+      updateAuthMenu: 'SET_AUTH_MENU',
+    }),
     // get plugin info
     initPluginInfo () {
       return new Promise(resolve => {
@@ -91,6 +96,8 @@ export default {
         this.currentStep = step
         this.initPluginInfo()
       } else {
+        this.updateAuthMenu({name: 'deploy-nodes'})
+
         this.$router.push({ path: "/deploy-nodes" })
       }
     },

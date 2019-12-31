@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import PanelGroup from './components/PanelGroup'
 export default {
   name: 'get-start',
@@ -61,9 +62,14 @@ export default {
     PanelGroup,
   },
   methods: {
+    ...mapMutations('user', {
+      updateAuthMenu: 'SET_AUTH_MENU',
+    }),
     handleStartSettingDeploy() {
       this.$_api.dashboard.oneClickApi({}, err => {
         if (err) return
+
+        this.updateAuthMenu({nameList: ['get-start', 'node-list']})
 
         this.$router.push('/node-list')
       })

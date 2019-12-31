@@ -1,7 +1,7 @@
 <template>
-  <el-menu-item :index="routePath">
+  <el-menu-item :index="routePath" :disabled="route.meta.disabled">
     <i :class="route.meta.icon" />
-    <span slot="title">{{ $t(route.meta.name) }}</span>
+    <span slot="title">{{ $t(route.meta.title) }}</span>
   </el-menu-item>
 </template>
 
@@ -13,6 +13,13 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data () {
+    return {
+      authMenu: [
+
+      ]
+    }
   },
   computed: {
     routePath() {
