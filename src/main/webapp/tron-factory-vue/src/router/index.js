@@ -28,6 +28,7 @@ export const authMenuRoutes = [
       name: 'get-start', // for path
       title: 'getStart.name', // for menu
       disabled: false,
+      isAuth: false,
       icon: 'el-icon-guide',
     },
     children: [

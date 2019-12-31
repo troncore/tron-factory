@@ -52,6 +52,7 @@ const getters = {
 }
 
 const mutations = {
+  // name is the meta name of the route path
   SET_AUTH_MENU (state, { nameList, name }) {
     state.authMenu = nameList || state.authMenu
 
