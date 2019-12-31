@@ -22,4 +22,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.el-menu-item {
+  margin-bottom: 15px;
+}
+</style>
