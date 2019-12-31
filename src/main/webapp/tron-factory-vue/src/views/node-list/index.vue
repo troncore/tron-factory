@@ -4,13 +4,13 @@
       <el-button class="im-button larger" icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
     </div>
 
-    <el-card class="page-main custom-card">
+    <el-card class="page-body custom-card">
       <el-table
-        class="custom-table"
-        v-loading="listLoading"
-        ref="multipleTable"
-        :empty-text="$t('tronNodesNoData')"
         :data="tableData"
+        :empty-text="$t('tronNodesNoData')"
+        v-loading="listLoading"
+        class="custom-table"
+        ref="multipleTable"
         stripe>
 
         <el-table-column prop="id" label="ID" />
@@ -23,8 +23,8 @@
 
         <el-table-column :label="$t('tronNodeWhetherIsSR')">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.isSR">yes</el-tag>
-            <el-tag type="danger" v-else>no</el-tag>
+            <el-tag size="medium" type="success" v-if="scope.row.isSR">YES</el-tag>
+            <el-tag size="medium" type="danger" v-else>NO</el-tag>
           </template>
         </el-table-column>
 

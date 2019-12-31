@@ -1,43 +1,43 @@
 <template>
   <div class="app-container page-view deploy-nodes">
     <div class="page-header">
-      <el-button size="small" :loading="batchDeployLoading" :type="batchDeployBtnType" @click="handleOpenDeployDialog">{{ $t('tronNodeBulkDeployment') }}</el-button>
+      <el-button class="im-button larger" :loading="batchDeployLoading" type="primary" @click="handleOpenDeployDialog">{{ $t('tronNodeBulkDeployment') }}</el-button>
     </div>
 
-    <el-table
-      v-loading="tableLoading"
-      :empty-text="$t('tronNodesNoData')"
-      :data="tableData"
-      tooltip-effect="dark"
-      border
-      @selection-change="handleSelectionChange">
+    <el-card class="page-body custom-card">
+      <el-table
+        :data="tableData"
+        :empty-text="$t('tronNodesNoData')"
+        v-loading="tableLoading"
+        class="custom-table"
+        header-align="center"
+        @selection-change="handleSelectionChange">
 
-      <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="selection" width="100" align="center"></el-table-column>
 
-      <el-table-column prop="id" label="ID" align="center"></el-table-column>
+        <el-table-column prop="id" label="ID" align="center"></el-table-column>
 
-      <el-table-column prop="userName" :label="$t('tronNodeName')" align="center"></el-table-column>
+        <el-table-column prop="userName" :label="$t('tronNodeName')" align="center"></el-table-column>
 
-      <el-table-column prop="ip" label="IP/HOST" align="center"></el-table-column>
+        <el-table-column prop="ip" label="IP/HOST" align="center"></el-table-column>
 
-      <el-table-column prop="port" label="SSH PORT" align="center"></el-table-column>
+        <el-table-column prop="port" label="SSH PORT" align="center"></el-table-column>
 
-      <el-table-column :label="$t('tronNodeWhetherIsSR')" align="center">
-        <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.isSR">yes</el-tag>
-          <el-tag type="danger" v-else>no</el-tag>
-        </template>
-      </el-table-column>
+        <el-table-column :label="$t('tronNodeWhetherIsSR')" align="center">
+          <template slot-scope="scope">
+            <el-tag size="medium" type="success" v-if="scope.row.isSR">YES</el-tag>
+            <el-tag size="medium" type="danger" v-else>NO</el-tag>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="status" :label="$t('tronNodeStatus')" align="center">
-        <template slot-scope="scope">
-          <el-button size="small" type="info" @click="handleViewDeployLog(scope.row)">{{
-            $t('tronNodeLog')
-            }}</el-button>
-        </template>
-      </el-table-column>
+        <el-table-column prop="status" :label="$t('tronNodeStatus')" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleViewDeployLog(scope.row)">{{$t('tronNodeLog') }}</el-button>
+          </template>
+        </el-table-column>
 
-    </el-table>
+      </el-table>
+    </el-card>
 
     <!-- deploy node  -->
     <deploy-dialog
