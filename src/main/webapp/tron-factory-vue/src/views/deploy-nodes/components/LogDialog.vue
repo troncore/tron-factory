@@ -1,9 +1,16 @@
 <template>
   <el-dialog
-    :title="$t('tronNodeStatus')"
     :visible.sync="dialogVisible"
-    width="600px"
+    custom-class="im-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    width="680px"
+    top="200px"
     center>
+    <div slot="title" class="dialog-header">
+      <div class="title">{{ $t('tronNodeStatus') }}</div>
+      <div class="title-info">以下均为必填项</div>
+    </div>
 
     <div class="dialog-content" v-loading="initLoading">
 

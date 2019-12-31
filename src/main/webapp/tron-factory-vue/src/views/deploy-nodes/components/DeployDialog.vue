@@ -1,21 +1,26 @@
 <template>
   <el-dialog
-    :title="$t('tronNodeBulkDeployment')"
     :visible.sync="dialogVisible"
-    width="600px"
+    custom-class="im-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    width="680px"
+    top="200px"
     center>
+    <div slot="title" class="dialog-header">
+      <div class="title">{{ $t('tronNodeBulkDeployment') }}</div>
+      <div class="title-info">以下均为必填项</div>
+    </div>
 
     <div class="dialog-content">
       <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" v-model.trim="form.filePath"></el-input>
       <div class="el-upload__tip">{{ $t('deploymentUpload') }}</div>
     </div>
 
-
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">{{ $t('tronNodeCancel') }}</el-button>
-      <el-button type="primary" @click="handleSubmit" :loading="loading">{{ $t('tronNodeSave') }}</el-button>
+      <el-button class="im-button" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button" type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
     </div>
-
   </el-dialog>
 </template>
 
