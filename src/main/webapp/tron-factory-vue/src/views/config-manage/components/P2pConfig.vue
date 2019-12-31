@@ -310,7 +310,7 @@ export default {
           let params = {
             p2pVersion: this.form.node_p2p_version,
             listenPort: this.form.node_listen_port,
-            seed_node_ip_list: this.form.seed_node_ip_list.map(ip => ip + ':' + this.form.node_listen_port),
+            seed_node_ip_list: this.form.seed_node_ip_list.map(ip => ip + '":"' + this.form.node_listen_port),
             maxActiveNodes: this.form.node_maxActiveNodes,
             nodeActiveConnectFactor: this.form.node_activeConnectFactor,
             nodeMaxActiveNodesWithSameIp: this.form.node_maxActiveNodesWithSameIp,
