@@ -4,7 +4,7 @@
   @create_date: 2019-12-19
 -->
 <template>
-  <div class="app-container page-view config-manage">
+  <div class="page-view config-manage">
 
     <div class="im-steps">
       <div :class="['im-step genesis', { active: 1 <= currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronSettingGenesis') }}</span></div>
@@ -242,8 +242,5 @@ $media1680: 1680px;
       }
     }
   }
-}
-.el-steps {
-  margin-bottom: 20px;
 }
 </style>

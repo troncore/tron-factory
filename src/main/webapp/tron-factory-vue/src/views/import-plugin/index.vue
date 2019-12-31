@@ -4,14 +4,14 @@
   @create_date: 2019-12-23
 -->
 <template>
-  <div class="app-container import-plugin">
+  <div class="page-view import-plugin">
 
-    <el-steps :active="currentStep" align-center type="mini">
-      <el-step @click.native="handleSkipStep(1)" :title="$t('tronPluginConsensusModule')"></el-step>
-      <el-step @click.native="handleSkipStep(2)" :title="$t('tronPluginTransactionModule')"></el-step>
-      <el-step @click.native="handleSkipStep(3)" :title="$t('tronPluginDatabaseModule')"></el-step>
-      <el-step @click.native="handleSkipStep(4)" :title="$t('tronPluginCryptoModule')"></el-step>
-    </el-steps>
+    <div class="im-steps">
+      <div :class="['im-step consensus', { active: 1 <= currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronPluginConsensusModule') }}</span></div>
+      <div :class="['im-step transaction', { active: 2 <= currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronPluginTransactionModule') }}</span></div>
+      <div :class="['im-step database', { active: 3 <= currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronPluginDatabaseModule') }}</span></div>
+      <div :class="['im-step crypto', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronPluginCryptoModule') }}</span></div>
+    </div>
 
     <component
       :is="stepMapConfig[currentStep]"
@@ -91,33 +91,110 @@ export default {
         this.currentStep = step
         this.initPluginInfo()
       } else {
-        this.$router.push({ path: "/deploy_nodes" })
+        this.$router.push({ path: "/deploy-nodes" })
       }
     },
   },
 }
 </script>
 <style lang="scss" scoped>
-.el-steps {
-  margin-bottom: 20px;
-}
-.page-view {
-  .box-footer {
-    &.align-right {
-      margin-top: 40px;
-      text-align: right;
+$media1680: 1680px;
+
+.import-plugin {
+  .im-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 60px auto 0;
+    @media screen and (max-width: $media1680){
+      margin-top: 30px;
+    }
+
+    .im-step {
+      &:not(:last-child) {
+        flex: 1;
+      }
+      position: relative;
+      padding-top: 120px;
+      height: 260px;
+      cursor: pointer;
+      @media screen and (max-width: $media1680){
+        height: 220px;
+      }
+      &:last-child {
+        width: 120px;
+      }
+      span {
+        display: inline-block;
+        width: 120px;
+        text-align: center;
+        color: #999;
+      }
+      &:before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 122px;
+        height: 120px;
+        background-repeat: no-repeat;
+        background-size: 94px auto;
+        background-position: center center;
+      }
+      &.active:before {
+        background-size: 100% auto;
+      }
+      &.active span {
+        color: #333;
+      }
+
+      &.consensus:before {
+        background-image: url(~@/assets/images/icon-gongshimokuai-disabled.png);
+      }
+      &.consensus.active:before {
+        background-image: url(~@/assets/images/icon-gongshimokuai-active.png);
+      }
+
+      &.transaction:before {
+        background-image: url(~@/assets/images/icon-jiaoyimokuai-disabled.png);
+      }
+      &.transaction.active:before {
+        background-image: url(~@/assets/images/icon-jiaoyimokuai-active.png);
+      }
+
+      &.database:before {
+        background-image: url(~@/assets/images/icon-shujukumokuai-disabled.png);
+      }
+      &.database.active:before {
+        background-image: url(~@/assets/images/icon-shujukumokuai-active.png);
+      }
+
+      &.crypto:before {
+        background-image: url(~@/assets/images/icon-shujukumokuai-disabled.png);
+      }
+      &.crypto.active:before {
+        background-image: url(~@/assets/images/icon-shujukumokuai-active.png);
+      }
+
+      &:after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        right: calc((100% - 120px) / 2);
+        top: 60px;
+        transform: translate(50%, -50%);
+        width: 48px;
+        height: 35px;
+        background-image: url(~@/assets/images/icon-stepjiantou.png);
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+      }
+
+      &:last-child:after {
+        display: none;
+      }
     }
   }
-}
-
-.textRight {
-  margin-top: 40px;
-  text-align: right;
-}
-.pluginSettingFormInput {
-  width: 400px;
-}
-.singlePluginSettingFormInput {
-  width: 715px;
 }
 </style>
