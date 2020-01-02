@@ -18,7 +18,7 @@
           </div>
 
           <el-form-item class="custom-transaction" props="customTransaction">
-            <el-checkbox style="margin:0" :label="9">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
+            <el-checkbox v-model="checkCustomTransaction">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
             <el-input
               v-model.trim="form.customTransaction"
               type="textarea"
@@ -55,6 +55,8 @@
           transaction: [],
           customTransaction: '',
         },
+        checkCustomTransaction: false,
+        customTransactionIndex: -1, // if customTransaction exist, return its index
         formRules: {
           transaction: [{ required: true, message: this.$t('tronSettingPlaceholder'), trigger: 'blur', },],
         },
@@ -73,7 +75,7 @@
           this.form.customTransaction = val.customTransaction || ''
           this.form.transaction = val.transaction
 
-          if (this.form.customTransaction) this.form.transaction.push(9)
+          if (this.form.customTransaction) this.checkCustomTransaction = true
         },
         immediate: true,
       },
@@ -89,39 +91,17 @@
           if (valid) {
             let checkStatus = 0
 
-            if (this.form.customTransaction) {
-              this.form.transaction.forEach(item => {
-                if (item === 9) {
-                  if ( this.form.customTransaction.length > 4 && this.form.customTransaction.endsWith('.jar')) checkStatus = 1
-                  else checkStatus = 2
-                }
-                else checkStatus = 3
-              })
-            } else {
-              if (this.form.transaction.indexOf(9) > 0) {
-                checkStatus = 4
+            if (this.checkCustomTransaction) {
+              if (!this.form.customTransaction.length) {
                 this.$message.warning(this.$t('tronPluginCustomTradingModulePlaceholder'),)
+                return
               }
-            }
-
-            if (checkStatus === 1) {
-              this.form.transaction.forEach((item, ind) => {
-                if (item === 9)this.form.transaction.splice(ind, 1)
-                else checkStatus = 3
-              })
-            } else if (checkStatus === 2) {
-              this.$message({
-                type: 'warning',
-                message: this.$t('tronPluginDeploymentCorrectPathPlaceholder'),
-              })
-              return
-            } else if (checkStatus === 3) {
-              this.$message({
-                type: 'warning',
-                message: this.$t('tronPluginDeploymentCheckPathPlaceholder'),
-              })
-              return
-            } else if (checkStatus === 4) {
+              else if (!this.form.customTransaction.endsWith('.jar')) {
+                this.$message.warning(this.$t('tronPluginDeploymentCorrectPathPlaceholder'),)
+                return
+              }
+            } else if (this.form.customTransaction) {
+              this.$message.warning(this.$t('tronPluginDeploymentCheckPathPlaceholder'),)
               return
             }
 

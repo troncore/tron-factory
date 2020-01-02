@@ -6,7 +6,7 @@ export default {
   tronPluginCustomConsensusModulePlaceholder: '请填写自定义共识模块内容',
   tronPluginTransactionModule: '交易模块',
   tronPluginCustomTradingModule: '自定义交易模块',
-  tronPluginCustomTradingModulePlaceholder: '请填写自定义交易模块路径',
+  tronPluginCustomTradingModulePlaceholder: '请填写自定义交易模块路径（以.jar结束）',
   tronPluginDeploymentCorrectPathPlaceholder: '请填写以.jar为结尾的路径',
   tronPluginDeploymentCheckPathPlaceholder: '请勾选自定义交易模块',
   tronPluginDatabaseModule: '数据库模块',
