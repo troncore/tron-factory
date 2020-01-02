@@ -20,7 +20,7 @@
           </el-form-item>
 
           <el-form-item :label="$t('tronSettingIndexDirectory')" prop="storage_index_directory">
-            <el-switch active-value="index" v-model="form.storage_index_directory"></el-switch>
+            <el-switch active-value="index"  inactive-value="is not open index directory" v-model="form.storage_index_directory"></el-switch>
           </el-form-item>
 
           <el-form-item :label="$t('tronSettingNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
