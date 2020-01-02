@@ -63,7 +63,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('user', {
+    ...mapMutations('app', {
       updateAuthMenu: 'SET_AUTH_MENU',
     }),
     // get plugin info

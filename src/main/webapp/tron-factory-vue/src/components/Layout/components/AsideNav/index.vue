@@ -7,7 +7,7 @@
       mode="vertical"
       @select="handleSelectMenu">
 
-      <side-menu-item v-for="route in menuRoutes" :key="route.name" :route="route" />
+      <side-menu-item v-for="route in allMenuRoutes" :key="route.name" :route="route" />
 
     </el-menu>
   </div>
@@ -21,10 +21,9 @@ export default {
   name: 'aside-nav',
   components: { SideMenuItem },
   computed: {
-    ...mapGetters(['permission_routes']),
     ...mapGetters('app', [
       'isCollapseAside',
-      'menuRoutes',
+      'allMenuRoutes',
     ]),
   },
   methods: {

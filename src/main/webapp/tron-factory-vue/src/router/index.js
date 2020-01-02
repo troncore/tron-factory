@@ -107,7 +107,7 @@ export const authMenuRoutes = [
     },
   },
 ]
-export const menuRoutes = [
+export const allMenuRoutes = [
   ...authMenuRoutes,
   {
     path: 'https://tronscan.org/',
@@ -121,7 +121,7 @@ export const menuRoutes = [
   },
 ]
 
-const routes = [...baseRoutes, ...menuRoutes, ...NotFoundRoutes]
+const routes = [...baseRoutes, ...allMenuRoutes, ...NotFoundRoutes]
 
 const router = new VueRouter({
   scrollBehavior: () => ({
