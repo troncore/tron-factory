@@ -143,7 +143,7 @@ export default {
         cancelButtonClass: 'im-message-cancel-button',
         confirmButtonClass: 'im-message-confirm-button',
       }).then(() => {
-        this.$_api.nodeApi.deleteNote({ id }, err => {
+        this.$_api.nodeApi.deleteNoteInfo({ id }, err => {
           if (err) return
 
           this.$message.success(this.$t('tronNodesDeleteSuccess'))
@@ -159,7 +159,7 @@ export default {
 
     // skip next
     handleNextStep() {
-      this.$_api.nodeApi.initConfigApi({}, err => {
+      this.$_api.nodeApi.initConfig({}, err => {
         if (err) return
 
         this.updateAuthMenu({name: 'config-manage'})

@@ -28,7 +28,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.id" :maxlength="50" :placeholder="$t('tronNodeIDPlaceholder')" :disabled="!isAdding"></el-input>
+          <el-input v-model.trim="form.id"  :maxlength="50" :placeholder="$t('tronNodeIDPlaceholder')" :disabled="!isAdding"></el-input>
         </el-form-item>
 
         <el-form-item prop="userName">
@@ -380,7 +380,7 @@ export default {
           this.saveLoading = true
           if (!(await this.formatParams(params))) return
 
-          let api = this.isAdding ? 'addNote' : 'editNote'
+          let api = this.isAdding ? 'addNoteInfo' : 'editNoteInfo'
           let msg = this.isAdding ? 'tronNodeAddSuccess' : 'tronNodeEditSuccess'
 
           this.$_api.nodeApi[api](params, err => {

@@ -63,7 +63,7 @@ export default {
     }),
 
     handleStartSettingDeploy() {
-      this.$_api.dashboard.oneClickApi({}, err => {
+      this.$_api.dashboard.oneClick({}, err => {
         if (err) return
 
         this.updateAuthMenu({nameList: ['get-start', 'node-list']})

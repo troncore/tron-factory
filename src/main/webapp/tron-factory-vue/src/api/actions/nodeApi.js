@@ -1,18 +1,18 @@
 export default {
   get: {
     allNodeInfo: '/allNodeInfo',
-    deployLogInfoApi: '/getLogInfo',
+    getLogInfo: '/getLogInfo',
   },
   post: {
-    addNote: '/nodeInfo',
-    nodeInfoApi: '/checkNode',
-    deployNodeApi: '/deployNode',
-    initConfigApi: '/initConfig',
+    addNoteInfo: '/nodeInfo',
+    checkNode: '/checkNode',
+    deployNode: '/deployNode',
+    initConfig: '/initConfig',
   },
   put: {
-    editNote: '/nodeInfo',
+    editNoteInfo: '/nodeInfo',
   },
   delete: {
-    deleteNote: '/nodeInfo',
+    deleteNoteInfo: '/nodeInfo',
   },
 }

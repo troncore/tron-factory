@@ -132,7 +132,7 @@ export default {
     // deploy node
     deployNode (node = {}, params = {}) {
       return new Promise(resolve => {
-        this.$_api.nodeApi.deployNodeApi({
+        this.$_api.nodeApi.deployNode({
           id: node.id,
           isSR: node.isSR,
           path: params.filePath,
@@ -152,7 +152,7 @@ export default {
         if (!loading) {
           loading = true // the network may slow
 
-          this.$_api.nodeApi.nodeInfoApi(deployedNodeIds, (err, res) => {
+          this.$_api.nodeApi.checkNode(deployedNodeIds, (err, res) => {
             loading = false
             if (err) {
               this.batchDeployLoading = false
