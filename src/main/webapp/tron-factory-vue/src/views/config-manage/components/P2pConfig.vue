@@ -318,7 +318,6 @@ export default {
           }
 
           this.loading = true
-          // TODO POST
           this.$_api.settingApi.p2pSettingApi(params, err => {
             this.loading = false
             if (err) return

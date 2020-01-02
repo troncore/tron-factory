@@ -196,14 +196,13 @@ export default {
           }
 
           this.loading = true
-          // TODO POST
-          /*this.$_api.settingApi.networkSettingApi(params, err => {
+          this.$_api.settingApi.networkSettingApi(params, err => {
             this.loading = false
             if (err) return
 
             this.$message.success(this.$t('tronSettingNetworkSaveSuccess'))
             this.$emit('next-step')
-          })*/
+          })
           this.$emit('next-step')
         }
       })
