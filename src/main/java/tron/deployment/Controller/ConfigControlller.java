@@ -170,13 +170,19 @@ public class ConfigControlller {
   }
 
   @PostMapping(value = "/dbconfig")
-  public JSONObject dbConfig(
-          @RequestParam(value = "isDBSync", required = false, defaultValue = "false") boolean isDBSync,
-          @RequestParam(value = "isOpenTransaction", required = false, defaultValue = "on") String isOpenTransaction,
-          @RequestParam(value = "dbEnine", required = false, defaultValue = "LEVELDB") String dbEnine,
-          @RequestParam(value = "indexDirectory", required = false, defaultValue = "index") String indexDirectory,
-          @RequestParam(value = "needToUpdateAsset", required = false, defaultValue = "true") boolean needToUpdateAsset
-  ) {
+  public JSONObject dbConfig(@RequestBody LinkedHashMap<String,Object> data) {
+    boolean isDBSync = (boolean) data.getOrDefault("isDBSync", "false");
+    String isOpenTransaction = (String) data.getOrDefault("isOpenTransaction", "on");
+    String dbEnine = (String) data.getOrDefault("dbEnine", "LEVELDB");
+    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");
+    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", "true");
+
+//    @RequestParam(value = "isDBSync", required = false, defaultValue = "false") boolean isDBSync,
+//          @RequestParam(value = "isOpenTransaction", required = false, defaultValue = "on") String isOpenTransaction,
+//          @RequestParam(value = "dbEnine", required = false, defaultValue = "LEVELDB") String dbEnine,
+//          @RequestParam(value = "indexDirectory", required = false, defaultValue = "index") String indexDirectory,
+//          @RequestParam(value = "needToUpdateAsset", required = false, defaultValue = "true") boolean needToUpdateAsset
+//  ) {
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
             dbEnine, indexDirectory, needToUpdateAsset), Common.configFiled);
@@ -187,13 +193,13 @@ public class ConfigControlller {
   }
 
   @PostMapping(value = "/networkconfig")
-  public JSONObject networkConfig(
-          @RequestParam(value = "maxHttpConnectNumber", required = false, defaultValue = "50") int maxHttpConnectNumber,
-          @RequestParam(value = "rpcPort", required = false, defaultValue = "50051") int rpcPort,
-          @RequestParam(value = "rpcSolidityPort", required = false, defaultValue = "50061") int solidityRPCPort,
-          @RequestParam(value = "httpFullNodePort", required = false, defaultValue = "8090") int httpFullNodePort,
-          @RequestParam(value = "httpSolidityPort", required = false, defaultValue = "8091") int httpSolidityPort
-  ) {
+  public JSONObject networkConfig(@RequestBody LinkedHashMap<String,Object> data) {
+    int maxHttpConnectNumber = (int) data.getOrDefault("maxHttpConnectNumber", "50");
+    int rpcPort = (int) data.getOrDefault("rpcPort", "50051");
+    int solidityRPCPort = (int) data.getOrDefault("rpcSolidityPort", "50061");
+    int httpFullNodePort = (int) data.getOrDefault("httpFullNodePort", "8090");
+    int httpSolidityPort = (int) data.getOrDefault("httpSolidityPort", "8091");
+
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new NetworkConfig(maxHttpConnectNumber, solidityRPCPort, rpcPort,
             httpFullNodePort, httpSolidityPort), Common.configFiled);
@@ -225,12 +231,12 @@ public class ConfigControlller {
   }
 
   @PostMapping(value = "/crossChainConfig")
-  public JSONObject dbConfig(
-          @RequestParam(value = "enableCrossChain", required = false, defaultValue = "false") boolean enableCrossChain,
-          @RequestParam(value = "maxValidatorNumber", required = false, defaultValue = "4") int maxValidatorNumber,
-          @RequestParam(value = "minValidatorNumber", required = false, defaultValue = "1") int minValidatorNumber,
-          @RequestParam(value = "crossChainFee", required = false, defaultValue = "0.00") double crossChainFee
-  ) {
+  public JSONObject crossChainConfig(@RequestBody LinkedHashMap<String,Object> data) {
+    boolean enableCrossChain = (boolean) data.getOrDefault("enableCrossChain", "false");
+    int maxValidatorNumber = (int) data.getOrDefault("maxValidatorNumber", "4");
+    int minValidatorNumber = (int) data.getOrDefault("minValidatorNumber", "1");
+    double crossChainFee = (double) data.getOrDefault("crossChainFee", "0.01");
+
     JSONObject jsonObject = readJsonFile();
     jsonObject.put(Common.enableCrossChainFiled, enableCrossChain);
     jsonObject.put(Common.maxValidatorNumberFiled, maxValidatorNumber);
