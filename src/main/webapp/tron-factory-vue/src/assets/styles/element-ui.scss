@@ -24,6 +24,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         font-weight: bold;
         color: #081C56;
         background-color: theme-color(0.05);
+        @media screen and (max-width: $media1680){
+          padding: 0 0 0 30px;
+          height: 40px;
+        }
       }
     }
   }
@@ -31,8 +35,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   .el-table__body {
     tr {
       td {
-        padding: 15px 0 15px 40px;
+        padding: 12px 0 12px 40px;
         background-color: white;
+        @media screen and (max-width: $media1680){
+          padding: 8px 0 8px 30px;
+        }
       }
     }
   }
@@ -60,6 +67,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     height: 124px;
     background-color: theme-color();
     overflow: hidden;
+    @media screen and (max-width: $media1680){
+      height: 100px;
+    }
 
     &:after {
       content: '';
@@ -73,7 +83,8 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     .el-dialog__headerbtn {
       right: 30px;
-      top: 45px;
+      top: 50%;
+      transform: translate(0, -50%);
       .el-dialog__close {
         color: white;
         font-size: 30px;
@@ -92,9 +103,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
   .el-dialog__body {
     padding: 50px 70px 20px;
+    @media screen and (max-width: $media1680){
+      padding: 40px 60px 10px;
+    }
   }
   .el-dialog__footer {
     padding-bottom: 50px;
+    @media screen and (max-width: $media1680){
+      padding-bottom: 40px;
+    }
   }
   .dialog-footer {
     .im-button {
@@ -104,6 +121,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       height: 50px;
       line-height: 50px;
       font-size: 18px;
+      @media screen and (max-width: $media1680){
+        width: 180px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+      }
       &:last-child {
         margin-right: 0;
       }
@@ -116,11 +139,18 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   width: 600px;
   .el-message-box__title {
     font-size: 24px;
+    @media screen and (max-width: $media1680){
+      font-size: 20px;
+    }
   }
   .el-message-box__content {
     margin-bottom: 30px;
     font-size: 18px;
     color: #606266;
+    @media screen and (max-width: $media1680){
+      margin-bottom: 25px;
+      font-size: 16px;
+    }
   }
 
   .el-button {
@@ -129,6 +159,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     height: 50px;
     line-height: 50px;
     font-size: 18px;
+    @media screen and (max-width: $media1680){
+      width: 180px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
+    }
     &.im-message-cancel-button:focus,
     &.im-message-cancel-button:hover {
       color: error-color();
@@ -149,6 +185,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     height: 50px;
     line-height: 50px;
     font-size: 18px;
+    @media screen and (max-width: $media1680){
+      width: 140px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+    }
   }
   &.larger {
     padding: 0;
@@ -156,6 +198,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     height: 50px;
     line-height: 50px;
     font-size: 18px;
+    @media screen and (max-width: $media1680){
+      width: 160px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
+    }
   }
   &.largest {
     padding: 0;
@@ -163,5 +211,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     height: 50px;
     line-height: 50px;
     font-size: 18px;
+    @media screen and (max-width: $media1680){
+      width: 180px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
+    }
   }
 }

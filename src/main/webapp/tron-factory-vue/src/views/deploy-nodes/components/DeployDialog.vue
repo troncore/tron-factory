@@ -13,7 +13,7 @@
     </div>
 
     <div class="dialog-content">
-      <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" v-model.trim="form.filePath"></el-input>
+      <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" v-model.trim="form.filePath"></el-input>
       <div class="el-upload__tip">{{ $t('deploymentUpload') }}</div>
     </div>
 

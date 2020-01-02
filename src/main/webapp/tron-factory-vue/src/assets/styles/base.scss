@@ -1,3 +1,5 @@
+$media1680: 1680px;
+
 @function error-color($alpha: 1) {
   @return rgba(245, 108, 108, $alpha)
 }

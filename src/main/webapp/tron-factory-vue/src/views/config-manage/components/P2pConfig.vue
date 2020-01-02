@@ -337,6 +337,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/base.scss";
 .p2p-config {
   /deep/ .el-card {
     .el-card__body {
@@ -357,12 +358,10 @@ export default {
     display: inline-block;
     margin-right: 150px;
     width: 350px;
-
-  }
-  /deep/ .el-form-item {
-    display: inline-block;
-    margin-right: 150px;
-    width: 350px;
+    @media screen and (max-width: $media1680){
+      margin-right: 120px;
+      width: 300px;
+    }
 
     .el-form-item__label {
       padding: 0;
@@ -380,6 +379,11 @@ export default {
         width: 350px;
         margin-right: 150px;
         margin-bottom: 30px;
+        @media screen and (max-width: $media1680){
+          margin-right: 120px;
+          width: 300px;
+          margin-bottom: 20px;
+        }
 
         .el-checkbox__label {
           flex: 1;

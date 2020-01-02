@@ -86,7 +86,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/base";
-$media1680: 1680px;
 .get-start {
   padding: 160px 100px 0;
   @media screen and (max-width: $media1680){

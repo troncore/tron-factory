@@ -130,4 +130,10 @@ const router = new VueRouter({
   routes,
 })
 
+router.beforeEach((to, from, next) => {
+  const authMenu = JSON.parse(sessionStorage.getItem('authMenu') || '[]')
+
+  next()
+})
+
 export default router

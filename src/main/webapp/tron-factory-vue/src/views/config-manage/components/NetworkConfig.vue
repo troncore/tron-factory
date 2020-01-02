@@ -214,6 +214,7 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
+@import "~@/assets/styles/base.scss";
 .network-config {
   /deep/ .el-card {
     .el-card__body {
@@ -234,6 +235,10 @@ export default {
     display: inline-block;
     margin-right: 150px;
     width: 350px;
+    @media screen and (max-width: $media1680){
+      margin-right: 120px;
+      width: 300px;
+    }
 
     .el-form-item__label {
       padding: 0;

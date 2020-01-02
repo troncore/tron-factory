@@ -5,7 +5,6 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     width="680px"
-    top="200px"
     center>
     <div slot="title" class="dialog-header">
       <div class="title">{{ dialogTitle }}</div>
