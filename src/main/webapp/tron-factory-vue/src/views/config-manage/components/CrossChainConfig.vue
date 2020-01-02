@@ -195,7 +195,6 @@ export default {
           let params = { ...this.form }
 
           this.loading = true
-          // TODO POST
           this.$_api.settingApi.crossChainConfig(params, err => {
             this.loading = false
             if (err) return

@@ -88,7 +88,6 @@ export default {
           }
 
           this.loading = true
-          // TODO POST
           this.$_api.settingApi.dbconfigApi(params, err => {
             this.loading = false
             if (err) return

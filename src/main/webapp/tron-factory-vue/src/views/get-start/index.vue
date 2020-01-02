@@ -54,17 +54,14 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import PanelGroup from './components/PanelGroup'
 export default {
   name: 'get-start',
   created() {},
-  components: {
-    PanelGroup,
-  },
   methods: {
     ...mapMutations('user', {
       updateAuthMenu: 'SET_AUTH_MENU',
     }),
+
     handleStartSettingDeploy() {
       this.$_api.dashboard.oneClickApi({}, err => {
         if (err) return
@@ -88,8 +85,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- @import "~@/assets/styles/base";
- $media1680: 1680px;
+@import "~@/assets/styles/base";
+$media1680: 1680px;
 .get-start {
   padding: 160px 100px 0;
   @media screen and (max-width: $media1680){

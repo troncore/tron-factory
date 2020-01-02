@@ -81,13 +81,14 @@ export default {
     ...mapMutations('user', {
       updateAuthMenu: 'SET_AUTH_MENU',
     }),
+
     // get configure info
     initConfigInfo () {
       return new Promise(resolve => {
         this.$_api.settingApi.getConfigInfo({}, (err, res = {}) => {
           if (err) return
 
-          this.configInfo = { ...this.configInfo, ...res }
+          this.configInfo = res
           resolve(this.configInfo)
         })
       })
@@ -108,8 +109,6 @@ export default {
     // skip next step
     handleNextStep () {
       let step = this.currentStep + 1
-
-      if (!this.checkP2PConfigSeedNode(step)) return
 
       if (step <= this.stepRange.max) {
         this.currentStep = step
