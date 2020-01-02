@@ -87,7 +87,7 @@ export default {
     }),
     // get table data
     getNodeList() {
-      this.$_api.nodeApi.allNodeInfo({}, (err, res = []) => {
+      this.$_api.nodeList.allNodeInfo({}, (err, res = []) => {
         if (err) return
 
         if (res.length > 0) {
@@ -143,7 +143,7 @@ export default {
         cancelButtonClass: 'im-message-cancel-button',
         confirmButtonClass: 'im-message-confirm-button',
       }).then(() => {
-        this.$_api.nodeApi.deleteNoteInfo({ id }, err => {
+        this.$_api.nodeList.deleteNoteInfo({ id }, err => {
           if (err) return
 
           this.$message.success(this.$t('tronNodesDeleteSuccess'))
@@ -159,7 +159,7 @@ export default {
 
     // skip next
     handleNextStep() {
-      this.$_api.nodeApi.initConfig({}, err => {
+      this.$_api.nodeList.initConfig({}, err => {
         if (err) return
 
         this.updateAuthMenu({name: 'config-manage'})

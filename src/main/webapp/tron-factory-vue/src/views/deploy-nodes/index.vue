@@ -88,7 +88,7 @@ export default {
   methods: {
     // get table data
     getNodeList () {
-      this.$_api.nodeApi.allNodeInfo({}, (err, res) => {
+      this.$_api.nodeList.allNodeInfo({}, (err, res) => {
         if (err) return
 
         this.tableData = res.sort((a, b) => a.id - b.id)
@@ -132,7 +132,7 @@ export default {
     // deploy node
     deployNode (node = {}, params = {}) {
       return new Promise(resolve => {
-        this.$_api.nodeApi.deployNode({
+        this.$_api.nodeList.deployNode({
           id: node.id,
           isSR: node.isSR,
           path: params.filePath,
@@ -152,7 +152,7 @@ export default {
         if (!loading) {
           loading = true // the network may slow
 
-          this.$_api.nodeApi.checkNode(deployedNodeIds, (err, res) => {
+          this.$_api.nodeList.checkNode(deployedNodeIds, (err, res) => {
             loading = false
             if (err) {
               this.batchDeployLoading = false

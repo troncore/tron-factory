@@ -383,7 +383,7 @@ export default {
           let api = this.isAdding ? 'addNoteInfo' : 'editNoteInfo'
           let msg = this.isAdding ? 'tronNodeAddSuccess' : 'tronNodeEditSuccess'
 
-          this.$_api.nodeApi[api](params, err => {
+          this.$_api.nodeList[api](params, err => {
             this.saveLoading = false
             if (err) return
 
