@@ -97,15 +97,20 @@ public class NodeController {
 
   @PostMapping(value = "/nodeInfo")
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
-    Long id = Long.parseLong((String)data.getOrDefault("id", "1"));
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
-    int port = Integer.parseInt((String)data.getOrDefault("port", 8090)) ;
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
     String url = (String) data.getOrDefault("url", "");
     String privateKey = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "104");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
+    Long id =data.getOrDefault("id", "1") instanceof String ?
+        (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+        (Long) data.getOrDefault("id", 1);
+    int port =data.getOrDefault("port", "8090") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
+        (int)data.getOrDefault("port", 8090);
+
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -153,15 +158,20 @@ public class NodeController {
 
   @PutMapping(value = "/nodeInfo")
   public JSONObject updateNode(@RequestBody LinkedHashMap<String,Object> data) {
-    Long id = Long.valueOf((int) data.getOrDefault("id", "1"));
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
-    int port = (int) data.getOrDefault("port", 8090);
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
     String url = (String) data.getOrDefault("url", "");
     String key = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "104");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
+    long id =data.getOrDefault("id", "1") instanceof String ?
+        (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+        (int) data.getOrDefault("id", 1);
+    int port =data.getOrDefault("port", "8090") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
+        (int)data.getOrDefault("port", 8090);
+
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -201,8 +211,7 @@ public class NodeController {
 
 
   @GetMapping(value ="/nodeInfo" )
-  public JSONObject getNode(@RequestBody LinkedHashMap<String,Object> data) {
-    Long id = Long.parseLong((String)data.getOrDefault("id", "1"));
+  public JSONObject getNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);

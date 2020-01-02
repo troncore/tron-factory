@@ -10,6 +10,9 @@ import static org.tron.core.config.args.Storage.getDbVersionSyncFromConfig;
 import static org.tron.core.config.args.Storage.getIndexDirectoryFromConfig;
 import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromConfig;
 
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import entity.AssetsEntity;
 import common.Args;
 import common.Common;
@@ -171,18 +174,12 @@ public class ConfigControlller {
 
   @PostMapping(value = "/dbconfig")
   public JSONObject dbConfig(@RequestBody LinkedHashMap<String,Object> data) {
-    boolean isDBSync = (boolean) data.getOrDefault("isDBSync", "false");
+    boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
     String isOpenTransaction = (String) data.getOrDefault("isOpenTransaction", "on");
     String dbEnine = (String) data.getOrDefault("dbEnine", "LEVELDB");
     String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");
-    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", "true");
+    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
 
-//    @RequestParam(value = "isDBSync", required = false, defaultValue = "false") boolean isDBSync,
-//          @RequestParam(value = "isOpenTransaction", required = false, defaultValue = "on") String isOpenTransaction,
-//          @RequestParam(value = "dbEnine", required = false, defaultValue = "LEVELDB") String dbEnine,
-//          @RequestParam(value = "indexDirectory", required = false, defaultValue = "index") String indexDirectory,
-//          @RequestParam(value = "needToUpdateAsset", required = false, defaultValue = "true") boolean needToUpdateAsset
-//  ) {
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
             dbEnine, indexDirectory, needToUpdateAsset), Common.configFiled);
@@ -194,11 +191,21 @@ public class ConfigControlller {
 
   @PostMapping(value = "/networkconfig")
   public JSONObject networkConfig(@RequestBody LinkedHashMap<String,Object> data) {
-    int maxHttpConnectNumber = (int) data.getOrDefault("maxHttpConnectNumber", "50");
-    int rpcPort = (int) data.getOrDefault("rpcPort", "50051");
-    int solidityRPCPort = (int) data.getOrDefault("rpcSolidityPort", "50061");
-    int httpFullNodePort = (int) data.getOrDefault("httpFullNodePort", "8090");
-    int httpSolidityPort = (int) data.getOrDefault("httpSolidityPort", "8091");
+    int maxHttpConnectNumber =data.getOrDefault("maxHttpConnectNumber", "50") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("maxHttpConnectNumber", "50"))) :
+        (int)data.getOrDefault("maxHttpConnectNumber", 50);
+    int rpcPort =data.getOrDefault("rpcPort", "50051") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("rpcPort", "50051"))) :
+        (int)data.getOrDefault("rpcPort", 50051);
+    int solidityRPCPort =data.getOrDefault("rpcSolidityPort", "50061") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("rpcSolidityPort", "50061"))) :
+        (int)data.getOrDefault("rpcSolidityPort", 50061);
+    int httpFullNodePort =data.getOrDefault("httpFullNodePort", "8090") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("httpFullNodePort", "8090"))) :
+        (int)data.getOrDefault("httpFullNodePort", 8090);
+    int httpSolidityPort =data.getOrDefault("httpSolidityPort", "8091") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("httpSolidityPort", "8091"))) :
+        (int)data.getOrDefault("httpSolidityPort", 8091);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new NetworkConfig(maxHttpConnectNumber, solidityRPCPort, rpcPort,
@@ -214,12 +221,25 @@ public class ConfigControlller {
   @PostMapping("/p2pconfig")
   public JSONObject p2pConfig(@RequestBody LinkedHashMap<String,Object> data) {
     ArrayList<String> ipList= (ArrayList<String>) data.get("seed_node_ip_list");
-    int p2pVersion = (int) data.getOrDefault("p2pVersion", 0);
-    int node_max_active_nodes = (int) data.getOrDefault("maxActiveNodes", 30);
-    double activeConnectFactor = (double) data.getOrDefault("nodeActiveConnectFactor", 0.1);
-    int nodeMaxActiveNodesWithSameIp = (int) data.getOrDefault("nodeMaxActiveNodesWithSameIp", 2);
-    double connectFactor = (double) data.getOrDefault("connectFactor", 0.3);
-    int listenPort = (int) data.getOrDefault("listenPort", 18883);
+    int p2pVersion =data.getOrDefault("p2pVersion", "0") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("p2pVersion", "0"))) :
+        (int)data.getOrDefault("p2pVersion", 0);
+    int node_max_active_nodes =data.getOrDefault("maxActiveNodes", "30") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("maxActiveNodes", "30"))) :
+        (int)data.getOrDefault("maxActiveNodes", 30);
+    double activeConnectFactor =data.getOrDefault("nodeActiveConnectFactor", "0.1") instanceof String ?
+        (Double.parseDouble((String)data.getOrDefault("nodeActiveConnectFactor", "0.1"))) :
+        (double)data.getOrDefault("nodeActiveConnectFactor", 0.1);
+    int nodeMaxActiveNodesWithSameIp =data.getOrDefault("nodeMaxActiveNodesWithSameIp", "2") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("nodeMaxActiveNodesWithSameIp", "2"))) :
+        (int)data.getOrDefault("nodeMaxActiveNodesWithSameIp", 2);
+    double connectFactor =data.getOrDefault("connectFactor", "0.3") instanceof String ?
+        (Double.parseDouble((String)data.getOrDefault("connectFactor", "0.3"))) :
+        (double)data.getOrDefault("connectFactor", 0.3);
+    int listenPort =data.getOrDefault("listenPort", "18883") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("listenPort", "18883"))) :
+        (int)data.getOrDefault("listenPort", 18883);
+
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new P2PConfig(p2pVersion, node_max_active_nodes,
             activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), Common.configFiled);
@@ -232,10 +252,16 @@ public class ConfigControlller {
 
   @PostMapping(value = "/crossChainConfig")
   public JSONObject crossChainConfig(@RequestBody LinkedHashMap<String,Object> data) {
-    boolean enableCrossChain = (boolean) data.getOrDefault("enableCrossChain", "false");
-    int maxValidatorNumber = (int) data.getOrDefault("maxValidatorNumber", "4");
-    int minValidatorNumber = (int) data.getOrDefault("minValidatorNumber", "1");
-    double crossChainFee = (double) data.getOrDefault("crossChainFee", "0.01");
+    boolean enableCrossChain = (boolean) data.getOrDefault("enableCrossChain", false);
+    int maxValidatorNumber =data.getOrDefault("maxValidatorNumber", "4") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("maxValidatorNumber", "4"))) :
+        (int)data.getOrDefault("maxValidatorNumber", 4);
+    int minValidatorNumber =data.getOrDefault("minValidatorNumber", "1") instanceof String ?
+        (Integer.parseInt((String)data.getOrDefault("minValidatorNumber", "1"))) :
+        (int)data.getOrDefault("minValidatorNumber", 1);
+    double crossChainFee =data.getOrDefault("crossChainFee", "0.01") instanceof String ?
+        (Double.parseDouble((String)data.getOrDefault("crossChainFee", "0.01"))) :
+        (double)data.getOrDefault("crossChainFee", 0.01);
 
     JSONObject jsonObject = readJsonFile();
     jsonObject.put(Common.enableCrossChainFiled, enableCrossChain);
@@ -250,13 +276,22 @@ public class ConfigControlller {
   }
 
   @PostMapping(value = "/baseSettingConfig")
-  public JSONObject baseSettingConfig(@RequestBody LinkedHashMap<String,Object> data) {
-    String chainId = (String) data.getOrDefault("chainId", "1");
-    String chainName = (String) data.getOrDefault("chainName", "Parachain");
-    int blockProducedTimeOut = (int) data.getOrDefault("blockProducedTimeOut", 75);
-    int maintenanceTimeInterval = (int) data.getOrDefault("maintenanceTimeInterval", 21600000);
-    int proposalExpireTime = (int) data.getOrDefault("proposalExpireTime", 259200000);
-    int minParticipationRate = (int) data.getOrDefault("minParticipationRate", 15);
+  public JSONObject baseSettingConfig(@RequestBody JSONObject jsonData) {
+
+    String chainId = (String) jsonData.getOrDefault("chainId", "1");
+    String chainName = (String) jsonData.getOrDefault("chainName", "Parachain");
+    int blockProducedTimeOut =jsonData.getOrDefault("blockProducedTimeOut", "75") instanceof String ?
+        (Integer.parseInt((String)jsonData.getOrDefault("blockProducedTimeOut", "75"))) :
+        (int)jsonData.getOrDefault("blockProducedTimeOut", 75);
+    int maintenanceTimeInterval =jsonData.getOrDefault("maintenanceTimeInterval", "21600000") instanceof String ?
+        (Integer.parseInt((String)jsonData.getOrDefault("maintenanceTimeInterval", "21600000"))) :
+        (int)jsonData.getOrDefault("maintenanceTimeInterval", 21600000);
+    int proposalExpireTime =jsonData.getOrDefault("proposalExpireTime", "259200000") instanceof String ?
+        (Integer.parseInt((String)jsonData.getOrDefault("proposalExpireTime", "259200000"))) :
+        (int)jsonData.getOrDefault("proposalExpireTime", 259200000);
+    int minParticipationRate =jsonData.getOrDefault("minParticipationRate", "15") instanceof String ?
+        (Integer.parseInt((String)jsonData.getOrDefault("minParticipationRate", "15"))) :
+        (int)jsonData.getOrDefault("minParticipationRate", 15);
 
     JSONObject jsonObject = readJsonFile();
     jsonObject.put(Common.chainIdFiled, chainId);

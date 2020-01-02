@@ -28,9 +28,9 @@ import response.Response;
 public class PluginConfig {
 
   @PostMapping(value = "/consensus")
-  public JSONObject consensus(
-      @RequestParam(value = "consensus", required = false, defaultValue = "dpos") String consensus
-  ){
+  public JSONObject consensus(@RequestBody JSONObject jsonData){
+    String consensus = (String) jsonData.getOrDefault("consensus", "dpos");
+//    @RequestParam(value = "consensus", required = false, defaultValue = "dpos") String consensus
     JSONObject json = readJsonFile();
     json.put(Common.consensusFiled, consensus);
     if (!writeJsonFile(json)) {
@@ -66,9 +66,12 @@ public class PluginConfig {
   }
 
   @PostMapping(value = "/dbEngine")
-  public JSONObject dbEngine(
-      @RequestParam(value = "dbEngine", required = false, defaultValue = "leveldb") String dbEngine
-  ){
+  public JSONObject dbEngine(@RequestBody JSONObject jsonData){
+    String dbEngine = (String) jsonData.getOrDefault("dbEngine", "leveldb");
+
+//    @RequestParam(value = "dbEngine", required = false, defaultValue = "leveldb") String dbEngine
+//  ){
+
     JSONObject json = readJsonFile();
     json.put(Common.dbEngineFiled, dbEngine);
     if (!writeJsonFile(json)) {
@@ -78,9 +81,11 @@ public class PluginConfig {
   }
 
   @PostMapping(value = "/crypto")
-  public JSONObject cryptoEngine(
-      @RequestParam(value = "crypto", required = false, defaultValue = "eckey") String eckey
-  ){
+  public JSONObject cryptoEngine(@RequestBody JSONObject jsonData){
+    String eckey = (String) jsonData.getOrDefault("crypto", "eckey");
+
+//    @RequestParam(value = "crypto", required = false, defaultValue = "eckey") String eckey
+//  ){
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new CryptoConfig(eckey), Common.configFiled);
 

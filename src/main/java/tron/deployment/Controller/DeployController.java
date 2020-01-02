@@ -100,10 +100,14 @@ public class DeployController {
   }
 
   @PostMapping(value = "/deployNode")
-  public JSONObject deploy(
-          @RequestParam(value = "id", required = false, defaultValue = "1") Long id,
-          @RequestParam(value = "path", required = false, defaultValue = "") String path
-  ) {
+  public JSONObject deploy(@RequestBody JSONObject jsonData) {
+
+    String path = (String) jsonData.getOrDefault("path", "");
+    String chainName = (String) jsonData.getOrDefault("chainName", "Parachain");
+    Long id =jsonData.getOrDefault("id", "1") instanceof String ?
+        (Long.parseLong((String)jsonData.getOrDefault("id", "1"))) :
+        (int) jsonData.getOrDefault("id", 1);
+
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     if (Objects.isNull(nodes)) {
