@@ -132,7 +132,7 @@
             }
 
             this.loading = true
-            this.$_api.pluginApi.transactionApi(params, (err, res) => {
+            this.$_api.importPlugin.transactionApi(params, (err, res) => {
               this.loading = false
               if (err) return
 

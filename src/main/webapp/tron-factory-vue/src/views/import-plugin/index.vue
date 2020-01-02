@@ -69,7 +69,7 @@ export default {
     // get plugin info
     initPluginInfo () {
       return new Promise(resolve => {
-        this.$_api.pluginApi.pluginConfigApi({}, (err, res = {}) => {
+        this.$_api.importPlugin.pluginConfigApi({}, (err, res = {}) => {
           if (err) return
 
           this.pluginInfo = res

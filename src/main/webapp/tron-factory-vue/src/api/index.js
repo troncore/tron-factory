@@ -4,16 +4,14 @@ import getStart from './actions/getStart'
 import nodeList from './actions/nodeList'
 import configManage from './actions/configManage'
 import user from './actions/user'
-import pluginApi from './actions/pluginApi'
-import table from './actions/table'
+import importPlugin from './actions/importPlugin'
 
 const actions = {
+  user,
   getStart,
   nodeList,
   configManage,
-  user,
-  pluginApi,
-  table,
+  importPlugin,
 }
 
 export default initActions(actions)
