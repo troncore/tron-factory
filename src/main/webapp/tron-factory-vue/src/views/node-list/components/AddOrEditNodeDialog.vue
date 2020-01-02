@@ -28,7 +28,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.id" :maxlength="50" :placeholder="$t('tronNodeIDPlaceholder')" :disabled="!isAdding"></el-input>
+          <el-input v-model.trim="form.id"  :maxlength="50" :placeholder="$t('tronNodeIDPlaceholder')" :disabled="!isAdding"></el-input>
         </el-form-item>
 
         <el-form-item prop="userName">
@@ -380,10 +380,10 @@ export default {
           this.saveLoading = true
           if (!(await this.formatParams(params))) return
 
-          let api = this.isAdding ? 'addNote' : 'editNote'
+          let api = this.isAdding ? 'addNoteInfo' : 'editNoteInfo'
           let msg = this.isAdding ? 'tronNodeAddSuccess' : 'tronNodeEditSuccess'
 
-          this.$_api.nodeApi[api](params, err => {
+          this.$_api.nodeList[api](params, err => {
             this.saveLoading = false
             if (err) return
 
@@ -413,7 +413,7 @@ export default {
 
       if (params.privateKey === validPrivateKey) delete params.privateKey
 
-      let hasSameIP = ~this.nodeList.findIndex(item => item.ip === params.ip)
+      let hasSameIP = this.isAdding && ~this.nodeList.findIndex(item => item.ip === params.ip)
       if (hasSameIP) {
         this.$message.warning(this.$t('tronNodesIpNoSame'))
         this.saveLoading = false
@@ -425,7 +425,7 @@ export default {
 
     checkBalance(balance) {
       return new Promise(resolve => {
-        this.$_api.settingApi.checkBalanceApi({ balance }, (err, res) => {
+        this.$_api.configManage.checkBalance({ balance }, (err, res) => {
           if (err) return resolve(false)
 
           if (res.result) {

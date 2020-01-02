@@ -88,7 +88,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.settingApi.dbconfigApi(params, err => {
+          this.$_api.configManage.dbConfig(params, err => {
             this.loading = false
             if (err) return
 

@@ -71,7 +71,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.pluginApi.dbEngineApi(params, (err, res) => {
+          this.$_api.importPlugin.dbEngineApi(params, (err, res) => {
             this.loading = false
             if (err) return
 

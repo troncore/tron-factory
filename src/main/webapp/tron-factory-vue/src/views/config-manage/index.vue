@@ -85,7 +85,7 @@ export default {
     // get configure info
     initConfigInfo () {
       return new Promise(resolve => {
-        this.$_api.settingApi.getConfigInfo({}, (err, res = {}) => {
+        this.$_api.configManage.getConfigInfo({}, (err, res = {}) => {
           if (err) return
 
           this.configInfo = res

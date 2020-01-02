@@ -1,19 +1,17 @@
 import { initActions } from '@/utils/common'
 
-import dashboard from './actions/dashboard'
-import settingApi from './actions/settingApi'
+import getStart from './actions/getStart'
+import nodeList from './actions/nodeList'
+import configManage from './actions/configManage'
 import user from './actions/user'
-import nodeApi from './actions/nodeApi'
-import pluginApi from './actions/pluginApi'
-import table from './actions/table'
+import importPlugin from './actions/importPlugin'
 
 const actions = {
-  dashboard,
-  settingApi,
   user,
-  nodeApi,
-  pluginApi,
-  table,
+  getStart,
+  nodeList,
+  configManage,
+  importPlugin,
 }
 
 export default initActions(actions)

@@ -63,7 +63,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.pluginApi.consensusApi(params, (err, res) => {
+          this.$_api.importPlugin.consensusApi(params, (err, res) => {
             this.loading = false
             if (err) return
 

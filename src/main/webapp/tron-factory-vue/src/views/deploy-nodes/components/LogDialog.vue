@@ -70,7 +70,7 @@
         this.timeID = setInterval(this.getLogInfo, 1000 * 5)
       },
       getLogInfo() {
-        this.$_api.nodeApi.deployLogInfoApi({ id: this.currentRow.id }, (err, res = {}) => {
+        this.$_api.nodeList.getLogInfo({ id: this.currentRow.id }, (err, res = {}) => {
           this.initLoading = false
           this.processingShow = true
           this.processingLoading = true

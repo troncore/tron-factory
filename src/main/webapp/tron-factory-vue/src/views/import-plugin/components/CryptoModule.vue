@@ -69,7 +69,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.pluginApi.cryptoApi(params, (err, res) => {
+          this.$_api.importPlugin.cryptoApi(params, (err, res) => {
             this.loading = false
             if (err) return
 
