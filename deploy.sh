@@ -10,7 +10,7 @@ while true; do
     break
   fi
 done
-nohup java -jar target/deployment-0.0.1-SNAPSHOT.jar&
+nohup java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar target/deployment-0.0.1-SNAPSHOT.jar&
 sleep 10
 echo "service ok!"
 cd src/main/webapp/tron-factory-vue && nohup yarn start&

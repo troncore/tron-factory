@@ -13,6 +13,7 @@ import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromC
 import entity.AssetsEntity;
 import common.Args;
 import common.Common;
+import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -203,16 +204,16 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
+
   @PostMapping("/p2pconfig")
-  public JSONObject p2pConfig(
-          @RequestParam(value = "p2pVersion", required = false, defaultValue = "0") int p2pVersion,
-          @RequestParam(value = "maxActiveNodes", required = false, defaultValue = "30") int node_max_active_nodes,
-          @RequestParam(value = "nodeActiveConnectFactor", required = false, defaultValue = "0.1") double activeConnectFactor,
-          @RequestParam(value = "nodeMaxActiveNodesWithSameIp", required = false, defaultValue = "2") int nodeMaxActiveNodesWithSameIp,
-          @RequestParam(value = "connectFactor", required = false, defaultValue = "0.3") double connectFactor,
-          @RequestParam(value = "listenPort", required = false, defaultValue = "18883") int listenPort,
-          @RequestBody List<String> ipList //seedNode
-  ) {
+  public JSONObject p2pConfig(@RequestBody LinkedHashMap<String,Object> data) {
+    ArrayList<String> ipList= (ArrayList<String>) data.get("seed_node_ip_list");
+    int p2pVersion = (int) data.getOrDefault("p2pVersion", 0);
+    int node_max_active_nodes = (int) data.getOrDefault("maxActiveNodes", 30);
+    double activeConnectFactor = (double) data.getOrDefault("nodeActiveConnectFactor", 0.1);
+    int nodeMaxActiveNodesWithSameIp = (int) data.getOrDefault("nodeMaxActiveNodesWithSameIp", 2);
+    double connectFactor = (double) data.getOrDefault("connectFactor", 0.3);
+    int listenPort = (int) data.getOrDefault("listenPort", 18883);
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new P2PConfig(p2pVersion, node_max_active_nodes,
             activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), Common.configFiled);
@@ -243,13 +244,14 @@ public class ConfigControlller {
   }
 
   @PostMapping(value = "/baseSettingConfig")
-  public JSONObject baseSettingConfig(
-          @RequestParam(value = "chainId", required = false, defaultValue = "1") String chainId,
-          @RequestParam(value = "chainName", required = false, defaultValue = "Parachain") String chainName,
-          @RequestParam(value = "blockProducedTimeOut", required = false, defaultValue = "75") int blockProducedTimeOut,
-          @RequestParam(value = "maintenanceTimeInterval", required = false, defaultValue = "21600000") int maintenanceTimeInterval,
-          @RequestParam(value = "proposalExpireTime", required = false, defaultValue = "259200000") int proposalExpireTime,
-          @RequestParam(value = "minParticipationRate", required = false, defaultValue = "15") int minParticipationRate) {
+  public JSONObject baseSettingConfig(@RequestBody LinkedHashMap<String,Object> data) {
+    String chainId = (String) data.getOrDefault("chainId", "1");
+    String chainName = (String) data.getOrDefault("chainName", "Parachain");
+    int blockProducedTimeOut = (int) data.getOrDefault("blockProducedTimeOut", 75);
+    int maintenanceTimeInterval = (int) data.getOrDefault("maintenanceTimeInterval", 21600000);
+    int proposalExpireTime = (int) data.getOrDefault("proposalExpireTime", 259200000);
+    int minParticipationRate = (int) data.getOrDefault("minParticipationRate", 15);
+
     JSONObject jsonObject = readJsonFile();
     jsonObject.put(Common.chainIdFiled, chainId);
     jsonObject.put(Common.chainNameFiled, chainName);
