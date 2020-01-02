@@ -11,7 +11,7 @@ export default {
     baseSettingApi: '/baseSettingConfig',
     p2pSettingApi: '/p2pconfig',
     dbconfigApi: '/dbconfig',
-    networkSettingApi: '/networkSettingApi',
+    networkconfig: '/networkconfig',
     crossChainConfig: '/crossChainConfig',
   },
 }

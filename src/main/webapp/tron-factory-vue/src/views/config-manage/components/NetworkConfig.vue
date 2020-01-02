@@ -196,7 +196,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.settingApi.networkSettingApi(params, err => {
+          this.$_api.settingApi.networkconfig(params, err => {
             this.loading = false
             if (err) return
 
