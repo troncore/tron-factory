@@ -115,7 +115,7 @@ export default {
     handleDeleteAssets(index) {
       this.genesisBlockAssets.splice(index, 1)
 
-      this.$_api.settingApi.genesisSettingApi({ assets: this.genesisBlockAssets}, (err, res) => {
+      this.$_api.configManage.genesisSettingApi({ assets: this.genesisBlockAssets}, (err, res) => {
         if (err) return
 
         this.$message.success(this.$t('tronSettingGenesisSaveSuccess'))

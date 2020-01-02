@@ -318,7 +318,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.settingApi.p2pSettingApi(params, err => {
+          this.$_api.configManage.p2pSettingApi(params, err => {
             this.loading = false
             if (err) return
 
