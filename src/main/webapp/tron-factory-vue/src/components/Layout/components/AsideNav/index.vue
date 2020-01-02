@@ -7,7 +7,7 @@
       mode="vertical"
       @select="handleSelectMenu">
 
-      <side-menu-item v-for="route in permission_routes" :key="route.name" :route="route" />
+      <side-menu-item v-for="route in menuRoutes" :key="route.name" :route="route" />
 
     </el-menu>
   </div>
@@ -23,7 +23,8 @@ export default {
   computed: {
     ...mapGetters(['permission_routes']),
     ...mapGetters('app', [
-      'isCollapseAside'
+      'isCollapseAside',
+      'menuRoutes',
     ]),
   },
   methods: {

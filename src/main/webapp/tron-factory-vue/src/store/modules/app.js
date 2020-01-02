@@ -3,7 +3,7 @@ import { menuRoutes } from '@/router'
 
 
 const state = {
-  permission_routes: [...menuRoutes],
+  menuRoutes: [...menuRoutes],
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false,
@@ -13,9 +13,12 @@ const state = {
 }
 
 const getters = {
+  menuRoutes (state) {
+    return state.menuRoutes
+  },
   isCollapseAside (state) {
     return state.isCollapseAside
-  }
+  },
 }
 
 const mutations = {
