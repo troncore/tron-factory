@@ -413,7 +413,7 @@ export default {
 
       if (params.privateKey === validPrivateKey) delete params.privateKey
 
-      let hasSameIP = ~this.nodeList.findIndex(item => item.ip === params.ip)
+      let hasSameIP = this.isAdding && ~this.nodeList.findIndex(item => item.ip === params.ip)
       if (hasSameIP) {
         this.$message.warning(this.$t('tronNodesIpNoSame'))
         this.saveLoading = false
