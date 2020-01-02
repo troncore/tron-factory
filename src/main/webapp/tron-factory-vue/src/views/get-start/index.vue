@@ -58,7 +58,7 @@ export default {
   name: 'get-start',
   created() {},
   methods: {
-    ...mapMutations('user', {
+    ...mapMutations('app', {
       updateAuthMenu: 'SET_AUTH_MENU',
     }),
 

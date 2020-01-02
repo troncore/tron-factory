@@ -80,7 +80,7 @@ export default {
     this.getNodeList()
   },
   methods: {
-    ...mapMutations('user', {
+    ...mapMutations('app', {
       updateAuthMenu: 'SET_AUTH_MENU',
     }),
     // get table data
