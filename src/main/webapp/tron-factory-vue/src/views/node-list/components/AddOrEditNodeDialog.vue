@@ -425,7 +425,7 @@ export default {
 
     checkBalance(balance) {
       return new Promise(resolve => {
-        this.$_api.configManage.checkBalanceApi({ balance }, (err, res) => {
+        this.$_api.configManage.checkBalance({ balance }, (err, res) => {
           if (err) return resolve(false)
 
           if (res.result) {

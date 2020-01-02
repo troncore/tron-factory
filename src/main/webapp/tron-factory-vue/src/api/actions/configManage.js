@@ -1,16 +1,16 @@
 export default {
   get: {
-    checkBalanceApi: '/checkBalance',
-    originSettingApi: '/originConfig',
+    checkBalance: '/checkBalance',
+    originConfig: '/originConfig',
     getConfigInfo: '/config',
   },
   post: {
     oneClick: '/oneClick',
-    genesisSettingApi: '/genesisAssetConfig',
-    baseSettingApi: '/baseSettingConfig',
-    p2pSettingApi: '/p2pconfig',
-    dbconfigApi: '/dbconfig',
-    networkconfig: '/networkconfig',
+    genesisAssetConfig: '/genesisAssetConfig',
+    baseSettingConfig: '/baseSettingConfig',
+    p2pConfig: '/p2pconfig',
+    dbConfig: '/dbconfig',
+    networkConfig: '/networkconfig',
     crossChainConfig: '/crossChainConfig',
   },
 }

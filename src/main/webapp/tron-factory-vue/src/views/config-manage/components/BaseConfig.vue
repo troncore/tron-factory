@@ -208,7 +208,7 @@ export default {
           }
 
           this.loading = true
-          this.$_api.configManage.baseSettingApi(params, err => {
+          this.$_api.configManage.baseSettingConfig(params, err => {
             this.loading = false
             if (err) return
 
