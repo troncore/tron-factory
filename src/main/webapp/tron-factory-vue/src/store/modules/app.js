@@ -1,7 +1,9 @@
 import Cookies from 'js-cookie'
+import { menuRoutes } from '@/router'
 
 
 const state = {
+  permission_routes: [...menuRoutes],
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false,
