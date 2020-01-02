@@ -203,7 +203,6 @@ export default {
             this.$message.success(this.$t('tronSettingNetworkSaveSuccess'))
             this.$emit('next-step')
           })
-          this.$emit('next-step')
         }
       })
     },
