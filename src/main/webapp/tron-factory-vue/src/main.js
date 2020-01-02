@@ -11,8 +11,6 @@ Vue.use(ElementUI)
 // import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import './assets/styles/index.scss' // global css
 
-import './icons'
-
 import api from './api'
 Vue.prototype.$_api = api
 

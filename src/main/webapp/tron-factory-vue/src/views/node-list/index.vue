@@ -54,13 +54,11 @@
 </template>
 <script>
 import AddOrEditNodeDialog from './components/AddOrEditNodeDialog'
-import ImDialog from "../../components/ImDialog/src/index";
 import { mapMutations } from "vuex";
 
 export default {
   name: 'node-list',
   components: {
-    ImDialog,
     AddOrEditNodeDialog,
   },
   data() {
