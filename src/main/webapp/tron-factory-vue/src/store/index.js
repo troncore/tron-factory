@@ -17,7 +17,10 @@ const store = new Vuex.Store({
     tronSetting,
     permission,
   },
+  state: {},
   getters,
+  mutations: {},
+  actions: {},
 })
 
 export default store
