@@ -8,7 +8,6 @@
     center>
     <div slot="title" class="dialog-header">
       <div class="title">{{ dialogTitle }}</div>
-      <div class="title-info">以下均为必填项</div>
     </div>
 
     <div class="dialog-content">
@@ -23,7 +22,7 @@
         <el-form-item prop="id">
           <span slot="label">ID
             <el-tooltip effect="dark" :content="$t('deploymentNodeIdTips')" placement="top">
-              <i class="im-icon-info"> </i>
+              <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
@@ -32,12 +31,8 @@
 
         <el-form-item prop="userName">
           <span slot="label">{{ $t('tronNodeName') }}
-            <el-tooltip
-              size="small"
-              effect="dark"
-              :content="$t('deploymentNodeUsernameTips')"
-              placement="top">
-              <i class="im-icon-info"></i>
+            <el-tooltip effect="dark" :content="$t('deploymentNodeUsernameTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
@@ -46,9 +41,9 @@
 
         <el-form-item prop="ip">
           <span slot="label">
-            IP
-            <el-tooltip class="item" effect="dark" :content="$t('deploymentNodeIpTips')" placement="top">
-              <i class="im-icon-info"></i>
+            FullNode IP
+            <el-tooltip effect="dark" :content="$t('deploymentNodeIpTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
@@ -57,9 +52,9 @@
 
         <el-form-item prop="port">
           <span slot="label">
-            PORT
-            <el-tooltip class="item" effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
-              <i class="im-icon-info"></i>
+            FullNode Port
+            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
@@ -67,93 +62,70 @@
         </el-form-item>
 
         <el-form-item prop="isSR">
-        <span slot="label">
-          {{ $t('tronNodeWhetherIsSR') }}
-          <el-tooltip class="item" effect="dark" :content="$t('deploymentNodeSrTips')" placement="top">
-            <i class="im-icon-info"></i>
-          </el-tooltip>
-        </span>
-          <el-select v-model="form.isSR" :placeholder="$t('tronNodeSRPlaceholder')">
-            <el-option v-for="item in srAry" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
+          <span slot="label">
+            {{ $t('tronNodeWhetherIsSR') }}
+            <el-tooltip effect="dark" :content="$t('deploymentNodeSrTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
+            </el-tooltip>
+          </span>
+
+          <el-switch v-model="form.isSR"></el-switch>
         </el-form-item>
 
         <!-- SR info-->
-        <template v-if="form.isSR">
-          <el-form-item prop="needSyncCheck">
-            <span slot="label">
-              needSyncCheck
-              <el-tooltip class="item" effect="dark" :content="$t('deploymentNodeSyncCheckTips')" placement="top">
-                <i class="im-icon-info"></i>
-              </el-tooltip>
-            </span>
+        <el-collapse-transition>
+          <div v-if="form.isSR">
+            <el-form-item prop="needSyncCheck">
+              <span slot="label">
+                needSyncCheck
+                <el-tooltip effect="dark" :content="$t('deploymentNodeSyncCheckTips')" placement="top">
+                  <i class="fa fa-question-circle-o"></i>
+                </el-tooltip>
+              </span>
+              <el-switch v-model="form.needSyncCheck"></el-switch>
+            </el-form-item>
 
-            <el-select v-model="form.needSyncCheck" :placeholder="$t('tronNodeSyncCheckPlaceholder')">
-              <el-option
-                v-for="item in syncCheckAry"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+            <el-form-item prop="url">
+              <span slot="label">
+                URL
+                <el-tooltip effect="dark" :content="$t('deploymentNodeUrlTips')" placement="top">
+                  <i class="fa fa-question-circle-o"></i>
+                </el-tooltip>
+              </span>
+              <el-input :maxlength="100" v-model.trim="form.url" :placeholder="$t('tronNodeUrlPlaceholder')"></el-input>
+            </el-form-item>
 
-          <el-form-item prop="url">
-          <span slot="label">
-            URL
-            <el-tooltip class="item" effect="dark" :content="$t('deploymentNodeUrlTips')" placement="top">
-              <i class="im-icon-info"></i>
-            </el-tooltip>
-          </span>
+            <el-form-item prop="voteCount">
+              <span slot="label">
+                voteCount
+                <el-tooltip effect="dark" :content="$t('tronNodeVoteNumberTips')" placement="top">
+                  <i class="fa fa-question-circle-o"></i>
+                </el-tooltip>
+              </span>
+              <el-input v-model.trim="form.voteCount" :maxlength="20" :placeholder="$t('tronNodeVoteNumberPlaceholder')"></el-input>
+            </el-form-item>
 
-            <el-input
-              :maxlength="100"
-              v-model.trim="form.url"
-              :placeholder="$t('tronNodeUrlPlaceholder')">
-            </el-input>
-          </el-form-item>
+            <el-form-item v-if="!isAdding" class="publickey">
+              <span slot="label">
+                publicKey
+                <el-tooltip effect="dark" :content="$t('deploymentNodePublickKeyTips')" placement="top">
+                  <i class="fa fa-question-circle-o"></i>
+                </el-tooltip>
+              </span>
+              {{ form.publicKey }}
+            </el-form-item>
 
-          <el-form-item prop="voteCount">
-          <span slot="label">
-            voteCount
-            <el-tooltip class="item" effect="dark" :content="$t('tronNodeVoteNumberTips')" placement="top">
-              <i class="im-icon-info"></i>
-            </el-tooltip>
-          </span>
-
-            <el-input
-              :maxlength="20"
-              v-model.trim="form.voteCount"
-              :placeholder="$t('tronNodeVoteNumberPlaceholder')">
-            </el-input>
-          </el-form-item>
-
-          <el-form-item v-if="!isAdding" class="publickey">
-          <span slot="label" style="padding-left:12px">
-            publicKey
-            <el-tooltip class="item" effect="dark" :content="$t('deploymentNodePublickKeyTips')" placement="top">
-              <i class="im-icon-info"></i>
-            </el-tooltip>
-          </span>
-            {{ form.publicKey }}
-          </el-form-item>
-
-          <el-form-item prop="privateKey">
-          <span slot="label">
-            privateKey
-            <el-tooltip class="item" effect="dark" :content="$t('deploymentNodePrivateKeyTips')" placement="top">
-              <i class="im-icon-info"></i>
-            </el-tooltip>
-          </span>
-
-            <el-input
-              type="textarea"
-              :maxlength="1000"
-              v-model.trim="form.privateKey"
-              :placeholder="$t('tronNodePrivateKeyPlaceholder')">
-            </el-input>
-          </el-form-item>
-        </template>
+            <el-form-item prop="privateKey">
+              <span slot="label">
+                privateKey
+                <el-tooltip effect="dark" :content="$t('deploymentNodePrivateKeyTips')" placement="top">
+                  <i class="fa fa-question-circle-o"></i>
+                </el-tooltip>
+              </span>
+              <el-input v-model.trim="form.privateKey" type="textarea" :maxlength="1000" :placeholder="$t('tronNodePrivateKeyPlaceholder')"></el-input>
+            </el-form-item>
+          </div>
+        </el-collapse-transition>
       </el-form>
     </div>
 
@@ -178,17 +150,9 @@ export default {
         userName: '',
         ip: '',
         port: '',
-        isSR: '',
+        isSR: false,
+        needSyncCheck: false,
       },
-
-      srAry: [
-        { id: 0, label: this.$t('tronNodeSrIs'), value: true },
-        { id: 1, label: this.$t('tronNodeSrNo'), value: false },
-      ],
-      syncCheckAry: [
-        { id: 0, label: this.$t('tronNodeSrIs'), value: true },
-        { id: 1, label: this.$t('tronNodeSrNo'), value: false },
-      ],
     }
   },
   computed: {

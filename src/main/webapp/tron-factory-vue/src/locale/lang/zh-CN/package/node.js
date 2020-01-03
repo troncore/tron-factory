@@ -2,7 +2,7 @@ export default {
   tronNodeAdd: '添加节点',
   tronNodeEditTitle: '修改节点',
   tronNodeBulkDeployment: '批量部署',
-  tronNodeName: '用户名称',
+  tronNodeName: 'ssh用户名',
   tronNodeWhetherIsSR: '是否为SR',
   tronNodeStatus: '节点日志',
   tronNodeLog: '查看日志',

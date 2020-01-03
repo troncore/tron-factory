@@ -4,7 +4,6 @@
     <div class="page-header">
       <div class="title">{{ $t('getStart.webTitle') }}</div>
       <div class="description">{{ $t('getStart.description') }}</div>
-      <div class="description-more">{{ $t('getStart.descriptionMore') }}</div>
     </div>
 
     <div class="page-main">
@@ -13,7 +12,7 @@
     </div>
 
     <div class="page-footer">
-      <div class="title"><span>{{ $t('getStart.forNewUserTitle') }}</span></div>
+      <!--<div class="title"><span>{{ $t('getStart.forNewUserTitle') }}</span></div>-->
       <div class="guide-list">
         <div class="guide-item">
           <i class="guide-item__index"></i>
@@ -100,10 +99,7 @@ export default {
       color: #333333;
     }
     .description {
-      font-size: 18px;
-      color: #3F3F3F;
-    }
-    .description-more {
+      margin-top: 20px;
       font-size: 18px;
       color: #777;
     }
@@ -116,24 +112,17 @@ export default {
       margin: 60px 0 90px 0;
     }
     .start-deploy {
-      margin: 0 auto 40px;
-      width: 500px;
-      height: 80px;
-      line-height:80px;
-      font-size: 36px;
+      margin: 0 auto 30px;
+      width: 300px;
+      height: 60px;
+      line-height:60px;
+      font-size: 26px;
       text-align: center;
       color: white;
       background-color: theme-color();
       box-shadow: 0 12px 20px 0 rgba(1,1,71,0.10);
       border-radius: 6px;
       cursor: pointer;
-      @media screen and (max-width: $media1680){
-        margin-bottom: 30px;
-        width: 300px;
-        height: 60px;
-        line-height:60px;
-        font-size: 26px;
-      }
     }
     .view-document {
       display: inline-block;
@@ -223,7 +212,7 @@ export default {
           }
         }
 
-        &:hover {
+        /*&:hover {
           background-color: theme-color();
           box-shadow: 0 12px 20px 0 rgba(1, 1, 71, 0.10);
 
@@ -233,7 +222,7 @@ export default {
           .guide-item__body-detail {
             color: rgba(255, 255, 255, .8);
           }
-        }
+        }*/
 
         &:nth-child(1) {
           .guide-item__index {
@@ -252,14 +241,14 @@ export default {
               width: 50px;
             }
           }
-          &:hover {
+          /*&:hover {
             .guide-item__index {
               background-image: url(../../assets/images/num-one-active.png);
             }
             .guide-item__icon {
               background-image: url(../../assets/images/add-node-active.png);
             }
-          }
+          }*/
         }
         &:nth-child(2) {
           .guide-item__index {
@@ -278,14 +267,14 @@ export default {
               width: 46px;
             }
           }
-          &:hover {
+          /*&:hover {
             .guide-item__index {
               background-image: url(../../assets/images/num-two-active.png);
             }
             .guide-item__icon {
               background-image: url(../../assets/images/config-manage-active.png);
             }
-          }
+          }*/
         }
         &:nth-child(3) {
           .guide-item__index {
@@ -304,14 +293,14 @@ export default {
               width: 45px;
             }
           }
-          &:hover {
+          /*&:hover {
             .guide-item__index {
               background-image: url(../../assets/images/num-three-active.png);
             }
             .guide-item__icon {
               background-image: url(../../assets/images/plugin-import-active.png);
             }
-          }
+          }*/
         }
         &:nth-child(4) {
           .guide-item__index {
@@ -330,14 +319,14 @@ export default {
               width: 55px;
             }
           }
-          &:hover {
+          /*&:hover {
             .guide-item__index {
               background-image: url(../../assets/images/num-four-active.png);
             }
             .guide-item__icon {
               background-image: url(../../assets/images/node-deploy-active.png);
             }
-          }
+          }*/
         }
       }
     }

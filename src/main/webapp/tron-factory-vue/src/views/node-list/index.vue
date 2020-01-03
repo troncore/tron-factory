@@ -1,7 +1,7 @@
 <template>
   <div class="page-view node-list">
     <div class="page-header">
-      <el-button class="im-button larger" icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
+      <el-button icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
     </div>
 
     <el-card class="page-body custom-card">
@@ -39,7 +39,7 @@
     </el-card>
 
     <div class="page-footer align-right">
-      <el-button class="im-button large" :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
+      <el-button :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
     </div>
 
     <!-- node add and edit  -->

@@ -1,8 +1,8 @@
 export default {
   name: '开始部署',
   webTitle: 'TRON FACTORY',
-  description: '一键发链服务（One Click Deployment， 简称OCD）',
-  descriptionMore: '是一种基于主流区块链技术的企业级PaaS（ Platform as a Service） 平台服务， 帮助您快速构建更稳定、 安全的生产级区块链环境， 减少在区块链部署、 运维、 管理、 应用开发等方面的挑战， 使您更专注于核心业务创新， 并实现业务快速上链。',
+  description: 'Tron Factory 具备一键发链功能，是一种基于主流区块链技术的企业级PaaS平台服务， 帮助您快速构建区块链环境， 减少在区块链部署、管理等方面的挑战，实现业务快速上链。',
+  descriptionMore: '',
   getStartDeploy: '开始一键部署',
   viewDocument: '点击查看帮助文档',
   forNewUserTitle: '新人必看',
