@@ -1,16 +1,17 @@
 <template>
   <div class="app-container page-view deploy-nodes">
-    <div class="page-header">
-      <el-button class="im-button larger" :loading="batchDeployLoading" type="primary" @click="handleOpenDeployDialog">{{ $t('tronNodeBulkDeployment') }}</el-button>
-    </div>
 
-    <el-card class="page-body custom-card">
+    <el-card>
+      <div class="page-header">
+        <el-button class="im-button large" :loading="batchDeployLoading" type="primary" @click="handleOpenDeployDialog">{{ $t('tronNodeBulkDeployment') }}</el-button>
+      </div>
       <el-table
         :data="tableData"
         :empty-text="$t('tronNodesNoData')"
         v-loading="tableLoading"
         class="custom-table"
         header-align="center"
+        border
         @selection-change="handleSelectionChange">
 
         <el-table-column type="selection" width="100" align="center"></el-table-column>
@@ -182,6 +183,11 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .deploy-nodes {
+
+  .el-card {
+    box-shadow: none;
+  }
+
   .page-header {
     margin-bottom: 20px;
   }

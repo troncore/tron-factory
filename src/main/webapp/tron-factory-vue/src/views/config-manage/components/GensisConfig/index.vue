@@ -1,29 +1,30 @@
 <template>
   <div class="genesis-config">
-    <el-card>
+    <el-card class="im-card">
       <div class="box-header title">{{ $t('tronSettingGenesis') }}</div>
-
       <div class="box-body">
         <div class="asset-list">
-          <el-button type="text" class="add-asset" @click="handleAddAsset">Add Asset</el-button>
+          <div class="asset-title">Asset List</div>
           <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
-            <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }}</el-button>
+            <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }} <i class="el-icon-edit"></i></el-button>
             <i class="delete-btn el-icon-circle-close" @click="handleDeleteAssets(index)"></i>
           </div>
+          <el-button class="el-icon-plus" type="primary" size="small" @click="handleAddAsset"> New Asset</el-button>
         </div>
 
         <div class="asset-list">
-          <el-button type="text" class="add-asset" disabled>Witness</el-button>
+          <div class="asset-title">Witness List</div>
           <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
             <el-button @click="handleViewWitness(item, index)" style="width:100%">{{ item.address }}</el-button>
           </div>
         </div>
       </div>
+
+      <div class="box-footer align-right">
+        <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      </div>
     </el-card>
 
-    <div class="box-footer align-right">
-      <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-    </div>
 
     <!-- add or edit asset-->
     <add-asset-dialog
@@ -151,34 +152,32 @@ export default {
     }
   }
   .box-body {
-    display: flex;
     .asset-list {
       flex: 1;
-      margin-right: 30px;
+      margin-bottom: 30px;
       position: relative;
-      padding: 80px 100px 50px;
-      border: 1px solid rgba(151, 151, 151, .2);
+      padding: 60px 30px 0;
       border-radius: 5px;
       &:last-child {
-        margin-right: 0;
+        margin-bottom: 0;
       }
-
-      .add-asset {
+      .asset-title {
         position: absolute;
         top: 12px;
-        left: 50px;
+        left: 0;
         font-size: 18px;
       }
+
       .asset-item {
         position: relative;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         &:last-child {
           margin-bottom: 0;
         }
         .el-button {
           padding: 0;
-          height: 50px;
-          line-height: 50px;
+          height: 40px;
+          line-height: 40px;
         }
         .delete-btn {
           position: absolute;

@@ -3,6 +3,7 @@ export default {
   submit: '提交',
   confirm: '确定',
   clear: '清空',
+  continue: '继续',
   reset: '重置',
   open: '打开',
   close: '关闭',

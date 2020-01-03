@@ -16,7 +16,7 @@
         :rules="nodeRules"
         :model="form"
         label-width="150px"
-        label-position="left"
+        label-position="right"
         class="dialog-form">
 
         <el-form-item prop="id">
@@ -130,8 +130,8 @@
     </div>
 
     <div slot="footer" class="dialog-footer">
-      <el-button class="im-button" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button" type="primary" @click="handleSubmit" :loading="saveLoading">{{ $t('base.save') }}</el-button>
+      <el-button type="primary" @click="handleSubmit" :loading="saveLoading">{{ $t('base.save') }}</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
     </div>
   </el-dialog>
 </template>

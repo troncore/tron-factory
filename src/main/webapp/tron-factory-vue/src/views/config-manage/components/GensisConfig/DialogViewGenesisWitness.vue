@@ -5,7 +5,6 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     width="680px"
-    top="200px"
     center>
 
     <div slot="title" class="dialog-header">
@@ -14,16 +13,16 @@
 
     <div class="dialog-content">
 
-      <el-form :model="witnessInfo" label-width="120px" label-position="left">
-        <el-form-item label="address" prop="address">
+      <el-form :model="witnessInfo" label-width="120px" label-position="right">
+        <el-form-item label="Address :" prop="address">
           {{ witnessInfo.address }}
         </el-form-item>
 
-        <el-form-item label="url" prop="url">
+        <el-form-item label="URL :" prop="url">
           {{ witnessInfo.url }}
         </el-form-item>
 
-        <el-form-item label="voteCount" prop="voteCount">
+        <el-form-item label="VoteCount :" prop="voteCount">
           {{ witnessInfo.voteCount }}
         </el-form-item>
       </el-form>

@@ -7,9 +7,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 
 // el-card
-.custom-card {
+.im-card {
+  box-shadow: none !important;
   .el-card__body {
-    padding: 0;
+    padding: 30px;
+  }
+  .box-body {
+    width: 600px;
+    //margin: 0 auto;
   }
 }
 
@@ -19,14 +24,16 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   .el-table__header {
     tr {
       th {
-        padding: 0 0 0 40px;
-        height: 50px;
+        padding: 0;
+        height: 40px;
         font-weight: bold;
         color: #081C56;
         background-color: theme-color(0.05);
-        @media screen and (max-width: $media1680){
-          padding: 0 0 0 30px;
-          height: 40px;
+        &.el-table-column--selection {
+          padding: 0;
+          .cell {
+            padding: 0;
+          }
         }
       }
     }
@@ -35,8 +42,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   .el-table__body {
     tr {
       td {
-        padding: 8px 0 8px 30px;
+        padding: 5px 0;
         background-color: white;
+        &.el-table-column--selection {
+          padding: 0;
+          .cell {
+            padding: 0;
+          }
+        }
       }
     }
   }
@@ -62,7 +75,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     padding: 0;
     width: 100%;
     height: 90px;
-    background-color: theme-color();
+    background-color: theme-color(.8);
     overflow: hidden;
 
     &:after {
@@ -166,16 +179,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .im-button {
   &.large {
     padding: 0;
-    width: 160px;
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    @media screen and (max-width: $media1680){
-      width: 140px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-    }
+    width: 140px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
   }
   &.larger {
     padding: 0;

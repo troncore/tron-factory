@@ -7,12 +7,12 @@
   <div class="page-view config-manage">
 
     <div class="im-steps">
-      <div :class="['im-step genesis', { active: 1 <= currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronSettingGenesis') }}</span></div>
-      <div :class="['im-step base', { active: 2 <= currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronSettingBase') }}</span></div>
-      <div :class="['im-step network', { active: 3 <= currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronSettingHttp') }}</span></div>
-      <div :class="['im-step database', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronSettingDb') }}</span></div>
-      <div :class="['im-step p2p', { active: 5 <= currentStep }]" @click="handleSkipStep(5)"><span>{{ $t('tronSettingP2p') }}</span></div>
-      <div :class="['im-step cross-chain', { active: 6 <= currentStep }]" @click="handleSkipStep(6)"><span>{{ $t('tronCrossChain') }}</span></div>
+      <div :class="['im-step genesis', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronSettingGenesis') }}</span></div>
+      <div :class="['im-step base', { active: 2 <= currentStep, 'is-current': 2 === currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronSettingBase') }}</span></div>
+      <div :class="['im-step network', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronSettingHttp') }}</span></div>
+      <div :class="['im-step database', { active: 4 <= currentStep, 'is-current': 4 === currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronSettingDb') }}</span></div>
+      <div :class="['im-step p2p', { active: 5 <= currentStep, 'is-current': 5 === currentStep }]" @click="handleSkipStep(5)"><span>{{ $t('tronSettingP2p') }}</span></div>
+      <!--<div :class="['im-step cross-chain', { active: 6 <= currentStep }]" @click="handleSkipStep(6)"><span>{{ $t('tronCrossChain') }}</span></div>-->
     </div>
     <!-- <i class="iconfont theme-icon iconbianzubeifenx1">123</i> -->
 
@@ -69,7 +69,7 @@ export default {
       },
       stepRange: {
         min: 1,
-        max: 6,
+        max: 5,
       },
     }
   },
@@ -135,16 +135,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-$media1680: 1680px;
+@import "~@/assets/styles/base.scss";
+  $media1680: 1680px;
 
 .config-manage {
   .im-steps {
     display: flex;
     justify-content: space-between;
-    margin: 60px auto 110px;
-    @media screen and (max-width: $media1680){
-      margin: 30px auto 60px;
-    }
+    margin: 0 auto 50px;
 
     .im-step {
       &:not(:last-child) {
@@ -179,6 +177,11 @@ $media1680: 1680px;
       }
       &.active span {
         color: #333;
+      }
+      &.is-current span {
+        font-size: 16px;
+        font-weight: bold;
+        color: theme-color();
       }
 
       &.genesis:before {

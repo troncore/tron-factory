@@ -4,7 +4,7 @@ export default {
   tronSettingBase: '基础配置',
   tronSettingP2p: 'p2p配置',
   tronSettingDb: '数据库基础配置',
-  tronSettingHttp: '网络链接配置(http/rpc)',
+  tronSettingHttp: 'http/rpc配置',
   tronCrossChain: '跨链配置',
   tronModifySetting: '修改配置',
   tronModifySettingSuccess: '修改配置成功',

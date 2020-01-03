@@ -5,20 +5,30 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     width="680px"
-    top="200px"
     center>
     <div slot="title" class="dialog-header">
       <div class="title">{{ $t('tronAssetSetting') }}</div>
-      <div class="title-info">以下均为必填项</div>
     </div>
 
     <div class="dialog-content">
-      <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="120px" label-position="left">
-        <el-form-item label="accountName" prop="accountName">
+      <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="150px" label-position="right">
+        <el-form-item prop="accountName">
+          <span slot="label">
+            accountName
+            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
+            </el-tooltip>
+          </span>
           <el-input v-model.trim="form.accountName" :maxlength="50" :placeholder="$t('tronAccountNamePlaceholder')"></el-input>
         </el-form-item>
 
-        <el-form-item label="accountType" prop="accountType">
+        <el-form-item prop="accountType">
+          <span slot="label">
+            accountType
+            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
+            </el-tooltip>
+          </span>
           <el-select v-model="form.accountType" :placeholder="$t('tronNodeSRPlaceholder')">
             <el-option
               v-for="item in accountTypeOptions"
@@ -29,11 +39,23 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="address" prop="address">
+        <el-form-item prop="address">
+          <span slot="label">
+            address
+            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
+            </el-tooltip>
+          </span>
           <el-input v-model.trim="form.address" :maxlength="50" :placeholder="$t('tronAddressPlaceholder')"></el-input>
         </el-form-item>
 
         <el-form-item label="balance" prop="balance">
+          <span slot="label">
+            balance
+            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
+            </el-tooltip>
+          </span>
           <el-input v-model.trim="form.balance" :maxlength="22" :placeholder="$t('tronBalancePlaceholder')"></el-input>
         </el-form-item>
       </el-form>
@@ -41,8 +63,8 @@
     </div>
 
     <div slot="footer" class="dialog-footer">
-      <el-button class="im-button" size="small" @click="dialogVisible = false">{{ $t('tronSettingCancel') }}</el-button>
-      <el-button class="im-button" size="small" type="primary" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
+      <el-button type="primary" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('tronSettingCancel') }}</el-button>
     </div>
   </el-dialog>
 </template>

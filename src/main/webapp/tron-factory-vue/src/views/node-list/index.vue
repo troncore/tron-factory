@@ -1,34 +1,35 @@
 <template>
   <div class="page-view node-list">
-    <div class="page-header">
-      <el-button icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
-    </div>
+    <el-card>
+      <div class="page-header">
+        <el-button class="im-button large" icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
+      </div>
 
-    <el-card class="page-body custom-card">
       <el-table
         :data="tableData"
         :empty-text="$t('tronNodesNoData')"
         v-loading="listLoading"
         class="custom-table"
         ref="multipleTable"
-        stripe>
+        header-align="center"
+        border>
 
-        <el-table-column prop="id" label="ID" />
+        <el-table-column prop="id" label="ID"  align="center"/>
 
-        <el-table-column prop="userName" :label="$t('tronNodeName')" />
+        <el-table-column prop="userName" :label="$t('tronNodeName')"  align="center"/>
 
-        <el-table-column prop="ip" label="IP/HOST" />
+        <el-table-column prop="ip" label="IP/HOST"  align="center"/>
 
-        <el-table-column prop="port" label="SSH PORT" />
+        <el-table-column prop="port" label="SSH PORT"  align="center"/>
 
-        <el-table-column :label="$t('tronNodeWhetherIsSR')">
+        <el-table-column :label="$t('tronNodeWhetherIsSR')" align="center">
           <template slot-scope="scope">
             <el-tag size="medium" type="success" v-if="scope.row.isSR">YES</el-tag>
             <el-tag size="medium" type="danger" v-else>NO</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column class-name="operator-btns" :label="$t('tronNodeOperate')" width="200">
+        <el-table-column class-name="operator-btns" :label="$t('tronNodeOperate')" width="200" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="handleClickEditBtn(scope.row)"><i class="el-icon-edit"></i></el-button>
             <span class="divider">|</span>
@@ -36,11 +37,11 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-card>
 
-    <div class="page-footer align-right">
-      <el-button :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
-    </div>
+      <div class="page-footer align-right">
+        <el-button class="im-button large" :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
+      </div>
+    </el-card>
 
     <!-- node add and edit  -->
     <add-or-edit-node-dialog
@@ -172,6 +173,9 @@ export default {
   .page-header {
     margin-bottom: 24px;
   }
+  .el-card {
+    box-shadow: none;
+  }
 
   .page-footer {
     margin-top: 30px;
@@ -182,6 +186,7 @@ export default {
       .operator-btns .cell {
         display: flex;
         align-items: center;
+        justify-content: center;
 
         .el-button {
           padding: 10px 0;

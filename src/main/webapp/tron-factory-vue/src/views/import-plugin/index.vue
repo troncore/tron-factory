@@ -7,9 +7,9 @@
   <div class="page-view import-plugin">
 
     <div class="im-steps">
-      <div :class="['im-step consensus', { active: 1 <= currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronPluginConsensusModule') }}</span></div>
-      <div :class="['im-step transaction', { active: 2 <= currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronPluginTransactionModule') }}</span></div>
-      <div :class="['im-step database', { active: 3 <= currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronPluginDatabaseModule') }}</span></div>
+      <div :class="['im-step consensus', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronPluginConsensusModule') }}</span></div>
+      <div :class="['im-step transaction', { active: 2 <= currentStep , 'is-current': 2 === currentStep}]" @click="handleSkipStep(2)"><span>{{ $t('tronPluginTransactionModule') }}</span></div>
+      <div :class="['im-step database', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronPluginDatabaseModule') }}</span></div>
       <!-- TODO -->
       <!--<div :class="['im-step crypto', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronPluginCryptoModule') }}</span></div>-->
     </div>
@@ -112,10 +112,7 @@ $media1680: 1680px;
   .im-steps {
     display: flex;
     justify-content: space-between;
-    margin: 60px auto 110px;
-    @media screen and (max-width: $media1680){
-      margin: 30px auto 60px;
-    }
+    margin: 0 auto 50px;
 
     .im-step {
       &:not(:last-child) {
@@ -150,6 +147,11 @@ $media1680: 1680px;
       }
       &.active span {
         color: #333;
+      }
+      &.is-current span {
+        font-size: 16px;
+        font-weight: bold;
+        color: theme-color();
       }
 
       &.consensus:before {

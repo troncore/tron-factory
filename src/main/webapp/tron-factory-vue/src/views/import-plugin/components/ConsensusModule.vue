@@ -1,6 +1,6 @@
 <template>
   <div class="consensus-module">
-    <el-card>
+    <el-card class="im-card">
       <div class="box-header title">{{ $t('tronPluginConsensusModule') }}</div>
 
       <div class="box-body">
@@ -12,13 +12,12 @@
             </el-radio-group>
           </el-form-item>
         </el-form>
-
+      </div>
+      <div class="box-footer align-right">
+        <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
       </div>
     </el-card>
 
-    <div class="box-footer align-right">
-      <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-    </div>
   </div>
 </template>
 
@@ -104,14 +103,6 @@ export default {
   }
 
   /deep/ .el-form-item {
-    display: inline-block;
-    margin-right: 150px;
-    width: 350px;
-    @media screen and (max-width: $media1680){
-      margin-right: 120px;
-      width: 300px;
-    }
-
     .el-form-item__label {
       padding: 0;
       font-size: 16px;

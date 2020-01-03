@@ -1,72 +1,72 @@
 <template>
   <div class="p2p-config">
-    <el-card>
+    <el-card class="im-card">
       <div class="box-header title">{{ $t('tronSettingP2p') }}</div>
 
       <div class="box-body">
-        <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
-          <template v-if="showContent">
-            <el-form-item prop="node_p2p_version" label="p2pVersion">
-              <el-input v-model.trim="form.node_p2p_version" :maxlength="50" :placeholder="$t('tronP2pVersionPlaceholder')"></el-input>
-            </el-form-item>
+        <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top"><el-form-item prop="node_p2p_version" label="p2pVersion">
+          <el-input v-model.trim="form.node_p2p_version" :maxlength="50" :placeholder="$t('tronP2pVersionPlaceholder')"></el-input>
+        </el-form-item>
 
-            <el-form-item label="listenPort" prop="node_listen_port">
-              <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('tronhttpRpcListenPortPlaceholder')"></el-input>
-            </el-form-item>
+          <el-form-item label="listenPort" prop="node_listen_port">
+            <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('tronhttpRpcListenPortPlaceholder')"></el-input>
+          </el-form-item>
 
-            <el-form-item class="seed-node-list" label="seedNode" prop="seed_node_ip_list">
-              <el-checkbox-group v-model="form.seed_node_ip_list">
-                <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
-                  <el-input v-model="form.node_listen_port" :placeholder="$t('tronSettingPortPlaceholder')" disabled>
-                    <template slot="prepend" style="width:100px">{{ ip }}</template>
-                  </el-input>
-                </el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
+          <el-form-item class="seed-node-list" label="seedNode" prop="seed_node_ip_list">
+            <el-checkbox-group v-model="form.seed_node_ip_list">
+              <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
+                <el-input v-model="form.node_listen_port" :placeholder="$t('tronSettingPortPlaceholder')" disabled>
+                  <template slot="prepend" style="width:100px">{{ ip }}</template>
+                </el-input>
+              </el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
 
-            <div class="more-form">
-              <el-button type="text">{{ $t('tronMoreSetting') }}</el-button>
+          <div class="more-form">
+            <el-button class="el-icon-arrow-down el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
+          </div>
+          <el-collapse-transition>
+            <div v-if="showMore">
+              <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
+                <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('tronMaxActionNodesPlaceholder')"></el-input>
+              </el-form-item>
+
+              <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
+                <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('tronMaxActiveNodesWithSameIpPlaceholder')"></el-input>
+              </el-form-item>
+
+              <el-form-item label="activeConnectFactor" prop="node_activeConnectFactor">
+                <el-input-number
+                  v-model.trim="form.node_activeConnectFactor"
+                  controls-position="right"
+                  :min="0"
+                  :step="0.1"
+                  :maxlength="50"
+                  :placeholder="$t('tronSettingPlaceholder')">
+                </el-input-number>
+              </el-form-item>
+
+              <el-form-item label="connectFactor" prop="node_connectFactor">
+                <el-input-number
+                  controls-position="right"
+                  :min="0"
+                  :step="0.1"
+                  :maxlength="50"
+                  v-model.trim="form.node_connectFactor"
+                  :placeholder="$t('tronSettingPlaceholder')">
+                </el-input-number>
+              </el-form-item>
             </div>
-
-            <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
-              <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('tronMaxActionNodesPlaceholder')"></el-input>
-            </el-form-item>
-
-            <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
-              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('tronMaxActiveNodesWithSameIpPlaceholder')"></el-input>
-            </el-form-item>
-
-            <el-form-item label="activeConnectFactor" prop="node_activeConnectFactor">
-              <el-input-number
-                v-model.trim="form.node_activeConnectFactor"
-                controls-position="right"
-                :min="0"
-                :step="0.1"
-                :maxlength="50"
-                :placeholder="$t('tronSettingPlaceholder')">
-              </el-input-number>
-            </el-form-item>
-
-            <el-form-item label="connectFactor" prop="node_connectFactor">
-              <el-input-number
-                controls-position="right"
-                :min="0"
-                :step="0.1"
-                :maxlength="50"
-                v-model.trim="form.node_connectFactor"
-                :placeholder="$t('tronSettingPlaceholder')">
-              </el-input-number>
-            </el-form-item>
-          </template>
+          </el-collapse-transition>
         </el-form>
       </div>
 
+      <div class="box-footer align-right">
+        <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+        <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      </div>
     </el-card>
 
-    <div class="box-footer align-right">
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-    </div>
   </div>
 </template>
 <script>
@@ -85,7 +85,7 @@ export default {
   },
   data() {
     return {
-      showContent: true,
+      showMore: false,
       moreSetting: false,
       form: {
         seed_node_ip_list: [], // selected seed node
@@ -355,13 +355,6 @@ export default {
   }
 
   /deep/ .el-form-item {
-    display: inline-block;
-    margin-right: 150px;
-    width: 350px;
-    @media screen and (max-width: $media1680){
-      margin-right: 120px;
-      width: 300px;
-    }
 
     .el-form-item__label {
       padding: 0;

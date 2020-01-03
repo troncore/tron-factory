@@ -1,6 +1,6 @@
 <template>
   <div class="box-view transaction-module">
-    <el-card>
+    <el-card class="im-card">
 
       <div class="box-header title">{{ $t('tronPluginTransactionModule') }}</div>
 
@@ -14,29 +14,31 @@
           </el-form-item>
 
           <div class="more-form">
-            <el-button type="text">{{ $t('tronMoreSetting') }}</el-button>
+            <el-button class="el-icon-arrow-down el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
           </div>
 
-          <el-form-item class="custom-transaction" props="customTransaction">
-            <el-checkbox v-model="checkCustomTransaction">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
-            <el-input
-              v-model.trim="form.customTransaction"
-              type="textarea"
-              :autosize="{ minRows: 4, maxRows: 6 }"
-              :maxlength="300"
-              :placeholder="$t('tronPluginCustomTradingModulePlaceholder')">
-            </el-input>
-          </el-form-item>
+          <el-collapse-transition>
+            <div v-if="showMore">
+              <el-form-item class="custom-transaction" props="customTransaction">
+                <el-checkbox v-model="checkCustomTransaction">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
+                <el-input
+                  v-model.trim="form.customTransaction"
+                  type="textarea"
+                  :autosize="{ minRows: 4, maxRows: 6 }"
+                  :maxlength="300"
+                  :placeholder="$t('tronPluginCustomTradingModulePlaceholder')">
+                </el-input>
+              </el-form-item>
+            </div>
+          </el-collapse-transition>
         </el-form>
 
+        <div class="box-footer align-right">
+          <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+          <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+        </div>
       </div>
     </el-card>
-
-
-    <div class="box-footer align-right">
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-    </div>
   </div>
 </template>
 
@@ -55,6 +57,7 @@
           transaction: [],
           customTransaction: '',
         },
+        showMore: false,
         checkCustomTransaction: false,
         customTransactionIndex: -1, // if customTransaction exist, return its index
         formRules: {
@@ -129,12 +132,6 @@
 <style lang="scss" scoped>
 @import "~@/assets/styles/base.scss";
 .transaction-module {
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
-
   .box-header {
     margin-bottom: 30px;
     &.title {
@@ -142,6 +139,10 @@
       font-weight: bold;
       color: #081C56;
     }
+  }
+  .box-body {
+
+    width: 100%;
   }
 
   .more-form {
@@ -153,14 +154,6 @@
   }
 
   /deep/ .el-form-item {
-    display: inline-block;
-    margin-right: 150px;
-    width: 350px;
-    @media screen and (max-width: $media1680){
-      margin-right: 120px;
-      width: 300px;
-    }
-
     .el-form-item__label {
       padding: 0;
       font-size: 16px;

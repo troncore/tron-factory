@@ -1,6 +1,6 @@
 <template>
   <div class="base-config">
-    <el-card>
+    <el-card class="im-card">
       <div class="box-header title">{{ $t('tronSettingBase') }}</div>
 
       <div class="box-body">
@@ -18,29 +18,33 @@
           </el-form-item>
 
           <div class="more-form">
-            <el-button type="text">{{ $t('tronMoreSetting') }}</el-button>
+            <el-button class="el-icon-arrow-down el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
           </div>
 
-          <el-form-item label="blockProposalExpireTime" prop="block_proposalExpireTime">
-            <el-input v-model.trim="form.block_proposalExpireTime" :maxlength="50" :placeholder="$t('tronblockProducedTimeOutePlaceholder')"></el-input>
-          </el-form-item>
+          <el-collapse-transition>
+            <div v-if="showMore">
+              <el-form-item label="blockProposalExpireTime" prop="block_proposalExpireTime">
+                <el-input v-model.trim="form.block_proposalExpireTime" :maxlength="50" :placeholder="$t('tronblockProducedTimeOutePlaceholder')"></el-input>
+              </el-form-item>
 
-          <el-form-item label="nodeBlockProducedTimeOut" prop="node_blockProducedTimeOut">
-            <el-input v-model.trim="form.node_blockProducedTimeOut" :maxlength="50" :placeholder="$t('tronblockNodeBlockProducedTimeOutPlaceholder')"></el-input>
-          </el-form-item>
+              <el-form-item label="nodeBlockProducedTimeOut" prop="node_blockProducedTimeOut">
+                <el-input v-model.trim="form.node_blockProducedTimeOut" :maxlength="50" :placeholder="$t('tronblockNodeBlockProducedTimeOutPlaceholder')"></el-input>
+              </el-form-item>
 
-          <el-form-item label="nodeMinParticipationRate" prop="node_minParticipationRate">
-            <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" :placeholder="$t('tronblockNodeMinParticipationRatePlaceholder')"></el-input>
-          </el-form-item>
+              <el-form-item label="nodeMinParticipationRate" prop="node_minParticipationRate">
+                <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" :placeholder="$t('tronblockNodeMinParticipationRatePlaceholder')"></el-input>
+              </el-form-item>
+            </div>
+          </el-collapse-transition>
         </el-form>
       </div>
 
+      <div  class="box-footer align-right">
+        <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+        <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      </div>
     </el-card>
 
-    <div  class="box-footer align-right">
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-    </div>
   </div>
 </template>
 <script>
@@ -60,6 +64,7 @@ export default {
   data() {
     return {
       form: {},
+      showMore: false,
       loading: false,
     }
   },
@@ -252,15 +257,6 @@ export default {
   }
 
   /deep/ .el-form-item {
-    display: inline-block;
-    margin-right: 150px;
-    width: 350px;
-
-    @media screen and (max-width: $media1680){
-      margin-right: 120px;
-      width: 300px;
-    }
-
     .el-form-item__label {
       padding: 0;
       font-size: 16px;
