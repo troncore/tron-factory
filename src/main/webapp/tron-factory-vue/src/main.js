@@ -5,7 +5,6 @@ import store from './store'
 import i18n from './locale'
 
 import ElementUI from 'element-ui'
-import './assets/styles/element-ui.scss'
 Vue.use(ElementUI)
 
 // import 'normalize.css/normalize.css' // A modern alternative to CSS resets
