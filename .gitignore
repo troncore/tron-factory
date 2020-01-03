@@ -9,7 +9,7 @@ package-lock.json
 !**/src/main/**
 !**/src/test/**
 src/main/webapp/dist/*
-src/main/resources/*
+#src/main/resources/*
 logs/*
 .DS_Store
 .originConfig.conf

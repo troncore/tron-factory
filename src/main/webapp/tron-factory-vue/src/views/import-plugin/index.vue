@@ -10,7 +10,8 @@
       <div :class="['im-step consensus', { active: 1 <= currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronPluginConsensusModule') }}</span></div>
       <div :class="['im-step transaction', { active: 2 <= currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronPluginTransactionModule') }}</span></div>
       <div :class="['im-step database', { active: 3 <= currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronPluginDatabaseModule') }}</span></div>
-      <div :class="['im-step crypto', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronPluginCryptoModule') }}</span></div>
+      <!-- TODO -->
+      <!--<div :class="['im-step crypto', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronPluginCryptoModule') }}</span></div>-->
     </div>
 
     <component
@@ -53,7 +54,7 @@ export default {
       },
       stepRange: {
         min: 1,
-        max: 4,
+        max: 3,
       },
     }
   },
