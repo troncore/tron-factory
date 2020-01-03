@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -98,9 +98,10 @@
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
         <executions>
-          <execution>
+          <!--  copy the build result of the front-end project to the back-end-->
+          <!--<execution>
             <id>copy-spring-boot-webapp</id>
-            <!-- here the phase you need -->
+            &lt;!&ndash; here the phase you need &ndash;&gt;
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -110,11 +111,11 @@
               <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${basedir}/src/main/webapp/tron-factory-vue-old/dist</directory>
+                  <directory>${basedir}/src/main/webapp/tron-factory-vue/dist</directory>
                 </resource>
               </resources>
             </configuration>
-          </execution>
+          </execution>-->
         </executions>
       </plugin>
     </plugins>

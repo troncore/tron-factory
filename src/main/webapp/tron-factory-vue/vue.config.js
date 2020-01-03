@@ -5,11 +5,12 @@ const path = require('path')
 function resolve (dir) {
  return  path.resolve(__dirname, dir)
 }
-const isDevelopmentEnv = process.env.NODE_ENV !== 'production'
+const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = {
   publicPath: '/',
-  outputDir: 'dist',
+  outputDir: isProduction ? '../../resources/static' : 'dist',
+  assetsDir: 'static',
   devServer: {
     proxy: {
       '/proxy_local': {
