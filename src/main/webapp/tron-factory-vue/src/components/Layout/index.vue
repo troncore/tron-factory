@@ -5,7 +5,7 @@
     </div>
 
     <div class="app-body">
-      <div class="app-sidebar">
+      <div class="app-sidebar" v-if="!$route.meta.hideAside">
         <aside-nav />
       </div>
 

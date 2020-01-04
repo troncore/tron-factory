@@ -7,7 +7,7 @@
       mode="vertical"
       @select="handleSelectMenu">
 
-      <side-menu-item v-for="route in allMenuRoutes" :key="route.name" :route="route" />
+      <side-menu-item v-for="item in menu" :key="item.name" :menu-item="item" />
 
     </el-menu>
   </div>
@@ -16,10 +16,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import SideMenuItem from './SideMenuItem'
-
+import menu from '@/router/menu.json'
 export default {
   name: 'aside-nav',
   components: { SideMenuItem },
+  data () {
+    return {
+      menu: menu,
+    }
+  },
   computed: {
     ...mapGetters('app', [
       'isCollapseAside',
@@ -27,13 +32,13 @@ export default {
     ]),
   },
   methods: {
-    handleSelectMenu(index) {
-      if (index.startsWith('http')) {
+    handleSelectMenu(path) {
+      if (path.startsWith('http')) {
         this.$refs['el-menu'].updateActiveIndex(this.$route.fullPath)
-        window.open(index, '_blank')
+        window.open(path, '_blank')
       } else {
         this.$router.push({
-          path: index,
+          path: path,
           query: {},
         }).catch(err => err)
       }

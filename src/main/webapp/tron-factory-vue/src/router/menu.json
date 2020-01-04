@@ -1,0 +1,44 @@
+[
+  {
+    "path": "/get-start",
+    "name": "get-start",
+    "title": "getStart.name",
+    "icon": "el-icon-guide",
+    "disabled": false
+  },
+  {
+    "path": "/node-list",
+    "name": "node-list",
+    "title": "tronSettingMenuNodeList",
+    "icon": "el-icon-s-operation",
+    "disabled": true
+  },
+  {
+    "path": "/config-manage",
+    "name": "config-manage",
+    "title": "tronSettingMenuSetting",
+    "icon": "el-icon-setting",
+    "disabled": true
+  },
+  {
+    "path": "/import-plugin",
+    "name": "import-plugin",
+    "title": "tronSettingMenuPlugin",
+    "icon": "el-icon-upload",
+    "disabled": true
+  },
+  {
+    "path": "/deploy-nodes",
+    "name": "deploy-nodes",
+    "title": "tronSettingMenuDeployment",
+    "icon": "el-icon-share",
+    "disabled": true
+  },
+  {
+    "path": "https://tronscan.org/",
+    "name": "tronscan",
+    "title": "tronscanMenu",
+    "icon": "el-icon-link",
+    "disabled": false
+  }
+]

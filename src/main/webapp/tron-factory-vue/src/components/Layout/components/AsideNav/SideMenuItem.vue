@@ -1,7 +1,7 @@
 <template>
-  <el-menu-item :index="routePath" :disabled="route.meta.disabled">
-    <i :class="route.meta.icon" />
-    <span slot="title">{{ $t(route.meta.title) }}</span>
+  <el-menu-item :index="routePath" :disabled="menuItem.disabled">
+    <i :class="menuItem.icon" />
+    <span slot="title">{{ $t(menuItem.title) }}</span>
   </el-menu-item>
 </template>
 
@@ -9,21 +9,19 @@
 export default {
   name: 'side-menu-item',
   props: {
-    route: {
+    menuItem: {
       type: Object,
       required: true,
     },
   },
   data () {
     return {
-      authMenu: [
 
-      ]
     }
   },
   computed: {
     routePath() {
-      return this.route.path
+      return this.menuItem.path
     },
   },
 }

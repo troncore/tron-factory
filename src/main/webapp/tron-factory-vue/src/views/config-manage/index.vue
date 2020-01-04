@@ -14,10 +14,7 @@
       <div :class="['im-step p2p', { active: 5 <= currentStep, 'is-current': 5 === currentStep }]" @click="handleSkipStep(5)"><span>{{ $t('tronSettingP2p') }}</span></div>
       <!--<div :class="['im-step cross-chain', { active: 6 <= currentStep }]" @click="handleSkipStep(6)"><span>{{ $t('tronCrossChain') }}</span></div>-->
     </div>
-     <!--<i class="iconfont theme-icon iconbianzubeifenx1">123</i>-->
-    <svg class="tron-icon" aria-hidden="true">
-      <use xlink:href="#icon-iconbianzubeifenx"></use>
-    </svg>
+
     <component
       :is="stepMapConfig[currentStep]"
       :config-info="configInfo"
