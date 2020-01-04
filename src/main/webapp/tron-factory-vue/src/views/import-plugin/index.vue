@@ -106,7 +106,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-$media1680: 1680px;
+@import "~@/assets/styles/base.scss";
 
 .import-plugin {
   .im-steps {
@@ -136,14 +136,11 @@ $media1680: 1680px;
         position: absolute;
         top: 0;
         left: 0;
-        width: 122px;
+        width: 120px;
         height: 120px;
         background-repeat: no-repeat;
-        background-size: 94px auto;
+        background-size: 90px auto;
         background-position: center center;
-      }
-      &.active:before {
-        background-size: 100% auto;
       }
       &.active span {
         color: #333;

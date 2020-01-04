@@ -3,7 +3,7 @@ import {
   authMenuRoutes
 } from '@/router'
 
-const authMenu = JSON.parse(sessionStorage.getItem('authMenu') || '[]')
+const authMenu = JSON.parse(localStorage.getItem('authMenu') || '[]')
 
 // init the disabled status for auth menu routes
 function initAuthMenuRoutes (authMenuRoutes, authMenu, isInit = true) {
@@ -28,7 +28,7 @@ function initAuthMenu (authMenuRoutes, authMenu) {
     }
   })
 
-  sessionStorage.setItem('authMenu', JSON.stringify(authMenu))
+  localStorage.setItem('authMenu', JSON.stringify(authMenu))
 
   return authMenu
 }

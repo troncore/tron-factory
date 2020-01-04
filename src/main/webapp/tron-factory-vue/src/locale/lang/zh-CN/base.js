@@ -10,7 +10,8 @@ export default {
   save: '保存',
   cancel: '取消',
   delete: '删除',
-  goBack: '返回',
+  goBack: '退后',
+  return: '返回',
   prevStep: '上一步',
   nextStep: '下一步',
 }

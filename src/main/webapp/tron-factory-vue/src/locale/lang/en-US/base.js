@@ -9,7 +9,8 @@ export default {
   save: 'Save',
   cancel: 'Cancel',
   delete: 'Delete',
-  goBack: 'Go back',
+  goBack: 'Go Back',
+  return: 'Return',
   prevStep: 'Prev step',
   nextStep: 'Next step',
 }
