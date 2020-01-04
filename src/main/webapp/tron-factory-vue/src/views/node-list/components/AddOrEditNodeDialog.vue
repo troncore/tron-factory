@@ -400,12 +400,4 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-.dialog-form {
-  padding: 0 20px;
-}
-.item {
-  i {
-    font-size: 12px;
-  }
-}
 </style>
