@@ -1,28 +1,26 @@
 <template>
-  <div class="database-module">
-    <el-card class="im-card">
-      <div class="box-header title">{{ $t('tronPluginDatabaseModule') }}</div>
+  <div class="database-module box-view">
+    <div class="box-header title">{{ $t('tronPluginDatabaseModule') }}</div>
 
-      <div class="box-body">
+    <div class="box-body">
 
-        <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
+      <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
 
-          <el-form-item prop="dbEngine">
-            <el-radio-group v-model="form.dbEngine">
-              <el-radio disabled :label="'leveldb'">leveldb</el-radio>
-              <el-radio disabled :label="'rocksdb'">rocksdb</el-radio>
-            </el-radio-group>
-          </el-form-item>
+        <el-form-item prop="dbEngine">
+          <el-radio-group v-model="form.dbEngine">
+            <el-radio disabled :label="'leveldb'">leveldb</el-radio>
+            <el-radio disabled :label="'rocksdb'">rocksdb</el-radio>
+          </el-radio-group>
+        </el-form-item>
 
-        </el-form>
+      </el-form>
 
-      </div>
+    </div>
 
-      <div class="box-footer align-right">
-        <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-        <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-      </div>
-    </el-card>
+    <div class="box-footer align-right">
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    </div>
   </div>
 </template>
 
@@ -86,47 +84,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/styles/base.scss";
-.database-module {
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
-
-  .box-header {
-    margin-bottom: 30px;
-
-    &.title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #081C56;
-    }
-  }
-
-  .more-form {
-    margin-top: 20px;
-
-    .el-button {
-      font-size: 18px;
-      font-weight: bold;
-    }
-  }
-
-  /deep/ .el-form-item {
-    .el-form-item__label {
-      padding: 0;
-      font-size: 16px;
-      color: rgba(8, 28, 86, .7);
-    }
-  }
-
-  .box-footer {
-    margin-top: 40px;
-
-    &.align-right {
-      text-align: right;
-    }
-  }
-}
 </style>

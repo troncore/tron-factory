@@ -63,7 +63,7 @@
     </div>
 
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
+      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
       <el-button @click="dialogVisible = false">{{ $t('tronSettingCancel') }}</el-button>
     </div>
   </el-dialog>

@@ -36,11 +36,14 @@ div, span {
 }
 
 .page-view {
-  padding: 40px;
+  padding: 30px;
 }
-.align-right {
-  text-align: right;
+
+.box-view {
+  padding: 30px;
+  background-color: white;
 }
+
 .align-center {
   text-align: center;
 }
@@ -52,16 +55,6 @@ div, span {
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
   border-radius: 5px;
-}
-
-
-.im-icon-info {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  background-image: url(~@/assets/images/icon-explain.png);
-  background-repeat: no-repeat;
-  background-size: 100% auto;
 }
 
 .theme-icon {
@@ -76,3 +69,4 @@ div, span {
   fill: currentColor;
   overflow: hidden;
 }
+

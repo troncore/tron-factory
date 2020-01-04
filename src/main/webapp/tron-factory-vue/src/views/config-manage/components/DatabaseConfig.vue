@@ -1,40 +1,37 @@
 <template>
-  <div class="database-config">
-    <el-card class="im-card">
-      <div class="box-header title">{{ $t('tronSettingDb') }}</div>
-      <div class="box-body">
-        <el-form ref="database-config-form" :rules="formRules" :model="form" label-position="top">
-          <el-form-item :label="$t('tronSettingwriteSynchronously')" prop="storage_db_sync">
-            <el-switch v-model="form.storage_db_sync"></el-switch>
-          </el-form-item>
+  <div class="box-view database-config">
+    <div class="box-header title">{{ $t('tronSettingDb') }}</div>
+    <div class="box-body">
+      <el-form ref="database-config-form" :rules="formRules" :model="form" label-position="top">
+        <el-form-item :label="$t('tronSettingwriteSynchronously')" prop="storage_db_sync">
+          <el-switch v-model="form.storage_db_sync"></el-switch>
+        </el-form-item>
 
-          <el-form-item :label="$t('tronSettingOpenTransaction')" prop="storage_transHistory_switch">
-            <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
-          </el-form-item>
+        <el-form-item :label="$t('tronSettingOpenTransaction')" prop="storage_transHistory_switch">
+          <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
+        </el-form-item>
 
-          <el-form-item :label="$t('tronSelectDatabaseConfiguration')" prop="storage_db_engine">
-            <el-radio-group v-model="form.storage_db_engine">
-              <el-radio :label="'LEVELDB'">leveldb</el-radio>
-              <el-radio :label="'ROCKSDB'">rocksdb</el-radio>
-            </el-radio-group>
-          </el-form-item>
+        <el-form-item :label="$t('tronSelectDatabaseConfiguration')" prop="storage_db_engine">
+          <el-radio-group v-model="form.storage_db_engine">
+            <el-radio :label="'LEVELDB'">leveldb</el-radio>
+            <el-radio :label="'ROCKSDB'">rocksdb</el-radio>
+          </el-radio-group>
+        </el-form-item>
 
-          <el-form-item :label="$t('tronSettingIndexDirectory')" prop="storage_index_directory">
-            <el-switch active-value="index"  inactive-value="is not open index directory" v-model="form.storage_index_directory"></el-switch>
-          </el-form-item>
+        <el-form-item :label="$t('tronSettingIndexDirectory')" prop="storage_index_directory">
+          <el-switch active-value="index"  inactive-value="is not open index directory" v-model="form.storage_index_directory"></el-switch>
+        </el-form-item>
 
-          <el-form-item :label="$t('tronSettingNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
-            <el-switch v-model="form.storage_needToUpdateAsset"></el-switch>
-          </el-form-item>
-        </el-form>
-      </div>
+        <el-form-item :label="$t('tronSettingNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
+          <el-switch v-model="form.storage_needToUpdateAsset"></el-switch>
+        </el-form-item>
+      </el-form>
+    </div>
 
-      <div class="box-footer align-right">
-        <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-        <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-      </div>
-    </el-card>
-
+    <div class="box-footer align-right">
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -107,36 +104,6 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import "~@/assets/styles/base.scss";
 .database-config {
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
-
-  .box-header {
-    margin-bottom: 30px;
-    &.title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #081C56;
-    }
-  }
-
-  /deep/ .el-form-item {
-
-    .el-form-item__label {
-      padding: 0;
-      font-size: 16px;
-      color: rgba(8, 28, 86, .7);
-    }
-  }
-  .box-footer {
-    margin-top: 40px;
-    &.align-right {
-      text-align: right;
-    }
-  }
 }
 </style>

@@ -1,43 +1,41 @@
 <template>
-  <div class="cross-chain-config">
-    <el-card>
-      <div class="box-header title">{{ $t('tronCrossChain') }}</div>
+  <div class="box-view cross-chain-config">
+    <div class="box-header title">{{ $t('tronCrossChain') }}</div>
 
-      <div class="box-body">
-        <el-form ref="cross-chain-config-form" :model="form" :rules="crossChainRules" label-position="top">
-          <el-form-item label="enableCrossChain" prop="enableCrossChain" class="baseFormItem mgt20">
-            <el-switch disabled  v-model="form.enableCrossChain"></el-switch>
-          </el-form-item>
+    <div class="box-body">
+      <el-form ref="cross-chain-config-form" :model="form" :rules="crossChainRules" label-position="top">
+        <el-form-item label="enableCrossChain" prop="enableCrossChain" class="baseFormItem mgt20">
+          <el-switch disabled  v-model="form.enableCrossChain"></el-switch>
+        </el-form-item>
 
-          <br/>
+        <br/>
 
-          <el-form-item label="maxValidatorNumber" prop="maxValidatorNumber" class="baseFormItem">
-            <el-input v-model.trim="form.maxValidatorNumber" :maxlength="50" :placeholder="$t('tronMaxValidatorNumberPlaceholder')" disabled></el-input>
-          </el-form-item>
+        <el-form-item label="maxValidatorNumber" prop="maxValidatorNumber" class="baseFormItem">
+          <el-input v-model.trim="form.maxValidatorNumber" :maxlength="50" :placeholder="$t('tronMaxValidatorNumberPlaceholder')" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="minValidatorNumber" prop="minValidatorNumber" class="baseFormItem">
-            <el-input v-model.trim="form.minValidatorNumber" :maxlength="50" :placeholder="$t('tronMinValidatorNumberPlaceholder')" disabled></el-input>
-          </el-form-item>
+        <el-form-item label="minValidatorNumber" prop="minValidatorNumber" class="baseFormItem">
+          <el-input v-model.trim="form.minValidatorNumber" :maxlength="50" :placeholder="$t('tronMinValidatorNumberPlaceholder')" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="crossChainFee" prop="crossChainFee" class="baseFormItem">
-            <el-input-number
-              v-model.trim="form.crossChainFee"
-              :min="0"
-              :step="0.01"
-              :maxlength="50"
-              controls-position="right"
-              :placeholder="$t('tronSettingPlaceholder')"
-              disabled>
-            </el-input-number>
-          </el-form-item>
-        </el-form>
+        <el-form-item label="crossChainFee" prop="crossChainFee" class="baseFormItem">
+          <el-input-number
+            v-model.trim="form.crossChainFee"
+            :min="0"
+            :step="0.01"
+            :maxlength="50"
+            controls-position="right"
+            :placeholder="$t('tronSettingPlaceholder')"
+            disabled>
+          </el-input-number>
+        </el-form-item>
+      </el-form>
 
-      </div>
-    </el-card>
+    </div>
 
     <div class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -213,43 +211,4 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import "~@/assets/styles/base.scss";
-.cross-chain-config {
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
-
-  .box-header {
-    margin-bottom: 30px;
-    &.title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #081C56;
-    }
-  }
-
-  /deep/ .el-form-item {
-    display: inline-block;
-    margin-right: 150px;
-    width: 350px;
-    @media screen and (max-width: $media1680){
-      margin-right: 120px;
-      width: 300px;
-    }
-
-    .el-form-item__label {
-      padding: 0;
-      font-size: 16px;
-      color: rgba(8, 28, 86, .7);
-    }
-  }
-  .box-footer {
-    margin-top: 40px;
-    &.align-right {
-      text-align: right;
-    }
-  }
-}
 </style>

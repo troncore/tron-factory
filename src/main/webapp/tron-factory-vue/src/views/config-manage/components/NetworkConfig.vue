@@ -1,36 +1,34 @@
 <template>
-  <div class="network-config">
-    <el-card class="im-card">
-      <div class="box-header title">{{ $t('tronSettingHttp') }}</div>
+  <div class="box-view  network-config">
+    <div class="box-header title">{{ $t('tronSettingHttp') }}</div>
 
-      <div class="box-body">
-        <el-form ref="network-config-form" :rules="networkRules" :model="form">
-          <el-form-item label="maxHttpConnectNumber" prop="node_maxHttpConnectNumber" class="baseFormItem mgt20">
-            <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" :placeholder="$t('tronmaxHttpConnectNumberPlaceholder')"></el-input>
-          </el-form-item>
+    <div class="box-body">
+      <el-form ref="network-config-form" :rules="networkRules" :model="form">
+        <el-form-item label="maxHttpConnectNumber" prop="node_maxHttpConnectNumber" class="baseFormItem mgt20">
+          <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" :placeholder="$t('tronmaxHttpConnectNumberPlaceholder')"></el-input>
+        </el-form-item>
 
-          <el-form-item class="baseFormItem" label="httpFullNodePort" prop="node_http_fullNodePort">
-            <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" :placeholder="$t('tronhttpFullNodePortPlaceholder')"></el-input>
-          </el-form-item>
+        <el-form-item class="baseFormItem" label="httpFullNodePort" prop="node_http_fullNodePort">
+          <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" :placeholder="$t('tronhttpFullNodePortPlaceholder')"></el-input>
+        </el-form-item>
 
-          <el-form-item class="baseFormItem" label="httpSolidityPort" prop="node_http_solidityPort">
-            <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" :placeholder="$t('tronhttpHttpSolidityPortPlaceholder')"></el-input>
-          </el-form-item>
+        <el-form-item class="baseFormItem" label="httpSolidityPort" prop="node_http_solidityPort">
+          <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" :placeholder="$t('tronhttpHttpSolidityPortPlaceholder')"></el-input>
+        </el-form-item>
 
-          <el-form-item class="baseFormItem" label="rpcPort" prop="node_rpc_port">
-            <el-input v-model.trim="form.node_rpc_port" :maxlength="50" :placeholder="$t('tronhttpRpcPortPlaceholder')"></el-input>
-          </el-form-item>
+        <el-form-item class="baseFormItem" label="rpcPort" prop="node_rpc_port">
+          <el-input v-model.trim="form.node_rpc_port" :maxlength="50" :placeholder="$t('tronhttpRpcPortPlaceholder')"></el-input>
+        </el-form-item>
 
-          <el-form-item class="baseFormItem" label="rpcSolidityPort" prop="node_rpc_solidityPort">
-            <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" :placeholder="$t('tronhttpRpcSolidityPortPlaceholder')"></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div  class="box-footer align-right">
-        <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-        <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-      </div>
-    </el-card>
+        <el-form-item class="baseFormItem" label="rpcSolidityPort" prop="node_rpc_solidityPort">
+          <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" :placeholder="$t('tronhttpRpcSolidityPortPlaceholder')"></el-input>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div  class="box-footer align-right">
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    </div>
 
   </div>
 </template>
@@ -214,38 +212,4 @@ export default {
 }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import "~@/assets/styles/base.scss";
-.network-config {
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
-
-  .box-header {
-    margin-bottom: 30px;
-    &.title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #081C56;
-    }
-  }
-
-  /deep/ .el-form-item {
-
-    .el-form-item__label {
-      padding: 0;
-      font-size: 16px;
-      color: rgba(8, 28, 86, .7);
-    }
-  }
-
-  .box-footer {
-    margin-top: 40px;
-    &.align-right {
-      text-align: right;
-    }
-  }
-}
-
 </style>

@@ -199,4 +199,39 @@ export default {
     }
   }
 }
+
+/deep/ .box-view {
+  .box-header {
+    margin-bottom: 30px;
+    &.title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #081C56;
+    }
+  }
+
+  .box-body {
+    width: 500px;
+
+    .more-form {
+      margin-top: 20px;
+      .el-button {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+
+    /deep/ .el-form-item {
+      .el-form-item__label {
+        padding: 0;
+        font-size: 16px;
+        color: rgba(8, 28, 86, .7);
+      }
+    }
+  }
+
+  .box-footer {
+    margin-top: 40px;
+  }
+}
 </style>

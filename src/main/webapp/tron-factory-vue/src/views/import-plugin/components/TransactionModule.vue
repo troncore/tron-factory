@@ -1,44 +1,40 @@
 <template>
   <div class="box-view transaction-module">
-    <el-card class="im-card">
+    <div class="box-header title">{{ $t('tronPluginTransactionModule') }}</div>
 
-      <div class="box-header title">{{ $t('tronPluginTransactionModule') }}</div>
+    <div class="box-body">
+      <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
+        <el-form-item class="transaction-list" prop="transaction">
+          <el-checkbox-group v-model="form.transaction">
+            <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
 
-      <div class="box-body">
-
-        <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
-          <el-form-item class="transaction-list" prop="transaction">
-            <el-checkbox-group v-model="form.transaction">
-              <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-
-          <div class="more-form">
-            <el-button class="el-icon-arrow-down el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
-          </div>
-
-          <el-collapse-transition>
-            <div v-if="showMore">
-              <el-form-item class="custom-transaction" props="customTransaction">
-                <el-checkbox v-model="checkCustomTransaction">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
-                <el-input
-                  v-model.trim="form.customTransaction"
-                  type="textarea"
-                  :autosize="{ minRows: 4, maxRows: 6 }"
-                  :maxlength="300"
-                  :placeholder="$t('tronPluginCustomTradingModulePlaceholder')">
-                </el-input>
-              </el-form-item>
-            </div>
-          </el-collapse-transition>
-        </el-form>
-
-        <div class="box-footer align-right">
-          <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-          <el-button class="im-button large" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+        <div class="more-form">
+          <el-button class="el-icon-arrow-down el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
         </div>
-      </div>
-    </el-card>
+
+        <el-collapse-transition>
+          <div v-if="showMore">
+            <el-form-item class="custom-transaction" props="customTransaction">
+              <el-checkbox v-model="checkCustomTransaction">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
+              <el-input
+                v-model.trim="form.customTransaction"
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 6 }"
+                :maxlength="300"
+                :placeholder="$t('tronPluginCustomTradingModulePlaceholder')">
+              </el-input>
+            </el-form-item>
+          </div>
+        </el-collapse-transition>
+      </el-form>
+    </div>
+
+    <div class="box-footer align-right">
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    </div>
   </div>
 </template>
 
@@ -130,63 +126,31 @@
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/styles/base.scss";
 .transaction-module {
-  .box-header {
-    margin-bottom: 30px;
-    &.title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #081C56;
+  &.box-view {
+    .box-body {
+      width: 100%;
     }
   }
-  .box-body {
 
+  .transaction-list {
+    display: block;
     width: 100%;
-  }
 
-  .more-form {
-    margin-top: 20px;
-    .el-button {
-      font-size: 18px;
-      font-weight: bold;
+    .el-checkbox {
+      display: inline-flex;
+      align-items: center;
+      min-width: 199px;
+      margin-right: 150px;
+      margin-bottom: 30px;
     }
   }
 
-  /deep/ .el-form-item {
-    .el-form-item__label {
-      padding: 0;
+  .custom-transaction {
+    width: 50%;
+    .el-checkbox__label {
       font-size: 16px;
       color: rgba(8, 28, 86, .7);
-    }
-
-    &.transaction-list {
-      display: block;
-      width: 100%;
-
-      .el-checkbox {
-        display: inline-flex;
-        align-items: center;
-        min-width: 199px;
-        margin-right: 150px;
-        margin-bottom: 30px;
-      }
-    }
-
-    &.custom-transaction {
-      width: 50%;
-      .el-checkbox__label {
-        font-size: 16px;
-        color: rgba(8, 28, 86, .7);
-      }
-    }
-
-  }
-
-  .box-footer {
-    margin-top: 40px;
-    &.align-right {
-      text-align: right;
     }
   }
 }

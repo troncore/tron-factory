@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container page-view deploy-nodes">
+  <div class="page-view deploy-nodes">
 
-    <el-card>
+    <div class="box-view">
       <div class="page-header">
         <el-button class="im-button large" :loading="batchDeployLoading" type="primary" @click="handleOpenDeployDialog">{{ $t('tronNodeBulkDeployment') }}</el-button>
       </div>
@@ -38,7 +38,7 @@
         </el-table-column>
 
       </el-table>
-    </el-card>
+    </div>
 
     <!-- deploy node  -->
     <deploy-dialog
@@ -89,7 +89,9 @@ export default {
   methods: {
     // get table data
     getNodeList () {
+      this.tableLoading = true
       this.$_api.nodeList.allNodeInfo({}, (err, res) => {
+        this.tableLoading = false
         if (err) return
 
         this.tableData = res.sort((a, b) => a.id - b.id)
@@ -183,11 +185,6 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .deploy-nodes {
-
-  .el-card {
-    box-shadow: none;
-  }
-
   .page-header {
     margin-bottom: 20px;
   }

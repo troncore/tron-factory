@@ -130,7 +130,7 @@
     </div>
 
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleSubmit" :loading="saveLoading">{{ $t('base.save') }}</el-button>
+      <el-button type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
       <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
     </div>
   </el-dialog>
@@ -143,8 +143,6 @@ export default {
   props: ['visible', 'isAdding', 'nodeDetail', 'nodeList'],
   data() {
     return {
-      saveLoading: false,
-      dialogTitle: this.$t('tronNodeAdd'),
       form: {
         id: '',
         userName: '',
@@ -153,6 +151,8 @@ export default {
         isSR: false,
         needSyncCheck: false,
       },
+      dialogTitle: this.$t('tronNodeAdd'),
+      loading: false,
     }
   },
   computed: {
@@ -365,23 +365,19 @@ export default {
         url: `"${this.form.url}"`,
       })
 
-      if (!(await this.checkBalance(params.voteCount))) {
-        this.saveLoading = false
-        return false
-      }
-
-      let validPrivateKey = Array(64)
-        .fill('*')
-        .join('')
-
-      if (params.privateKey === validPrivateKey) delete params.privateKey
-
       let hasSameIP = this.isAdding && ~this.nodeList.findIndex(item => item.ip === params.ip)
       if (hasSameIP) {
         this.$message.warning(this.$t('tronNodesIpNoSame'))
         this.saveLoading = false
         return false
       }
+
+      if (!(await this.checkBalance(params.voteCount))) {
+        this.saveLoading = false
+        return false
+      }
+
+      if (params.privateKey === Array(64).fill('*').join('')) delete params.privateKey
 
       return true
     },

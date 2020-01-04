@@ -1,29 +1,27 @@
 <template>
-  <div class="genesis-config">
-    <el-card class="im-card">
-      <div class="box-header title">{{ $t('tronSettingGenesis') }}</div>
-      <div class="box-body">
-        <div class="asset-list">
-          <div class="asset-title">Asset List</div>
-          <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
-            <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }} <i class="el-icon-edit"></i></el-button>
-            <i class="delete-btn el-icon-circle-close" @click="handleDeleteAssets(index)"></i>
-          </div>
-          <el-button class="el-icon-plus" type="primary" size="small" @click="handleAddAsset"> New Asset</el-button>
+  <div class="box-view genesis-config">
+    <div class="box-header title">{{ $t('tronSettingGenesis') }}</div>
+    <div class="box-body">
+      <div class="asset-list">
+        <div class="asset-title">Asset List</div>
+        <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
+          <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }} <i class="el-icon-edit"></i></el-button>
+          <i class="delete-btn el-icon-circle-close" @click="handleDeleteAssets(index)"></i>
         </div>
-
-        <div class="asset-list">
-          <div class="asset-title">Witness List</div>
-          <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
-            <el-button @click="handleViewWitness(item, index)" style="width:100%">{{ item.address }}</el-button>
-          </div>
-        </div>
+        <el-button class="el-icon-plus" type="primary" size="small" @click="handleAddAsset"> New Asset</el-button>
       </div>
 
-      <div class="box-footer align-right">
-        <el-button class="im-button large" size="small" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      <div class="asset-list">
+        <div class="asset-title">Witness List</div>
+        <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
+          <el-button @click="handleViewWitness(item, index)" style="width:100%">{{ item.address }}</el-button>
+        </div>
       </div>
-    </el-card>
+    </div>
+
+    <div class="box-footer align-right">
+      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    </div>
 
 
     <!-- add or edit asset-->
@@ -79,6 +77,7 @@ export default {
         voteCount: '',
         privateKey: '',
       },
+      loading: false,
     }
   },
   computed: {
@@ -138,64 +137,41 @@ export default {
 </script>
 <style lang="scss" scoped>
 .genesis-config {
-  /deep/ .el-card {
-    .el-card__body {
-      padding: 30px;
-    }
-  }
-  .box-header {
+  .asset-list {
+    flex: 1;
     margin-bottom: 30px;
-    &.title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #081C56;
+    position: relative;
+    padding: 60px 30px 0;
+    border-radius: 5px;
+    &:last-child {
+      margin-bottom: 0;
     }
-  }
-  .box-body {
-    .asset-list {
-      flex: 1;
-      margin-bottom: 30px;
+    .asset-title {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      font-size: 18px;
+    }
+
+    .asset-item {
       position: relative;
-      padding: 60px 30px 0;
-      border-radius: 5px;
+      margin-bottom: 20px;
       &:last-child {
         margin-bottom: 0;
       }
-      .asset-title {
+      .el-button {
+        padding: 0;
+        height: 40px;
+        line-height: 40px;
+      }
+      .delete-btn {
         position: absolute;
-        top: 12px;
-        left: 0;
-        font-size: 18px;
-      }
-
-      .asset-item {
-        position: relative;
-        margin-bottom: 20px;
-        &:last-child {
-          margin-bottom: 0;
-        }
-        .el-button {
-          padding: 0;
-          height: 40px;
-          line-height: 40px;
-        }
-        .delete-btn {
-          position: absolute;
-          right: 8px;
-          top: 50%;
-          transform: translate(0, -50%);
-          cursor: pointer;
-        }
+        right: 8px;
+        top: 50%;
+        transform: translate(0, -50%);
+        cursor: pointer;
       }
     }
   }
-
-  .box-footer {
-    margin-top: 40px;
-    &.align-right {
-      text-align: right;
-    }
-  }
-
 }
 </style>

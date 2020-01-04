@@ -1,14 +1,15 @@
 <template>
   <div class="page-view node-list">
-    <el-card>
+    <div class="box-view">
       <div class="page-header">
-        <el-button class="im-button large" icon="el-icon-plus" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
+        <el-button class="im-button large" icon="el-icon-plus" :disabled="tableLoading || tableData.length > 20" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
+        <span v-if="tableData.length > 20" class="max-tips">({{ $t('tronNodesMaxTips') }})</span>
       </div>
 
       <el-table
         :data="tableData"
         :empty-text="$t('tronNodesNoData')"
-        v-loading="listLoading"
+        v-loading="tableLoading"
         class="custom-table"
         ref="multipleTable"
         header-align="center"
@@ -39,17 +40,17 @@
       </el-table>
 
       <div class="page-footer align-right">
-        <el-button class="im-button large" :type="nextBtnType" :disabled="isNextBtnDisabled" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
+        <el-button class="im-button large" :type="nextBtnType" :disabled="isNextBtnDisabled" :loading="loading" @click="handleNextStep">{{ $t('base.nextStep') }}</el-button>
       </div>
-    </el-card>
+    </div>
 
     <!-- node add and edit  -->
     <add-or-edit-node-dialog
-      v-if="nodeObj.visible"
-      :visible.sync="nodeObj.visible"
-      :is-adding="nodeObj.isAdding"
+      v-if="dialogVisible"
+      :visible.sync="dialogVisible"
+      :is-adding="isAdding"
       :node-list="tableData"
-      :node-detail="nodeObj.detail"
+      :node-detail="nodeInfo"
       @success="getNodeList"/>
   </div>
 </template>
@@ -66,15 +67,15 @@ export default {
     return {
       testVisible: false,
       tableData: [],
-      listLoading: false,
+      tableLoading: false,
+
+      dialogVisible: false,
+      nodeInfo: {},
+      isAdding: true,
+
       nextBtnType: 'info',
       isNextBtnDisabled: true,
-
-      nodeObj: {
-        visible: false,
-        detail: {},
-        isAdding: 0,
-      },
+      loading: false,
     }
   },
   created() {
@@ -84,9 +85,12 @@ export default {
     ...mapMutations('app', {
       updateAuthMenu: 'SET_AUTH_MENU',
     }),
+
     // get table data
     getNodeList() {
+      this.tableLoading = true
       this.$_api.nodeList.allNodeInfo({}, (err, res = []) => {
+        this.tableLoading = false
         if (err) return
 
         if (res.length > 0) {
@@ -110,25 +114,24 @@ export default {
         })
         return
       }
-      this.nodeObj.detail = {
+      this.nodeInfo = {
         url: 'http://',
       }
 
-      this.nodeObj.isAdding = true
-      this.nodeObj.visible = true
+      this.isAdding = true
+      this.dialogVisible = true
     },
 
     // edit node
     handleClickEditBtn(val) {
-      this.nodeObj.detail = {
+      this.nodeInfo = {
         ...val,
         url: JSON.stringify(val.url).slice(3).slice(0, -3),
         privateKey: Array(64).fill('*').join(''),
       }
-      sessionStorage.setItem('currentnode', val.ip)
 
-      this.nodeObj.isAdding = false
-      this.nodeObj.visible = true
+      this.isAdding = false
+      this.dialogVisible = true
     },
 
     // delete node
@@ -158,8 +161,12 @@ export default {
 
     // skip next
     handleNextStep() {
+      this.loading = true
       this.$_api.nodeList.initConfig({}, err => {
+        this.loading = false
         if (err) return
+
+        console.log(1)
 
         this.updateAuthMenu({name: 'config-manage'})
         this.$router.push({ path: '/config-manage' })
@@ -173,8 +180,11 @@ export default {
   .page-header {
     margin-bottom: 24px;
   }
-  .el-card {
-    box-shadow: none;
+
+  .max-tips {
+    margin-left: 20px;
+    font-size: 12px;
+    color: red;
   }
 
   .page-footer {
