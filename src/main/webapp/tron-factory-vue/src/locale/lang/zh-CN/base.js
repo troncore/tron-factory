@@ -14,4 +14,8 @@ export default {
   return: '返回',
   prevStep: '上一步',
   nextStep: '下一步',
+  form: {
+    pleaseInput: '请输入',
+    pleaseSelect: '请选择',
+  }
 }

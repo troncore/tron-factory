@@ -13,4 +13,8 @@ export default {
   return: 'Return',
   prevStep: 'Prev step',
   nextStep: 'Next step',
+  form: {
+    pleaseInput: 'Please Input',
+    pleaseSelect: 'Please Select',
+  }
 }

@@ -13,7 +13,7 @@
     <div class="dialog-content">
       <el-form
         ref="dialog-form"
-        :rules="nodeRules"
+        :rules="formRules"
         :model="form"
         label-width="150px"
         label-position="right"
@@ -104,6 +104,18 @@
               </span>
               <el-input v-model.trim="form.voteCount" :maxlength="20" :placeholder="$t('tronNodeVoteNumberPlaceholder')"></el-input>
             </el-form-item>
+            <el-form-item prop="crypto">
+              <span slot="label">
+                crypto
+                <el-tooltip effect="dark" :content="$t('deploymentNodeCryptoTips')" placement="top">
+                  <i class="fa fa-question-circle-o"></i>
+                </el-tooltip>
+              </span>
+              <el-radio-group v-model="form.crypto">
+                <el-radio :label="'eckey'">eckey</el-radio>
+                <el-radio :label="'sm2'">sm2</el-radio>
+              </el-radio-group>
+            </el-form-item>
 
             <el-form-item v-if="!isAdding" class="publickey">
               <span slot="label">
@@ -164,7 +176,8 @@ export default {
         this.$emit('update:visible', val)
       },
     },
-    nodeRules() {
+
+    formRules() {
       const validNum = (rule, value, callback) => {
         if (!isvalidateNum(value)) {
           callback(new Error(this.$t('tronSettingNumberPlaceholder')))
@@ -216,108 +229,46 @@ export default {
         }
         // const address = TronWeb.address.fromPrivateKey(value)
       }
-      const rules = {
+      return {
         id: [
-          {
-            required: true,
-            message: this.$t('tronNodeIDPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodeIDPlaceholder'), trigger: 'blur', },
+          { required: true, validator: validNum, trigger: 'blur', },
+          { required: true, validator: validMaxNum, trigger: 'blur', },
         ],
         userName: [
-          {
-            required: true,
-            message: this.$t('tronNodeNamePlaceholder'),
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodeNamePlaceholder'), trigger: 'blur', },
         ],
         ip: [
-          {
-            required: true,
-            message: this.$t('tronNodeIpPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validIpRule,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validLocalRule,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodeIpPlaceholder'), trigger: 'blur', },
+          { required: true, validator: validIpRule, trigger: 'blur', },
+          { required: true, validator: validLocalRule, trigger: 'blur', },
         ],
         port: [
-          {
-            required: true,
-            message: this.$t('tronNodePortPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPortNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodePortPlaceholder'), trigger: 'blur', },
+          { required: true, validator: validNum, trigger: 'blur', },
+          { required: true, validator: validPortNum, trigger: 'blur', },
         ],
-        isSR: {
-          required: true,
-          message: this.$t('tronNodeSRPlaceholder'),
-          trigger: 'blur',
-        },
-        needSyncCheck: {
-          required: true,
-          message: this.$t('tronNodeSyncCheckPlaceholder'),
-          trigger: 'change',
-        },
+        isSR: [
+          { required: true, message: this.$t('tronNodeSRPlaceholder'), trigger: 'blur', }
+        ],
+        needSyncCheck: [
+          { required: true, message: this.$t('tronNodeSyncCheckPlaceholder'), trigger: 'change', }
+        ],
         url: [
-          {
-            required: true,
-            message: this.$t('tronNodeUrlPlaceholder'),
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodeUrlPlaceholder'), trigger: 'blur', },
         ],
         voteCount: [
-          {
-            required: true,
-            message: this.$t('tronNodeVoteNumberTips'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validVoteNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodeVoteNumberTips'), trigger: 'blur', },
+          { required: true, validator: validVoteNum, trigger: 'blur', },
+        ],
+        crypto: [
+          { required: true, message: this.$t('base.form.pleaseSelect'), trigger: 'blur', },
         ],
         privateKey: [
-          {
-            required: true,
-            message: this.$t('tronNodePrivateKeyPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPrivateKey,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('tronNodePrivateKeyPlaceholder'), trigger: 'blur', },
+          { required: true, validator: validPrivateKey, trigger: 'blur', },
         ],
       }
-      return rules
     },
   },
   watch: {
