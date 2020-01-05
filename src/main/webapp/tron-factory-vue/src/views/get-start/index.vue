@@ -58,14 +58,14 @@ export default {
   created() {},
   methods: {
     ...mapMutations('app', {
-      updateAuthMenu: 'SET_AUTH_MENU',
+      updateMenuList: 'updateMenuList',
     }),
 
     handleStartSettingDeploy() {
       this.$_api.getStart.oneClick({}, err => {
         if (err) return
 
-        this.updateAuthMenu({nameList: ['get-start', 'node-list']})
+        this.updateMenuList({ activeNames: ['get-start', 'node-list'], })
 
         this.$router.push('/node-list')
       })

@@ -7,7 +7,7 @@
       mode="vertical"
       @select="handleSelectMenu">
 
-      <side-menu-item v-for="item in menu" :key="item.name" :menu-item="item" />
+      <side-menu-item v-for="item in menuList" :key="item.name" :menu-item="item" />
 
     </el-menu>
   </div>
@@ -28,7 +28,7 @@ export default {
   computed: {
     ...mapGetters('app', [
       'isCollapseAside',
-      'allMenuRoutes',
+      'menuList',
     ]),
   },
   methods: {

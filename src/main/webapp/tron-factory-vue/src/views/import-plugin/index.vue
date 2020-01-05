@@ -65,7 +65,7 @@ export default {
 
   methods: {
     ...mapMutations('app', {
-      updateAuthMenu: 'SET_AUTH_MENU',
+      updateMenuList: 'updateMenuList',
     }),
     // get plugin info
     initPluginInfo () {
@@ -97,7 +97,7 @@ export default {
         this.currentStep = step
         this.initPluginInfo()
       } else {
-        this.updateAuthMenu({name: 'deploy-nodes'})
+        this.updateMenuList({ activeName: 'deploy-nodes' })
 
         this.$router.push({ path: "/deploy-nodes" })
       }

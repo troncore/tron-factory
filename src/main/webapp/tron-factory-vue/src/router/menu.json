@@ -4,6 +4,7 @@
     "name": "get-start",
     "title": "getStart.name",
     "icon": "el-icon-guide",
+    "auth": true,
     "disabled": false
   },
   {
@@ -11,6 +12,7 @@
     "name": "node-list",
     "title": "tronSettingMenuNodeList",
     "icon": "el-icon-s-operation",
+    "auth": true,
     "disabled": true
   },
   {
@@ -18,6 +20,7 @@
     "name": "config-manage",
     "title": "tronSettingMenuSetting",
     "icon": "el-icon-setting",
+    "auth": true,
     "disabled": true
   },
   {
@@ -25,6 +28,7 @@
     "name": "import-plugin",
     "title": "tronSettingMenuPlugin",
     "icon": "el-icon-upload",
+    "auth": true,
     "disabled": true
   },
   {
@@ -32,6 +36,7 @@
     "name": "deploy-nodes",
     "title": "tronSettingMenuDeployment",
     "icon": "el-icon-share",
+    "auth": true,
     "disabled": true
   },
   {
@@ -39,6 +44,7 @@
     "name": "tronscan",
     "title": "tronscanMenu",
     "icon": "el-icon-link",
+    "auth": false,
     "disabled": false
   }
 ]

@@ -79,7 +79,7 @@ export default {
 
   methods: {
     ...mapMutations('app', {
-      updateAuthMenu: 'SET_AUTH_MENU',
+      updateMenuList: 'updateMenuList',
     }),
 
     // get configure info
@@ -114,7 +114,7 @@ export default {
         this.currentStep = step
         this.initConfigInfo()
       } else {
-        this.updateAuthMenu({name: 'import-plugin'})
+        this.updateMenuList({ activeName: 'import-plugin' })
         this.$router.push({ path: "/import-plugin" })
       }
     },

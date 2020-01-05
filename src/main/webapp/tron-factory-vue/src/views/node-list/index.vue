@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     ...mapMutations('app', {
-      updateAuthMenu: 'SET_AUTH_MENU',
+      updateMenuList: 'updateMenuList',
     }),
 
     // get table data
@@ -166,9 +166,7 @@ export default {
         this.loading = false
         if (err) return
 
-        console.log(1)
-
-        this.updateAuthMenu({name: 'config-manage'})
+        this.updateMenuList({ activeName: 'config-manage' })
         this.$router.push({ path: '/config-manage' })
       })
     },
