@@ -1,7 +1,7 @@
 <template>
   <div class="header-view header-nav">
     <!-- toggle aside nav -->
-    <hamburger />
+    <hamburger/>
 
     <div class="header-logo">
       <router-link to="/"><img class="logo-img" src="@/assets/images/logo.png" :title="siteTitle" :alt="siteTitle"/></router-link>

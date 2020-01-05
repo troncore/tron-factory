@@ -1,6 +1,9 @@
 <template>
-  <div class="hamburger" @click="toggleCollapseAside">
-    <span :class="['toggle-aside', {'is-collapse': isCollapseAside}]"></span>
+  <div class="hamburger">
+    <span
+      v-show="!$route.meta.hideAside"
+      :class="['toggle-aside', {'is-collapse': isCollapseAside}]"
+      @click="toggleCollapseAside"></span>
   </div>
 </template>
 
@@ -29,7 +32,6 @@ export default {
   justify-content: center;
   height: 100%;
   width: 64px;
-  cursor: pointer;
 
   .toggle-aside {
     display: inline-block;
@@ -40,6 +42,7 @@ export default {
     background-size: 100% auto;
     background-repeat: no-repeat;
     background-position: center center;
+    cursor: pointer;
 
     &.is-collapse {
       background-image: url(~@/assets/images/menu-left.png);
