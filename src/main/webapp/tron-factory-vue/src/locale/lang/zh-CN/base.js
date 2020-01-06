@@ -4,13 +4,14 @@ export default {
   reset: '重置',
   clear: '清空',
   delete: '删除',
+
   open: '打开',
   confirm: '确定',
   save: '保存',
-  cancel: '取消',
   close: '关闭',
   edit: '编辑',
   update: '更新',
+
   detail: '详情',
   view: '查看',
   viewDetail: '查看详情',
@@ -20,6 +21,9 @@ export default {
   prevStep: '上一步',
   nextStep: '下一步',
   continue: '继续',
+  operate: '操作',
+  emptyData: '暂无数据',
+
   success: {
     save: '保存成功',
     edit: '编辑成功',
@@ -36,8 +40,14 @@ export default {
     operate: '操作失败',
     delete: '删除失败',
   },
+  cancel: '取消',
+  cancelUpdate: '取消修改',
+  cancelDelete: '取消删除',
+
+
+  pleaseInput: '请输入',
+  pleaseSelect: '请选择',
+
   form: {
-    pleaseInput: '请输入',
-    pleaseSelect: '请选择',
   },
 }

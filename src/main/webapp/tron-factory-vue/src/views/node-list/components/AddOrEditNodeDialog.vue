@@ -21,50 +21,50 @@
 
         <el-form-item prop="id">
           <span slot="label">ID
-            <el-tooltip effect="dark" :content="$t('deploymentNodeIdTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.id')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.id"  :maxlength="50" :placeholder="$t('tronNodeIDPlaceholder')" :disabled="!isAdding"></el-input>
+          <el-input v-model.trim="form.id" type="number"  :maxlength="50" :placeholder="$t('nodeList.valid.positiveInteger')" :disabled="!isAdding"></el-input>
         </el-form-item>
 
         <el-form-item prop="userName">
-          <span slot="label">{{ $t('tronNodeName') }}
-            <el-tooltip effect="dark" :content="$t('deploymentNodeUsernameTips')" placement="top">
+          <span slot="label">{{ $t('nodeList.sshUserName') }}
+            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.userName" :maxlength="50" :placeholder="$t('tronNodeNamePlaceholder')"></el-input>
+          <el-input v-model.trim="form.userName" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="ip">
           <span slot="label">
             FullNode IP
-            <el-tooltip effect="dark" :content="$t('deploymentNodeIpTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.ip')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.ip" :maxlength="50" :placeholder="$t('tronNodeIpPlaceholder')"></el-input>
+          <el-input v-model.trim="form.ip" :maxlength="50" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
         </el-form-item>
 
         <el-form-item prop="port">
           <span slot="label">
             FullNode Port
-            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.port')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.port" :maxlength="50" :placeholder="$t('tronNodePortPlaceholder')"></el-input>
+          <el-input v-model.trim="form.port" :maxlength="50" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
         </el-form-item>
 
         <el-form-item prop="isSR">
           <span slot="label">
-            {{ $t('tronNodeWhetherIsSR') }}
-            <el-tooltip effect="dark" :content="$t('deploymentNodeSrTips')" placement="top">
+            {{ $t('nodeList.isSR') }}
+            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.isSR')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
@@ -78,7 +78,7 @@
             <el-form-item prop="needSyncCheck">
               <span slot="label">
                 needSyncCheck
-                <el-tooltip effect="dark" :content="$t('deploymentNodeSyncCheckTips')" placement="top">
+                <el-tooltip effect="dark" :content="$t('nodeList.helpTips.needSyncCheck')" placement="top">
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
@@ -88,39 +88,27 @@
             <el-form-item prop="url">
               <span slot="label">
                 URL
-                <el-tooltip effect="dark" :content="$t('deploymentNodeUrlTips')" placement="top">
+                <el-tooltip effect="dark" :content="$t('nodeList.helpTips.url')" placement="top">
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
-              <el-input :maxlength="100" v-model.trim="form.url" :placeholder="$t('tronNodeUrlPlaceholder')"></el-input>
+              <el-input :maxlength="100" v-model.trim="form.url" :placeholder="$t('nodeList.valid.inputURL')"></el-input>
             </el-form-item>
 
             <el-form-item prop="voteCount">
               <span slot="label">
                 voteCount
-                <el-tooltip effect="dark" :content="$t('tronNodeVoteNumberTips')" placement="top">
+                <el-tooltip effect="dark" :content="$t('nodeList.helpTips.voteCount')" placement="top">
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
-              <el-input v-model.trim="form.voteCount" :maxlength="20" :placeholder="$t('tronNodeVoteNumberPlaceholder')"></el-input>
-            </el-form-item>
-            <el-form-item prop="crypto">
-              <span slot="label">
-                crypto
-                <el-tooltip effect="dark" :content="$t('deploymentNodeCryptoTips')" placement="top">
-                  <i class="fa fa-question-circle-o"></i>
-                </el-tooltip>
-              </span>
-              <el-radio-group v-model="form.crypto">
-                <el-radio :label="'eckey'">eckey</el-radio>
-                <el-radio :label="'sm2'">sm2</el-radio>
-              </el-radio-group>
+              <el-input v-model.trim="form.voteCount" type="number" :maxlength="20" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
             </el-form-item>
 
-            <el-form-item v-if="!isAdding" class="publickey">
+            <el-form-item v-if="!isAdding">
               <span slot="label">
                 publicKey
-                <el-tooltip effect="dark" :content="$t('deploymentNodePublickKeyTips')" placement="top">
+                <el-tooltip effect="dark" :content="$t('nodeList.helpTips.publicKey')" placement="top">
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
@@ -130,11 +118,11 @@
             <el-form-item prop="privateKey">
               <span slot="label">
                 privateKey
-                <el-tooltip effect="dark" :content="$t('deploymentNodePrivateKeyTips')" placement="top">
+                <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
-              <el-input v-model.trim="form.privateKey" type="textarea" :maxlength="1000" :placeholder="$t('tronNodePrivateKeyPlaceholder')"></el-input>
+              <el-input v-model.trim="form.privateKey" type="textarea" :maxlength="1000" :placeholder="$t('nodeList.valid.inputPrivateKey')"></el-input>
             </el-form-item>
           </div>
         </el-collapse-transition>
@@ -163,7 +151,7 @@ export default {
         isSR: false,
         needSyncCheck: false,
       },
-      dialogTitle: this.$t('tronNodeAdd'),
+      dialogTitle: this.$t('nodeList.addNode'),
       loading: false,
     }
   },
@@ -180,28 +168,28 @@ export default {
     formRules() {
       const validNum = (rule, value, callback) => {
         if (!isvalidateNum(value)) {
-          callback(new Error(this.$t('tronSettingNumberPlaceholder')))
+          callback(new Error(this.$t('nodeList.valid.positiveInteger')))
         } else {
           callback()
         }
       }
       const validVoteNum = (rule, value, callback) => {
         if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('tronSettingNumberZeroPlaceholder')))
+          callback(new Error(this.$t('nodeList.valid.gteZeroInt')))
         } else {
           callback()
         }
       }
       const validIpRule = (rule, value, callback) => {
         if (!isCorrectIp(value)) {
-          callback(new Error(this.$t('tronNodeIpValidate')))
+          callback(new Error(this.$t('nodeList.valid.rightIP')))
         } else {
           callback()
         }
       }
       const validLocalRule = (rule, value, callback) => {
         if (value == '127.0.0.1') {
-          callback(new Error(this.$t('tronNodeIpLocalValidate')))
+          callback(new Error(this.$t('nodeList.valid.disabledLocalIP')))
         } else {
           callback()
         }
@@ -209,63 +197,53 @@ export default {
 
       const validMaxNum = (rule, value, callback) => {
         if (value > 2147483647) {
-          callback(new Error(this.$t('tronNumberPlaceholder')))
+          callback(new Error(this.$t('nodeList.valid.maxNumberValue')))
         } else {
           callback()
         }
       }
       const validPortNum = (rule, value, callback) => {
         if (value > 65535) {
-          callback(new Error(this.$t('tronPortNumberPlaceholder')))
+          callback(new Error(this.$t('nodeList.valid.maxPortValue')))
         } else {
           callback()
         }
       }
       const validPrivateKey = (rule, value, callback) => {
         if (value.length !== 64) {
-          callback(new Error(this.$t('tronNodeCorrectPrivateKeyPlaceholder')))
+          callback(new Error(this.$t('nodeList.valid.inputPrivateKey')))
         } else {
           callback()
         }
-        // const address = TronWeb.address.fromPrivateKey(value)
       }
       return {
         id: [
-          { required: true, message: this.$t('tronNodeIDPlaceholder'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { required: true, validator: validNum, trigger: 'blur', },
           { required: true, validator: validMaxNum, trigger: 'blur', },
         ],
         userName: [
-          { required: true, message: this.$t('tronNodeNamePlaceholder'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
         ip: [
-          { required: true, message: this.$t('tronNodeIpPlaceholder'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { required: true, validator: validIpRule, trigger: 'blur', },
           { required: true, validator: validLocalRule, trigger: 'blur', },
         ],
         port: [
-          { required: true, message: this.$t('tronNodePortPlaceholder'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { required: true, validator: validNum, trigger: 'blur', },
           { required: true, validator: validPortNum, trigger: 'blur', },
         ],
-        isSR: [
-          { required: true, message: this.$t('tronNodeSRPlaceholder'), trigger: 'blur', }
-        ],
-        needSyncCheck: [
-          { required: true, message: this.$t('tronNodeSyncCheckPlaceholder'), trigger: 'change', }
-        ],
         url: [
-          { required: true, message: this.$t('tronNodeUrlPlaceholder'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
         voteCount: [
-          { required: true, message: this.$t('tronNodeVoteNumberTips'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { required: true, validator: validVoteNum, trigger: 'blur', },
         ],
-        crypto: [
-          { required: true, message: this.$t('base.form.pleaseSelect'), trigger: 'blur', },
-        ],
         privateKey: [
-          { required: true, message: this.$t('tronNodePrivateKeyPlaceholder'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { required: true, validator: validPrivateKey, trigger: 'blur', },
         ],
       }
@@ -274,7 +252,7 @@ export default {
   watch: {
     isAdding: {
       handler(val) {
-        this.dialogTitle = val ? this.$t('tronNodeAdd') : this.$t('tronNodeEditTitle')
+        this.dialogTitle = val ? this.$t('nodeList.addNode') : this.$t('nodeList.updateNode')
       },
       immediate: true,
     },
@@ -295,7 +273,7 @@ export default {
           if (!(await this.formatParams(params))) return
 
           let api = this.isAdding ? 'addNoteInfo' : 'editNoteInfo'
-          let msg = this.isAdding ? 'tronNodeAddSuccess' : 'tronNodeEditSuccess'
+          let msg = this.isAdding ? 'nodeList.addNodeSuccess' : 'nodeList.updateNodeSuccess'
 
           this.$_api.nodeList[api](params, err => {
             this.saveLoading = false
@@ -318,7 +296,7 @@ export default {
 
       let hasSameIP = this.isAdding && ~this.nodeList.findIndex(item => item.ip === params.ip)
       if (hasSameIP) {
-        this.$message.warning(this.$t('tronNodesIpNoSame'))
+        this.$message.warning(this.$t('nodeList.valid.hasSameIP'))
         this.saveLoading = false
         return false
       }
@@ -341,7 +319,7 @@ export default {
           if (res.result) {
             resolve(true)
           } else {
-            this.$message.error(this.$t('tronNodevoteCountNumberMaxPlaceholder'))
+            this.$message.error(this.$t('nodeList.valid.maxVoteCountValue'))
             resolve(false)
           }
         })

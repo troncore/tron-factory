@@ -5,7 +5,7 @@
 
         <div class="form-item">
             <span class="label">
-              密钥算法<el-tooltip effect="dark" :content="$t('deploymentNodeCryptoTips')" placement="top"><i class="fa fa-question-circle-o" style="margin: 0 5px;"></i> </el-tooltip>:
+              {{$t('nodeList.encryption')}}<el-tooltip effect="dark" :content="$t('nodeList.helpTips.crypto')" placement="top"><i class="fa fa-question-circle-o" style="margin: 0 5px;"></i> </el-tooltip>:
             </span>
             <el-radio-group v-model="form.crypto" @change="handleChangeCrypto">
               <el-radio :label="'eckey'">eckey</el-radio>
@@ -14,13 +14,13 @@
         </div>
 
 
-        <el-button size="medium" icon="el-icon-plus" :disabled="tableLoading || tableData.length > 20" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
-        <span v-if="tableData.length > 20" class="max-tips">({{ $t('tronNodesMaxTips') }})</span>
+        <el-button size="medium" icon="el-icon-plus" :disabled="tableLoading || tableData.length > 20" @click="handleClickAddBtn" type="primary">{{ $t('nodeList.addNode') }}</el-button>
+        <span v-if="tableData.length > 20" class="max-tips">({{ $t('nodeList.valid.maxNodeLength') }})</span>
       </div>
 
       <el-table
         :data="tableData"
-        :empty-text="$t('tronNodesNoData')"
+        :empty-text="$t('base.emptyData')"
         v-loading="tableLoading"
         class="custom-table"
         ref="multipleTable"
@@ -29,20 +29,20 @@
 
         <el-table-column prop="id" label="ID"  align="center"/>
 
-        <el-table-column prop="userName" :label="$t('tronNodeName')"  align="center"/>
+        <el-table-column prop="userName" :label="$t('nodeList.sshUserName')"  align="center"/>
 
         <el-table-column prop="ip" label="IP/HOST"  align="center"/>
 
         <el-table-column prop="port" label="SSH PORT"  align="center"/>
 
-        <el-table-column :label="$t('tronNodeWhetherIsSR')" align="center">
+        <el-table-column :label="$t('nodeList.isSR')" align="center">
           <template slot-scope="scope">
             <el-tag size="medium" type="success" v-if="scope.row.isSR">YES</el-tag>
             <el-tag size="medium" type="danger" v-else>NO</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column class-name="operator-btns" :label="$t('tronNodeOperate')" width="200" align="center">
+        <el-table-column class-name="operator-btns" :label="$t('base.operate')" width="200" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="handleClickEditBtn(scope.row)"><i class="el-icon-edit"></i></el-button>
             <span class="divider">|</span>
@@ -111,7 +111,7 @@ export default {
     handleChangeCrypto () {
       this.$_api.nodeList.updateCrypto(this.form, (err, res) => {
         if (err) return
-        this.$message.success(this.$t('tronPluginInputSaveSuccess'))
+        this.$message.success(this.$t('base.success.update'))
       })
     },
 
@@ -139,7 +139,7 @@ export default {
       if (this.tableData.length > 20) {
         this.$message({
           type: 'info',
-          message: this.$t('tronNodesMaxTips'),
+          message: this.$t('nodeList.valid.maxNodeLength'),
         })
         return
       }
@@ -165,10 +165,9 @@ export default {
 
     // delete node
     handleDeleteNode(id) {
-      this.$confirm(this.$t('tronNodesDeleteTips'), this.$t('tronNodesDeleteTipsTitle'), {
-        confirmButtonText: this.$t('tronNodeDetermine'),
-        cancelButtonText: this.$t('tronNodeCancel'),
-        type: 'warning',
+      this.$confirm(this.$t('nodeList.deleteNodeTips'), this.$t('nodeList.deleteNodeTipsTitle'), {
+        confirmButtonText: this.$t('base.confirm'),
+        cancelButtonText: this.$t('base.cancel'),
         center: true,
         customClass: 'im-message-box',
         cancelButtonClass: 'im-message-cancel-button',
@@ -177,13 +176,13 @@ export default {
         this.$_api.nodeList.deleteNoteInfo({ id }, err => {
           if (err) return
 
-          this.$message.success(this.$t('tronNodesDeleteSuccess'))
+          this.$message.success(this.$t('base.success.delete'))
           this.getNodeList()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: this.$t('tronNodesCancelDelete'),
+          message: this.$t('base.cancelDelete'),
         })
       })
     },
