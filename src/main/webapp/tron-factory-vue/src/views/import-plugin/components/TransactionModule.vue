@@ -11,7 +11,7 @@
         </el-form-item>
 
         <div class="more-form">
-          <el-button class="el-icon-arrow-down el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
+          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
         </div>
 
         <el-collapse-transition>

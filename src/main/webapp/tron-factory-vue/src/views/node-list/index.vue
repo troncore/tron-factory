@@ -2,7 +2,19 @@
   <div class="page-view node-list">
     <div class="box-view">
       <div class="page-header">
-        <el-button class="im-button large" icon="el-icon-plus" :disabled="tableLoading || tableData.length > 20" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
+
+        <div class="form-item">
+            <span class="label">
+              密钥算法<el-tooltip effect="dark" :content="$t('deploymentNodeCryptoTips')" placement="top"><i class="fa fa-question-circle-o" style="margin: 0 5px;"></i> </el-tooltip>:
+            </span>
+            <el-radio-group v-model="form.crypto" @change="handleChangeCrypto">
+              <el-radio :label="'eckey'">eckey</el-radio>
+              <el-radio :label="'sm2'">sm2</el-radio>
+            </el-radio-group>
+        </div>
+
+
+        <el-button size="medium" icon="el-icon-plus" :disabled="tableLoading || tableData.length > 20" @click="handleClickAddBtn" type="primary">{{ $t('tronNodeAdd') }}</el-button>
         <span v-if="tableData.length > 20" class="max-tips">({{ $t('tronNodesMaxTips') }})</span>
       </div>
 
@@ -65,7 +77,9 @@ export default {
   },
   data() {
     return {
-      testVisible: false,
+      form: {
+        crypto: 'eckey',
+      },
       tableData: [],
       tableLoading: false,
 
@@ -79,12 +93,27 @@ export default {
     }
   },
   created() {
+    this.getCrypto()
     this.getNodeList()
   },
   methods: {
     ...mapMutations('app', {
       updateMenuList: 'updateMenuList',
     }),
+
+    getCrypto () {
+      this.$_api.nodeList.getCrypto(this.form, (err, res = {}) => {
+        if (err) return
+        this.form.crypto = res.crypto || this.form.crypto
+      })
+    },
+
+    handleChangeCrypto () {
+      this.$_api.nodeList.updateCrypto(this.form, (err, res) => {
+        if (err) return
+        this.$message.success(this.$t('tronPluginInputSaveSuccess'))
+      })
+    },
 
     // get table data
     getNodeList() {
@@ -177,6 +206,13 @@ export default {
 .node-list {
   .page-header {
     margin-bottom: 24px;
+    .form-item {
+      margin-bottom: 30px;
+      span {
+        margin-right: 10px;
+        color: #606266;
+      }
+    }
   }
 
   .max-tips {

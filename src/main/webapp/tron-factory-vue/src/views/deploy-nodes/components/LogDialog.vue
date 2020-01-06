@@ -9,7 +9,6 @@
     center>
     <div slot="title" class="dialog-header">
       <div class="title">{{ $t('tronNodeStatus') }}</div>
-      <div class="title-info">以下均为必填项</div>
     </div>
 
     <div class="dialog-content" v-loading="initLoading">
