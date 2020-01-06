@@ -37,6 +37,7 @@ export default {
     position: relative;
     z-index: 1;
     height: 60px;
+    box-shadow: 0 1px 4px 0 rgba(0,21,41,0.12);
   }
 
   .app-body {
@@ -47,7 +48,7 @@ export default {
       display: inline-block;
       flex-basis: auto;
       height: 100%;
-      overflow: auto;
+      box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
     }
 
     .app-main {

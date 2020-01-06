@@ -65,7 +65,6 @@ export default {
   align-items: center;
   height: 100%;
   background-color: white;
-  box-shadow: 0 1px 4px 0 rgba(0,21,41,0.12);
 
   .header-logo {
     width: 192px;

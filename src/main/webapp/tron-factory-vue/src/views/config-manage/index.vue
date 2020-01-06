@@ -140,14 +140,14 @@ export default {
   .im-steps {
     display: flex;
     justify-content: space-between;
-    margin: 0 auto 50px;
+    margin: 0 auto 40px;
 
     .im-step {
       &:not(:last-child) {
         flex: 1;
       }
       position: relative;
-      padding-top: 120px;
+      padding-top: 100px;
       cursor: pointer;
       &:last-child {
         width: 120px;
@@ -162,13 +162,24 @@ export default {
         content: '';
         display: inline-block;
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 122px;
-        height: 120px;
+        top: 10px;
+        left: 15px;
+        width: 90px;
+        height: 90px;
         background-repeat: no-repeat;
-        background-size: 90px auto;
+        background-size: 100% auto;
         background-position: center center;
+        border-radius: 50%;
+        overflow: auto;
+      }
+      &.active:before {
+        left: 20px;
+        width: 80px;
+        height: 80px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
+      }
+      &.is-current:before {
+        box-shadow: 0 0 10px 0 theme-color(.3);
       }
       &.active span {
         color: #333;

@@ -51,7 +51,7 @@ export default {
 .aside-nav {
   height: 100%;
   background-color: #fff;
-  box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
+  overflow: auto;
 
   .el-menu {
     padding-top: 40px;
