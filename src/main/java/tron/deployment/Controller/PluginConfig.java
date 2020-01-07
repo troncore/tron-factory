@@ -1,5 +1,6 @@
 package tron.deployment.Controller;
 
+import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
 import static org.tron.core.config.args.Storage.getDbEngineFromConfig;
@@ -107,5 +108,22 @@ public class PluginConfig {
     result.put(Common.cryptoEngine, Args.getCrypto(Util.config));
 
     return new Response(ResultCode.OK.code, result).toJSONObject();
+  }
+
+  @GetMapping(value = "/getCrypto")
+  public JSONObject getCrypto(@RequestParam(value = "crypto", required = false, defaultValue =
+      "eckey") String eckeySm2) {
+    parseConfig();
+    if (Util.config.hasPath("crypto.engine")) {
+      eckeySm2 = Util.config.getString("crypto.engine");
+    }
+    ConfigGenerator configGenerator = new ConfigGenerator();
+    boolean result = configGenerator.updateConfig(new CryptoConfig(eckeySm2), Common.configFiled);
+    if (!result) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+    }
+    JSONObject resultJson = new JSONObject();
+    resultJson.put(Common.cryptoEngine, eckeySm2);
+    return new Response(ResultCode.OK.code, resultJson).toJSONObject();
   }
 }
