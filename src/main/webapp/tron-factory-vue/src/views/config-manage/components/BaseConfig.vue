@@ -36,7 +36,7 @@
             </el-form-item>
 
             <el-form-item prop="node_minParticipationRate">
-              <span slot="label">nodeMinParticipationRate <i class="help-tips">( {{ $t('configManage.helpTips.nodeMinParticipationRate') }}：mm )</i></span>
+              <span slot="label">nodeMinParticipationRate <i class="help-tips">( {{ $t('configManage.helpTips.nodeMinParticipationRate') }} )</i></span>
               <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
           </div>

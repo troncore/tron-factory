@@ -37,14 +37,14 @@ export default {
   },
 
   helpTips: {
-    accountName: 'accountName',
-    accountType: 'accountType',
-    address: 'address',
-    balance: 'balance',
+    accountName: '账户名',
+    accountType: '账户类型',
+    address: '账户地址',
+    balance: '单位sun',
 
     chainId: '该链Id',
     maintenanceTimeInterval: '块维护时间间隔',
-    blockProposalExpireTime: '区提案到期时间',
+    blockProposalExpireTime: '块提案失效时间',
     nodeBlockProducedTimeOut: '节点区块产生超时时间',
     nodeMinParticipationRate: '节点最小参与率',
 
@@ -56,8 +56,8 @@ export default {
 
     p2pVersion: 'p2p 版本',
     listenPort: 'listen 端口',
-    maxActiveNodes: '最大链接数',
-    maxActiveNodesWithSameIp: '同一ip最大连接数',
+    maxActiveNodes: '最大活跃节点数',
+    maxActiveNodesWithSameIp: '同一ip最大活跃节点',
     activeConnectFactor: '同一ip最大连接数',
     connectFactor: '同一ip最大连接数',
   },

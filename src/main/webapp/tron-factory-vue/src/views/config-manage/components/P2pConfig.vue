@@ -103,14 +103,11 @@ export default {
         node_connectFactor: '',
         node_activeConnectFactor: '',
       },
+      seedNodeIpList: [],
       loading: false,
     }
   },
   computed: {
-    seedNodeIpList () {
-      let p2pConfig = this.configInfo.p2pConfig || {}
-      return p2pConfig.allNodes || []
-    },
 
     formRules() {
       const validNum = (rule, value, callback) => {
@@ -214,12 +211,18 @@ export default {
   methods: {
     init () {
       let p2pConfig = this.configInfo.p2pConfig || {}
-      let selectedSeedNodeIpList = p2pConfig.seed_node_ip_list || []
+      let ipWithPortList = p2pConfig.seed_node_ip_list || []
+      let seedNodeIpList = ipWithPortList.map(item => item.split(':')[0])
+
+      this.seedNodeIpList = p2pConfig.allNodes || []
+
+      // default all select
+      if (!seedNodeIpList.length) seedNodeIpList = [...this.seedNodeIpList]
 
       this.form = {
         ...this.form,
         ...p2pConfig,
-        seed_node_ip_list: selectedSeedNodeIpList.map(item => item.split(':')[0])
+        seed_node_ip_list: seedNodeIpList
       }
     },
 

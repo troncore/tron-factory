@@ -30,7 +30,7 @@ export default {
     maxNodeLength: '最多添加20个节点',
     inputID: '请输入ID',
     positiveInteger: '请输入大于0的整数',
-    rightIP: '请输入y有效的IP地址',
+    rightIP: '请输入有效的IP地址',
     disabledLocalIP: '暂不支持本地情况',
     hasSameIP: 'Ip不能和已有Ip相同',
     maxPortValue: '端口号不能超过65535',
