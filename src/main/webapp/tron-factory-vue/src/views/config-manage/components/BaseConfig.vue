@@ -1,37 +1,43 @@
 <template>
   <div class="box-view base-config">
-    <div class="box-header title">{{ $t('tronSettingBase') }}</div>
+    <div class="box-header title">{{ $t('configManage.baseConfig') }}</div>
 
     <div class="box-body">
       <el-form ref="base-config-form" :rules="baseRules" :model="form">
-        <el-form-item label="chainId" prop="chainId">
-          <el-input v-model.trim="form.chainId" :maxlength="50" :placeholder="$t('tronChainIdPlaceholder')"></el-input>
+        <el-form-item prop="chainId">
+          <span slot="label">chainId <i class="help-tips">( {{ $t('configManage.helpTips.chainId') }} )</i></span>
+          <el-input v-model.trim="form.chainId" type="number" min="0" max="2147483647" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item label="chainName" prop="chainName">
-          <el-input v-model.trim="form.chainName" :maxlength="50" :placeholder="$t('tronChainNamePlaceholder')"></el-input>
+        <el-form-item prop="chainName">
+          <span slot="label">chainName</span>
+          <el-input v-model.trim="form.chainName" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item label="MaintenanceTimeInterval" prop="block_maintenanceTimeInterval">
-          <el-input v-model.trim="form.block_maintenanceTimeInterval" :maxlength="50" :placeholder="$t('tronblockBlockMaintenanceTimeIntervalPlaceholder')"></el-input>
+        <el-form-item prop="block_maintenanceTimeInterval">
+          <span slot="label">maintenanceTimeInterval <i class="help-tips">( {{ $t('configManage.helpTips.maintenanceTimeInterval') }} ：mm)</i></span>
+          <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <div class="more-form">
-          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
+          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('configManage.moreSetting') }}</el-button>
         </div>
 
         <el-collapse-transition>
           <div v-if="showMore">
-            <el-form-item label="blockProposalExpireTime" prop="block_proposalExpireTime">
-              <el-input v-model.trim="form.block_proposalExpireTime" :maxlength="50" :placeholder="$t('tronblockProducedTimeOutePlaceholder')"></el-input>
+            <el-form-item prop="block_proposalExpireTime">
+              <span slot="label">blockProposalExpireTime <i class="help-tips">( {{ $t('configManage.helpTips.blockProposalExpireTime') }}：mm )</i></span>
+              <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
-            <el-form-item label="nodeBlockProducedTimeOut" prop="node_blockProducedTimeOut">
-              <el-input v-model.trim="form.node_blockProducedTimeOut" :maxlength="50" :placeholder="$t('tronblockNodeBlockProducedTimeOutPlaceholder')"></el-input>
+            <el-form-item prop="node_blockProducedTimeOut">
+              <span slot="label">nodeBlockProducedTimeOut <i class="help-tips">( {{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}：mm )</i></span>
+              <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
-            <el-form-item label="nodeMinParticipationRate" prop="node_minParticipationRate">
-              <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" :placeholder="$t('tronblockNodeMinParticipationRatePlaceholder')"></el-input>
+            <el-form-item prop="node_minParticipationRate">
+              <span slot="label">nodeMinParticipationRate <i class="help-tips">( {{ $t('configManage.helpTips.nodeMinParticipationRate') }}：mm )</i></span>
+              <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
           </div>
         </el-collapse-transition>
@@ -69,122 +75,55 @@ export default {
     baseRules() {
       const validateNum = (rule, value, callback) => {
         if (!isvalidateNum(value)) {
-          callback(new Error(this.$t('tronSettingNumberZeroPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.gtZeroInt')))
         } else {
           callback()
         }
       }
       const validNum = (rule, value, callback) => {
         if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('tronSettingNumberPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.gteZeroInt')))
         } else {
           callback()
         }
       }
       const validMaxNum = (rule, value, callback) => {
         if (value > 2147483647) {
-          callback(new Error(this.$t('tronNumberPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.maxNumberValue')))
         } else {
           callback()
         }
       }
-      const rules = {
+      return {
         chainId: [
-          {
-            required: true,
-            message: this.$t('tronChainIdPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validateNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validateNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         chainName: [
-          {
-            required: true,
-            message: this.$t('tronChainNamePlaceholder'),
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
         block_proposalExpireTime: [
-          {
-            required: true,
-            message: this.$t('tronblockProducedTimeOutePlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validateNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validateNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         block_maintenanceTimeInterval: [
-          {
-            required: true,
-            message: this.$t(
-              'tronblockBlockMaintenanceTimeIntervalPlaceholder',
-            ),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validateNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput',), trigger: 'blur', },
+          { validator: validateNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         node_blockProducedTimeOut: [
-          {
-            required: true,
-            message: this.$t('tronblockNodeBlockProducedTimeOutPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validateNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validateNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         node_minParticipationRate: [
-          {
-            required: true,
-            message: this.$t('tronblockNodeMinParticipationRatePlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberZeroPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
       }
-      return rules
     },
   },
   watch: {
@@ -214,7 +153,7 @@ export default {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('tronSettingBaseSaveSuccess'))
+            this.$message.success(this.$t('configManage.baseSaveSuccess'))
             this.$emit('next-step')
           })
         }

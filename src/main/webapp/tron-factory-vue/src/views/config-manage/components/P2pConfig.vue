@@ -1,20 +1,24 @@
 <template>
   <div class="box-view p2p-config">
-    <div class="box-header title">{{ $t('tronSettingP2p') }}</div>
+    <div class="box-header title">{{ $t('configManage.p2pConfig') }}</div>
 
     <div class="box-body">
-      <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top"><el-form-item prop="node_p2p_version" label="p2pVersion">
-        <el-input v-model.trim="form.node_p2p_version" :maxlength="50" :placeholder="$t('tronP2pVersionPlaceholder')"></el-input>
-      </el-form-item>
+      <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
 
-        <el-form-item label="listenPort" prop="node_listen_port">
-          <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('tronhttpRpcListenPortPlaceholder')"></el-input>
+        <el-form-item prop="node_p2p_version" label="p2pVersion">
+          <span slot="label">p2pVersion <i class="help-tips">( {{ $t('configManage.helpTips.p2pVersion') }} )</i></span>
+          <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item class="seed-node-list" label="seedNode" prop="seed_node_ip_list">
+        <el-form-item label="listenPort" prop="node_listen_port">
+          <span slot="label">listenPort <i class="help-tips">( {{ $t('configManage.helpTips.listenPort') }} )</i></span>
+          <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+        </el-form-item>
+
+        <el-form-item label="seedNode" prop="seed_node_ip_list" class="seed-node-list">
           <el-checkbox-group v-model="form.seed_node_ip_list">
             <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
-              <el-input v-model="form.node_listen_port" :placeholder="$t('tronSettingPortPlaceholder')" disabled>
+              <el-input v-model="form.node_listen_port" :placeholder="$t('configManage.valid.listenPort')" disabled>
                 <template slot="prepend" style="width:100px">{{ ip }}</template>
               </el-input>
             </el-checkbox>
@@ -22,37 +26,41 @@
         </el-form-item>
 
         <div class="more-form">
-          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
+          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('configManage.moreSetting') }}</el-button>
         </div>
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
-              <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('tronMaxActionNodesPlaceholder')"></el-input>
+              <span slot="label">maxActiveNodes <i class="help-tips">( {{ $t('configManage.helpTips.maxActiveNodes') }} )</i></span>
+              <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
-              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('tronMaxActiveNodesWithSameIpPlaceholder')"></el-input>
+              <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">( {{ $t('configManage.helpTips.maxActiveNodesWithSameIp') }} )</i></span>
+              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="activeConnectFactor" prop="node_activeConnectFactor">
+              <span slot="label">activeConnectFactor</span>
               <el-input-number
                 v-model.trim="form.node_activeConnectFactor"
                 controls-position="right"
                 :min="0"
                 :step="0.1"
                 :maxlength="50"
-                :placeholder="$t('tronSettingPlaceholder')">
+                :placeholder="$t('base.pleaseInput')">
               </el-input-number>
             </el-form-item>
 
             <el-form-item label="connectFactor" prop="node_connectFactor">
+              <span slot="label">connectFactor</span>
               <el-input-number
                 controls-position="right"
                 :min="0"
                 :step="0.1"
                 :maxlength="50"
                 v-model.trim="form.node_connectFactor"
-                :placeholder="$t('tronSettingPlaceholder')">
+                :placeholder="$t('base.pleaseInput')">
               </el-input-number>
             </el-form-item>
           </div>
@@ -69,6 +77,7 @@
 </template>
 <script>
 import { isvalidateNum, twoDecimal } from '@/utils/validate.js'
+import { isvalidateIntegerNum } from "@/utils/validate";
 export default {
   name: 'p2p-config',
   props: {
@@ -105,178 +114,90 @@ export default {
 
     formRules() {
       const validNum = (rule, value, callback) => {
-        if (!isvalidateNum(value)) {
-          callback(new Error(this.$t('tronSettingNumberPlaceholder')))
+        if (!isvalidateIntegerNum(value)) {
+          callback(new Error(this.$t('configManage.valid.gteZeroInt')))
         } else {
           callback()
         }
       }
       const validMaxNum = (rule, value, callback) => {
         if (value > 2147483647) {
-          callback(new Error(this.$t('tronNumberPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.maxNumberValue')))
         } else {
           callback()
         }
       }
       const validMainnet = (rule, value, callback) => {
         if (value == 11111) {
-          callback(new Error(this.$t('tronp2pVersionMainnetPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.mainnetPlaceholder')))
         } else {
           callback()
         }
       }
       const validTestNet = (rule, value, callback) => {
         if (value == 20180622) {
-          callback(new Error(this.$t('tronp2pVersionTestnetPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.testnetPlaceholder')))
         } else {
           callback()
         }
       }
       const validSpecialNet = (rule, value, callback) => {
         if (value == 1) {
-          callback(new Error(this.$t('tronp2pVersionSpecialPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.specialPlaceholder')))
         } else {
           callback()
         }
       }
       const validPortNum = (rule, value, callback) => {
         if (value > 65535) {
-          callback(new Error(this.$t('tronPortNumberPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.maxPortValue')))
         } else {
           callback()
         }
       }
       const validTwoDecimalFun = (rule, value, callback) => {
         if (!twoDecimal(value)) {
-          callback(new Error(this.$t('validTwoDecimal')))
+          callback(new Error(this.$t('configManage.valid.validTwoDecimal')))
         } else {
           callback()
         }
       }
       const rules = {
         node_p2p_version: [
-          {
-            required: true,
-            message: this.$t('tronP2pVersionPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronp2pVersionMainnetPlaceholder'),
-            validator: validMainnet,
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronp2pVersionTestnetPlaceholder'),
-            validator: validTestNet,
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronp2pVersionSpecialPlaceholder'),
-            validator: validSpecialNet,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validMainnet, trigger: 'blur', },
+          { validator: validTestNet, trigger: 'blur', },
+          { validator: validSpecialNet, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         node_listen_port: [
-          {
-            required: true,
-            message: this.$t('tronhttpRpcListenPortPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPortNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
         ],
         seed_node_ip_list: [
-          {
-            required: true,
-            message: this.$t('tronP2pSeedNodeSelectPlaceholder'),
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change', },
         ],
         node_maxActiveNodes: [
-          {
-            required: true,
-            message: this.$t('tronMaxActionNodesPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         node_maxActiveNodesWithSameIp: [
-          {
-            required: true,
-            message: this.$t('tronMaxActiveNodesWithSameIpPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         node_activeConnectFactor: [
-          {
-            required: true,
-            message: this.$t('tronSettingPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberTwoDecimal'),
-            validator: validTwoDecimalFun,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
+          { validator: validTwoDecimalFun, trigger: 'blur', },
         ],
         node_connectFactor: [
-          {
-            required: true,
-            message: this.$t('tronSettingPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberTwoDecimal'),
-            validator: validTwoDecimalFun,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
+          { validator: validTwoDecimalFun, trigger: 'blur', },
         ],
       }
       return rules
@@ -320,7 +241,7 @@ export default {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('tronSettingp2pSaveSuccess'))
+            this.$message.success(this.$t('configManage.p2pSaveSuccess'))
             this.$emit('next-step')
           })
         }

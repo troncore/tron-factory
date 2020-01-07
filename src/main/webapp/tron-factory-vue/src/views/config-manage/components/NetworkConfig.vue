@@ -1,27 +1,32 @@
 <template>
   <div class="box-view  network-config">
-    <div class="box-header title">{{ $t('tronSettingHttp') }}</div>
+    <div class="box-header title">{{ $t('configManage.netWorkConfig') }}</div>
 
     <div class="box-body">
       <el-form ref="network-config-form" :rules="networkRules" :model="form">
-        <el-form-item label="maxHttpConnectNumber" prop="node_maxHttpConnectNumber" class="baseFormItem mgt20">
-          <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" :placeholder="$t('tronmaxHttpConnectNumberPlaceholder')"></el-input>
+        <el-form-item prop="node_maxHttpConnectNumber">
+          <span slot="label">maxHttpConnectNumber <i class="help-tips">( {{ $t('configManage.helpTips.maxHttpConnectNumber') }} )</i></span>
+          <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item class="baseFormItem" label="httpFullNodePort" prop="node_http_fullNodePort">
-          <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" :placeholder="$t('tronhttpFullNodePortPlaceholder')"></el-input>
+        <el-form-item prop="node_http_fullNodePort">
+          <span slot="label">httpFullNodePort <i class="help-tips">( {{ $t('configManage.helpTips.httpFullNodePort') }} )</i></span>
+          <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item class="baseFormItem" label="httpSolidityPort" prop="node_http_solidityPort">
-          <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" :placeholder="$t('tronhttpHttpSolidityPortPlaceholder')"></el-input>
+        <el-form-item prop="node_http_solidityPort">
+          <span slot="label">httpSolidityPort <i class="help-tips">( {{ $t('configManage.helpTips.httpSolidityPort') }} )</i></span>
+          <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item class="baseFormItem" label="rpcPort" prop="node_rpc_port">
-          <el-input v-model.trim="form.node_rpc_port" :maxlength="50" :placeholder="$t('tronhttpRpcPortPlaceholder')"></el-input>
+        <el-form-item prop="node_rpc_port">
+          <span slot="label">rpcPort <i class="help-tips">( {{ $t('configManage.helpTips.rpcPort') }} )</i></span>
+          <el-input v-model.trim="form.node_rpc_port" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item class="baseFormItem" label="rpcSolidityPort" prop="node_rpc_solidityPort">
-          <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" :placeholder="$t('tronhttpRpcSolidityPortPlaceholder')"></el-input>
+        <el-form-item prop="node_rpc_solidityPort">
+          <span slot="label">rpcSolidityPort <i class="help-tips">( {{ $t('configManage.helpTips.rpcSolidityPort') }} )</i></span>
+          <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -34,6 +39,7 @@
 </template>
 <script>
 import { isvalidateNum } from '@/utils/validate.js'
+import { isvalidateIntegerNum } from "@/utils/validate";
 export default {
   name: 'network-config',
   props: {
@@ -62,114 +68,53 @@ export default {
   computed: {
     networkRules() {
       const validNum = (rule, value, callback) => {
-        if (!isvalidateNum(value)) {
-          callback(new Error(this.$t('tronSettingNumberPlaceholder')))
+        if (!isvalidateIntegerNum(value)) {
+          callback(new Error(this.$t('configManage.valid.gteZeroInt')))
         } else {
           callback()
         }
       }
       const validMaxNum = (rule, value, callback) => {
         if (value > 2147483647) {
-          callback(new Error(this.$t('tronNumberPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.maxNumberValue')))
         } else {
           callback()
         }
       }
       const validPortNum = (rule, value, callback) => {
         if (value > 65535) {
-          callback(new Error(this.$t('tronPortNumberPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.maxPortValue')))
         } else {
           callback()
         }
       }
-      const rules = {
+      return {
         node_maxHttpConnectNumber: [
-          {
-            required: true,
-            message: this.$t('tronmaxHttpConnectNumberPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validMaxNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', },
         ],
         node_http_fullNodePort: [
-          {
-            required: true,
-            message: this.$t('tronhttpFullNodePortPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPortNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
         ],
         node_http_solidityPort: [
-          {
-            required: true,
-            message: this.$t('tronhttpHttpSolidityPortPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPortNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
         ],
         node_rpc_port: [
-          {
-            required: true,
-            message: this.$t('tronhttpRpcPortPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPortNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
         ],
         node_rpc_solidityPort: [
-          {
-            required: true,
-            message: this.$t('tronhttpRpcSolidityPortPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            message: this.$t('tronSettingNumberPlaceholder'),
-            validator: validNum,
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validPortNum,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
         ],
       }
-      return rules
     },
   },
   watch: {
@@ -198,7 +143,7 @@ export default {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('tronSettingNetworkSaveSuccess'))
+            this.$message.success(this.$t('configManage.networkSaveSuccess'))
             this.$emit('next-step')
           })
         }

@@ -7,7 +7,7 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('tronAssetSetting') }}</div>
+      <div class="title">{{ $t('configManage.assetDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content">
@@ -15,21 +15,21 @@
         <el-form-item prop="accountName">
           <span slot="label">
             accountName
-            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configManage.helpTips.accountName')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.accountName" :maxlength="50" :placeholder="$t('tronAccountNamePlaceholder')"></el-input>
+          <el-input v-model.trim="form.accountName" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="accountType">
           <span slot="label">
             accountType
-            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configManage.helpTips.accountType')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="form.accountType" :placeholder="$t('tronNodeSRPlaceholder')">
+          <el-select v-model="form.accountType" :placeholder="$t('base.pleaseSelect')">
             <el-option
               v-for="item in accountTypeOptions"
               :key="item.value"
@@ -42,35 +42,34 @@
         <el-form-item prop="address">
           <span slot="label">
             address
-            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configManage.helpTips.address')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.address" :maxlength="50" :placeholder="$t('tronAddressPlaceholder')"></el-input>
+          <el-input v-model.trim="form.address" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="balance" prop="balance">
           <span slot="label">
             balance
-            <el-tooltip effect="dark" :content="$t('deploymentNodePortTips')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configManage.helpTips.balance')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.balance" :maxlength="22" :placeholder="$t('tronBalancePlaceholder')"></el-input>
+          <el-input v-model.trim="form.balance" type="number" :maxlength="22" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
 
     </div>
 
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('tronSettingSave') }}</el-button>
-      <el-button @click="dialogVisible = false">{{ $t('tronSettingCancel') }}</el-button>
+      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import TronWeb from 'tronweb'
-import { isAllNumber } from '@/utils/validate.js'
 export default {
   name: 'DialogAddGenesisAsset',
   props: [
@@ -113,63 +112,29 @@ export default {
       },
     },
     assetRules() {
-      const validateNumber = (rule, value, callback) => {
-        if (!isAllNumber(value)) {
-          callback(new Error(this.$t('tronSettingValidateNumberPlaceholder')))
-        } else {
-          callback()
-        }
-      }
-
       const validAddress = (rule, value, callback) => {
         if (!TronWeb.isAddress(value)) {
-          callback(new Error(this.$t('tronSettingAddressPlaceholder')))
+          callback(new Error(this.$t('configManage.valid.inputRightAddress')))
         } else {
           callback()
         }
       }
 
-      const rules = {
+      return {
         accountName: [
-          {
-            required: true,
-            message: this.$t('tronAccountNamePlaceholder'),
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
         accountType: [
-          {
-            required: true,
-            message: this.$t('tronAccountTypePlaceholder'),
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
         address: [
-          {
-            required: true,
-            message: this.$t('tronAddressPlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validAddress,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, validator: validAddress, trigger: 'blur', },
         ],
         balance: [
-          {
-            required: true,
-            message: this.$t('tronBalancePlaceholder'),
-            trigger: 'blur',
-          },
-          {
-            required: true,
-            validator: validateNumber,
-            trigger: 'blur',
-          },
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
       }
-      return rules
     },
   },
 
@@ -193,7 +158,7 @@ export default {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('tronSettingGenesisSaveSuccess'))
+            this.$message.success(this.$t('configManage.assetSaveSuccess'))
             this.$emit('success')
             this.dialogVisible = false
           })
@@ -209,7 +174,7 @@ export default {
           if (res.result) {
             resolve(true)
           } else {
-            this.$message.error(this.$t('tronNodevoteCountNumberMaxPlaceholder'))
+            this.$message.error(this.$t('configManage.valid.maxVoteCountValue'))
             resolve(false)
           }
         })
