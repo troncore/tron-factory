@@ -6,7 +6,7 @@
 
 ## 简介
 
-[one-click-deployment](http://39.106.174.213/wubin1/one-click-deployment) 是一个一键发链解决方案， 帮助您快速构建更稳定、 安全的生产级区块链环境， 减少在区块链部署、 运维、 管理、 应用开发等方面的挑战， 使您更专注于核心业务创新， 并实现业务快速上链.
+[TRON FACTORY](http://39.106.174.213/kangjiancheng/tron-factory) 是一个一键发链解决方案， 帮助您快速构建更稳定、 安全的生产级区块链环境， 减少在区块链部署、 运维、 管理、 应用开发等方面的挑战， 使您更专注于核心业务创新， 并实现业务快速上链.
 
 ## 前序准备
 
@@ -30,7 +30,6 @@
   - 网络链接配置(http/rpc)
   - 数据库基础配置
   - p2p配置
-  - 跨链配置
 
 - 插件配置
   - 共识模块
@@ -46,10 +45,10 @@
 
 ```bash
 # 克隆项目
-git clone http://39.106.174.213/wubin1/one-click-deployment.git
+git clone http://39.106.174.213/kangjiancheng/tron-factory.git
 
 # 进入项目目录
-cd one-click-deployment
+cd tron-factory
 
 # 安装依赖
 ./install.sh
@@ -72,11 +71,7 @@ cd one-click-deployment
 
 ## 浏览器支持
 
-Suggest chrome browser.
-
-|  [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](https://godban.github.io/browsers-support-badges/)</br>Chrome |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|      last 2 versions                                                                                                                                                                                                |
+推荐使用最新版chrome浏览器.
 
 ## 版权
 

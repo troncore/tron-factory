@@ -6,7 +6,7 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Introduction
 
-[one-click-deployment](http://39.106.174.213/wubin1/one-click-deployment) is a one-click chaining solution that helps you quickly build a more stable and secure production-level blockchain environment, reducing the challenges of blockchain deployment, operations, management, application development, etc. You are more focused on core business innovation and fast business.
+[TRON FACTORY](http://39.106.174.213/kangjiancheng/tron-factory) is a one-click chaining solution that helps you quickly build a more stable and secure production-level blockchain environment, reducing the challenges of blockchain deployment, operations, management, application development, etc. You are more focused on core business innovation and fast business.
 
 ## Preparation
 
@@ -30,7 +30,6 @@ Learning this knowledge in advance will make a greate help in this project.
   - Network link configuration(http/rpc)
   - Database basic configuration
   - P2p configuration
-  - Cross-chain configuration
 
 - Plugins Setting
   - Consensus module setting
@@ -46,10 +45,10 @@ Learning this knowledge in advance will make a greate help in this project.
 
 ```bash
 # clone the project
-git clone http://39.106.174.213/wubin1/one-click-deployment.git
+git clone http://39.106.174.213/kangjiancheng/tron-factory.git
 
 # Enter the project directory
-cd one-click-deployment
+cd tron-factory
 
 # install dependency
 ./install.sh
@@ -72,11 +71,7 @@ Detailed changes for each release are documented in the [release notes](http://3
 
 ## Browsers support
 
-Suggest chrome browser.
-
-|  [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](https://godban.github.io/browsers-support-badges/)</br>Chrome |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|      last 2 versions                                                                                                                                                                                                |
+Chrome is recommended.
 
 ## License
 
