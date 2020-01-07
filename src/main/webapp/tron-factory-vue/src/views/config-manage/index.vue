@@ -280,6 +280,15 @@ export default {
         padding: 0;
         font-size: 16px;
         color: rgba(8, 28, 86, .7);
+
+        .unit {
+          font-size: 14px;
+          color: rgba(8, 28, 86, .5);
+        }
+        .help-tips {
+          font-size: 14px;
+          color: rgba(8, 28, 86, .5);
+        }
       }
     }
   }

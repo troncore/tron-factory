@@ -1,6 +1,6 @@
 <template>
   <div class="box-view genesis-config">
-    <div class="box-header title">{{ $t('tronSettingGenesis') }}</div>
+    <div class="box-header title">{{ $t('configManage.genesisInfoConfig') }}</div>
     <div class="box-body">
       <div class="asset-list">
         <div class="asset-title">Asset List</div>
@@ -118,7 +118,7 @@ export default {
       this.$_api.configManage.genesisAssetConfig({ assets: this.genesisBlockAssets}, (err, res) => {
         if (err) return
 
-        this.$message.success(this.$t('tronSettingGenesisSaveSuccess'))
+        this.$message.success(this.$t('configManage.assetDeleteSuccess'))
       })
     },
 
