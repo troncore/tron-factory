@@ -1,6 +1,6 @@
 #!/bin/bash
 while true; do
-  pid=`ps -ef | grep deployment | grep java | grep -v grep | awk '{print $2}'`
+  pid=`ps -ef | grep tron-factory | grep java | grep -v grep | awk '{print $2}'`
   if [ -n "$pid" ]; then
     kill -15 $pid
     echo "ending one click deployment process"
