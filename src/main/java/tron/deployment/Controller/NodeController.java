@@ -4,8 +4,11 @@ import static common.LogConfig.LOG;
 import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
 import static wallet.Wallet.hexs2Bytes;
-import static wallet.Wallet.private2Address;
+import static wallet.Wallet.private2AddressEckey;
+import static wallet.Wallet.private2AddressSm2;
 
+
+import com.typesafe.config.Config;
 import common.Common;
 //import common.LogConfig;
 import config.SeedNodeConfig;
@@ -39,6 +42,18 @@ import config.ConfigGenerator;
 @RequestMapping(value = "/")
 @Slf4j
 public class NodeController {
+
+  private static boolean isEckey = true;
+
+  static {
+    Util util = new Util();
+    util.parseConfig();
+    Config config = util.config;
+    if (config.hasPath("crypto.engine")) {
+      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+    }
+  }
+
   private JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
     ConfigGenerator configGenerator = new ConfigGenerator();
 
@@ -134,7 +149,11 @@ public class NodeController {
       String publicKey;
       try {
         path = Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
-        publicKey = private2Address(hexs2Bytes(privateKey.getBytes()));
+        if (isEckey) {
+          publicKey = private2AddressEckey(hexs2Bytes(privateKey.getBytes()));
+        } else {
+          publicKey = private2AddressSm2(hexs2Bytes(privateKey.getBytes()));
+        }
         newNode.put(Common.privateKeyFiled, path);
         newNode.put(Common.publicKeyFiled, publicKey);
       } catch (CipherException | IOException e) {
@@ -187,7 +206,11 @@ public class NodeController {
       String publicKey;
       try {
         path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
-        publicKey = private2Address(hexs2Bytes(key.getBytes()));
+        if (isEckey) {
+          publicKey = private2AddressEckey(hexs2Bytes(key.getBytes()));
+        } else {
+          publicKey = private2AddressSm2(hexs2Bytes(key.getBytes()));
+        }
         node.put(Common.privateKeyFiled, path);
         node.put(Common.publicKeyFiled, publicKey);
       } catch (CipherException | IOException e) {

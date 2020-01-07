@@ -3,7 +3,10 @@ package wallet;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.tron.common.crypto.ECKey;
+import com.typesafe.config.Config;
+import common.Util;
+import common.crypto.ECKey;
+import common.crypto.sm2.SM2;
 import org.tron.keystore.CipherException;
 
 /**
@@ -14,6 +17,16 @@ public class WalletFile {
   private Crypto crypto;
   private String id;
   private int version;
+  private static boolean isEckey = true;
+
+  static {
+    Util util = new Util();
+    util.parseConfig();
+    Config config = util.config;
+    if (config.hasPath("crypto.engine")) {
+      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+    }
+  }
 
   public WalletFile() {
     //Do nothing
@@ -59,9 +72,16 @@ public class WalletFile {
 
 
   public static WalletFile createWalletFile(byte[] pass, byte[] priKey) throws CipherException {
-    ECKey ecKey = ECKey.fromPrivate(priKey);
-    WalletFile walletFile = Wallet.createStandard(pass, ecKey);
-    return walletFile;
+    if (isEckey) {
+      ECKey ecKeySm2 = ECKey.fromPrivate(priKey);
+      WalletFile walletFile = Wallet.createStandard(pass, ecKeySm2);
+      return walletFile;
+    } else {
+      SM2 ecKeySm2 = SM2.fromPrivate(priKey);
+      WalletFile walletFile = Wallet.createStandard(pass, ecKeySm2);
+      return walletFile;
+    }
+
   }
 
   @Override
