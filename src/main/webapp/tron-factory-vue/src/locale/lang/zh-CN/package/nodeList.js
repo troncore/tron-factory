@@ -13,7 +13,7 @@ export default {
   isSR: '是否为SR',
 
   helpTips: {
-    crypto: '加密算法',
+    crypto: '添加节点之后，密钥算法不可再修改。删除所有节点之后即可再重新选择。',
     id: 'ID作为节点唯一标识',
     sshUserName: 'ssh用户名',
     ip: 'FullNode IP',
