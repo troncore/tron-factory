@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import common.crypto.SignInterface;
+import common.crypto.sm2.SM2;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -376,7 +377,7 @@ public class Wallet {
     return result;
   }
 
-  public static String private2Address(byte[] privateKey) throws CipherException {
+  public static String private2AddressEckey(byte[] privateKey) throws CipherException {
     ECKey eCkey;
     if (StringUtils.isEmpty(privateKey)) {
       eCkey = new ECKey(Utils.getRandom());  //Gen new Keypair
@@ -388,7 +389,7 @@ public class Wallet {
 
 
     byte[] publicKey0 = eCkey.getPubKey();
-    byte[] publicKey1 = private2PublicDemo(eCkey.getPrivKeyBytes());
+    byte[] publicKey1 = private2PublicDemoEckey(eCkey.getPrivKeyBytes());
     if (!Arrays.equals(publicKey0, publicKey1)) {
       throw new CipherException("publickey error");
     }
@@ -412,12 +413,52 @@ public class Wallet {
     return base58checkAddress1;
   }
 
-  private static byte[] private2PublicDemo(byte[] privateKey) {
+  public static String private2AddressSm2(byte[] privateKey) throws CipherException {
+    SM2 sm2;
+    if (StringUtils.isEmpty(privateKey)) {
+      sm2 = new SM2(Utils.getRandom());  //Gen new Keypair
+    } else {
+      sm2 = SM2.fromPrivate(privateKey);
+    }
+    String privateKeyFormatString = String.format("Private Key: %s", toHexString(sm2.getPrivKeyBytes()));
+    LOG.info(privateKeyFormatString);
+
+
+    byte[] publicKey0 = sm2.getPubKey();
+    byte[] publicKey1 = private2PublicDemoSm2(sm2.getPrivKeyBytes());
+    if (!Arrays.equals(publicKey0, publicKey1)) {
+      throw new CipherException("publickey error");
+    }
+    String publicKeyFormatString = String.format("Public Key: %s", toHexString(publicKey0));
+    LOG.info(publicKeyFormatString);
+
+    byte[] address0 = sm2.getAddress();
+    byte[] address1 = public2AddressDemo(publicKey0);
+    if (!Arrays.equals(address0, address1)) {
+      throw new CipherException("address error");
+    }
+    String addressFormatString = String.format("Address: %s", ByteArray.toHexString(address0));
+    LOG.info(addressFormatString);
+
+    String base58checkAddress0 = encode58Check(address0);
+    String base58checkAddress1 = address2Encode58CheckDemo(address0);
+    if (!base58checkAddress0.equals(base58checkAddress1)) {
+      throw new CipherException("base58checkAddress error");
+    }
+
+    return base58checkAddress1;
+  }
+
+  private static byte[] private2PublicDemoEckey(byte[] privateKey) {
     BigInteger privKey = new BigInteger(1, privateKey);
     ECPoint point = ECKey.CURVE.getG().multiply(privKey);
     return point.getEncoded(false);
   }
-
+  private static byte[] private2PublicDemoSm2(byte[] privateKey) {
+    BigInteger privKey = new BigInteger(1, privateKey);
+    ECPoint point = SM2.getEcc_param().getG().multiply(privKey);
+    return point.getEncoded(false);
+  }
   private static byte[] public2AddressDemo(byte[] publicKey) {
     byte[] hash = Hash.sha3(copyOfRange(publicKey, 1, publicKey.length));
     String sha3FormatString = String.format("sha3 = %s", ByteArray.toHexString(hash));

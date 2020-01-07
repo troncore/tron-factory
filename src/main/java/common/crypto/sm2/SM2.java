@@ -56,6 +56,14 @@ public class SM2 implements Serializable, SignInterface {
   private static BigInteger SM2_GX = new BigInteger("32C4AE2C1F1981195F9904466A39C9948FE30BBFF2660BE1715A4589334C74C7", 16);
   private static BigInteger SM2_GY = new BigInteger("BC3736A2F4F6779C59BDCEE36B692153D0A9877CC62A474002DF32E52139F0A0", 16);
 
+  public static ECDomainParameters getEcc_param() {
+    return ecc_param;
+  }
+
+  public static void setEcc_param(ECDomainParameters ecc_param) {
+    SM2.ecc_param = ecc_param;
+  }
+
   private static ECDomainParameters ecc_param;
   private static ECParameterSpec ecc_spec;
   private static ECCurve.Fp curve;
