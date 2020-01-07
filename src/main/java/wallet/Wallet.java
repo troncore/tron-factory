@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import common.crypto.SignInterface;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -87,8 +88,8 @@ public class Wallet {
     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
-  public static WalletFile create(byte[] password, ECKey ecKeyPair, int n, int p)
-          throws CipherException {
+  public static WalletFile create(byte[] password, SignInterface ecKeySm2Pair, int n, int p)
+      throws CipherException {
 
     byte[] salt = generateRandomBytes(32);
 
@@ -97,30 +98,32 @@ public class Wallet {
     byte[] encryptKey = Arrays.copyOfRange(derivedKey, 0, 16);
     byte[] iv = generateRandomBytes(16);
 
-    byte[] privateKeyBytes = ecKeyPair.getPrivKeyBytes();
+    byte[] privateKeyBytes = ecKeySm2Pair.getPrivKeyBytes();
 
     byte[] cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey,
-            privateKeyBytes);
+        privateKeyBytes);
 
     byte[] mac = generateMac(derivedKey, cipherText);
 
-    return createWalletFile(ecKeyPair, cipherText, iv, salt, mac, n, p);
+    return createWalletFile(ecKeySm2Pair, cipherText, iv, salt, mac, n, p);
   }
+
 
   private static byte[] generateDerivedScryptKey(
           byte[] password, byte[] salt, int n, int r, int p, int dkLen) {
     return SCrypt.generate(password, salt, n, r, p, dkLen);
   }
 
-  public static WalletFile createStandard(byte[] password, ECKey ecKeyPair)
-          throws CipherException {
-    return create(password, ecKeyPair, N_STANDARD, P_STANDARD);
+  public static WalletFile createStandard(byte[] password, SignInterface ecKeySm2Pair)
+      throws CipherException {
+    return create(password, ecKeySm2Pair, N_STANDARD, P_STANDARD);
   }
 
-  public static WalletFile createLight(byte[] password, ECKey ecKeyPair)
-          throws CipherException {
-    return create(password, ecKeyPair, N_LIGHT, P_LIGHT);
+  public static WalletFile createLight(byte[] password, SignInterface ecKeySm2Pair)
+      throws CipherException {
+    return create(password, ecKeySm2Pair, N_LIGHT, P_LIGHT);
   }
+
 
   public static String store2Keystore(WalletFile walletFile) throws IOException {
     if (walletFile == null) {
@@ -172,11 +175,11 @@ public class Wallet {
   }
 
   private static WalletFile createWalletFile(
-          ECKey ecKeyPair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
-          int n, int p) {
+      SignInterface ecKeySm2Pair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
+      int n, int p) {
 
     WalletFile walletFile = new WalletFile();
-    walletFile.setAddress(encode58Check(ecKeyPair.getAddress()));
+    walletFile.setAddress(encode58Check(ecKeySm2Pair.getAddress()));
 
     WalletFile.Crypto crypto = new WalletFile.Crypto();
     crypto.setCipher(CIPHER);
@@ -203,6 +206,8 @@ public class Wallet {
 
     return walletFile;
   }
+
+
 
   private static byte[] performCipherOperation(
           int mode, byte[] iv, byte[] encryptKey, byte[] text) throws CipherException {

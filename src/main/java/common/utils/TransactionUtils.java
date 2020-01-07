@@ -17,17 +17,16 @@ package common.utils;
 
 import com.google.protobuf.ByteString;
 import com.typesafe.config.Config;
+import common.crypto.SignInterface;
+import common.crypto.SignatureInterface;
+import common.crypto.sm2.SM3;
 import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import org.tron.common.crypto.ECKey;
 import org.tron.common.crypto.ECKey.ECDSASignature;
-import org.tron.common.crypto.SignInterface;
-import org.tron.common.crypto.SignatureInterface;
-import org.tron.common.crypto.sm2.SM3;
 import org.tron.common.utils.Sha256Hash;
-import org.tron.core.config.Configuration;
 import org.tron.core.exception.CancelException;
 import org.tron.protos.Protocol.Transaction;
 

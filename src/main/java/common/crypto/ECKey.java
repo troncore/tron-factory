@@ -17,6 +17,9 @@ package common.crypto;
  * along with the ethereumJ library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static common.utils.Hash.computeAddress;
+
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -293,8 +296,8 @@ public class ECKey implements Serializable, SignInterface {
    * @param privKey -
    * @return -
    */
-  public static org.tron.common.crypto.ECKey fromPrivate(BigInteger privKey) {
-    return new org.tron.common.crypto.ECKey(privKey, CURVE.getG().multiply(privKey));
+  public static ECKey fromPrivate(BigInteger privKey) {
+    return new ECKey(privKey, CURVE.getG().multiply(privKey));
   }
 
   /**
@@ -303,7 +306,7 @@ public class ECKey implements Serializable, SignInterface {
    * @param privKeyBytes -
    * @return -
    */
-  public static org.tron.common.crypto.ECKey fromPrivate(byte[] privKeyBytes) {
+  public static ECKey fromPrivate(byte[] privKeyBytes) {
     return fromPrivate(new BigInteger(1, privKeyBytes));
   }
   /**
@@ -315,9 +318,9 @@ public class ECKey implements Serializable, SignInterface {
    * @param pub -
    * @return -
    */
-  public static org.tron.common.crypto.ECKey fromPrivateAndPrecalculatedPublic(BigInteger priv,
+  public static ECKey fromPrivateAndPrecalculatedPublic(BigInteger priv,
                                                                                ECPoint pub) {
-    return new org.tron.common.crypto.ECKey(priv, pub);
+    return new ECKey(priv, pub);
   }
 
   /**
@@ -329,11 +332,11 @@ public class ECKey implements Serializable, SignInterface {
    * @param pub -
    * @return -
    */
-  public static org.tron.common.crypto.ECKey fromPrivateAndPrecalculatedPublic(byte[] priv, byte[]
+  public static ECKey fromPrivateAndPrecalculatedPublic(byte[] priv, byte[]
       pub) {
     check(priv != null, "Private key must not be null");
     check(pub != null, "Public key must not be null");
-    return new org.tron.common.crypto.ECKey(new BigInteger(1, priv), CURVE.getCurve()
+    return new ECKey(new BigInteger(1, priv), CURVE.getCurve()
         .decodePoint(pub));
   }
 
@@ -344,8 +347,8 @@ public class ECKey implements Serializable, SignInterface {
    * @param pub -
    * @return -
    */
-  public static org.tron.common.crypto.ECKey fromPublicOnly(ECPoint pub) {
-    return new org.tron.common.crypto.ECKey(null, pub);
+  public static ECKey fromPublicOnly(ECPoint pub) {
+    return new ECKey(null, pub);
   }
 
   /**
@@ -355,8 +358,8 @@ public class ECKey implements Serializable, SignInterface {
    * @param pub -
    * @return -
    */
-  public static org.tron.common.crypto.ECKey fromPublicOnly(byte[] pub) {
-    return new org.tron.common.crypto.ECKey(null, CURVE.getCurve().decodePoint(pub));
+  public static ECKey fromPublicOnly(byte[] pub) {
+    return new ECKey(null, CURVE.getCurve().decodePoint(pub));
   }
 
   /**
@@ -390,12 +393,12 @@ public class ECKey implements Serializable, SignInterface {
    *
    * @param nodeId a 64-byte X,Y point pair
    */
-  public static org.tron.common.crypto.ECKey fromNodeId(byte[] nodeId) {
+  public static ECKey fromNodeId(byte[] nodeId) {
     check(nodeId.length == 64, "Expected a 64 byte node id");
     byte[] pubBytes = new byte[65];
     System.arraycopy(nodeId, 0, pubBytes, 1, nodeId.length);
     pubBytes[0] = 0x04; // uncompressed
-    return org.tron.common.crypto.ECKey.fromPublicOnly(pubBytes);
+    return ECKey.fromPublicOnly(pubBytes);
   }
 
   public static byte[] signatureToKeyBytes(byte[] messageHash, String
@@ -439,7 +442,7 @@ public class ECKey implements Serializable, SignInterface {
       header -= 4;
     }
     int recId = header - 27;
-    byte[] key = org.tron.common.crypto.ECKey.recoverPubBytesFromSignature(recId, sig,
+    byte[] key = ECKey.recoverPubBytesFromSignature(recId, sig,
         messageHash);
     if (key == null) {
       throw new SignatureException("Could not recover public key from " +
@@ -457,7 +460,7 @@ public class ECKey implements Serializable, SignInterface {
    */
   public static byte[] signatureToAddress(byte[] messageHash, String
       signatureBase64) throws SignatureException {
-    return Hash.computeAddress(signatureToKeyBytes(messageHash,
+    return computeAddress(signatureToKeyBytes(messageHash,
         signatureBase64));
   }
 
@@ -471,7 +474,7 @@ public class ECKey implements Serializable, SignInterface {
   public static byte[] signatureToAddress(byte[] messageHash,
       ECDSASignature sig) throws
       SignatureException {
-    return Hash.computeAddress(signatureToKeyBytes(messageHash, sig));
+    return computeAddress(signatureToKeyBytes(messageHash, sig));
   }
 
   /**
@@ -481,11 +484,11 @@ public class ECKey implements Serializable, SignInterface {
    * @param signatureBase64 Base-64 encoded signature
    * @return ECKey
    */
-  public static org.tron.common.crypto.ECKey signatureToKey(byte[] messageHash, String
+  public static ECKey signatureToKey(byte[] messageHash, String
       signatureBase64) throws SignatureException {
     final byte[] keyBytes = signatureToKeyBytes(messageHash,
         signatureBase64);
-    return org.tron.common.crypto.ECKey.fromPublicOnly(keyBytes);
+    return ECKey.fromPublicOnly(keyBytes);
   }
 
   /**
@@ -495,10 +498,10 @@ public class ECKey implements Serializable, SignInterface {
    * @param sig -
    * @return ECKey
    */
-  public static org.tron.common.crypto.ECKey signatureToKey(byte[] messageHash, ECDSASignature
+  public static ECKey signatureToKey(byte[] messageHash, ECDSASignature
       sig) throws SignatureException {
     final byte[] keyBytes = signatureToKeyBytes(messageHash, sig);
-    return org.tron.common.crypto.ECKey.fromPublicOnly(keyBytes);
+    return ECKey.fromPublicOnly(keyBytes);
   }
 
   /**
@@ -668,7 +671,7 @@ public class ECKey implements Serializable, SignInterface {
     if (pubBytes == null) {
       return null;
     } else {
-      return Hash.computeAddress(pubBytes);
+      return computeAddress(pubBytes);
     }
   }
 
@@ -679,14 +682,14 @@ public class ECKey implements Serializable, SignInterface {
    * @return ECKey
    */
   @Nullable
-  public static org.tron.common.crypto.ECKey recoverFromSignature(int recId, ECDSASignature sig,
+  public static ECKey recoverFromSignature(int recId, ECDSASignature sig,
                                                                   byte[] messageHash) {
     final byte[] pubBytes = recoverPubBytesFromSignature(recId, sig,
         messageHash);
     if (pubBytes == null) {
       return null;
     } else {
-      return org.tron.common.crypto.ECKey.fromPublicOnly(pubBytes);
+      return ECKey.fromPublicOnly(pubBytes);
     }
   }
 
@@ -720,22 +723,22 @@ public class ECKey implements Serializable, SignInterface {
    * @return -
    * @deprecated per-point compression property will be removed in Bouncy Castle
    */
-  public org.tron.common.crypto.ECKey decompress() {
+  public ECKey decompress() {
     if (!pub.isCompressed()) {
       return this;
     } else {
-      return new org.tron.common.crypto.ECKey(this.provider, this.privKey, decompressPoint(pub));
+      return new ECKey(this.provider, this.privKey, decompressPoint(pub));
     }
   }
 
   /**
    * @deprecated per-point compression property will be removed in Bouncy Castle
    */
-  public org.tron.common.crypto.ECKey compress() {
+  public ECKey compress() {
     if (pub.isCompressed()) {
       return this;
     } else {
-      return new org.tron.common.crypto.ECKey(this.provider, this.privKey, compressPoint(pub));
+      return new ECKey(this.provider, this.privKey, compressPoint(pub));
     }
   }
 
@@ -766,7 +769,7 @@ public class ECKey implements Serializable, SignInterface {
    */
   public byte[] getAddress() {
     if (pubKeyHash == null) {
-      pubKeyHash = Hash.computeAddress(this.pub);
+      pubKeyHash = computeAddress(this.pub);
     }
     return pubKeyHash;
   }
@@ -785,7 +788,7 @@ public class ECKey implements Serializable, SignInterface {
 
   @Override
   public byte[] signToAddress(byte[] messageHash, String signatureBase64) throws SignatureException {
-    return Hash.computeAddress(signatureToKeyBytes(messageHash,
+    return computeAddress(signatureToKeyBytes(messageHash,
             signatureBase64));
   }
 
@@ -799,7 +802,7 @@ public class ECKey implements Serializable, SignInterface {
     return nodeId;
   }
 
-  @Override
+//  @Override
   public byte[] hash(byte[] message) {
     Keccak256 hashFun = new Keccak256();
     return hashFun.digest(message);
@@ -931,7 +934,7 @@ public class ECKey implements Serializable, SignInterface {
     int recId = -1;
     byte[] thisKey = this.pub.getEncoded(/* compressed */ false);
     for (int i = 0; i < 4; i++) {
-      byte[] k = org.tron.common.crypto.ECKey.recoverPubBytesFromSignature(i, sig, messageHash);
+      byte[] k = ECKey.recoverPubBytesFromSignature(i, sig, messageHash);
       if (k != null && Arrays.equals(k, thisKey)) {
         recId = i;
         break;
@@ -1027,7 +1030,7 @@ public class ECKey implements Serializable, SignInterface {
    * @return -
    */
   public boolean verify(byte[] data, byte[] signature) {
-    return org.tron.common.crypto.ECKey.verify(data, signature, getPubKey());
+    return ECKey.verify(data, signature, getPubKey());
   }
 
   /**
@@ -1038,7 +1041,7 @@ public class ECKey implements Serializable, SignInterface {
    * @return -
    */
   public boolean verify(byte[] sigHash, ECDSASignature signature) {
-    return org.tron.common.crypto.ECKey.verify(sigHash, signature, getPubKey());
+    return ECKey.verify(sigHash, signature, getPubKey());
   }
 
   /**
@@ -1078,7 +1081,7 @@ public class ECKey implements Serializable, SignInterface {
       return false;
     }
 
-    org.tron.common.crypto.ECKey ecKey = (org.tron.common.crypto.ECKey) o;
+    ECKey ecKey = (ECKey) o;
 
     if (privKey != null && !privKey.equals(ecKey.privKey)) {
       return false;

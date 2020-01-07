@@ -18,7 +18,6 @@
 
 package common.crypto;
 
-import static java.util.Arrays.copyOfRange;
 
 
 import java.security.MessageDigest;
@@ -28,7 +27,6 @@ import java.security.Security;
 import lombok.extern.slf4j.Slf4j;
 import org.tron.common.crypto.jce.TronCastleProvider;
 import org.tron.common.utils.ByteArray;
-import org.tron.walletserver.WalletApi;
 
 @Slf4j
 public class Hash {
@@ -120,16 +118,4 @@ public class Hash {
     }
   }
 
-  /**
-   * Calculates RIGTMOST160(SHA3(input)). This is used in address calculations. *
-   *
-   * @param input - data
-   * @return - add_pre_fix + 20 right bytes of the hash keccak of the data
-   */
-  public static byte[] sha3omit12(byte[] input) {
-    byte[] hash = sha3(input);
-    byte[] address = copyOfRange(hash, 11, hash.length);
-    address[0] = WalletApi.getAddressPreFixByte();
-    return address;
-  }
 }
