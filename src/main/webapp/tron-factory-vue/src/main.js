@@ -7,7 +7,6 @@ import i18n from './locale'
 import ElementUI from 'element-ui'
 Vue.use(ElementUI)
 
-// import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import './assets/styles/index.scss' // global css
 
 import api from './api'
