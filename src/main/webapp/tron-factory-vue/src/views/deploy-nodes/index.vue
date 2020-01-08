@@ -3,11 +3,11 @@
 
     <div class="box-view">
       <div class="page-header">
-        <el-button class="im-button large" :loading="batchDeployLoading" type="primary" @click="handleOpenDeployDialog">{{ $t('tronNodeBulkDeployment') }}</el-button>
+        <el-button class="im-button large" :loading="batchDeployLoading" type="primary" @click="handleOpenDeployDialog">{{ $t('deployNodes.batchDeploy') }}</el-button>
       </div>
       <el-table
         :data="tableData"
-        :empty-text="$t('tronNodesNoData')"
+        :empty-text="$t('base.emptyData')"
         v-loading="tableLoading"
         class="custom-table"
         header-align="center"
@@ -18,22 +18,22 @@
 
         <el-table-column prop="id" label="ID" align="center"></el-table-column>
 
-        <el-table-column prop="userName" :label="$t('tronNodeName')" align="center"></el-table-column>
+        <el-table-column prop="userName" :label="$t('deployNodes.sshUserName')" align="center"></el-table-column>
 
-        <el-table-column prop="ip" label="IP/HOST" align="center"></el-table-column>
+        <el-table-column prop="ip" label="IP" align="center"></el-table-column>
 
         <el-table-column prop="port" label="SSH PORT" align="center"></el-table-column>
 
-        <el-table-column :label="$t('tronNodeWhetherIsSR')" align="center">
+        <el-table-column :label="$t('deployNodes.isSR')" align="center">
           <template slot-scope="scope">
             <el-tag size="medium" type="success" v-if="scope.row.isSR">YES</el-tag>
             <el-tag size="medium" type="danger" v-else>NO</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column prop="status" :label="$t('tronNodeStatus')" align="center">
+        <el-table-column prop="status" :label="$t('base.operate')" align="center">
           <template slot-scope="scope">
-            <el-button type="text" @click="handleViewDeployLog(scope.row)">{{$t('tronNodeLog') }}</el-button>
+            <el-button type="text" @click="handleViewDeployLog(scope.row)">{{$t('deployNodes.viewLog') }}</el-button>
           </template>
         </el-table-column>
 
@@ -108,7 +108,7 @@ export default {
       if (!this.tableSelections.length) {
         this.$message({
           type: 'warning',
-          message: this.$t('deploymentSelectTips'),
+          message: this.$t('deployNodes.mustSelectNodes'),
         })
         return
       }
@@ -126,7 +126,7 @@ export default {
 
       this.$message({
         type: 'success',
-        message: this.$t('deploymentLoading'),
+        message: this.$t('deployNodes.deployingTips'),
       })
 
       this.refreshDeployedNodeList()

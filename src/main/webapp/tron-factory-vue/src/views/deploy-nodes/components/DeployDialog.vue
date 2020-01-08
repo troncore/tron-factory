@@ -5,15 +5,14 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     width="680px"
-    top="200px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('tronNodeBulkDeployment') }}</div>
+      <div class="title">{{ $t('deployNodes.deployDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content">
       <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" v-model.trim="form.filePath"></el-input>
-      <div class="el-upload__tip">{{ $t('deploymentUpload') }}</div>
+      <div class="el-upload__tip">{{ $t('deployNodes.deployHelpTips') }}</div>
     </div>
 
     <div slot="footer" class="dialog-footer">
@@ -56,7 +55,7 @@
         if (!this.form.filePath) {
           this.$message({
             type: 'warning',
-            message: this.$t('deploymentPath'),
+            message: this.$t('deployNodes.valid.inputFilePath'),
           })
           return
         }
@@ -65,7 +64,7 @@
         if (!~this.form.filePath.indexOf('java-tron-1.0.0.zip')) {
           this.$message({
             type: 'warning',
-            message: this.$t('deploymentCorrectPath'),
+            message: this.$t('deployNodes.valid.inputRightPath'),
           })
           return
         }

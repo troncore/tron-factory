@@ -7,11 +7,9 @@
   <div class="page-view import-plugin">
 
     <div class="im-steps">
-      <div :class="['im-step consensus', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronPluginConsensusModule') }}</span></div>
-      <div :class="['im-step transaction', { active: 2 <= currentStep , 'is-current': 2 === currentStep}]" @click="handleSkipStep(2)"><span>{{ $t('tronPluginTransactionModule') }}</span></div>
-      <div :class="['im-step database', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronPluginDatabaseModule') }}</span></div>
-      <!-- TODO -->
-      <!--<div :class="['im-step crypto', { active: 4 <= currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronPluginCryptoModule') }}</span></div>-->
+      <div :class="['im-step consensus', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('importPlugin.consensusModule') }}</span></div>
+      <div :class="['im-step transaction', { active: 2 <= currentStep , 'is-current': 2 === currentStep}]" @click="handleSkipStep(2)"><span>{{ $t('importPlugin.transactionModule') }}</span></div>
+      <!--<div :class="['im-step database', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('importPlugin.databaseModule') }}</span></div>-->
     </div>
 
     <component
@@ -26,7 +24,6 @@
 import ConsensusModule from './components/ConsensusModule'
 import TransactionModule from './components/TransactionModule'
 import DatabaseModule from './components/DatabaseModule'
-import CryptoModule from './components/CryptoModule'
 
 import { mapMutations } from "vuex";
 
@@ -36,7 +33,6 @@ export default {
     ConsensusModule,
     TransactionModule,
     DatabaseModule,
-    CryptoModule,
   },
   data() {
     return {
@@ -50,11 +46,10 @@ export default {
         1: 'ConsensusModule',
         2: 'TransactionModule',
         3: 'DatabaseModule',
-        4: 'CryptoModule',
       },
       stepRange: {
         min: 1,
-        max: 3,
+        max: 2,
       },
     }
   },
@@ -112,7 +107,8 @@ export default {
   .im-steps {
     display: flex;
     justify-content: space-between;
-    margin: 0 auto 40px;
+    margin-bottom: 40px;
+    width: 500px;
 
     .im-step {
       &:not(:last-child) {

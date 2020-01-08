@@ -31,7 +31,7 @@
 
         <el-table-column prop="userName" :label="$t('nodeList.sshUserName')"  align="center"/>
 
-        <el-table-column prop="ip" label="IP/HOST"  align="center"/>
+        <el-table-column prop="ip" label="IP"  align="center"/>
 
         <el-table-column prop="port" label="SSH PORT"  align="center"/>
 

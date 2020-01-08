@@ -2,7 +2,7 @@
   {
     "path": "/get-start",
     "name": "get-start",
-    "title": "getStart.name",
+    "title": "menu.name.getStart",
     "icon": "el-icon-guide",
     "auth": true,
     "disabled": false
@@ -10,7 +10,7 @@
   {
     "path": "/node-list",
     "name": "node-list",
-    "title": "tronSettingMenuNodeList",
+    "title": "menu.name.nodeList",
     "icon": "el-icon-s-operation",
     "auth": true,
     "disabled": true
@@ -18,7 +18,7 @@
   {
     "path": "/config-manage",
     "name": "config-manage",
-    "title": "tronSettingMenuSetting",
+    "title": "menu.name.configManage",
     "icon": "el-icon-setting",
     "auth": true,
     "disabled": true
@@ -26,7 +26,7 @@
   {
     "path": "/import-plugin",
     "name": "import-plugin",
-    "title": "tronSettingMenuPlugin",
+    "title": "menu.name.importPlugin",
     "icon": "el-icon-upload",
     "auth": true,
     "disabled": true
@@ -34,7 +34,7 @@
   {
     "path": "/deploy-nodes",
     "name": "deploy-nodes",
-    "title": "tronSettingMenuDeployment",
+    "title": "menu.name.deployNodes",
     "icon": "el-icon-share",
     "auth": true,
     "disabled": true

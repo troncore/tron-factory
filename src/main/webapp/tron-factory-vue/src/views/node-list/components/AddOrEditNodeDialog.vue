@@ -269,14 +269,14 @@ export default {
       this.$refs['dialog-form'].validate(async valid => {
         if (valid) {
           let params = {}
-          this.saveLoading = true
+          this.loading = true
           if (!(await this.formatParams(params))) return
 
           let api = this.isAdding ? 'addNoteInfo' : 'editNoteInfo'
           let msg = this.isAdding ? 'nodeList.addNodeSuccess' : 'nodeList.updateNodeSuccess'
 
           this.$_api.nodeList[api](params, err => {
-            this.saveLoading = false
+            this.loading = false
             if (err) return
 
             this.$emit('success', true)
@@ -297,12 +297,12 @@ export default {
       let hasSameIP = this.isAdding && ~this.nodeList.findIndex(item => item.ip === params.ip)
       if (hasSameIP) {
         this.$message.warning(this.$t('nodeList.valid.hasSameIP'))
-        this.saveLoading = false
+        this.loading = false
         return false
       }
 
       if (!(await this.checkBalance(params.voteCount))) {
-        this.saveLoading = false
+        this.loading = false
         return false
       }
 

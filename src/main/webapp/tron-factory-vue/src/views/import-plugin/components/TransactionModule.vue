@@ -1,6 +1,6 @@
 <template>
   <div class="box-view transaction-module">
-    <div class="box-header title">{{ $t('tronPluginTransactionModule') }}</div>
+    <div class="box-header title">{{ $t('importPlugin.transactionModule') }}</div>
 
     <div class="box-body">
       <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
@@ -11,19 +11,19 @@
         </el-form-item>
 
         <div class="more-form">
-          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('tronMoreSetting') }}</el-button>
+          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('importPlugin.moreSetting') }}</el-button>
         </div>
 
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item class="custom-transaction" props="customTransaction">
-              <el-checkbox v-model="checkCustomTransaction">{{ $t('tronPluginCustomTradingModule') }}</el-checkbox>
+              <el-checkbox v-model="checkCustomTransaction">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
               <el-input
                 v-model.trim="form.customTransaction"
                 type="textarea"
                 :autosize="{ minRows: 4, maxRows: 6 }"
                 :maxlength="300"
-                :placeholder="$t('tronPluginCustomTradingModulePlaceholder')">
+                :placeholder="$t('importPlugin.valid.inputCustomTransaction')">
               </el-input>
             </el-form-item>
           </div>
@@ -57,7 +57,7 @@
         checkCustomTransaction: false,
         customTransactionIndex: -1, // if customTransaction exist, return its index
         formRules: {
-          transaction: [{ required: true, message: this.$t('tronSettingPlaceholder'), trigger: 'blur', },],
+          transaction: [{ required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },],
         },
         contentShow: true,
         transactionList: require('./transactionModuleList.json') || [],
@@ -88,19 +88,17 @@
       handleSubmit() {
         this.$refs['form-box'].validate(valid => {
           if (valid) {
-            let checkStatus = 0
-
             if (this.checkCustomTransaction) {
               if (!this.form.customTransaction.length) {
-                this.$message.warning(this.$t('tronPluginCustomTradingModulePlaceholder'),)
+                this.$message.warning(this.$t('importPlugin.valid.customTransaction'),)
                 return
               }
               else if (!this.form.customTransaction.endsWith('.jar')) {
-                this.$message.warning(this.$t('tronPluginDeploymentCorrectPathPlaceholder'),)
+                this.$message.warning(this.$t('importPlugin.valid.pathEndJAR'),)
                 return
               }
             } else if (this.form.customTransaction) {
-              this.$message.warning(this.$t('tronPluginDeploymentCheckPathPlaceholder'),)
+              this.$message.warning(this.$t('importPlugin.valid.checkCustomTransaction'),)
               return
             }
 
@@ -115,7 +113,7 @@
               this.loading = false
               if (err) return
 
-              this.$message.success(this.$t('tronPluginInputSaveSuccess'))
+              this.$message.success(this.$t('importPlugin.transactionModuleSaveSuccess'))
               this.$emit('next-step')
             })
           }

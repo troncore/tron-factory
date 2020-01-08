@@ -1,17 +1,13 @@
 <template>
   <div class="consensus-module box-view">
-    <div class="box-header title">{{ $t('tronPluginConsensusModule') }}</div>
+    <div class="box-header title">{{ $t('importPlugin.consensusModule') }}</div>
 
     <div class="box-body">
-
-      <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
-        <el-form-item prop="consensus">
-          <el-radio-group v-model="form.consensus">
-            <el-radio :label="'dpos'">DPOS</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
+      <div class="consensus-list">
+        <span class="consensus-item">DPoS</span>
+      </div>
     </div>
+
     <div class="box-footer align-right">
       <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
@@ -34,10 +30,6 @@ export default {
       },
       contentShow: true,
       loading: false,
-
-      formRules: {
-        consensus: [{ required: true, message: this.$t('tronSettingPlaceholder'), trigger: 'blur', },],
-      },
     }
   },
 
@@ -52,21 +44,13 @@ export default {
 
   methods: {
     handleSubmit() {
-      this.$refs['form-box'].validate(valid => {
-        if (valid) {
-          let params = {
-            consensus: this.form.consensus
-          }
+      this.loading = true
+      this.$_api.importPlugin.consensusApi(this.form, (err, res) => {
+        this.loading = false
+        if (err) return
 
-          this.loading = true
-          this.$_api.importPlugin.consensusApi(params, (err, res) => {
-            this.loading = false
-            if (err) return
-
-            this.$message.success(this.$t('tronPluginConsensusSaveSuccess'))
-            this.$emit('next-step')
-          })
-        }
+        this.$message.success(this.$t('base.success.save'))
+        this.$emit('next-step')
       })
     },
   },

@@ -8,7 +8,7 @@
     top="200px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('tronNodeStatus') }}</div>
+      <div class="title">{{ $t('deployNodes.logDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content" v-loading="initLoading">
@@ -41,7 +41,7 @@
         initLoading: true,
         processingShow: false,
         processingLoading: false,
-        processingText: this.$t('deploymentNodeLog'),
+        processingText: this.$t('deployNodes.emptyLog'),
         timeID: null,
       }
     },
@@ -73,11 +73,11 @@
           this.initLoading = false
           this.processingShow = true
           this.processingLoading = true
-          this.processingText = this.$t('deploymentSearchLoading')
+          this.processingText = this.$t('deployNodes.loadingLog')
 
           if (err) {
             this.processingLoading = false
-            this.processingText = this.$t('deploymentNodeLog')
+            this.processingText = this.$t('deployNodes.emptyLog')
             clearInterval(this.timeID)
 
             return
@@ -89,20 +89,20 @@
             this.logInfo.forEach(log => {
               if (log.indexOf('deploy finish') > -1) {
                 this.processingLoading = false
-                this.processingText = this.$t('deploymentDone')
+                this.processingText = this.$t('deployNodes.deployComplete')
 
                 clearInterval(this.timeID)
 
               } else if (log === 'ssh connect failed') {
                 this.processingLoading = false
-                this.processingText = this.$t('deploymentFail')
+                this.processingText = this.$t('deployNodes.deployFail')
 
                 clearInterval(this.timeID)
               }
             })
           } else {
             this.processingLoading = false
-            this.processingText = this.$t('deploymentNodeLog')
+            this.processingText = this.$t('deployNodes.emptyLog')
 
             clearInterval(this.timeID)
           }

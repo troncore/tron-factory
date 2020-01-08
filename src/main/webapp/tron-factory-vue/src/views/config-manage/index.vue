@@ -7,11 +7,11 @@
   <div class="page-view config-manage">
 
     <div class="im-steps">
-      <div :class="['im-step genesis', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('tronSettingGenesis') }}</span></div>
-      <div :class="['im-step base', { active: 2 <= currentStep, 'is-current': 2 === currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('tronSettingBase') }}</span></div>
-      <div :class="['im-step network', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('tronSettingHttp') }}</span></div>
-      <div :class="['im-step database', { active: 4 <= currentStep, 'is-current': 4 === currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('tronSettingDb') }}</span></div>
-      <div :class="['im-step p2p', { active: 5 <= currentStep, 'is-current': 5 === currentStep }]" @click="handleSkipStep(5)"><span>{{ $t('tronSettingP2p') }}</span></div>
+      <div :class="['im-step genesis', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('configManage.genesisInfoConfig') }}</span></div>
+      <div :class="['im-step base', { active: 2 <= currentStep, 'is-current': 2 === currentStep }]" @click="handleSkipStep(2)"><span>{{ $t('configManage.baseConfig') }}</span></div>
+      <div :class="['im-step network', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('configManage.netWorkConfig') }}</span></div>
+      <div :class="['im-step database', { active: 4 <= currentStep, 'is-current': 4 === currentStep }]" @click="handleSkipStep(4)"><span>{{ $t('configManage.databaseConfig') }}</span></div>
+      <div :class="['im-step p2p', { active: 5 <= currentStep, 'is-current': 5 === currentStep }]" @click="handleSkipStep(5)"><span>{{ $t('configManage.p2pConfig') }}</span></div>
       <!--<div :class="['im-step cross-chain', { active: 6 <= currentStep }]" @click="handleSkipStep(6)"><span>{{ $t('tronCrossChain') }}</span></div>-->
     </div>
 
@@ -64,7 +64,7 @@ export default {
         3: 'NetworkConfig',
         4: 'DatabaseConfig',
         5: 'P2pConfig',
-        6: 'CrossChainConfig',
+        // 6: 'CrossChainConfig',
       },
       stepRange: {
         min: 1,
