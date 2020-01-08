@@ -8,7 +8,6 @@ import branch from './package/branch'
 import setting from './package/setting'
 import node from './package/node'
 import plugin from './package/plugin'
-import dashboard from './package/dashboard'
 import route from './package/route'
 
 export default {
@@ -16,10 +15,10 @@ export default {
   getStart,
   nodeList,
   configManage,
+
   ...branch,
   ...setting,
   ...node,
   ...plugin,
-  ...dashboard,
   ...route,
 }

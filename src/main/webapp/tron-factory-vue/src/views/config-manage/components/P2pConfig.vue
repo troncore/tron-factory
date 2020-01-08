@@ -6,12 +6,12 @@
       <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
 
         <el-form-item prop="node_p2p_version" label="p2pVersion">
-          <span slot="label">p2pVersion <i class="help-tips">( {{ $t('configManage.helpTips.p2pVersion') }} )</i></span>
+          <span slot="label">p2pVersion <i class="help-tips">({{ $t('configManage.helpTips.p2pVersion') }})</i></span>
           <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="listenPort" prop="node_listen_port">
-          <span slot="label">listenPort <i class="help-tips">( {{ $t('configManage.helpTips.listenPort') }} )</i></span>
+          <span slot="label">listenPort <i class="help-tips">({{ $t('configManage.helpTips.listenPort') }})</i></span>
           <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
@@ -31,12 +31,12 @@
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
-              <span slot="label">maxActiveNodes <i class="help-tips">( {{ $t('configManage.helpTips.maxActiveNodes') }} )</i></span>
+              <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configManage.helpTips.maxActiveNodes') }})</i></span>
               <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
-              <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">( {{ $t('configManage.helpTips.maxActiveNodesWithSameIp') }} )</i></span>
+              <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configManage.helpTips.maxActiveNodesWithSameIp') }})</i></span>
               <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 

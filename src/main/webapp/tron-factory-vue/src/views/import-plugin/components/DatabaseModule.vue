@@ -8,8 +8,8 @@
 
         <el-form-item prop="dbEngine">
           <el-radio-group v-model="form.dbEngine">
-            <el-radio disabled :label="'leveldb'">leveldb</el-radio>
-            <el-radio disabled :label="'rocksdb'">rocksdb</el-radio>
+            <el-radio disabled :label="'leveldb'">LevelDB</el-radio>
+            <el-radio disabled :label="'rocksdb'">RocksDB</el-radio>
           </el-radio-group>
         </el-form-item>
 

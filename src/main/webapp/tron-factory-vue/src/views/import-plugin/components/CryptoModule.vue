@@ -7,8 +7,8 @@
 
         <el-form-item prop="crypto">
           <el-radio-group v-model="form.crypto">
-            <el-radio :label="'eckey'">eckey</el-radio>
-            <el-radio :label="'sm2'">sm2</el-radio>
+            <el-radio :label="'eckey'">ECKey</el-radio>
+            <el-radio :label="'sm2'">SM2</el-radio>
           </el-radio-group>
         </el-form-item>
 
