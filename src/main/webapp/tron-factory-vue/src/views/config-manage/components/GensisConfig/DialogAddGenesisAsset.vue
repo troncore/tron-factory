@@ -125,7 +125,7 @@ export default {
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
         ],
         accountType: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: this.$t('base.pleaseSelect'), trigger: 'blur', },
         ],
         address: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },

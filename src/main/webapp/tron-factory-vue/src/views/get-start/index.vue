@@ -74,9 +74,9 @@ export default {
     handleViewDocument() {
       let currentLanguage = sessionStorage.getItem('currentLang')
       if (currentLanguage === 'en-US') {
-        window.open('http://39.106.174.213/wubin1/one-click-deployment/blob/master/README.md', '_blank')
+        window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/develop/README.md', '_blank')
       } else {
-        window.open('http://39.106.174.213/wubin1/one-click-deployment/blob/master/README.zh-CN.md', '_blank')
+        window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/develop/README.zh-CN.md', '_blank')
       }
     },
   },
