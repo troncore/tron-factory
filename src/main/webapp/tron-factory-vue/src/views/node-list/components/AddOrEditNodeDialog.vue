@@ -26,7 +26,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.id" type="number"  :maxlength="50" :placeholder="$t('nodeList.valid.positiveInteger')" :disabled="!isAdding"></el-input>
+          <el-input v-model.trim="form.id" tabindex="20" type="number" :maxlength="50" :placeholder="$t('nodeList.valid.positiveInteger')" :disabled="!isAdding"></el-input>
         </el-form-item>
 
         <el-form-item prop="userName">
@@ -36,7 +36,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.userName" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.userName" tabindex="21" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="ip">
@@ -47,7 +47,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.ip" :maxlength="50" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
+          <el-input v-model.trim="form.ip" tabindex="22" :maxlength="50" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
         </el-form-item>
 
         <el-form-item prop="port">
@@ -58,7 +58,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.port" :maxlength="50" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
+          <el-input v-model.trim="form.port" tabindex="23" :maxlength="50" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
         </el-form-item>
 
         <el-form-item prop="isSR">
@@ -92,7 +92,7 @@
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
-              <el-input :maxlength="100" v-model.trim="form.url" :placeholder="$t('nodeList.valid.inputURL')"></el-input>
+              <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :placeholder="$t('nodeList.valid.inputURL')"></el-input>
             </el-form-item>
 
             <el-form-item prop="voteCount">
@@ -102,7 +102,7 @@
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
-              <el-input v-model.trim="form.voteCount" type="number" :maxlength="20" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
+              <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
             </el-form-item>
 
             <el-form-item v-if="!isAdding">
@@ -122,7 +122,7 @@
                   <i class="fa fa-question-circle-o"></i>
                 </el-tooltip>
               </span>
-              <el-input v-model.trim="form.privateKey" type="textarea" :maxlength="1000" :placeholder="$t('nodeList.valid.inputPrivateKey')"></el-input>
+              <el-input v-model.trim="form.privateKey" tabindex="28" type="textarea" :maxlength="1000" :placeholder="$t('nodeList.valid.inputPrivateKey')"></el-input>
             </el-form-item>
           </div>
         </el-collapse-transition>
@@ -151,6 +151,7 @@ export default {
         isSR: false,
         needSyncCheck: false,
       },
+      tabIndex: 20,
       dialogTitle: this.$t('nodeList.addNode'),
       loading: false,
     }

@@ -3,19 +3,19 @@
     <div class="box-header title">{{ $t('configManage.databaseConfig') }}</div>
     <div class="box-body">
       <el-form ref="database-config-form" :model="form" label-position="left" label-width="200px">
-        <el-form-item :label="$t('configManage.isWriteSync')" prop="storage_db_sync">
-          <el-switch v-model="form.storage_db_sync"></el-switch>
-        </el-form-item>
-
-        <el-form-item :label="$t('configManage.isOpenTransaction')" prop="storage_transHistory_switch">
-          <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
-        </el-form-item>
 
         <el-form-item :label="$t('configManage.selectDatabaseConfig')" prop="storage_db_engine">
           <el-radio-group v-model="form.storage_db_engine">
             <el-radio :label="'LEVELDB'">LevelDB</el-radio>
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('configManage.isWriteSync')" prop="storage_db_sync">
+          <el-switch v-model="form.storage_db_sync"></el-switch>
+        </el-form-item>
+
+        <el-form-item :label="$t('configManage.isOpenTransaction')" prop="storage_transHistory_switch">
+          <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
         </el-form-item>
 
         <el-form-item :label="$t('configManage.isOpenIndexDirectory')" prop="storage_index_directory">

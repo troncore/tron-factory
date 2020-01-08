@@ -1,34 +1,36 @@
 <template>
   <div class="box-view transaction-module">
-    <div class="box-header title">{{ $t('importPlugin.transactionModule') }}</div>
-
     <div class="box-body">
-      <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
-        <el-form-item class="transaction-list" prop="transaction">
-          <el-checkbox-group v-model="form.transaction">
-            <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-
-        <div class="more-form">
-          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('importPlugin.moreSetting') }}</el-button>
+      <div class="box-card">
+        <div class="card-header">{{ $t('importPlugin.consensusModule') }}</div>
+        <div class="consensus-list">
+          <span class="consensus-item">DPoS</span>
         </div>
+      </div>
 
-        <el-collapse-transition>
-          <div v-if="showMore">
-            <el-form-item class="custom-transaction" props="customTransaction">
-              <el-checkbox v-model="checkCustomTransaction">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
-              <el-input
-                v-model.trim="form.customTransaction"
-                type="textarea"
-                :autosize="{ minRows: 4, maxRows: 6 }"
-                :maxlength="300"
-                :placeholder="$t('importPlugin.valid.inputCustomTransaction')">
-              </el-input>
-            </el-form-item>
-          </div>
-        </el-collapse-transition>
-      </el-form>
+      <div class="box-card">
+        <div class="card-header">{{ $t('importPlugin.transactionModule') }}</div>
+
+        <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
+          <el-form-item class="transaction-list" prop="transaction">
+            <el-checkbox-group v-model="form.transaction">
+              <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+
+          <el-form-item class="custom-transaction" props="customTransaction">
+            <el-checkbox v-model="checkCustomTransaction">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
+            <el-input
+              v-model.trim="form.customTransaction"
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 6 }"
+              :maxlength="300"
+              :disabled="!checkCustomTransaction"
+              :placeholder="$t(checkCustomTransaction ? 'importPlugin.valid.inputCustomTransaction': 'importPlugin.valid.checkCustomTransaction')">
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
 
     <div class="box-footer align-right">
@@ -60,7 +62,7 @@
           transaction: [{ required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },],
         },
         contentShow: true,
-        transactionList: require('./transactionModuleList.json') || [],
+        transactionList: require('../transactionModuleList.json') || [],
         moreSetting: false,
 
         loading: false,
@@ -128,24 +130,44 @@
   &.box-view {
     .box-body {
       width: 100%;
+
+      .more-form {
+        margin: 0;
+      }
+    }
+  }
+
+  .box-card {
+    margin-bottom: 40px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .card-header {
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #081C56;
     }
   }
 
   .transaction-list {
     display: block;
     width: 100%;
+    margin-bottom: 0;
 
     .el-checkbox {
       display: inline-flex;
       align-items: center;
-      min-width: 199px;
-      margin-right: 150px;
-      margin-bottom: 30px;
+      min-width: 200px;
+      margin-right: 100px;
+      margin-bottom: 14px;
     }
   }
 
   .custom-transaction {
     width: 50%;
+    margin: 0;
+
     .el-checkbox__label {
       font-size: 16px;
       color: rgba(8, 28, 86, .7);

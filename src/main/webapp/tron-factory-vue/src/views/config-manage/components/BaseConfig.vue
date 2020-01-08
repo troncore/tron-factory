@@ -26,17 +26,17 @@
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item prop="block_proposalExpireTime">
-              <span slot="label">blockProposalExpireTime <i class="help-tips">({{ $t('configManage.helpTips.blockProposalExpireTime') }}：ms)</i></span>
+              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configManage.helpTips.blockProposalExpireTime') }}：ms)</i></span>
               <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item prop="node_blockProducedTimeOut">
-              <span slot="label">nodeBlockProducedTimeOut <i class="help-tips">({{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}：ms)</i></span>
-              <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}：0 ～ 100%)</i></span>
+              <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item prop="node_minParticipationRate">
-              <span slot="label">nodeMinParticipationRate <i class="help-tips">({{ $t('configManage.helpTips.nodeMinParticipationRate') }})</i></span>
+              <span slot="label">participationRate <i class="help-tips">({{ $t('configManage.helpTips.nodeMinParticipationRate') }})</i></span>
               <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
           </div>
@@ -94,6 +94,13 @@ export default {
           callback()
         }
       }
+      const validMaxNum1 = (rule, value, callback) => {
+        if (value > 100) {
+          callback(new Error(this.$t('configManage.valid.maxNumberValue')))
+        } else {
+          callback()
+        }
+      }
       return {
         chainId: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -116,7 +123,7 @@ export default {
         node_blockProducedTimeOut: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: validateNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
+          { validator: validMaxNum1, trigger: 'blur', },
         ],
         node_minParticipationRate: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },

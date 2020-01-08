@@ -16,9 +16,9 @@ export default {
   assetDeleteFail: '删除asset失败',
   witnessDialogTitle: 'Witness配置',
 
+  selectDatabaseConfig: '数据库引擎',
   isWriteSync: '是否同步写入',
   isOpenTransaction: '是否打开 transaction',
-  selectDatabaseConfig: '选择数据库配置',
   isOpenIndexDirectory: '是否打开 index 开关',
   isNeedToUpdateAsset: '是否需要更新 assets',
 
@@ -27,7 +27,7 @@ export default {
     maxVoteCountValue: 'Vote Count 填写额超过最大值',
     gteZeroInt: '请输入大于或等于0的整数',
     gtZeroInt: '请输入大于0的整数',
-    maxNumberValue: '数字超过最大限额',
+    maxNumberValue: '数值超过最大范围',
     maxPortValue: '端口号不能超过65535',
     listenPort: '请输入listen端口号',
     mainnetPlaceholder: '主网p2pversion不可使用',
@@ -39,14 +39,14 @@ export default {
   helpTips: {
     accountName: '账户名',
     accountType: '账户类型',
-    address: '账户地址',
+    address: 'Base58Check 地址',
     balance: '账户初始余额, 单位 SUN',
 
     chainId: '当前区块链 ID',
-    maintenanceTimeInterval: '维护时间间隔',
+    maintenanceTimeInterval: '维护期的时间间隔',
     blockProposalExpireTime: '提案失效时间',
-    nodeBlockProducedTimeOut: '节点区块产生超时时间',
-    nodeMinParticipationRate: '节点最小参与率',
+    nodeBlockProducedTimeOut: '节点区块产生超时比重',
+    nodeMinParticipationRate: '节点最小参与度',
 
     maxHttpConnectNumber: '最大 HTTP 连接数',
     httpFullNodePort: 'FullNode HTTP 端口',
@@ -66,7 +66,7 @@ export default {
   assetSaveSuccess: '保存创世信息配置成功',
   baseSaveSuccess: '保存基础配置成功',
   networkSaveSuccess: '保存网络链接配置成功',
-  databaseSaveSuccess: '保存网络链接配置成功',
+  databaseSaveSuccess: '保存数据库配置成功',
   p2pSaveSuccess: '保存 P2P 配置成功',
 
 }

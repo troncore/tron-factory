@@ -19,7 +19,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.accountName" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.accountName" tabindex="26" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="accountType">
@@ -29,7 +29,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="form.accountType" :placeholder="$t('base.pleaseSelect')">
+          <el-select v-model="form.accountType" tabindex="27" filterable clearable :placeholder="$t('base.pleaseSelect')">
             <el-option
               v-for="item in accountTypeOptions"
               :key="item.value"
@@ -46,7 +46,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.address" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.address" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="balance" prop="balance">
@@ -56,7 +56,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.balance" type="number" :maxlength="22" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.balance" tabindex="29" type="number" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
 

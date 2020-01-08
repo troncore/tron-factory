@@ -1,59 +1,90 @@
-<!--
-  @description configure manage
-  @Author: Jason.Kang
-  @create_date: 2019-12-23
--->
 <template>
   <div class="page-view import-plugin">
+    <div class="box-view">
+      <div class="page-body">
 
-    <div class="im-steps">
-      <div :class="['im-step consensus', { active: 1 <= currentStep, 'is-current': 1 === currentStep }]" @click="handleSkipStep(1)"><span>{{ $t('importPlugin.consensusModule') }}</span></div>
-      <div :class="['im-step transaction', { active: 2 <= currentStep , 'is-current': 2 === currentStep}]" @click="handleSkipStep(2)"><span>{{ $t('importPlugin.transactionModule') }}</span></div>
-      <!--<div :class="['im-step database', { active: 3 <= currentStep, 'is-current': 3 === currentStep }]" @click="handleSkipStep(3)"><span>{{ $t('importPlugin.databaseModule') }}</span></div>-->
+        <div class="box-card">
+          <div class="card-header">{{ $t('importPlugin.consensusModule') }}</div>
+          <div class="consensus-list">
+            <span class="consensus-item">DPoS</span>
+          </div>
+        </div>
+
+        <div class="box-card">
+          <div class="card-header">{{ $t('importPlugin.transactionModule') }}</div>
+          <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
+
+            <el-form-item class="transaction-list" prop="transaction">
+              <el-checkbox-group v-model="form.transaction">
+                <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+
+            <el-form-item class="custom-transaction" props="customTransaction">
+              <el-checkbox v-model="checkCustomTransaction">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
+              <el-input
+                v-model.trim="form.customTransaction"
+                type="textarea"
+                :autosize="{ minRows: 4, maxRows: 6 }"
+                :maxlength="300"
+                :disabled="!checkCustomTransaction"
+                :placeholder="$t(checkCustomTransaction ? 'importPlugin.valid.inputCustomTransaction': 'importPlugin.valid.checkCustomTransaction')">
+              </el-input>
+            </el-form-item>
+
+          </el-form>
+        </div>
+      </div>
+
+      <div class="page-footer align-right">
+        <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      </div>
     </div>
-
-    <component
-      :is="stepMapConfig[currentStep]"
-      :plugin-info="pluginInfo"
-      @prev-step="handlePrevStep"
-      @next-step="handleNextStep" />
-
   </div>
 </template>
 <script>
-import ConsensusModule from './components/ConsensusModule'
-import TransactionModule from './components/TransactionModule'
-import DatabaseModule from './components/DatabaseModule'
-
 import { mapMutations } from "vuex";
 
 export default {
   name: 'import-plugin',
-  components: {
-    ConsensusModule,
-    TransactionModule,
-    DatabaseModule,
+  props: {
+    pluginInfo: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
-      // plugin module info
-      pluginInfo: {},
+      form: {
+        transaction: [],
+        customTransaction: '',
+      },
+      showMore: false,
+      checkCustomTransaction: false,
+      customTransactionIndex: -1, // if customTransaction exist, return its index
+      formRules: {
+        transaction: [{ required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },],
+      },
+      contentShow: true,
+      transactionList: require('./transactionModuleList.json') || [],
+      moreSetting: false,
 
-      currentStep: 1,
-      // key is current step
-      // value is current component name
-      stepMapConfig: {
-        1: 'ConsensusModule',
-        2: 'TransactionModule',
-        3: 'DatabaseModule',
-      },
-      stepRange: {
-        min: 1,
-        max: 2,
-      },
+      loading: false,
+
     }
   },
 
+  watch: {
+    pluginInfo: {
+      handler (val = {}) {
+        this.form.customTransaction = val.customTransaction || ''
+        this.form.transaction = val.transaction
+
+        if (this.form.customTransaction) this.checkCustomTransaction = true
+      },
+      immediate: true,
+    },
+  },
   created() {
     this.initPluginInfo()
   },
@@ -73,29 +104,42 @@ export default {
         })
       })
     },
+    handleSubmit() {
+      this.$refs['form-box'].validate(valid => {
+        if (valid) {
+          if (this.checkCustomTransaction) {
+            if (!this.form.customTransaction.length) {
+              this.$message.warning(this.$t('importPlugin.valid.customTransaction'),)
+              return
+            }
+            else if (!this.form.customTransaction.endsWith('.jar')) {
+              this.$message.warning(this.$t('importPlugin.valid.pathEndJAR'),)
+              return
+            }
+          } else if (this.form.customTransaction) {
+            this.$message.warning(this.$t('importPlugin.valid.checkCustomTransaction'),)
+            return
+          }
 
-    handleSkipStep(step) {
-      this.currentStep = step
-    },
 
-    // skip prev step
-    handlePrevStep () {
-      let step = this.currentStep - 1
-      this.currentStep = step >= this.stepRange.min ? step : this.stepRange.min
-    },
+          let params = {
+            transaction: this.form.transaction,
+            customTransaction: this.form.customTransaction
+          }
 
-    // skip next step
-    handleNextStep () {
-      let step = this.currentStep + 1
+          this.loading = true
+          this.$_api.importPlugin.transactionApi(params, (err, res) => {
+            this.loading = false
+            if (err) return
 
-      if (step <= this.stepRange.max) {
-        this.currentStep = step
-        this.initPluginInfo()
-      } else {
-        this.updateMenuList({ activeName: 'deploy-nodes' })
+            this.$message.success(this.$t('base.success.save'))
 
-        this.$router.push({ path: "/deploy-nodes" })
-      }
+            this.updateMenuList({ activeName: 'deploy-nodes' })
+
+            this.$router.push({ path: "/deploy-nodes" })
+          })
+        }
+      })
     },
   },
 }
@@ -104,141 +148,53 @@ export default {
 @import "~@/assets/styles/base.scss";
 
 .import-plugin {
-  .im-steps {
-    display: flex;
-    justify-content: space-between;
+  .box-card {
     margin-bottom: 40px;
-    width: 500px;
-
-    .im-step {
-      &:not(:last-child) {
-        flex: 1;
-      }
-      position: relative;
-      padding-top: 100px;
-      cursor: pointer;
-      &:last-child {
-        width: 120px;
-      }
-      span {
-        display: inline-block;
-        width: 120px;
-        text-align: center;
-        color: #999;
-      }
-      &:before {
-        content: '';
-        display: inline-block;
-        position: absolute;
-        top: 10px;
-        left: 15px;
-        width: 90px;
-        height: 90px;
-        background-repeat: no-repeat;
-        background-size: 100% auto;
-        background-position: center center;
-        border-radius: 50%;
-        overflow: auto;
-      }
-      &.active:before {
-        left: 20px;
-        width: 80px;
-        height: 80px;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
-      }
-      &.is-current:before {
-        box-shadow: 0 0 10px 0 theme-color(.3);
-      }
-      &.active span {
-        color: #333;
-      }
-      &.is-current span {
-        font-size: 16px;
-        font-weight: bold;
-        color: theme-color();
-      }
-
-      &.consensus:before {
-        background-image: url(~@/assets/images/icon-gongshimokuai-disabled.png);
-      }
-      &.consensus.active:before {
-        background-image: url(~@/assets/images/icon-gongshimokuai-active.png);
-      }
-
-      &.transaction:before {
-        background-image: url(~@/assets/images/icon-jiaoyimokuai-disabled.png);
-      }
-      &.transaction.active:before {
-        background-image: url(~@/assets/images/icon-jiaoyimokuai-active.png);
-      }
-
-      &.database:before {
-        background-image: url(~@/assets/images/icon-shujukumokuai-disabled.png);
-      }
-      &.database.active:before {
-        background-image: url(~@/assets/images/icon-shujukumokuai-active.png);
-      }
-
-      &.crypto:before {
-        background-image: url(~@/assets/images/icon-shujukumokuai-disabled.png);
-      }
-      &.crypto.active:before {
-        background-image: url(~@/assets/images/icon-shujukumokuai-active.png);
-      }
-
-      &:after {
-        content: '';
-        display: inline-block;
-        position: absolute;
-        right: calc((100% - 120px) / 2);
-        top: 60px;
-        transform: translate(50%, -50%);
-        width: 48px;
-        height: 35px;
-        background-image: url(~@/assets/images/icon-stepjiantou.png);
-        background-repeat: no-repeat;
-        background-size: 100% auto;
-      }
-
-      &:last-child:after {
-        display: none;
-      }
+    &:last-child {
+      margin-bottom: 0;
     }
-  }
-}
-
-/deep/ .box-view {
-  .box-header {
-    margin-bottom: 30px;
-    &.title {
-      font-size: 20px;
+    .card-header {
+      margin-bottom: 20px;
+      font-size: 18px;
       font-weight: bold;
       color: #081C56;
     }
   }
 
-  .box-body {
-    width: 500px;
+  .transaction-list {
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
 
-    .more-form {
-      margin-top: 20px;
-      .el-button {
-        font-size: 18px;
-        font-weight: bold;
-      }
-    }
-
-    /deep/ .el-form-item {
-      .el-form-item__label {
-        padding: 0;
-        font-size: 16px;
-        color: rgba(8, 28, 86, .7);
-      }
+    .el-checkbox {
+      display: inline-flex;
+      align-items: center;
+      min-width: 200px;
+      margin-right: 100px;
+      margin-bottom: 14px;
     }
   }
 
+  .custom-transaction {
+    width: 50%;
+    margin: 20px 0 0;
+
+    .el-checkbox__label {
+      font-size: 16px;
+      color: rgba(8, 28, 86, .7);
+    }
+  }
+
+  /deep/ .el-form-item {
+    .el-form-item__label {
+      padding: 0;
+      font-size: 16px;
+      color: rgba(8, 28, 86, .7);
+    }
+  }
   .box-footer {
     margin-top: 40px;
   }
 }
+
 </style>

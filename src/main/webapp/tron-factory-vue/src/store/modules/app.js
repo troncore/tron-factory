@@ -15,11 +15,18 @@ function activeMenuItem (menuList, activeName) {
   })
 }
 
+// Change this value, it will change aside menu status because it reset the localstorage value
+const menuListIdInStorage = 2 // when the menu.json value changed, need change this value by increment 1
+
 export default {
   namespaced: true,
   state: {
     isCollapseAside: localStorage.getItem('isCollapseAside') === 'true',
     menuList: [],
+
+    // for localStorage
+    oldMenuListKey: 'menuList' + (menuListIdInStorage - 1),
+    newMenuListKey: 'menuList' + menuListIdInStorage,
   },
 
   getters: {
@@ -41,15 +48,18 @@ export default {
       if (payload.activeNames) initMenuList(state.menuList, payload.activeNames)
       else if (payload.activeName) activeMenuItem(state.menuList, payload.activeName)
 
-      localStorage.setItem('menuList1', JSON.stringify(state.menuList))
+      localStorage.setItem(state.newMenuListKey, JSON.stringify(state.menuList))
     },
 
     SET_MENU_LIST (state, payload = { menuList: []}) {
       const  menu = payload.menuList || []
-      const  storedMenu = JSON.parse(localStorage.getItem('menuList1') || '[]')
+      if (localStorage.getItem(state.oldMenuListKey)) {
+        localStorage.removeItem(state.oldMenuListKey)
+      }
+      const  storedMenu = JSON.parse(localStorage.getItem(state.newMenuListKey) || '[]')
 
       state.menuList = storedMenu.length ? storedMenu : menu
-      localStorage.setItem('menuList1', JSON.stringify(state.menuList))
+      localStorage.setItem(state.newMenuListKey, JSON.stringify(state.menuList))
     }
   },
 
