@@ -10,8 +10,6 @@ Need to implement in advance [free login](https://www.jianshu.com/p/13919b5ba8a2
 
 Deploy node needs [java-tron-1.0.0.zip build](https://github.com/tronprotocol/java-tron/blob/develop/build.md)
 
-If front-end browser and the back-end server not in one computer, we needs to modified the corresponding variable VUE_APP_BASE_API in src/main/webapp/.env.development.
-
 ### 2.Home
 
 Mainly show the content operation steps of the one-click deployment and related documentation

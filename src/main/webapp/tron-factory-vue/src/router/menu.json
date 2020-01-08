@@ -38,13 +38,5 @@
     "icon": "el-icon-share",
     "auth": true,
     "disabled": true
-  },
-  {
-    "path": "https://tronscan.org/",
-    "name": "tronscan",
-    "title": "tronscanMenu",
-    "icon": "el-icon-link",
-    "auth": false,
-    "disabled": false
   }
 ]
