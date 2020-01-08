@@ -15,7 +15,8 @@
           <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item label="seedNode" prop="seed_node_ip_list" class="seed-node-list">
+        <el-form-item label="seedNodeList" prop="seed_node_ip_list" class="seed-node-list">
+          <span slot="label">seedNodeList <i class="help-tips">({{ $t('configManage.helpTips.seedNodeList') }})</i></span>
           <el-checkbox-group v-model="form.seed_node_ip_list">
             <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
               <el-input v-model="form.node_listen_port" :placeholder="$t('configManage.valid.listenPort')" disabled>

@@ -8,7 +8,7 @@
           <el-button @click="handleAddAsset(false, item, index)" style="width:100%">{{ item.accountName }} <i class="el-icon-edit"></i></el-button>
           <i class="delete-btn el-icon-circle-close" @click="handleDeleteAssets(index)"></i>
         </div>
-        <el-button class="el-icon-plus" type="primary" size="small" @click="handleAddAsset"> New Asset</el-button>
+        <el-button type="primary" size="small" @click="handleAddAsset"><i class="el-icon-plus"></i> New Asset</el-button>
       </div>
 
       <div class="asset-list">

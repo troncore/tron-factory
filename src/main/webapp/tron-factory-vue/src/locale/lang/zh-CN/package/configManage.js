@@ -56,6 +56,7 @@ export default {
 
     p2pVersion: 'P2P 版本号',
     listenPort: '监听端口',
+    seedNodeList: 'seedNode 列表',
     maxActiveNodes: '最大活跃节点数',
     maxActiveNodesWithSameIp: '同一 IP 最大活跃节点数',
     activeConnectFactor: '同一 IP 最大连接数',

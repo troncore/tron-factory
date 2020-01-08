@@ -2,7 +2,7 @@
   <div class="box-view database-config">
     <div class="box-header title">{{ $t('configManage.databaseConfig') }}</div>
     <div class="box-body">
-      <el-form ref="database-config-form" :rules="formRules" :model="form" label-position="top">
+      <el-form ref="database-config-form" :model="form" label-position="left" label-width="200px">
         <el-form-item :label="$t('configManage.isWriteSync')" prop="storage_db_sync">
           <el-switch v-model="form.storage_db_sync"></el-switch>
         </el-form-item>
@@ -50,11 +50,6 @@ export default {
   data() {
     return {
       form: {},
-      formRules: {
-        storage_db_sync: [
-          { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change', },
-        ],
-      },
       showContent: true,
       loading: false,
     }
