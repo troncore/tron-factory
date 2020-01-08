@@ -47,43 +47,21 @@ import { mapMutations } from "vuex";
 
 export default {
   name: 'import-plugin',
-  props: {
-    pluginInfo: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       form: {
         transaction: [],
         customTransaction: '',
       },
-      showMore: false,
+      consensus: '',
       checkCustomTransaction: false,
-      customTransactionIndex: -1, // if customTransaction exist, return its index
+      transactionList: require('./transactionModuleList.json') || [],
+
       formRules: {
         transaction: [{ required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },],
       },
-      contentShow: true,
-      transactionList: require('./transactionModuleList.json') || [],
-      moreSetting: false,
-
       loading: false,
-
     }
-  },
-
-  watch: {
-    pluginInfo: {
-      handler (val = {}) {
-        this.form.customTransaction = val.customTransaction || ''
-        this.form.transaction = val.transaction
-
-        if (this.form.customTransaction) this.checkCustomTransaction = true
-      },
-      immediate: true,
-    },
   },
   created() {
     this.initPluginInfo()
@@ -93,23 +71,27 @@ export default {
     ...mapMutations('app', {
       updateMenuList: 'updateMenuList',
     }),
+
     // get plugin info
     initPluginInfo () {
       return new Promise(resolve => {
         this.$_api.importPlugin.pluginConfigApi({}, (err, res = {}) => {
           if (err) return
 
-          this.pluginInfo = res
-          resolve(this.pluginInfo)
+          this.consensus = res.consensus
+          this.form.customTransaction = res.customTransaction || ''
+          this.checkCustomTransaction = !!this.form.customTransaction
+          this.form.transaction = res.transaction || []
         })
       })
     },
+
     handleSubmit() {
       this.$refs['form-box'].validate(valid => {
         if (valid) {
           if (this.checkCustomTransaction) {
-            if (!this.form.customTransaction.length) {
-              this.$message.warning(this.$t('importPlugin.valid.customTransaction'),)
+            if (!this.form.customTransaction) {
+              this.$message.warning(this.$t('importPlugin.valid.inputCustomTransaction'),)
               return
             }
             else if (!this.form.customTransaction.endsWith('.jar')) {
