@@ -9,8 +9,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.typesafe.config.Config;
+import common.crypto.SM3Hash;
 import common.crypto.SignInterface;
 import common.crypto.sm2.SM2;
+import common.utils.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -83,6 +86,14 @@ public class Wallet {
   private static final String FilePath = "Wallet";
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
+  private static boolean isEckey = true;
+
+  public static void init() {
+    Config config = Configuration.getByPath("config.conf");
+    if (config.hasPath("crypto.engine")) {
+      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+    }
+  }
 
   static {
     objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -167,8 +178,15 @@ public class Wallet {
   }
 
   private static String encode58Check(byte[] input) {
-    byte[] hash0 = Sha256Hash.hash(input);
-    byte[] hash1 = Sha256Hash.hash(hash0);
+    byte[] hash0;
+    byte[] hash1;
+    if (isEckey) {
+      hash0 = Sha256Hash.hash(input);
+      hash1 = Sha256Hash.hash(hash0);
+    } else {
+      hash0 = SM3Hash.hash(input);
+      hash1 = SM3Hash.hash(hash0);
+    }
     byte[] inputCheck = new byte[input.length + 4];
     System.arraycopy(input, 0, inputCheck, 0, input.length);
     System.arraycopy(hash1, 0, inputCheck, input.length, 4);
@@ -469,14 +487,22 @@ public class Wallet {
   }
 
   public static String address2Encode58CheckDemo(byte[] input) {
-    byte[] hash0 = Sha256Hash.hash(input);
-    String sha256_0FormatString = String.format("sha256_0: %s", ByteArray.toHexString(hash0));
-    LOG.info(sha256_0FormatString);
-
-    byte[] hash1 = Sha256Hash.hash(hash0);
-    String sha256_1FormatString = String.format("sha256_1: %s", ByteArray.toHexString(hash0));
-    LOG.info(sha256_1FormatString);
-
+    byte[] hash1;
+    if (isEckey) {
+      byte[] hash0 = Sha256Hash.hash(input);
+      String sha256_0FormatString = String.format("sha256_0: %s", ByteArray.toHexString(hash0));
+      LOG.info(sha256_0FormatString);
+      hash1 = Sha256Hash.hash(hash0);
+      String sha256_1FormatString = String.format("sha256_1: %s", ByteArray.toHexString(hash0));
+      LOG.info(sha256_1FormatString);
+    } else {
+      byte[] hash0 = SM3Hash.hash(input);
+      String sm3_0FormatString = String.format("sm3_0: %s", ByteArray.toHexString(hash0));
+      LOG.info(sm3_0FormatString);
+      hash1 = SM3Hash.hash(hash0);
+      String sm3_1FormatString = String.format("sm3_1: %s", ByteArray.toHexString(hash0));
+      LOG.info(sm3_1FormatString);
+    }
     byte[] inputCheck = new byte[input.length + 4];
     String checkSumFormatString = String.format("checkSum: %s", ByteArray.toHexString(copyOfRange(hash1, 0, 4)));
     LOG.info(checkSumFormatString);
