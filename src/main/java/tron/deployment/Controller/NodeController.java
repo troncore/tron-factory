@@ -45,6 +45,14 @@ public class NodeController {
 
   private static boolean isEckey = true;
 
+  private void refresh() {
+    Util util = new Util();
+    util.parseConfig();
+    Config config = util.config;
+    if (config.hasPath("crypto.engine")) {
+      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+    }
+  }
   static {
     Util util = new Util();
     util.parseConfig();
@@ -112,6 +120,7 @@ public class NodeController {
 
   @PostMapping(value = "/nodeInfo")
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
+    refresh();
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
