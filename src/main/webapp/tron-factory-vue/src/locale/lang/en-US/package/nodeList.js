@@ -1,0 +1,46 @@
+export default {
+  encryption: '签名算法',
+  addNode: '添加节点',
+  addNodeSuccess: '添加节点成功',
+  addNodeFail: '添加节点失败',
+  deleteNodeSuccess: '删除节点成功',
+  updateNode: '修改节点',
+  updateNodeSuccess: '修改节点成功',
+  updateNodeFail: '修改节点失败',
+
+  sshUserName: 'SSH 用户名',
+  isSR: '是否为 SR',
+
+  helpTips: {
+    crypto: '添加节点之后，签名算法不可修改',
+    id: 'ID 是节点唯一标识',
+    sshUserName: 'SSH 用户名',
+    ip: 'FullNode IP',
+    port: 'FullNode 端口号',
+    isSR: '开启时为 witness 节点，关闭时为 FullNode',
+    needSyncCheck: '是否需要同步检测，新链需要有一个 SR 为 false，其他为 true',
+    url: 'Witness URL',
+    voteCount: '对应投票数量',
+    publicKey: '当前公钥展示',
+    privateKey: '请输入私钥(256位, 16进制编码)',
+  },
+
+  valid: {
+    maxNodeLength: '最多添加 20 个节点',
+    inputID: '请输入 ID',
+    positiveInteger: '请输入大于 0 的整数',
+    rightIP: '请输入有效的 IP 地址',
+    disabledLocalIP: '暂不支持本地情况',
+    hasSameIP: 'IP 不能和已有 IP 相同',
+    maxPortValue: '端口号不能超过 65535',
+    inputURL: '请输入投票的 URL',
+    inputVoteCount: '请输入对应投票数量',
+    gteZeroInt: '请输入大于或等于0的整数',
+    maxNumberValue: '数字超过最大限额',
+    maxVoteCountValue: 'Vote Count 填写额超过最大值',
+    inputPrivateKey: '请输入256位 private key (hex编码)',
+  },
+
+  deleteNodeTipsTitle: '提示',
+  deleteNodeTips: '此操作将删除该节点信息, 是否继续?',
+}

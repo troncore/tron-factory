@@ -131,6 +131,9 @@ export default {
         }
 
         this.tableData = res.sort((x, y) => x.id - y.id)
+
+        if (!this.tableData.length)
+          this.updateMenuList({ activeNames: ['get-start', 'node-list'], })
       })
     },
 

@@ -41,15 +41,15 @@ export default {
       if (payload.activeNames) initMenuList(state.menuList, payload.activeNames)
       else if (payload.activeName) activeMenuItem(state.menuList, payload.activeName)
 
-      localStorage.setItem('menuList', JSON.stringify(state.menuList))
+      localStorage.setItem('menuList1', JSON.stringify(state.menuList))
     },
 
     SET_MENU_LIST (state, payload = { menuList: []}) {
       const  menu = payload.menuList || []
-      const  storedMenu = JSON.parse(localStorage.getItem('menuList') || '[]')
+      const  storedMenu = JSON.parse(localStorage.getItem('menuList1') || '[]')
 
       state.menuList = storedMenu.length ? storedMenu : menu
-      localStorage.setItem('menuList', JSON.stringify(state.menuList))
+      localStorage.setItem('menuList1', JSON.stringify(state.menuList))
     }
   },
 

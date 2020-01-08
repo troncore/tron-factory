@@ -1,18 +1,20 @@
-import base from './base'
+import base from './package/base'
+import menu from './package/menu'
+
 import getStart from './package/getStart'
-import branch from './package/branch'
-import setting from './package/setting'
-import node from './package/node'
-import plugin from './package/plugin'
-import route from './package/route'
+import nodeList from "./package/nodeList";
+import configManage from "./package/configManage";
+import importPlugin from './package/importPlugin'
+import deployNodes from "./package/deployNodes";
+
 
 export default {
   base,
-  getStart,
+  menu,
 
-  ...branch,
-  ...setting,
-  ...node,
-  ...plugin,
-  ...route,
+  getStart,
+  nodeList,
+  configManage,
+  importPlugin,
+  deployNodes,
 }
