@@ -13,8 +13,8 @@
 
         <el-form-item :label="$t('configManage.selectDatabaseConfig')" prop="storage_db_engine">
           <el-radio-group v-model="form.storage_db_engine">
-            <el-radio :label="'LEVELDB'">leveldb</el-radio>
-            <el-radio :label="'ROCKSDB'">rocksdb</el-radio>
+            <el-radio :label="'LEVELDB'">LevelDB</el-radio>
+            <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
         </el-form-item>
 

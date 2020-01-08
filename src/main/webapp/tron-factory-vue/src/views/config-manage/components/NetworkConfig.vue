@@ -5,27 +5,27 @@
     <div class="box-body">
       <el-form ref="network-config-form" :rules="networkRules" :model="form">
         <el-form-item prop="node_maxHttpConnectNumber">
-          <span slot="label">maxHttpConnectNumber <i class="help-tips">( {{ $t('configManage.helpTips.maxHttpConnectNumber') }} )</i></span>
+          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configManage.helpTips.maxHttpConnectNumber') }})</i></span>
           <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_http_fullNodePort">
-          <span slot="label">httpFullNodePort <i class="help-tips">( {{ $t('configManage.helpTips.httpFullNodePort') }} )</i></span>
+          <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configManage.helpTips.httpFullNodePort') }})</i></span>
           <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_http_solidityPort">
-          <span slot="label">httpSolidityPort <i class="help-tips">( {{ $t('configManage.helpTips.httpSolidityPort') }} )</i></span>
+          <span slot="label">httpSolidityPort <i class="help-tips">({{ $t('configManage.helpTips.httpSolidityPort') }})</i></span>
           <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_rpc_port">
-          <span slot="label">rpcPort <i class="help-tips">( {{ $t('configManage.helpTips.rpcPort') }} )</i></span>
+          <span slot="label">rpcPort <i class="help-tips">({{ $t('configManage.helpTips.rpcPort') }})</i></span>
           <el-input v-model.trim="form.node_rpc_port" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_rpc_solidityPort">
-          <span slot="label">rpcSolidityPort <i class="help-tips">( {{ $t('configManage.helpTips.rpcSolidityPort') }} )</i></span>
+          <span slot="label">rpcSolidityPort <i class="help-tips">({{ $t('configManage.helpTips.rpcSolidityPort') }})</i></span>
           <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>

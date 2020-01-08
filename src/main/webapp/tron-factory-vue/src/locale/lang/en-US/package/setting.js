@@ -4,7 +4,7 @@ export default {
   tronSettingBase: 'Basic configuration',
   tronSettingP2p: 'P2p configuration',
   tronSettingDb: 'Database basic configuration',
-  tronSettingHttp: 'Network link configuration(http/rpc)',
+  tronSettingHttp: 'Network link configuration(HTTP/RPC)',
   tronCrossChain: 'Cross-chain configuration',
   tronModifySetting: 'Change setting',
   tronModifySettingSuccess: 'Modify the configuration successfully.',
