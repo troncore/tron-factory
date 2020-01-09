@@ -3,7 +3,7 @@ export default {
   transactionModule: 'Transaction Module',
 
 
-  moreSetting: 'Advanced Configration',
+  moreSetting: 'Advanced configuration',
   customTransactionModule: 'Custom Transaction Module',
 
   valid: {
