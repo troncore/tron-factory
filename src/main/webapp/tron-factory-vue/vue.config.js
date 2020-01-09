@@ -18,6 +18,12 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: { '^/proxy_local': '' },
       },
+      '/proxy_service': {
+        target: 'http://47.252.2.112:8080',
+        changeOrigin: true,
+        xfwd: false,
+        pathRewrite: { '^/proxy_service': '' },
+      }
     },
     host: '127.0.0.1',
     port: 8090,

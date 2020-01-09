@@ -2,15 +2,16 @@ export default {
   consensusModule: 'Consensus Module',
   transactionModule: 'Transaction Module',
 
-  moreSetting: 'Advanced Configuration',
-  customTransactionModule: 'Custom transaction module',
+
+  moreSetting: 'Advanced Configration',
+  customTransactionModule: 'Custom Transaction Module',
 
   valid: {
-    checkCustomTransaction: 'Please check the custom trading module',
-    inputCustomTransaction: '请填写自定义交易模块路径（以.jar结束）',
-    pathEndJAR: '请填写以.jar为结尾的路径',
+    checkCustomTransaction: 'Please enable custom transaction module first',
+    inputCustomTransaction: 'Please input custom transaction module path (ended with .jar)',
+    pathEndJAR: 'Please input a path ended with .jar',
   },
 
-  consensusModuleSaveSuccess: '保存共识模块成功',
-  transactionModuleSaveSuccess: '保存交易模块成功',
+  consensusModuleSaveSuccess: 'Saving Consensus Module Successful',
+  transactionModuleSaveSuccess: 'Saving Transaction Module Successful',
 }

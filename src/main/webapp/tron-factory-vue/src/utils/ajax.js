@@ -3,7 +3,7 @@ import { Notification } from 'element-ui'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-export const proxyApi = isDevelopment ? '/proxy_local' : ''
+export const proxyApi = isDevelopment ? '/proxy_service' : ''
 
 const $axios = Axios.create({
   headers: {
