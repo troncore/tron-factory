@@ -3,7 +3,6 @@
 
     <div class="page-header">
       <div class="title">{{ $t('getStart.webTitle') }}</div>
-      <div class="description">{{ $t('getStart.description') }}</div>
     </div>
 
     <div class="page-main">
@@ -72,7 +71,7 @@ export default {
     },
 
     handleViewDocument() {
-      let currentLanguage = sessionStorage.getItem('currentLang')
+      let currentLanguage = localStorage.getItem('currentLang')
       if (currentLanguage === 'en-US') {
         window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/develop/README.md', '_blank')
       } else {
@@ -106,11 +105,8 @@ export default {
   }
 
   .page-main {
-    margin: 70px 0 120px 0;
+    margin: 90px 0 120px 0;
     text-align: center;
-    @media screen and (max-width: $media1680){
-      margin: 60px 0 90px 0;
-    }
     .start-deploy {
       margin: 0 auto 30px;
       width: 300px;
