@@ -46,14 +46,14 @@ export default {
   },
   methods: {
     getLang () {
-      let lang = sessionStorage.getItem('currentLang')
+      let lang = localStorage.getItem('currentLang')
       this.currentLang = this.languages[lang || 'en-US']
     },
 
     handleCommand(val) {
       this.currentLang = this.languages[val]
       this.$i18n.locale = val
-      sessionStorage.setItem('currentLang', val)
+      localStorage.setItem('currentLang', val)
     },
   },
 }

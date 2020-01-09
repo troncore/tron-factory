@@ -46,7 +46,7 @@ export default {
     maintenanceTimeInterval: 'Maintenance Time Interval',
     blockProposalExpireTime: 'Proposal Expire Time',
     nodeBlockProducedTimeOut: 'Block Produced Time Out Percent',
-    nodeMinParticipationRate: 'Min Particippation Rate',
+    nodeMinParticipationRate: 'Min Participation Rate',
 
     maxHttpConnectNumber: 'Maximum HTTP Connection Number',
     httpFullNodePort: 'FullNode HTTP Port',

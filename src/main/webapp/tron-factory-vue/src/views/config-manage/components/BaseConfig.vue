@@ -31,7 +31,7 @@
             </el-form-item>
 
             <el-form-item prop="node_blockProducedTimeOut">
-              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}：0 ～ 100%)</i></span>
+              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}：0 - 100%)</i></span>
               <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
