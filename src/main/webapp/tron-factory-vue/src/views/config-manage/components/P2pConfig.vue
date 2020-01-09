@@ -27,8 +27,9 @@
         </el-form-item>
 
         <div class="more-form">
-          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('configManage.moreSetting') }}</el-button>
+          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i> {{ $t('configManage.moreSetting') }}</el-button>
         </div>
+
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">

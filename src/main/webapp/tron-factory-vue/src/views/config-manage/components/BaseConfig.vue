@@ -15,23 +15,23 @@
         </el-form-item>
 
         <el-form-item prop="block_maintenanceTimeInterval">
-          <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('configManage.helpTips.maintenanceTimeInterval') }} ：ms)</i></span>
+          <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('configManage.helpTips.maintenanceTimeInterval') }}: ms)</i></span>
           <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <div class="more-form">
-          <el-button class="el-icon-arrow-right el-icon--right" type="text" @click="showMore = !showMore">{{ $t('configManage.moreSetting') }}</el-button>
+          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i> {{ $t('configManage.moreSetting') }}</el-button>
         </div>
 
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item prop="block_proposalExpireTime">
-              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configManage.helpTips.blockProposalExpireTime') }}：ms)</i></span>
+              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configManage.helpTips.blockProposalExpireTime') }}: ms)</i></span>
               <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item prop="node_blockProducedTimeOut">
-              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}：0 ～ 100%)</i></span>
+              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configManage.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100%)</i></span>
               <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 

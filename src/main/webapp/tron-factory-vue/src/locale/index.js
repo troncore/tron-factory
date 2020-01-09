@@ -9,11 +9,11 @@ import lang from './lang'
 Vue.use(VueI18n)
 
 let curBrowserLang = navigator.language || navigator.userLanguage
-if (sessionStorage.getItem('currentLang')) {
-  curBrowserLang = sessionStorage.getItem('currentLang')
+if (localStorage.getItem('currentLang')) {
+  curBrowserLang = localStorage.getItem('currentLang')
 }
 
-sessionStorage.setItem('currentLang', curBrowserLang)
+localStorage.setItem('currentLang', curBrowserLang)
 
 const i18n = new VueI18n({
   locale: curBrowserLang || 'en-US', // default language

@@ -45,7 +45,7 @@ export default {
     chainId: '当前区块链 ID',
     maintenanceTimeInterval: '维护期的时间间隔',
     blockProposalExpireTime: '提案失效时间',
-    nodeBlockProducedTimeOut: '节点区块产生超时比重',
+    nodeBlockProducedTimeOut: '节点区块产生超时比例',
     nodeMinParticipationRate: '节点最小参与度',
 
     maxHttpConnectNumber: '最大 HTTP 连接数',
@@ -59,8 +59,6 @@ export default {
     seedNodeList: '初始种子节点列表',
     maxActiveNodes: '最大活跃节点数',
     maxActiveNodesWithSameIp: '同一 IP 最大活跃节点数',
-    activeConnectFactor: '同一 IP 最大连接数',
-    connectFactor: '同一 IP 最大连接数',
   },
 
   assetSaveSuccess: '保存创世信息配置成功',
