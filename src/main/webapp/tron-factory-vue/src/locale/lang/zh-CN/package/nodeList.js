@@ -21,7 +21,7 @@ export default {
     needSyncCheck: '是否需要同步检测，新链需要有一个 SR 为 false，其他为 true',
     url: 'Witness URL',
     voteCount: '对应投票数量',
-    publicKey: '当前公钥展示',
+    publicKey: '地址',
     privateKey: '请输入私钥(256位, 16进制编码)',
   },
 

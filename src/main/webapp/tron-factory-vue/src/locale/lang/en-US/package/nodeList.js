@@ -21,7 +21,7 @@ export default {
     needSyncCheck: 'Is SyncCheck needed. Newly created chain requires exactly one SR to set this to false',
     url: 'Witness URL',
     voteCount: 'Corresponding Vote Count',
-    publicKey: '当前公钥展示',
+    publicKey: 'Address',
     privateKey: 'Private Key(256-bits, hex encoded)',
   },
 
