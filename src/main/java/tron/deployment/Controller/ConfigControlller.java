@@ -13,6 +13,8 @@ import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromC
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.typesafe.config.Config;
+import common.Util;
 import entity.AssetsEntity;
 import common.Args;
 import common.Common;
@@ -67,7 +69,11 @@ public class ConfigControlller {
 
   // genesisWitnessConfig
   GenesisWitnessConfig genesisWitnessConfig;
-
+  private void refresh() {
+    Util util = new Util();
+    util.parseConfig();
+    Config config = util.config;
+  }
 
   private void initCrossSetting() {
 
@@ -332,9 +338,11 @@ public class ConfigControlller {
 
   @GetMapping(value = "/config")
   public JSONObject getConfig() {
+//    refresh();
     parseConfig();
     JSONObject configObject = getConfigJsonObject(config);
     return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
   }
 
   @GetMapping(value = "/checkBalance")

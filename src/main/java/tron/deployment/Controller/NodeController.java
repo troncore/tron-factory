@@ -1,6 +1,7 @@
 package tron.deployment.Controller;
 
 import static common.LogConfig.LOG;
+import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
 import static wallet.Wallet.hexs2Bytes;
@@ -45,23 +46,15 @@ public class NodeController {
 
   private static boolean isEckey = true;
 
-  private void refresh() {
-    Util util = new Util();
-    util.parseConfig();
-    Config config = util.config;
-    if (config.hasPath("crypto.engine")) {
-      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
-    }
-  }
   static {
-    Util util = new Util();
-    util.parseConfig();
-    Config config = util.config;
-    if (config.hasPath("crypto.engine")) {
-      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+    refresh();
+  }
+  private static void refresh() {
+    parseConfig();
+    if (Util.config.hasPath("crypto.engine")) {
+      isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
-
   private JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
     ConfigGenerator configGenerator = new ConfigGenerator();
 
