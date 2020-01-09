@@ -11,7 +11,7 @@
 
       <!-- choose language -->
       <el-dropdown class="lang-dropdown hover-effect" trigger="click" @command="handleCommand">
-        <div class="avatar-wrapper">{{ currentLang || 'language' }}<i class="el-icon-caret-bottom" /></div>
+        <div class="avatar-wrapper">{{ currentLang || 'Language' }}<i class="el-icon-caret-bottom" /></div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="(value, key) in languages" :key="key" :command="key">
             {{ value }}
