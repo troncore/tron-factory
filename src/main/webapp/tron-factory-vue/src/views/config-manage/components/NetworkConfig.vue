@@ -70,8 +70,8 @@ export default {
         fullNodeHttpEnable: true,
         solidityNodeHttpEnable: true,
         node_maxHttpConnectNumber: '',
-        node_http_solidityPort: '',
         node_http_fullNodePort: '',
+        node_http_solidityPort: '',
         node_rpc_port: '',
         node_rpc_solidityPort: '',
       },
@@ -102,22 +102,38 @@ export default {
           callback()
         }
       }
+
+      let node_maxHttpConnectNumber = [
+        { required: !!this.form.fullNodeHttpEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+      ]
+      let node_http_fullNodePort = [
+        { required: !!this.form.fullNodeHttpEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+      ]
+      if (!!this.form.fullNodeHttpEnable) {
+        node_maxHttpConnectNumber = node_maxHttpConnectNumber.concat([
+          { validator: validNum, trigger: 'blur', },
+          { validator: validMaxNum, trigger: 'blur', }
+        ])
+        node_http_fullNodePort = node_http_fullNodePort.concat([
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
+        ])
+      }
+
+      let node_http_solidityPort = [
+        { required: !!this.form.solidityNodeHttpEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+      ]
+      if (!!this.form.solidityNodeHttpEnable) {
+        node_http_solidityPort = node_http_solidityPort.concat([
+          { validator: validNum, trigger: 'blur', },
+          { validator: validPortNum, trigger: 'blur', },
+        ])
+      }
+
       return {
-        node_maxHttpConnectNumber: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
-        ],
-        node_http_fullNodePort: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
-        ],
-        node_http_solidityPort: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
-        ],
+        node_maxHttpConnectNumber,
+        node_http_fullNodePort,
+        node_http_solidityPort,
         node_rpc_port: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: validNum, trigger: 'blur', },
@@ -145,13 +161,15 @@ export default {
       this.$refs['network-config-form'].validate(valid => {
         if (valid) {
           let params = {
-            maxHttpConnectNumber: this.form.node_maxHttpConnectNumber,
+            fullNodeHttpEnable: this.form.fullNodeHttpEnable,
+            maxHttpConnectNumber: this.form.fullNodeHttpEnable ? this.form.node_maxHttpConnectNumber : undefined,
+            httpFullNodePort: this.form.fullNodeHttpEnable ? this.form.node_http_fullNodePort : undefined,
+
+            solidityNodeHttpEnable: this.form.solidityNodeHttpEnable,
+            httpSolidityPort: this.form.solidityNodeHttpEnable ? this.form.node_http_solidityPort : undefined,
+
             rpcPort: this.form.node_rpc_port,
             rpcSolidityPort: this.form.node_rpc_solidityPort,
-            httpFullNodePort: this.form.node_http_fullNodePort,
-            httpSolidityPort: this.form.node_http_solidityPort,
-            fullNodeHttpEnable: this.form.fullNodeHttpEnable,
-            solidityNodeHttpEnable: this.form.solidityNodeHttpEnable,
           }
 
           this.loading = true
