@@ -69,7 +69,7 @@
   </el-dialog>
 </template>
 <script>
-import TronWeb from 'tronweb'
+import TronWeb from 'tronweb' // https://developers.tron.network/docs/tron-web-intro
 export default {
   name: 'DialogAddGenesisAsset',
   props: [

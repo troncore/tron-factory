@@ -6,5 +6,4 @@ export default {
     importPlugin: 'Import Plugins',
     deployNodes: 'Deploy',
   }
-
 }
