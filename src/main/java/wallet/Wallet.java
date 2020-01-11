@@ -45,6 +45,7 @@ import org.tron.common.crypto.Hash;
 import org.tron.common.crypto.Sha256Sm3Hash;
 import org.tron.common.utils.Base58;
 import org.tron.common.utils.ByteArray;
+import org.tron.common.utils.Sha256Hash;
 import org.tron.common.utils.Utils;
 import org.tron.keystore.CipherException;
 
@@ -180,8 +181,8 @@ public class Wallet {
   private static String encode58Check(byte[] input) {
     byte[] hash0;
     byte[] hash1;
-    hash0 = Sha256Sm3Hash.hash(input);
-    hash1 = Sha256Sm3Hash.hash(hash0);
+    hash0 = Sha256Hash.hash(input);
+    hash1 = Sha256Hash.hash(hash0);
     byte[] inputCheck = new byte[input.length + 4];
     System.arraycopy(input, 0, inputCheck, 0, input.length);
     System.arraycopy(hash1, 0, inputCheck, input.length, 4);
