@@ -42,6 +42,7 @@ import org.spongycastle.math.ec.ECPoint;
 import org.springframework.util.StringUtils;
 import org.tron.common.crypto.ECKey;
 import org.tron.common.crypto.Hash;
+import org.tron.common.crypto.Sha256Sm3Hash;
 import org.tron.common.utils.Base58;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.Sha256Hash;
@@ -180,13 +181,8 @@ public class Wallet {
   private static String encode58Check(byte[] input) {
     byte[] hash0;
     byte[] hash1;
-    if (isEckey) {
-      hash0 = Sha256Hash.hash(input);
-      hash1 = Sha256Hash.hash(hash0);
-    } else {
-      hash0 = SM3Hash.hash(input);
-      hash1 = SM3Hash.hash(hash0);
-    }
+    hash0 = Sha256Hash.hash(input);
+    hash1 = Sha256Hash.hash(hash0);
     byte[] inputCheck = new byte[input.length + 4];
     System.arraycopy(input, 0, inputCheck, 0, input.length);
     System.arraycopy(hash1, 0, inputCheck, input.length, 4);
@@ -489,10 +485,10 @@ public class Wallet {
   public static String address2Encode58CheckDemo(byte[] input) {
     byte[] hash1;
     if (isEckey) {
-      byte[] hash0 = Sha256Hash.hash(input);
+      byte[] hash0 = Sha256Sm3Hash.hash(input);
       String sha256_0FormatString = String.format("sha256_0: %s", ByteArray.toHexString(hash0));
       LOG.info(sha256_0FormatString);
-      hash1 = Sha256Hash.hash(hash0);
+      hash1 = Sha256Sm3Hash.hash(hash0);
       String sha256_1FormatString = String.format("sha256_1: %s", ByteArray.toHexString(hash0));
       LOG.info(sha256_1FormatString);
     } else {
