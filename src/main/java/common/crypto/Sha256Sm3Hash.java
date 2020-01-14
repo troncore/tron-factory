@@ -1,4 +1,4 @@
-package org.tron.common.crypto;
+package common.crypto;
 
 /*
  * Copyright 2011 Google Inc.
@@ -47,7 +47,7 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
   private static boolean isEckey = true;
 
   static {
-    Config config = Configuration.getByPath("config.conf"); // it is needs set to be a constant
+    Config config = Configuration.getByPath(".config.conf"); // it is needs set to be a constant
     if (config.hasPath("crypto.engine")) {
       isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
       System.out.println("WalletUtils getConfig isEckey: " + isEckey);

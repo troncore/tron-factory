@@ -484,21 +484,21 @@ public class Wallet {
 
   public static String address2Encode58CheckDemo(byte[] input) {
     byte[] hash1;
-    if (isEckey) {
+//    if (isEckey) {
       byte[] hash0 = Sha256Sm3Hash.hash(input);
       String sha256_0FormatString = String.format("sha256_0: %s", ByteArray.toHexString(hash0));
       LOG.info(sha256_0FormatString);
       hash1 = Sha256Sm3Hash.hash(hash0);
       String sha256_1FormatString = String.format("sha256_1: %s", ByteArray.toHexString(hash0));
       LOG.info(sha256_1FormatString);
-    } else {
-      byte[] hash0 = SM3Hash.hash(input);
-      String sm3_0FormatString = String.format("sm3_0: %s", ByteArray.toHexString(hash0));
-      LOG.info(sm3_0FormatString);
-      hash1 = SM3Hash.hash(hash0);
-      String sm3_1FormatString = String.format("sm3_1: %s", ByteArray.toHexString(hash0));
-      LOG.info(sm3_1FormatString);
-    }
+//    } else {
+//      byte[] hash0 = SM3Hash.hash(input);
+//      String sm3_0FormatString = String.format("sm3_0: %s", ByteArray.toHexString(hash0));
+//      LOG.info(sm3_0FormatString);
+//      hash1 = SM3Hash.hash(hash0);
+//      String sm3_1FormatString = String.format("sm3_1: %s", ByteArray.toHexString(hash0));
+//      LOG.info(sm3_1FormatString);
+//    }
     byte[] inputCheck = new byte[input.length + 4];
     String checkSumFormatString = String.format("checkSum: %s", ByteArray.toHexString(copyOfRange(hash1, 0, 4)));
     LOG.info(checkSumFormatString);
