@@ -1,6 +1,8 @@
 package entity;
 
-import org.tron.core.Wallet;
+import static wallet.Wallet.encode58Check;
+
+
 import org.tron.core.config.args.Account;
 
 public class AssetsEntity {
@@ -12,7 +14,7 @@ public class AssetsEntity {
   public AssetsEntity(Account account) {
     this.accountName = account.getAccountName().toStringUtf8();
     this.accountType = account.getAccountType().toString();
-    this.address = Wallet.encode58Check(account.getAddress());
+    this.address = encode58Check(account.getAddress());
     this.balance = String.valueOf(account.getBalance());
   }
 }

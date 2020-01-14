@@ -1,6 +1,12 @@
 package config;
 
-import static org.tron.core.Wallet.encode58Check;
+
+
+
+
+
+import static wallet.Wallet.encode58Check;
+
 
 import common.Common;
 import entity.WitnessEntity;
@@ -8,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.tron.core.Wallet;
 import org.tron.core.config.args.Witness;
 
 public class GenesisWitnessConfig implements Serializable {

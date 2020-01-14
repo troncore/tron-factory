@@ -1,8 +1,6 @@
 package common;
 
-import static common.Util.parseConfig;
-
-
+import static wallet.Wallet.decodeFromBase58Check;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigObject;
 import java.util.ArrayList;
@@ -11,9 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.spongycastle.util.Strings;
-import org.tron.core.Constant;
-import org.tron.core.Wallet;
 import org.tron.core.config.args.Account;
 import org.tron.core.config.args.Witness;
 
@@ -131,7 +126,7 @@ public class Args {
     final Account account = new Account();
     account.setAccountName(asset.get(Common.accountNameField).unwrapped().toString());
     account.setAccountType(asset.get(Common.accountTypeField).unwrapped().toString());
-    account.setAddress(Wallet.decodeFromBase58Check(asset.get(Common.addressFiled).unwrapped().toString()));
+    account.setAddress(decodeFromBase58Check(asset.get(Common.addressFiled).unwrapped().toString()));
     account.setBalance(asset.get(Common.balanceField).unwrapped().toString());
     return account;
   }
@@ -145,7 +140,7 @@ public class Args {
   private static Witness createWitness(final ConfigObject witnessAccount) {
     final Witness witness = new Witness();
     witness.setAddress(
-        Wallet.decodeFromBase58Check(witnessAccount.get(Common.addressFiled).unwrapped().toString()));
+        decodeFromBase58Check(witnessAccount.get(Common.addressFiled).unwrapped().toString()));
     witness.setUrl(witnessAccount.get(Common.urlFiled).unwrapped().toString());
     witness.setVoteCount(witnessAccount.toConfig().getLong(Common.voteCountFiled));
     return witness;

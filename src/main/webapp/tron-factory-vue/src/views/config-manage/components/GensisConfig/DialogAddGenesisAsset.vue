@@ -129,7 +129,7 @@ export default {
         ],
         address: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { required: true, validator: validAddress, trigger: 'blur', },
+          // { required: true, validator: validAddress, trigger: 'blur', },
         ],
         balance: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
