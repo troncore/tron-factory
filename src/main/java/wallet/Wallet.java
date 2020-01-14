@@ -10,10 +10,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.typesafe.config.Config;
-import common.crypto.SM3Hash;
+import common.crypto.Sha256Sm3Hash;
 import common.crypto.SignInterface;
 import common.crypto.sm2.SM2;
 import common.utils.Configuration;
+import common.utils.DecodeUtil;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -42,7 +43,6 @@ import org.spongycastle.math.ec.ECPoint;
 import org.springframework.util.StringUtils;
 import org.tron.common.crypto.ECKey;
 import org.tron.common.crypto.Hash;
-import org.tron.common.crypto.Sha256Sm3Hash;
 import org.tron.common.utils.Base58;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.Sha256Hash;
@@ -178,7 +178,7 @@ public class Wallet {
     return now.format(format) + walletFile.getAddress() + ".json";
   }
 
-  private static String encode58Check(byte[] input) {
+  public static String encode58Check(byte[] input) {
     byte[] hash0;
     byte[] hash1;
     hash0 = Sha256Sm3Hash.hash(input);
@@ -188,6 +188,42 @@ public class Wallet {
     System.arraycopy(hash1, 0, inputCheck, input.length, 4);
     return Base58.encode(inputCheck);
   }
+  private static byte[] decode58Check(String input) {
+    byte[] decodeCheck = Base58.decode(input);
+    if (decodeCheck.length <= 4) {
+      return null;
+    }
+    byte[] decodeData = new byte[decodeCheck.length - 4];
+    System.arraycopy(decodeCheck, 0, decodeData, 0, decodeData.length);
+    // shoud be "true" for consistency
+    byte[] hash0 = Sha256Sm3Hash.hash(decodeData);
+    byte[] hash1 = Sha256Sm3Hash.hash(hash0);
+    if (hash1[0] == decodeCheck[decodeData.length] &&
+        hash1[1] == decodeCheck[decodeData.length + 1] &&
+        hash1[2] == decodeCheck[decodeData.length + 2] &&
+        hash1[3] == decodeCheck[decodeData.length + 3]) {
+      return decodeData;
+    }
+    return null;
+  }
+
+  public static byte[] decodeFromBase58Check(String addressBase58) {
+    if (org.apache.commons.lang3.StringUtils.isEmpty(addressBase58)) {
+//      logger.warn("Warning: Address is empty !!");
+      return null;
+    }
+    byte[] address = decode58Check(addressBase58);
+    if (address == null) {
+      return null;
+    }
+
+    if (!DecodeUtil.addressValid(address)) {
+      return null;
+    }
+
+    return address;
+  }
+
 
   private static WalletFile createWalletFile(
       SignInterface ecKeySm2Pair, byte[] cipherText, byte[] iv, byte[] salt, byte[] mac,
