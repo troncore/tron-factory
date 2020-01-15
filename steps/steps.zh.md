@@ -65,6 +65,7 @@ asset 配置必填字段包括：
 |                accountType                |  AssetIssue |
 |                  address                  | (eckey签名算法）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB    （sm2签名算法）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
 | balance <sup style="color:blue">[7]</sup> |               -9223372036854775808                |
+
 创世信息配置点击下一步按钮保存当前配置
 
 #### 基础配置

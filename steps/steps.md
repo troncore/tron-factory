@@ -60,6 +60,16 @@ The required fields for asset configuration include:
 |                  address                  |                address                |
 | balance <sup style="color:blue">[6]</sup> |                balance                |
 
+The required asset:
+
+|                Required field             |              Required value               |
+| :---------------------------------------: | :-------------------------------: |
+|                accountName                |              Blackhole<sup style="color:blue">[8]</sup>               |
+|                accountType                |  AssetIssue |
+|                  address                  | (eckey signature algorithm:）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB    （sm2 signature algorithm:）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
+| balance <sup style="color:blue">[7]</sup> |               -9223372036854775808                |
+
+
 Genesis Information Configuration click next button to save the current configuration
 
 (2)Basic configuration
@@ -193,7 +203,7 @@ Trading module click the next button to save the current transaction module sett
 
 Support for leveldb and rocksdb
 
-Database module click next to save the current database module<sup style="color:blue">[8]</sup>
+Database module click next to save the current database module<sup style="color:blue">[9]</sup>
 
 ### 6.Node deployment
 
@@ -227,7 +237,9 @@ The log will be automatically refreshed until the deploy finish.
 
 [7] Note: Click the last step of the configuration management cross-chain configuration next step, get the import plug-in menu permissions, each time click reset menu permissions
 
-[8] Note: Click the button to get the node deployment menu right when you click the next step of the import plugin. Click the reset menu permission each time.
+[8] Note：Blackhole asset is required and different signature algorithm corresponding to different address
+ 
+[9] Note: Click the button to get the node deployment menu right when you click the next step of the import plugin. Click the reset menu permission each time.
 
 ## License
 
