@@ -8,26 +8,18 @@ import static wallet.Wallet.hexs2Bytes;
 import static wallet.Wallet.private2AddressEckey;
 import static wallet.Wallet.private2AddressSm2;
 
-
-import com.typesafe.config.Config;
 import common.Common;
-//import common.LogConfig;
 import config.SeedNodeConfig;
-
-//import java.util.List;
-
 import java.util.LinkedHashMap;
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import common.Util;
 import entity.WitnessEntity;
 import config.GenesisWitnessConfig;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
-
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -151,6 +143,7 @@ public class NodeController {
       String publicKey;
       try {
         path = Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
+        refresh();
         if (isEckey) {
           publicKey = private2AddressEckey(hexs2Bytes(privateKey.getBytes()));
         } else {
@@ -208,6 +201,7 @@ public class NodeController {
       String publicKey;
       try {
         path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
+        refresh();
         if (isEckey) {
           publicKey = private2AddressEckey(hexs2Bytes(key.getBytes()));
         } else {
@@ -266,6 +260,28 @@ public class NodeController {
     if (!configGenerator.updateConfig(new SeedNodeConfig(new ArrayList<>()), Common.configFiled)) {
       LOG.error("update seed node config file failed");
     }
+
+    ConfigControlller configControlller = new ConfigControlller();
+    JSONObject jsonObject = new JSONObject();
+    String address = null;
+    refresh();
+    if (isEckey) {
+      address = "TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB";
+    } else {
+      address = "TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu";
+    }
+
+    LinkedHashMap<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
+    stringStringLinkedHashMap.put("accountName", "Blackhole");
+    stringStringLinkedHashMap.put("accountType", "AssetIssue");
+    stringStringLinkedHashMap.put("address", address);
+    stringStringLinkedHashMap.put("balance", "-9223372036854775808");
+    ArrayList<LinkedHashMap> linkedHashMaps = new ArrayList<>();
+    linkedHashMaps.add(stringStringLinkedHashMap);
+    jsonObject.put("assets", linkedHashMaps);
+    configControlller.genesisSettingConfig(jsonObject);
+
+
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
