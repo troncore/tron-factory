@@ -59,6 +59,14 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
 
   private final byte[] bytes;
 
+  public static void refresh() {    Config config = Configuration.getByPath(".config.conf"); // it is needs set to be a constant
+    if (config.hasPath("crypto.engine")) {
+      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+      System.out.println("Tron factory getConfig isEckey: " + isEckey);
+    }
+  }
+
+
   public Sha256Sm3Hash(long num, byte[] hash) {
     byte[] rawHashBytes = this.generateBlockId(num, hash);
     checkArgument(rawHashBytes.length == LENGTH);
@@ -179,6 +187,7 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
    * @return the hash (in big-endian order)
    */
   public static byte[] hash(byte[] input, int offset, int length) {
+    refresh();
     if (isEckey) {
       MessageDigest digest = newDigestEckey();
       digest.update(input, offset, length);
@@ -210,6 +219,7 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
    * @return the double-hash (in big-endian order)
    */
   public static byte[] hashTwice(byte[] input, int offset, int length) {
+    refresh();
     if (isEckey) {
       MessageDigest digest = newDigestEckey();
       digest.update(input, offset, length);
@@ -231,6 +241,7 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
    */
   public static byte[] hashTwice(
       byte[] input1, int offset1, int length1, byte[] input2, int offset2, int length2) {
+    refresh();
     if (isEckey) {
       MessageDigest digest = newDigestEckey();
       digest.update(input1, offset1, length1);
