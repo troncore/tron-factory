@@ -57,6 +57,14 @@ asset 配置必填字段包括：
 |                  address                  |               地址                |
 | balance <sup style="color:blue">[7]</sup> |               余额                |
 
+必须添加的asset：
+
+|                必填字段                  |              必填值                |
+| :---------------------------------------: | :-------------------------------: |
+|                accountName                |              Blackhole<sup style="color:blue">[8]</sup>               |
+|                accountType                |  AssetIssue |
+|                  address                  | (eckey签名算法）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB    （sm2签名算法）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
+| balance <sup style="color:blue">[7]</sup> |               -9223372036854775808                |
 创世信息配置点击下一步按钮保存当前配置
 
 #### 基础配置
@@ -139,7 +147,7 @@ p2p 配置点击下一步按钮保存当前配置
 | minValidatorNumber | 最小验证数 （数字且为正整数且小于 minValidatorNumber 最大支持值 2147483647） |
 |   crossChainFee    |             crossChainFee （数字且为正数最大支持值 2147483647）              |
 
-跨链配置点击下一步按钮保存当前跨链配置<sup style="color:blue">[8]</sup>
+跨链配置点击下一步按钮保存当前跨链配置<sup style="color:blue">[9]</sup>
 
 ### 5.导入插件
 
@@ -189,7 +197,7 @@ WitnessUpdate
 
 支持 leveldb 和 rocksdb
 
-数据库模块点击下一步保存当前数据库模块<sup style="color:blue">[9]</sup>
+数据库模块点击下一步保存当前数据库模块<sup style="color:blue">[10]</sup>
 
 ### 6.节点部署
 
@@ -222,9 +230,11 @@ WitnessUpdate
 
 [7] 注：balance 范围为-9223372036854775808 至 9223372036854775807 ，为保证部署成功，请按照取值内范围填写
 
-[8] 注：点击配置管理最后一步骤跨链配置的下一步时，获取导入插件菜单权限，每次点击重置菜单权限
+[8] 注：必须添加名为Blackhole 的asset，不同的签名算法，对应的地址也不相同
 
-[9] 注：点击导入插件最后一步数据库模块的下一步时点击获取节点部署菜单权限，每次点击重置菜单权限
+[9] 注：点击配置管理最后一步骤跨链配置的下一步时，获取导入插件菜单权限，每次点击重置菜单权限
+
+[10] 注：点击导入插件最后一步数据库模块的下一步时点击获取节点部署菜单权限，每次点击重置菜单权限
 
 ## License
 
