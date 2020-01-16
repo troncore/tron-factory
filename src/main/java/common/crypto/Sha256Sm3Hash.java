@@ -22,6 +22,7 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.protobuf.ByteString;
 import com.typesafe.config.Config;
+import common.Util;
 import common.utils.Configuration;
 import org.spongycastle.crypto.digests.SM3Digest;
 import org.tron.common.utils.ByteArray;
@@ -36,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static common.Util.parseConfig;
 
 /**
  * A Sha256Sm3Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be
@@ -47,10 +49,14 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
   private static boolean isEckey = true;
 
   static {
-    Config config = Configuration.getByPath(".config.conf"); // it is needs set to be a constant
-    if (config.hasPath("crypto.engine")) {
-      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
-      System.out.println("WalletUtils getConfig isEckey: " + isEckey);
+//    Config config = Configuration.getByPath(".config.conf"); // it is needs set to be a constant
+//    if (config.hasPath("crypto.engine")) {
+//      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+//      System.out.println("WalletUtils getConfig isEckey: " + isEckey);
+//    }
+    parseConfig();
+    if (Util.config.hasPath("crypto.engine")) {
+      isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
 
@@ -59,10 +65,15 @@ public class Sha256Sm3Hash implements Serializable, Comparable<Sha256Sm3Hash> {
 
   private final byte[] bytes;
 
-  public static void refresh() {    Config config = Configuration.getByPath(".config.conf"); // it is needs set to be a constant
-    if (config.hasPath("crypto.engine")) {
-      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
-      System.out.println("Tron factory getConfig isEckey: " + isEckey);
+  public static void refresh() {
+//    Config config = Configuration.getByPath(".config.conf"); // it is needs set to be a constant
+//    if (config.hasPath("crypto.engine")) {
+//      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+//      System.out.println("Tron factory getConfig isEckey: " + isEckey);
+//    }
+    parseConfig();
+    if (Util.config.hasPath("crypto.engine")) {
+      isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
 

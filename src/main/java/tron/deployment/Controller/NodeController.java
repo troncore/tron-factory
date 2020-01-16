@@ -199,6 +199,7 @@ public class NodeController {
     if (key.length() != 0) {
       String path;
       String publicKey;
+      refresh();
       try {
         path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
         refresh();

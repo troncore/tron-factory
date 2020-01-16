@@ -89,6 +89,7 @@ public class PluginConfig {
 //  ){
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new CryptoConfig(eckey), Common.configFiled);
+    parseConfig();
 
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();

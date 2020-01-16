@@ -1,6 +1,7 @@
 package wallet;
 
 import static common.LogConfig.LOG;
+import static common.Util.parseConfig;
 import static java.util.Arrays.copyOfRange;
 import static org.tron.common.utils.ByteArray.toHexString;
 import static org.tron.core.Wallet.getAddressPreFixByte;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.typesafe.config.Config;
+import common.Util;
 import common.crypto.Sha256Sm3Hash;
 import common.crypto.SignInterface;
 import common.crypto.sm2.SM2;
@@ -90,9 +92,13 @@ public class Wallet {
   private static boolean isEckey = true;
 
   public static void init() {
-    Config config = Configuration.getByPath("config.conf");
-    if (config.hasPath("crypto.engine")) {
-      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+//    Config config = Configuration.getByPath(".config.conf");
+//    if (config.hasPath("crypto.engine")) {
+//      isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+//    }
+    parseConfig();
+    if (Util.config.hasPath("crypto.engine")) {
+      isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
 
