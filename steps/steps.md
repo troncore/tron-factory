@@ -57,7 +57,7 @@ The required fields for asset configuration include:
 | :---------------------------------------: | :-----------------------------------: |
 |                accountName                |             account name              |
 |                accountType                | account type： AssetIssue or Contract |
-|                  address                  |                address                |
+|                  address                  |                address<sup style="color:blue">[10]</sup>                 |
 | balance <sup style="color:blue">[6]</sup> |                balance                |
 
 The required asset:
@@ -239,7 +239,9 @@ The log will be automatically refreshed until the deploy finish.
 
 [8] Note：Blackhole asset is required and different signature algorithm corresponding to different address
  
-[9] Note: Click the button to get the node deployment menu right when you click the next step of the import plugin. Click the reset menu permission each time.
+[9] Note: Click the button to get the node deployment menu right when you click the next step of the import plugin. Click the reset menu permission each time
+
+[10] Note: Need to fill in the corresponding address of the current signature algorithm
 
 ## License
 

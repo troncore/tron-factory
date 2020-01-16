@@ -54,7 +54,7 @@ asset 配置必填字段包括：
 | :---------------------------------------: | :-------------------------------: |
 |                accountName                |              账户名               |
 |                accountType                | 账户类型： AssetIssue 或 Contract |
-|                  address                  |               地址                |
+|                  address                  |               地址<sup style="color:blue">[11]</sup>                |
 | balance <sup style="color:blue">[7]</sup> |               余额                |
 
 必须添加的asset：
@@ -236,6 +236,10 @@ WitnessUpdate
 [9] 注：点击配置管理最后一步骤跨链配置的下一步时，获取导入插件菜单权限，每次点击重置菜单权限
 
 [10] 注：点击导入插件最后一步数据库模块的下一步时点击获取节点部署菜单权限，每次点击重置菜单权限
+
+[11] 注：需填写对应当前签名算法的地址
+
+
 
 ## License
 
