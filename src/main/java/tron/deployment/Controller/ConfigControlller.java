@@ -213,8 +213,8 @@ public class ConfigControlller {
     int httpSolidityPort =data.getOrDefault("httpSolidityPort", "8091") instanceof String ?
         (Integer.parseInt((String)data.getOrDefault("httpSolidityPort", "8091"))) :
         (int)data.getOrDefault("httpSolidityPort", 8091);
-    boolean httpFullNode = (boolean) data.getOrDefault("fullNodeHttpEnable", false);
-    boolean httpSolidity = (boolean) data.getOrDefault("solidityNodeHttpEnable", false);
+    boolean httpFullNode = (boolean) data.getOrDefault("fullNodeHttpEnable", true);
+    boolean httpSolidity = (boolean) data.getOrDefault("solidityNodeHttpEnable", true);
 
 
     ConfigGenerator configGenerator = new ConfigGenerator();
@@ -338,7 +338,7 @@ public class ConfigControlller {
 
   @GetMapping(value = "/config")
   public JSONObject getConfig() {
-//    refresh();
+    refresh();
     parseConfig();
     JSONObject configObject = getConfigJsonObject(config);
     return new Response(ResultCode.OK.code, configObject).toJSONObject();
