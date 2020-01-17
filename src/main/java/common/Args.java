@@ -25,9 +25,9 @@ public class Args {
   private static final String NODE_LISTEN_PORT = "node.listen.port";
   private static final String RPC_SOLIDITY_PORT = "node.rpc.solidityPort";
   private static final String NODE_HTTP_FULLNODE_PORT = "node.http.fullNodePort";
-  private static final String NODE_HTTP_FULLNODE_ENABLE = "node.http.fullNodeHttpEnable";
+  private static final String NODE_HTTP_FULLNODE_ENABLE = "node.http.fullNodeEnable";
   private static final String NODE_HTTP_SOLIDITY_PORT = "node.http.solidityPort";
-  private static final String NODE_HTTP_SOLIDITY_ENABLE = "node.http.solidityNodeHttpEnable";
+  private static final String NODE_HTTP_SOLIDITY_ENABLE = "node.http.solidityEnable";
   private static final String BLOCK_MAINTENANCE_TIME_INTERVAR = "block.maintenanceTimeInterval";
   private static final String NODE_BLOCK_PRODUCED_TIMEOUT = "node.blockProducedTimeOut";
   private static final String GENESIS_BLOCK_ASSETS = "genesis.block.assets";
