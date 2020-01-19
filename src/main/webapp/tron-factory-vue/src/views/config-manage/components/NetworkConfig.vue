@@ -7,7 +7,7 @@
       <el-form ref="network-config-form" :rules="networkRules" :model="form">
 
         <div class="switch-item">
-          <span class="label">fullNodeHttpEnable </span>
+          <span class="label">fullNodeEnable </span>
           <el-switch v-model="form.node_http_fullNodeEnable"></el-switch>
         </div>
         <el-form-item prop="node_maxHttpConnectNumber">
@@ -20,7 +20,7 @@
         </el-form-item>
 
         <div class="switch-item">
-          <span class="label">solidityNodeHttpEnable </span>
+          <span class="label">solidityEnable </span>
           <el-switch v-model="form.node_http_solidityEnable"></el-switch>
         </div>
 
@@ -33,7 +33,7 @@
 
         <el-form-item prop="node_rpc_port">
           <span slot="label">rpcPort <i class="help-tips">({{ $t('configManage.helpTips.rpcPort') }})</i></span>
-          <el-input v-model.trim="form.node_rpc_port" :maxlength="50"clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_rpc_port" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_rpc_solidityPort">
@@ -133,12 +133,15 @@ export default {
       return {
         node_maxHttpConnectNumber,
         node_http_fullNodePort,
+        
         node_http_solidityPort,
+
         node_rpc_port: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: validNum, trigger: 'blur', },
           { validator: validPortNum, trigger: 'blur', },
         ],
+
         node_rpc_solidityPort: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: validNum, trigger: 'blur', },
@@ -161,11 +164,11 @@ export default {
       this.$refs['network-config-form'].validate(valid => {
         if (valid) {
           let params = {
-            fullNodeHttpEnable: this.form.node_http_fullNodeEnable,
+            fullNodeEnable: this.form.node_http_fullNodeEnable,
             maxHttpConnectNumber: this.form.node_http_fullNodeEnable ? this.form.node_maxHttpConnectNumber : undefined,
             httpFullNodePort: this.form.node_http_fullNodeEnable ? this.form.node_http_fullNodePort : undefined,
 
-            solidityNodeHttpEnable: this.form.node_http_solidityEnable,
+            solidityEnable: this.form.node_http_solidityEnable,
             httpSolidityPort: this.form.node_http_solidityEnable ? this.form.node_http_solidityPort : undefined,
 
             rpcPort: this.form.node_rpc_port,
