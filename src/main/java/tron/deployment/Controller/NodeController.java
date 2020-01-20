@@ -111,7 +111,7 @@ public class NodeController {
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
     String url = (String) data.getOrDefault("url", "");
     String privateKey = (String) data.getOrDefault("privateKey", "");
-    String voteCount = (String) data.getOrDefault("voteCount", "104");
+    String voteCount = (String) data.getOrDefault("voteCount", "");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
     Long id =data.getOrDefault("id", "1") instanceof String ?
         (Long.parseLong((String)data.getOrDefault("id", "1"))) :
@@ -177,7 +177,7 @@ public class NodeController {
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
     String url = (String) data.getOrDefault("url", "");
     String key = (String) data.getOrDefault("privateKey", "");
-    String voteCount = (String) data.getOrDefault("voteCount", "104");
+    String voteCount = (String) data.getOrDefault("voteCount", "");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
     long id =data.getOrDefault("id", "1") instanceof String ?
         (Long.parseLong((String)data.getOrDefault("id", "1"))) :
