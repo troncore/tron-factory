@@ -12,7 +12,7 @@
 
         <div class="box-card">
           <div class="card-header">{{ $t('importPlugin.transactionModule') }}</div>
-          <el-form ref="form-box" :model="form" :rules="formRules" label-position="top">
+          <el-form ref="form-box" :rules="formRules" :model="form" label-position="top">
 
             <el-form-item class="transaction-list" prop="transaction">
               <el-checkbox-group v-model="form.transaction">
@@ -20,8 +20,13 @@
               </el-checkbox-group>
             </el-form-item>
 
-            <el-form-item class="custom-transaction" props="customTransaction">
-              <el-checkbox v-model="checkCustomTransaction">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
+            <div class="more-setting">
+              <el-checkbox v-model="checkCustomTransaction" @change="handleChangeCheckCustom">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
+            </div>
+            <el-form-item
+              ref="custom-transaction" 
+              class="custom-transaction" 
+              prop="customTransaction">
               <el-input
                 v-model.trim="form.customTransaction"
                 type="textarea"
@@ -31,7 +36,6 @@
                 :placeholder="$t(checkCustomTransaction ? 'importPlugin.valid.inputCustomTransaction': 'importPlugin.valid.checkCustomTransaction')">
               </el-input>
             </el-form-item>
-
           </el-form>
         </div>
       </div>
@@ -56,12 +60,25 @@ export default {
       consensus: '',
       checkCustomTransaction: false,
       transactionList: require('./transactionModuleList.json') || [],
-
-      formRules: {
-        transaction: [{ required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },],
-      },
       loading: false,
     }
+  },
+  computed: {
+    formRules() {
+      const pathEndJAR = (rule, value, callback) => {
+        if (this.checkCustomTransaction && !this.form.customTransaction.endsWith('.jar')) {
+          callback(new Error(this.$t('importPlugin.valid.pathEndJAR')))
+        } else {
+          callback()
+        }
+      }
+      return {
+        customTransaction: [
+          { required: this.checkCustomTransaction, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: pathEndJAR, trigger: 'blur', },
+        ]
+      }
+    },
   },
   created() {
     this.initPluginInfo()
@@ -86,27 +103,23 @@ export default {
       })
     },
 
+    handleChangeCheckCustom (val) {
+      if (val) {
+        setTimeout(this.$refs['custom-transaction'].clearValidate, 0)
+      }
+    },
+
     handleSubmit() {
       this.$refs['form-box'].validate(valid => {
         if (valid) {
-          if (this.checkCustomTransaction) {
-            if (!this.form.customTransaction) {
-              this.$message.warning(this.$t('importPlugin.valid.inputCustomTransaction'),)
-              return
-            }
-            else if (!this.form.customTransaction.endsWith('.jar')) {
-              this.$message.warning(this.$t('importPlugin.valid.pathEndJAR'),)
-              return
-            }
-          } else if (this.form.customTransaction) {
-            this.$message.warning(this.$t('importPlugin.valid.checkCustomTransaction'),)
-            return
-          }
-
+          // if (this.form.customTransaction) {
+          //   this.$message.warning(this.$t('importPlugin.valid.checkCustomTransaction'),)
+          //   return
+          // }
 
           let params = {
             transaction: this.form.transaction,
-            customTransaction: this.form.customTransaction
+            customTransaction: this.checkCustomTransaction ? this.form.customTransaction : ''
           }
 
           this.loading = true
@@ -157,14 +170,17 @@ export default {
     }
   }
 
-  .custom-transaction {
-    width: 50%;
-    margin: 20px 0 0;
+  /deep/ .more-setting {
+    margin: 20px 0 10px;
 
     .el-checkbox__label {
       font-size: 16px;
       color: rgba(8, 28, 86, .7);
     }
+  }
+
+  .custom-transaction {
+    width: 50%;
   }
 
   /deep/ .el-form-item {

@@ -105,7 +105,7 @@
               <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
             </el-form-item>
 
-            <el-form-item v-if="!isAdding">
+            <el-form-item v-if="form.publicKey">
               <span slot="label">
                 publicKey
                 <el-tooltip effect="dark" :content="$t('nodeList.helpTips.publicKey')" placement="top">
@@ -150,6 +150,9 @@ export default {
         port: '',
         isSR: false,
         needSyncCheck: false,
+        url: 'http://',
+        voteCount: '',
+        privateKey: '',
       },
       tabIndex: 20,
       dialogTitle: this.$t('nodeList.addNode'),
@@ -293,6 +296,7 @@ export default {
       Object.assign(params, {
         ...this.form,
         url: `"${this.form.url}"`,
+        publicKey: '',
       })
 
       let hasSameIP = this.isAdding && ~this.nodeList.findIndex(item => item.ip === params.ip)

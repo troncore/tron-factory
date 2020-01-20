@@ -52,7 +52,7 @@ export default {
     httpFullNodePort: 'FullNode HTTP 端口',
     httpSolidityPort: 'SolidityNode HTTP 端口',
     rpcPort: 'FullNode RPC 端口',
-    rpcSolidityPort: 'SolidityNode RPC 端口',
+    rpcSolidityPort: 'FullNode Solidity RPC 端口',
 
     p2pVersion: 'P2P 版本号',
     listenPort: '监听端口',
