@@ -213,8 +213,8 @@ public class ConfigControlller {
     int httpSolidityPort =data.getOrDefault("httpSolidityPort", "8091") instanceof String ?
         (Integer.parseInt((String)data.getOrDefault("httpSolidityPort", "8091"))) :
         (int)data.getOrDefault("httpSolidityPort", 8091);
-    boolean httpFullNode = (boolean) data.getOrDefault("fullNodeHttpEnable", true);
-    boolean httpSolidity = (boolean) data.getOrDefault("solidityNodeHttpEnable", true);
+    boolean httpFullNode = (boolean) data.getOrDefault("fullNodeEnable", true);
+    boolean httpSolidity = (boolean) data.getOrDefault("solidityEnable", true);
 
 
     ConfigGenerator configGenerator = new ConfigGenerator();
