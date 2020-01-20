@@ -3,21 +3,6 @@ import { Notification } from 'element-ui'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-export const proxyMap = {
-  local: '/proxy_local',
-  service: '/proxy_service',
-}
-const currentProxy = 'local'
-export const proxyApi = isDevelopment ? proxyMap[currentProxy] : ''
-
-const $axios = Axios.create({
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-  },
-  withCredentials: true,
-  // timeout: 200000,
-})
-
 // if the server responses success, just deal with the useless data
 function responseSuccess(response, callback) {
   if (response.data && (response.data.code < 300 || response.data.code === 304)) {
@@ -25,12 +10,12 @@ function responseSuccess(response, callback) {
   } else {
     let error_msg = response.data.msg
 
-    responseError(error_msg, callback)
+    responseFail1(error_msg, callback)
   }
 }
 
 // the server responses error or network error
-function responseError(error, callback) {
+function responseFail(error, callback) {
   let error_msg = '' + error || 'Unknown Error'
   Notification.error({
     title: 'Error',
@@ -40,13 +25,28 @@ function responseError(error, callback) {
   callback(error_msg)
 }
 
+export const proxyMap = {
+  local: '/__local__',
+  service: '/__server__',
+}
+const currentProxy = 'local'
+export const baseURL = isDevelopment ? proxyMap[currentProxy] : ''
+
+const $axios = Axios.create({
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+  },
+  withCredentials: true,
+  // timeout: 200000,
+})
+
 export default {
   request(config) {
     return $axios.request(config)
   },
   $http(method, url, params, callback) {
     const config = {
-      baseURL: proxyApi,
+      baseURL: baseURL,
       url: url,
       method: method,
     }
@@ -59,7 +59,7 @@ export default {
 
     this.request(config).then(
       response => responseSuccess(response, callback),
-      error => responseError(error, callback),
+      error => responseFail(error, callback),
     )
   },
   get(url, params, callback) {

@@ -52,7 +52,7 @@ export default {
     httpFullNodePort: 'FullNode HTTP Port',
     httpSolidityPort: 'SolidityNode HTTP Port',
     rpcPort: 'FullNode RPC Port',
-    rpcSolidityPort: 'SolidityNode RPC Port',
+    rpcSolidityPort: 'FullNode Solidity RPC Port',
 
     p2pVersion: 'P2P Version Number',
     listenPort: 'Listen Port',

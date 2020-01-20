@@ -13,15 +13,15 @@ module.exports = {
   assetsDir: 'static',
   devServer: {
     proxy: {
-      '/proxy_local': {
+      '/__local__': {
         target: 'http://127.0.0.1:8080',
         changeOrigin: true,
-        pathRewrite: { '^/proxy_local': '' },
+        pathRewrite: { '^/__local__': '' },
       },
-      '/proxy_service': {
+      '/__server__': {
         target: 'http://47.252.2.112:8080',
         changeOrigin: true,
-        pathRewrite: { '^/proxy_service': '' },
+        pathRewrite: { '^/__server__': '' },
       }
     },
     host: '127.0.0.1',

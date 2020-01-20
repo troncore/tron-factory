@@ -155,11 +155,11 @@ export default {
     },
 
     // edit node
-    handleClickEditBtn(val) {
+    handleClickEditBtn(val = {}) {
       this.nodeInfo = {
         ...val,
         url: JSON.stringify(val.url).slice(3).slice(0, -3),
-        privateKey: Array(64).fill('*').join(''),
+        privateKey: val.publicKey ? Array(64).fill('*').join('') : '',
       }
 
       this.isAdding = false
