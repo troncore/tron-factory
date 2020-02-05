@@ -50,9 +50,9 @@ export default {
 
     maxHttpConnectNumber: '最大 HTTP 连接数',
     httpFullNodePort: 'FullNode HTTP 端口',
-    httpSolidityPort: 'SolidityNode HTTP 端口',
+    httpSolidityPort: 'FullNode HTTP Solidity 端口',
     rpcPort: 'FullNode RPC 端口',
-    rpcSolidityPort: 'FullNode Solidity RPC 端口',
+    rpcSolidityPort: 'FullNode RPC Solidity 端口',
 
     p2pVersion: 'P2P 版本号',
     listenPort: '监听端口',

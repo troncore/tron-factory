@@ -93,10 +93,10 @@ export default {
           value: 'AssetIssue',
           label: 'AssetIssue',
         },
-        {
-          value: 'Contract',
-          label: 'Contract',
-        },
+        // {
+        //   value: 'Contract',
+        //   label: 'Contract',
+        // },
       ],
       loading: false,
     }
