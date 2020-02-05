@@ -112,14 +112,6 @@ export default {
       },
     },
     assetRules() {
-      const validAddress = (rule, value, callback) => {
-        if (!TronWeb.isAddress(value)) {
-          callback(new Error(this.$t('configManage.valid.inputRightAddress')))
-        } else {
-          callback()
-        }
-      }
-
       return {
         accountName: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -129,7 +121,6 @@ export default {
         ],
         address: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          // { required: true, validator: validAddress, trigger: 'blur', },
         ],
         balance: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
