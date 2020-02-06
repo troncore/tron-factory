@@ -69,7 +69,7 @@
     <dependency>
       <groupId>com.github.tronprotocol</groupId>
       <artifactId>java-tron</artifactId>
-      <version>master-b491bbc04c-1</version>
+      <version>master-8b113f9f72-1</version>
     </dependency>
     <dependency>
       <groupId>com.jcraft</groupId>
