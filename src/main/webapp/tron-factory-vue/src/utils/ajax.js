@@ -10,7 +10,7 @@ function responseSuccess(response, callback) {
   } else {
     let error_msg = response.data.msg
 
-    responseFail1(error_msg, callback)
+    responseFail(error_msg, callback)
   }
 }
 
