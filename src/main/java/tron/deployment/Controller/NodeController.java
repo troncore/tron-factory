@@ -4,14 +4,15 @@ import static common.LogConfig.LOG;
 import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
-import static wallet.Wallet.hexs2Bytes;
-import static wallet.Wallet.private2AddressEckey;
-import static wallet.Wallet.private2AddressSm2;
+import static wallet.Wallet.*;
 
 import common.Common;
 import config.SeedNodeConfig;
 import java.util.LinkedHashMap;
+
+import entity.AssetsEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tron.core.config.args.Account;
 import response.ResultCode;
 import common.Util;
 import entity.WitnessEntity;
@@ -273,13 +274,27 @@ public class NodeController {
     }
 
     LinkedHashMap<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
+
     stringStringLinkedHashMap.put("accountName", "Blackhole");
     stringStringLinkedHashMap.put("accountType", "AssetIssue");
     stringStringLinkedHashMap.put("address", address);
     stringStringLinkedHashMap.put("balance", "-9223372036854775808");
     ArrayList<LinkedHashMap> linkedHashMaps = new ArrayList<>();
+
     linkedHashMaps.add(stringStringLinkedHashMap);
     jsonObject.put("assets", linkedHashMaps);
+
+
+//    Account account = new Account();
+//    account.setAccountName("Blackhole");
+//    account.setAccountType("AssetIssue");
+//    account.setAddress(decodeFromBase58Check(address));
+//    account.setBalance("-9223372036854775808");
+//    AssetsEntity assetsEntity = new AssetsEntity(account);
+//
+//    ArrayList<AssetsEntity> assetsEntities = new ArrayList<>();
+//    assetsEntities.add(assetsEntity);
+//    jsonObject.put("assets", assetsEntities);
     configControlller.genesisSettingConfig(jsonObject);
 
 

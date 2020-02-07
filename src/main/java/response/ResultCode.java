@@ -6,7 +6,9 @@ public enum ResultCode {
     UNAUTHORIZED(401),
     FORBIDDEND(403),
     NOT_FOUND(404),
+    ADDRESS_ERROR(444),
     INTERNAL_SERVER_ERROR(500);
+
 
 
     public Integer code;

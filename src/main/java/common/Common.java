@@ -88,6 +88,8 @@ public class Common {
 
   public static final String updateConfigFileFailed = "update config file failed";
 
+  public static final String invalidBase58CheckAddress = "Invalid Base58Check Address";
+
   public static final String nodeIdNotExistFailed = "node id not exist";
 
   public static final String savePrivateKeyFailed = "save private key failed";

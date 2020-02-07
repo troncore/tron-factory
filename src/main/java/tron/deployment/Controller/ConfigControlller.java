@@ -11,16 +11,14 @@ import static org.tron.core.config.args.Storage.getIndexDirectoryFromConfig;
 import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromConfig;
 
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.inject.internal.cglib.core.$CodeGenerationException;
 import com.typesafe.config.Config;
 import common.Util;
 import entity.AssetsEntity;
 import common.Args;
 import common.Common;
 import java.util.LinkedHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import config.BaseSettingConfig;
@@ -35,12 +33,14 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import response.Response;
 import config.ConfigGenerator;
+import wallet.Wallet;
 
 
 @CrossOrigin
@@ -324,15 +324,31 @@ public class ConfigControlller {
     if (!jsonObject.containsKey(Common.assetsFiled)) {
       return new Response(ResultCode.FAILED.code, "miss assets information").toJSONObject();
     }
-    List<AssetsEntity> assets = (ArrayList<AssetsEntity>) jsonObject.get(Common.assetsFiled);
-    ConfigGenerator configGenerator = new ConfigGenerator();
-    GenesisAssetConfig genesisAssetConfig = new GenesisAssetConfig();
-    genesisAssetConfig.genesis_block_assets = assets;
-    boolean result = configGenerator.updateConfig(genesisAssetConfig, Common.configFiled);
+    Object o = jsonObject.get(Common.assetsFiled);
+      ArrayList<LinkedHashMap> arrayList = (ArrayList<LinkedHashMap>) o;
+      AtomicBoolean base58check= new AtomicBoolean(false);
+      for (LinkedHashMap linkedHashMap : arrayList) {
+        String address = (String) linkedHashMap.get("address");
+        byte[] bytes = Wallet.decode58Check(address);
+          if (bytes == null) {
+            base58check.set(true);
+          }
+      }
+      if (base58check.get()) {
+        return new Response(ResultCode.ADDRESS_ERROR.code, Common.invalidBase58CheckAddress).toJSONObject();
+//        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.invalidBase58CheckAddress).toJSONObject();
+      }
 
-    if (!result) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-    }
+      List<AssetsEntity> assets = (ArrayList<AssetsEntity>) jsonObject.get(Common.assetsFiled);
+      ConfigGenerator configGenerator = new ConfigGenerator();
+      GenesisAssetConfig genesisAssetConfig = new GenesisAssetConfig();
+      genesisAssetConfig.genesis_block_assets = assets;
+      boolean result = configGenerator.updateConfig(genesisAssetConfig, Common.configFiled);
+
+      if (!result) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+      }
+
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
