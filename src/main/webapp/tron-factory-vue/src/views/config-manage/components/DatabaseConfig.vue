@@ -18,10 +18,6 @@
           <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('configManage.isOpenIndexDirectory')" prop="storage_index_directory">
-          <el-switch active-value="index"  inactive-value="is not open index directory" v-model="form.storage_index_directory"></el-switch>
-        </el-form-item>
-
         <el-form-item :label="$t('configManage.isNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
           <el-switch v-model="form.storage_needToUpdateAsset"></el-switch>
         </el-form-item>
@@ -72,7 +68,6 @@ export default {
             isDBSync: this.form.storage_db_sync,
             isOpenTransaction: this.form.storage_transHistory_switch,
             dbEnine: this.form.storage_db_engine,
-            indexDirectory: this.form.storage_index_directory,
             needToUpdateAsset: this.form.storage_needToUpdateAsset,
           }
 
