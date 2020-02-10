@@ -18,4 +18,10 @@ public class DBConfig implements Serializable {
     this.storage_index_directory = storage_index_directory;
     this.storage_needToUpdateAsset = storage_needToUpdateAsset;
   }
+  public DBConfig(boolean storage_db_sync, String storage_transHistory_switch, String storage_db_enine, boolean storage_needToUpdateAsset) {
+    this.storage_db_sync = storage_db_sync;
+    this.storage_transHistory_switch = storage_transHistory_switch;
+    this.storage_db_engine = storage_db_enine;
+    this.storage_needToUpdateAsset = storage_needToUpdateAsset;
+  }
 }

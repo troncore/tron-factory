@@ -184,12 +184,14 @@ public class ConfigControlller {
     boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
     String isOpenTransaction = (String) data.getOrDefault("isOpenTransaction", "on");
     String dbEnine = (String) data.getOrDefault("dbEnine", "LEVELDB");
-    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");
+//    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");
     boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
+//    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
+//            dbEnine, indexDirectory, needToUpdateAsset), Common.configFiled);
     boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
-            dbEnine, indexDirectory, needToUpdateAsset), Common.configFiled);
+            dbEnine, needToUpdateAsset), Common.configFiled);
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
