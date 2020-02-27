@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "@/store";
 
+import store from "@/store"
 import Layout from '@/components/Layout'
 import routeList from "./route.json"
-import menuList from './menu.json'
 
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error=> error)
+}
 Vue.use(VueRouter)
 
 const vueRoutes = routeList.map(route => Object.assign({
@@ -15,11 +18,11 @@ const vueRoutes = routeList.map(route => Object.assign({
   meta: route.meta || {}
 }))
 
-export const allRoutes = [
+export const routes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/get-start',
+    redirect: '/nodes-manage',
     children: [
       ...vueRoutes,
     ],
@@ -32,30 +35,20 @@ export const allRoutes = [
 ]
 
 const router = new VueRouter({
-  routes: allRoutes,
+  routes,
 })
-
-
-function isDisabledMenuItem (menuList = [], itemName) {
-  return menuList.some(menuItem => {
-    if(menuItem.name === itemName && menuItem.disabled) return true
-
-    if (Array.isArray(menuItem.children)) return isDisabledMenuItem(menuItem.children, itemName)
-  })
-}
 
 router.beforeEach( async (to, from, next) => {
   try {
-    await store.dispatch('app/SET_MENU_LIST', { menuList })
+    console.log(store.getters['app/isSignIn'])
 
-    if (isDisabledMenuItem(store.getters['app/menuList'], to.name)) {
-      next('/')
+    if (to.meta.auth && !store.getters['app/isSignIn']) {
+      next('/sign-in')
     } else {
       next()
     }
 
   } catch (e) {
-    console.log(e)
     next('/')
   }
 })

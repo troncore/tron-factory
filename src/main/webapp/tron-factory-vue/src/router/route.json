@@ -1,23 +1,45 @@
 [
   {
-    "path": "/get-start",
-    "name": "get-start"
+    "path": "/sign-in",
+    "name": "sign-in",
+    "meta": {
+      "hideAside": true
+    }
   },
   {
-    "path": "/node-list",
-    "name": "node-list"
+    "path": "/nodes-manage",
+    "name": "nodes-manage",
+    "meta": {
+      "auth": true
+    }
   },
   {
-    "path": "/config-manage",
-    "name": "config-manage"
+    "path": "/configuring",
+    "name": "configuring",
+    "meta": {
+      "auth": true
+    }
   },
   {
-    "path": "/import-plugin",
-    "name": "import-plugin"
+    "path": "/ecology-app",
+    "name": "ecology-app",
+    "meta": {
+      "auth": true
+    }
   },
   {
-    "path": "/deploy-nodes",
-    "name": "deploy-nodes"
+    "path": "/wallet-cli",
+    "name": "wallet-cli",
+    "meta": {
+      "auth": true
+    }
+  },
+  {
+    "path": "/tron-link",
+    "name": "tron-link",
+    "meta": {
+      "auth": true
+    }
   },
   {
     "path": "/404",

@@ -1,42 +1,38 @@
 [
   {
-    "path": "/get-start",
-    "name": "get-start",
-    "title": "menu.name.getStart",
-    "icon": "el-icon-guide",
-    "auth": true,
-    "disabled": false
+    "path": "/nodes-manage",
+    "name": "nodes-manage",
+    "title": "menu.nodesManage",
+    "icon": "el-icon-guide"
   },
   {
-    "path": "/node-list",
-    "name": "node-list",
-    "title": "menu.name.nodeList",
+    "path": "/configuring",
+    "name": "configuring",
+    "title": "menu.configuring",
     "icon": "el-icon-s-operation",
-    "auth": true,
-    "disabled": true
+    "auth": true
   },
   {
-    "path": "/config-manage",
-    "name": "config-manage",
-    "title": "menu.name.configManage",
+    "path": "/ecology-app",
+    "name": "ecology-app",
+    "title": "menu.ecologyApp",
     "icon": "el-icon-setting",
     "auth": true,
-    "disabled": true
-  },
-  {
-    "path": "/import-plugin",
-    "name": "import-plugin",
-    "title": "menu.name.importPlugin",
-    "icon": "el-icon-upload",
-    "auth": true,
-    "disabled": true
-  },
-  {
-    "path": "/deploy-nodes",
-    "name": "deploy-nodes",
-    "title": "menu.name.deployNodes",
-    "icon": "el-icon-share",
-    "auth": true,
-    "disabled": true
+    "children": [
+      {
+        "path": "/wallet-cli",
+        "name": "wallet-cli",
+        "title": "menu.walletCLI",
+        "icon": "el-icon-upload",
+        "auth": true
+      },
+      {
+        "path": "/tron-link",
+        "name": "tron-link",
+        "title": "menu.tronLink",
+        "icon": "el-icon-share",
+        "auth": true
+      }
+    ]
   }
 ]

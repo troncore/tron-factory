@@ -59,7 +59,7 @@ export default {
   }
 }
 
-.fade-leave-active,
+/*.fade-leave-active,*/
 .fade-enter-active {
   transition: all .5s;
 }

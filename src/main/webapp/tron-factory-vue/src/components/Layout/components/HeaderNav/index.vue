@@ -9,6 +9,10 @@
 
     <div class="header-right">
 
+      <div class="user-info" v-if="isSignIn">
+        <el-button type="text" class="sign-out" @click="handleSignOut">登出</el-button>
+      </div>
+
       <!-- choose language -->
       <el-dropdown class="lang-dropdown hover-effect" trigger="click" @command="handleCommand">
         <div class="avatar-wrapper">{{ currentLang || 'Language' }}<i class="el-icon-caret-bottom" /></div>
@@ -24,10 +28,14 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 import Hamburger from './Hamburger'
 
 export default {
   name: 'header-nav',
+  components: {
+    Hamburger,
+  },
   data() {
     return {
       siteTitle: 'TRON FACTORY',
@@ -38,16 +46,26 @@ export default {
       },
     }
   },
-  components: {
-    Hamburger,
+  computed: {
+    ...mapGetters('app', [
+      "isSignIn",
+    ])
   },
   created () {
     this.getLang()
   },
   methods: {
+    ...mapMutations('app', [
+      "signOut"
+    ]),
     getLang () {
       let lang = localStorage.getItem('currentLang')
       this.currentLang = this.languages[lang || 'en-US']
+    },
+
+    handleSignOut () {
+      this.signOut()
+      this.$router.push('/sign-in')
     },
 
     handleCommand(val) {
@@ -65,6 +83,8 @@ export default {
   align-items: center;
   height: 100%;
   background-color: white;
+  font-size: 14px;
+  color: #606266;
 
   .header-logo {
     width: 192px;
@@ -74,8 +94,18 @@ export default {
   }
 
   .header-right {
+    display: flex;
+    align-items: center;
     margin: 0 64px 0 auto;
+
+    .user-info {
+      .sign-out {
+        cursor: pointer;
+      }
+    }
+
     .lang-dropdown {
+      margin-left: 30px;
       &.hover-effect {
         cursor: pointer;
         transition: background 0.3s;
