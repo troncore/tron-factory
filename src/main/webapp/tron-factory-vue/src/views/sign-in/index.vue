@@ -77,8 +77,8 @@ export default {
       let emailReg = /^\w+@\w+\.\w+$/
       let passwordReg = /^(?=.*[0-9])(?=.*[a-zA-Z])\S{8,20}$/
 
-      let invalidEmail = !this.form.email && this.form.email !== this.currentAccount.email
-      let invalidPassword = !this.form.password && this.form.password !== this.currentAccount.password
+      let invalidEmail = !this.form.email || this.form.email !== this.currentAccount.email
+      let invalidPassword = !this.form.password || this.form.password !== this.currentAccount.password
 
       if (invalidEmail  || invalidPassword) {
         this.$notify.error({

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import store from "@/store"
 import Layout from '@/components/Layout'
 import routeList from "./route.json"
@@ -31,7 +30,7 @@ const baseRoutes = [
   },
 ]
 
-export const routes = [
+const routes = [
   {
     path: '/',
     component: Layout,
@@ -47,6 +46,7 @@ const router = new VueRouter({
   routes,
 })
 
+
 router.beforeEach( async (to, from, next) => {
   try {
     if ((to.meta.auth || to.name === '404') && !store.getters['app/isSignIn']) {
@@ -56,7 +56,7 @@ router.beforeEach( async (to, from, next) => {
     }
 
   } catch (e) {
-    next('/')
+    next('/sign-in')
   }
 })
 
