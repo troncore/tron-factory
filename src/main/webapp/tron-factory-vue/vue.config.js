@@ -42,6 +42,12 @@ module.exports = {
   chainWebpack: () => {
     // https://cli.vuejs.org/config/#chainwebpack
   },
-  css: {},
+  css: {
+    loaderOptions: {
+      scss: {
+        prependData: `@import "~@/assets/styles/base.scss";`
+      },
+    },
+  },
   lintOnSave: false,
 }
