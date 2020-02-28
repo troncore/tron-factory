@@ -1,12 +1,5 @@
 [
   {
-    "path": "/sign-in",
-    "name": "sign-in",
-    "meta": {
-      "hideAside": true
-    }
-  },
-  {
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "meta": {
@@ -39,13 +32,6 @@
     "name": "tron-link",
     "meta": {
       "auth": true
-    }
-  },
-  {
-    "path": "/404",
-    "name": "404",
-    "meta": {
-      "hideAside": true
     }
   }
 ]

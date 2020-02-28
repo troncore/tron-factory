@@ -11,12 +11,25 @@ VueRouter.prototype.push = function push(location) {
 }
 Vue.use(VueRouter)
 
-const vueRoutes = routeList.map(route => Object.assign({
+const layoutRoutes = routeList.map(route => Object.assign({
   path: route.path,
   name: route.name,
   component: () => import(`@/views/${route.name}`),
   meta: route.meta || {}
 }))
+
+const baseRoutes = [
+  {
+    path: "/sign-in",
+    name: "sign-in",
+    component: () => import('@/views/sign-in')
+  },
+  {
+    path: "*",
+    name: "404",
+    component: () => import('@/views/404')
+  },
+]
 
 export const routes = [
   {
@@ -24,14 +37,10 @@ export const routes = [
     component: Layout,
     redirect: '/nodes-manage',
     children: [
-      ...vueRoutes,
+      ...layoutRoutes,
     ],
   },
-
-  {
-    path: '*',
-    redirect: '/404',
-  },
+  ...baseRoutes
 ]
 
 const router = new VueRouter({
@@ -40,9 +49,7 @@ const router = new VueRouter({
 
 router.beforeEach( async (to, from, next) => {
   try {
-    console.log(store.getters['app/isSignIn'])
-
-    if (to.meta.auth && !store.getters['app/isSignIn']) {
+    if ((to.meta.auth || to.name === '404') && !store.getters['app/isSignIn']) {
       next('/sign-in')
     } else {
       next()

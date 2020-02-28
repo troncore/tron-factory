@@ -1,22 +1,24 @@
 <template>
-  <div class="sign-in page-view">
+  <div class="sign-in">
 
-    <el-form ref="form" :rules="formRules">
+    <div class="left-box">
 
-    </el-form>
-    <div class="form">
-      <div class="form-item">
-        <el-input v-model="form.email" clearable :placeholder="$t('userInfo.email')"/>
-      </div>
-      <div class="form-item">
-        <el-input type="password" v-model="form.password" clearable :placeholder="$t('userInfo.password')"/>
-      </div>
+    </div>
+    <div class="right-box">
+      <div class="form">
+        <div class="form-item">
+          <el-input v-model="form.email" clearable :placeholder="$t('userInfo.email')"/>
+        </div>
+        <div class="form-item">
+          <el-input type="password" v-model="form.password" clearable :placeholder="$t('userInfo.password')"/>
+        </div>
 
-      <div class="form-item remove-margin">
-        <el-button type="text" @click="handleTestAccount">{{ $t('userInfo.testAccount') }}</el-button>
-      </div>
-      <div class="form-item">
-        <el-button class="sign-in__btn" type="primary" :loading="loading" @click="handleSignIn">{{ $t('userInfo.signIn') }}</el-button>
+        <div class="form-item remove-margin">
+          <el-button type="text" @click="handleTestAccount">{{ $t('userInfo.testAccount') }}</el-button>
+        </div>
+        <div class="form-item">
+          <el-button class="sign-in__btn" type="primary" :loading="loading" @click="handleSignIn">{{ $t('userInfo.signIn') }}</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -84,12 +86,26 @@ export default {
 <style lang="scss" scoped>
 .sign-in {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100vh;
+  background-color: white;
+
+  .left-box {
+    flex: 1.5;
+    height: 100%;
+
+    background-color: theme-color(.8);
+  }
+  .right-box {
+    flex: 1;
+    position: relative;
+  }
 
   .form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 400px;
-    transform: translate(0, -50%);
+    transform: translate(-50%, -50%);
 
     .form-item {
       &:first-child {
