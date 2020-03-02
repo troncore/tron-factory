@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store"
 import Layout from '@/components/Layout'
-import routeList from "./route.json"
+import rawRoutes from "./route.json"
 
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -10,36 +10,36 @@ VueRouter.prototype.push = function push(location) {
 }
 Vue.use(VueRouter)
 
-const layoutRoutes = routeList.map(route => Object.assign({
-  path: route.path,
-  name: route.name,
-  component: () => import(`@/views/${route.name}`),
-  meta: route.meta || {}
-}))
-
 const baseRoutes = [
   {
     path: "/sign-in",
     name: "sign-in",
     component: () => import('@/views/sign-in')
   },
-  {
-    path: "*",
-    name: "404",
-    component: () => import('@/views/404')
-  },
 ]
 
+// for layout routes
+const authRoutes = rawRoutes.map(route => Object.assign({
+  path: route.path,
+  name: route.name,
+  component: () => import(`@/views/${route.name}`),
+  meta: route.meta || {}
+}))
+
 const routes = [
+  ...baseRoutes,
   {
     path: '/',
     component: Layout,
     redirect: '/nodes-manage',
     children: [
-      ...layoutRoutes,
+      ...authRoutes,
     ],
   },
-  ...baseRoutes
+  {
+    path: '*',
+    redirect: { name: '404' }
+  }
 ]
 
 const router = new VueRouter({
@@ -49,7 +49,8 @@ const router = new VueRouter({
 
 router.beforeEach( async (to, from, next) => {
   try {
-    if ((to.meta.auth || to.name === '404') && !store.getters['app/isSignIn']) {
+    let isAuth = ~authRoutes.findIndex(route => route.name === to.name) // !== -1
+    if ( isAuth && !store.getters['app/isSignIn']) {
       next('/sign-in')
     } else {
       next()
