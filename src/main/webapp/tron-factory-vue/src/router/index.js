@@ -21,7 +21,7 @@ const baseRoutes = [
 // for layout routes
 const authRoutes = rawRoutes.map(route => Object.assign({
   path: route.path,
-  name: route.name,
+  name: route.name,  // equivalent to the view component file path
   component: () => import(`@/views/${route.name}`),
   meta: route.meta || {}
 }))

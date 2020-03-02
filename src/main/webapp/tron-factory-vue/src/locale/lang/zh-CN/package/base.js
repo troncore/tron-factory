@@ -11,9 +11,11 @@ export default {
   close: '关闭',
   edit: '编辑',
   update: '更新',
+  modify: '修改',
 
   detail: '详情',
   view: '查看',
+  logs: '日志',
   viewDetail: '查看详情',
   viewLog: '查看日志',
   goBack: '退后',
@@ -46,4 +48,6 @@ export default {
 
   pleaseInput: '请输入',
   pleaseSelect: '请选择',
+  warning: '警告',
+  error: '错误',
 }
