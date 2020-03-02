@@ -47,7 +47,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~@/assets/styles/base";
 .aside-nav {
   height: 100%;
   background-color: #fff;
@@ -62,7 +61,7 @@ export default {
       overflow: auto;
     }
 
-    /deep/ .el-menu-item{
+    /deep/ .el-menu-item, {
       font-size: 16px;
       color: #666;
       border-left: 4px solid transparent;
@@ -82,6 +81,16 @@ export default {
         color: #475F7B;
       }
     }
+    /deep/ .el-submenu {
+      .el-submenu__title {
+        font-size: 16px;
+        color: #666;
+        *:first-child {
+          margin-left: 4px;
+        }
+      }
+    }
+
   }
 }
 </style>

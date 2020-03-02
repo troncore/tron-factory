@@ -11,8 +11,8 @@
   <el-submenu
     v-else
     class="im-submenu"
-    :index="menuItem.name"
-    :popper-append-to-body="false">
+    :key="menuItem.name"
+    :index="menuItem.name">
     <template slot="title">
       <i class="menu-icon" :class="menuItem.icon" />
       <span> {{ $t(menuItem.title) }}</span>
