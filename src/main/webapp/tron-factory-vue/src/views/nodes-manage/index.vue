@@ -19,14 +19,14 @@
       <el-table-column prop="port" :label="$t('nodesManage.nodePort')" align="center"></el-table-column>
       <el-table-column :label="$t('nodesManage.isSR')" align="center">
         <template slot-scope="scope">
-          <el-tag size="medium" type="success" v-if="scope.row.isSR">YES</el-tag>
-          <el-tag size="medium" type="danger" v-else>NO</el-tag>
+          <el-tag size="mini" type="success" effect="plain" v-if="scope.row.isSR">YES</el-tag>
+          <el-tag size="mini" type="info" effect="plain" v-else>NO</el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('nodesManage.deployStatus')" align="center">
         <template slot-scope="scope">
-          <el-tag size="medium" type="success" v-if="scope.row.isDeploy">{{$t('nodesManage.deployed')}}</el-tag>
-          <el-tag size="medium" type="danger" v-else>{{$t('nodesManage.unDeploy')}}</el-tag>
+          <el-tag size="mini" type="success" v-if="scope.row.deployed_status">{{$t('nodesManage.deployed')}}</el-tag>
+          <el-tag size="mini" type="danger" v-else>{{$t('nodesManage.unDeploy')}}</el-tag>
         </template>
       </el-table-column>
 
@@ -54,7 +54,19 @@ export default {
       tableLoading: false,
     }
   },
+  created() {
+    this.getNodeList()
+  },
   methods: {
+    getNodeList () {
+      this.tableLoading = true
+      this.$_api.nodesManage.getNodeList({}, (err, res) => {
+        this.tableLoading = false
+        if (err) return
+
+        this.tableData = res
+      })
+    },
     handleAddNode() {
       this.$router.push({
         path: '/nodes-manage/node-edit'

@@ -18,11 +18,17 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: { '^/__local__': '' },
       },
+      // mock platform:  http://rap2.taobao.org/
+      '/__mock__': {
+        target: 'http://rap2.taobao.org:38080/app/mock/246117',
+        changeOrigin: true,
+        pathRewrite: { '^/__mock__': '' },
+      },
       '/__server__': {
         target: 'http://47.252.2.112:8080',
         changeOrigin: true,
         pathRewrite: { '^/__server__': '' },
-      }
+      },
     },
     host: '127.0.0.1',
     port: 8090,

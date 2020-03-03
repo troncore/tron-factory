@@ -16,7 +16,7 @@ function responseSuccess(response, callback) {
 
 // the server responses error or network error
 function responseFail(error, callback) {
-  let error_msg = '' + error || 'Unknown Error'
+  let error_msg = '' + (error || 'Exception Error')
   Notification.error({
     title: 'Error',
     message: error_msg,
@@ -27,9 +27,10 @@ function responseFail(error, callback) {
 
 export const proxyMap = {
   local: '/__local__',
+  mock: '/__mock__',
   service: '/__server__',
 }
-const currentProxy = 'local'
+const currentProxy = 'mock'
 export const baseURL = isDevelopment ? proxyMap[currentProxy] : ''
 
 const $axios = Axios.create({
