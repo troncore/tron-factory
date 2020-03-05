@@ -10,14 +10,20 @@
     <div class="header-right">
 
       <div class="user-info" v-if="isSignIn">
-        <el-button type="text" class="sign-out" @click="handleSignOut">登出</el-button>
+        <span class="account">{{ userInfo.account }}</span>
+        <i class="sign-out el-icon-switch-button" @click="handleSignOut"></i>
       </div>
+
+      <i class="divider-line"></i>
 
       <!-- choose language -->
       <el-dropdown class="lang-dropdown hover-effect" trigger="click" @command="handleCommand">
         <div class="avatar-wrapper">{{ currentLang || 'Language' }}<i class="el-icon-caret-bottom" /></div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(value, key) in languages" :key="key" :command="key">
+          <el-dropdown-item
+            v-for="(value, key) in languages"
+            :key="key"
+            :command="key">
             {{ value }}
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -28,7 +34,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import Hamburger from './Hamburger'
 
 export default {
@@ -49,13 +55,14 @@ export default {
   computed: {
     ...mapGetters('app', [
       "isSignIn",
+      "userInfo"
     ])
   },
   created () {
     this.getLang()
   },
   methods: {
-    ...mapMutations('app', [
+    ...mapActions('app', [
       "signOut"
     ]),
     getLang () {
@@ -64,8 +71,9 @@ export default {
     },
 
     handleSignOut () {
-      this.signOut()
-      this.$router.push('/sign-in')
+      this.signOut().then(() => {
+        this.$router.push('/sign-in')
+      })
     },
 
     handleCommand(val) {
@@ -99,13 +107,28 @@ export default {
     margin: 0 64px 0 auto;
 
     .user-info {
+      color: #081C56;
+      font-size: 14px;
       .sign-out {
+        margin-left: 5px;
+        vertical-align: middle;
         cursor: pointer;
+        &:hover {
+          color: red;
+        }
       }
     }
 
+    .divider-line {
+      display: inline-block;
+      height: 16px;
+      width: 1px;
+      background-color: rgba(0, 0, 0, .2);
+      vertical-align: middle;
+      margin: 0 15px;
+    }
+
     .lang-dropdown {
-      margin-left: 30px;
       &.hover-effect {
         cursor: pointer;
         transition: background 0.3s;

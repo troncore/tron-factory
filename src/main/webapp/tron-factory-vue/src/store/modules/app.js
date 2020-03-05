@@ -5,6 +5,8 @@ export default {
   state: {
     isSignIn: localStorage.getItem('isSignIn') === 'true',
     userInfo: {
+      name: '',
+      account: '',
       email: '',
     },
     isCollapseAside: localStorage.getItem('isCollapseAside') === 'true',
@@ -27,13 +29,14 @@ export default {
   },
 
   mutations: {
-    signIn (state) {
-      state.isSignIn = true
-      localStorage.setItem('isSignIn', state.isSignIn)
+    signIn (state, payload) {
+      return undefined;
     },
     signOut (state) {
-      state.isSignIn = false
-      localStorage.setItem('isSignIn', state.isSignIn)
+      return undefined;
+    },
+    setUserInfo (state, payload) {
+      state.userInfo.account = localStorage.getItem('user_account') || ''
     },
     toggleCollapseAside (state) {
       state.isCollapseAside = !state.isCollapseAside
@@ -42,5 +45,24 @@ export default {
   },
 
   actions: {
+    signIn ({ state, getters, commit, dispatch, rootGetters }, payload) {
+      return new Promise(resolve => {
+        state.isSignIn = true
+        localStorage.setItem('isSignIn', state.isSignIn)
+
+        state.userInfo.account = payload.account
+        localStorage.setItem('user_account', state.userInfo.account)
+
+        resolve()
+      })
+    },
+    signOut ({ state }) {
+      return new Promise(resolve => {
+        state.isSignIn = false
+        localStorage.setItem('isSignIn', state.isSignIn)
+
+        resolve()
+      })
+    },
   },
 }

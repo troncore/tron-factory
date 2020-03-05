@@ -5,6 +5,7 @@ export default {
   testAccount: '登录测试账号',
   signIn: '登录',
   helpTips: {
+    account: '请输入邮箱',
     email: '请输入邮箱',
     password: '请输入密码',
     emailOrPwd: '邮箱或密码错误',

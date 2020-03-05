@@ -20,7 +20,7 @@
         <img class="logo-img" src="@/assets/images/logo.png" :title="siteTitle" :alt="siteTitle"/>
         <div class="form-item">
           <label class="label">{{ $t('userInfo.account') }}</label>
-          <el-input v-model="form.email" clearable :placeholder="$t('userInfo.helpTips.email')"/>
+          <el-input v-model="form.account" clearable :placeholder="$t('userInfo.helpTips.account')"/>
         </div>
         <div class="form-item">
           <label class="label">{{ $t('userInfo.password') }}</label>
@@ -39,14 +39,14 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   name: "sign-in",
   data () {
     return {
       siteTitle: 'TRON FACTORY',
       form: {
-        email: '',
+        account: '',
         password: '',
       },
       formRules: {
@@ -54,7 +54,7 @@ export default {
       },
       testAccount: [
         {
-          email: 'test@tron.com',
+          account: 'test@tron.com',
           password: 'test1234'
         }
       ],
@@ -68,7 +68,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', [
+    ...mapActions('app', [
       "signIn"
     ]),
 
@@ -77,7 +77,7 @@ export default {
       let emailReg = /^\w+@\w+\.\w+$/
       let passwordReg = /^(?=.*[0-9])(?=.*[a-zA-Z])\S{8,20}$/
 
-      let invalidEmail = !this.form.email || this.form.email !== this.currentAccount.email
+      let invalidEmail = !this.form.account || this.form.account !== this.currentAccount.account
       let invalidPassword = !this.form.password || this.form.password !== this.currentAccount.password
 
       if (invalidEmail  || invalidPassword) {
@@ -88,15 +88,18 @@ export default {
         return
       }
 
-      this.signIn()
-      this.$router.push('/')
+      this.signIn({
+        account: this.form.account,
+      }).then(() => {
+        this.$router.push('/')
+      })
     },
 
     handleSavePassword () {
 
     },
     handleTestAccount () {
-      this.form.email = this.currentAccount.email || ''
+      this.form.account = this.currentAccount.account || ''
       this.form.password = this.currentAccount.password || ''
     },
   }

@@ -53,6 +53,8 @@ router.beforeEach( async (to, from, next) => {
     if ( isAuth && !store.getters['app/isSignIn']) {
       next('/sign-in')
     } else {
+      if(store.getters['app/isSignIn']) store.commit('app/setUserInfo')
+
       next()
     }
 

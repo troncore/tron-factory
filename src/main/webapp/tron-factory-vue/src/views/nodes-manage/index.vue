@@ -1,10 +1,8 @@
 <template>
   <div class="nodes-manage page-view">
     <div class="help-tools">
-      <el-button @click="handleAddNode">{{ $t('nodesManage.addNode') }}</el-button>
-      <el-button @click="handleConfig">{{ $t('nodesManage.config') }}</el-button>
-      <el-button @click="handleDeploy">{{ $t('nodesManage.deploy') }}</el-button>
-      <el-button @click="handleRefresh">{{ $t('nodesManage.refresh') }}</el-button>
+      <el-button class="el-icon-plus" type="primary" @click="handleAddNode"> {{ $t('nodesManage.addNode') }}</el-button>
+      <el-button class="el-icon-caret-right" type="success" :loading="deployLoading" @click="handleDeploy"> {{ $t('nodesManage.deploy') }}</el-button>
     </div>
 
 
@@ -19,14 +17,14 @@
       <el-table-column prop="port" :label="$t('nodesManage.nodePort')" align="center"></el-table-column>
       <el-table-column :label="$t('nodesManage.isSR')" align="center">
         <template slot-scope="scope">
-          <el-tag size="mini" type="success" effect="plain" v-if="scope.row.isSR">YES</el-tag>
-          <el-tag size="mini" type="info" effect="plain" v-else>NO</el-tag>
+          <span class="color-success" v-if="scope.row.isSR">YES</span>
+          <span class="color-info" v-else>NO</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('nodesManage.deployStatus')" align="center">
         <template slot-scope="scope">
           <el-tag size="mini" type="success" v-if="scope.row.deployed_status">{{$t('nodesManage.deployed')}}</el-tag>
-          <el-tag size="mini" type="danger" v-else>{{$t('nodesManage.unDeploy')}}</el-tag>
+          <el-tag size="mini" type="info" v-else>{{$t('nodesManage.unDeploy')}}</el-tag>
         </template>
       </el-table-column>
 
@@ -52,6 +50,7 @@ export default {
     return {
       tableData: [],
       tableLoading: false,
+      deployLoading: false,
     }
   },
   created() {
@@ -72,13 +71,7 @@ export default {
         path: '/nodes-manage/node-edit'
       })
     },
-    handleConfig() {
-
-    },
     handleDeploy() {
-
-    },
-    handleRefresh() {
 
     },
     handleLogs(row) {
@@ -102,5 +95,11 @@ export default {
   .help-tools {
     margin-bottom: 20px;
   }
+}
+.color-success {
+  color: #67c23a;
+}
+.color-info {
+  color: #909399;
 }
 </style>
