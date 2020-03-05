@@ -28,12 +28,12 @@
 
       <el-table-column prop="java_tron_version" :label="$t('nodesManage.version')+'(java-tron)'" align="center"></el-table-column>
 
-      <el-table-column prop="status" :label="$t('base.operate')" align="center">
+      <el-table-column prop="status" :label="$t('base.operate')">
         <template slot-scope="scope">
           <el-button type="text" @click="handleLogs(scope.row)">{{$t('base.logs') }}</el-button>
-          <el-button type="text" @click="handleUpdate(scope.row)">{{$t('base.modify') }}</el-button>
-          <el-button type="text" @click="handleDelete(scope.row)">{{$t('base.delete') }}</el-button>
-          <el-button type="text" @click="handleDetail(scope.row)">{{$t('base.detail') }}</el-button>
+          <el-button v-if="scope.row.deployed_status" type="text" @click="handleDetail(scope.row)">{{$t('base.detail') }}</el-button>
+          <el-button v-if="!scope.row.deployed_status" type="text" @click="handleUpdate(scope.row)">{{$t('base.edit') }}</el-button>
+          <el-button v-if="!scope.row.deployed_status" type="text" @click="handleDelete(scope.row)">{{$t('base.delete') }}</el-button>
         </template>
       </el-table-column>
 
@@ -67,19 +67,19 @@ export default {
 
     handleAddNode() {
       this.$router.push({
-        path: '/nodes-manage/add'
+        path: '/nodes-manage/node-add'
       })
     },
 
     handleUpdate(row) {
       this.$router.push({
-        path: '/nodes-manage/update'
+        path: '/nodes-manage/node-edit'
       })
     },
 
     handleDetail(row) {
       this.$router.push({
-        path: '/nodes-manage/detail'
+        path: '/nodes-manage/node-detail'
       })
     },
 
