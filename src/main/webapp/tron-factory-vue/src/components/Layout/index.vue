@@ -58,19 +58,4 @@ export default {
     }
   }
 }
-
-/*.fade-leave-active,*/
-.fade-enter-active {
-  transition: all .5s;
-}
-
-.fade-enter {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
 </style>

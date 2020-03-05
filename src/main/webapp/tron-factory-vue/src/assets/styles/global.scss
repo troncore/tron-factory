@@ -48,6 +48,29 @@ div, span {
   background-color: white;
 }
 
+.im-card {
+  background-color: #fff;
+  box-shadow: 0 1px 4px 0 rgba(0,21,41,0.12);
+  border-radius: 5px;
+}
+
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: all .5s;
+}
+.fade-enter {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.padding-20 {
+  padding: 20px;
+}
 .align-left {
   text-align: left;
 }
@@ -56,24 +79,5 @@ div, span {
 }
 .align-right {
   text-align: right;
-}
-
-.flow-card {
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0 2px 40px 0 rgba(4,4,64,0.04);
-  border-radius: 5px;
-}
-
-.theme-icon {
-  font-size: 100px;
-  color: theme-color();
-}
-
-.tron-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
 }
 

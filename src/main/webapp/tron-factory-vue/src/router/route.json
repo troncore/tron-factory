@@ -1,25 +1,9 @@
 [
   {
-    "path": "/nodes-manage",
+    "path": "/nodes-manage/:type?/:id?",
     "name": "nodes-manage",
     "meta": {
       "auth": true
-    }
-  },
-  {
-    "path": "/nodes-manage/node-edit/:id?",
-    "name": "nodes-manage/node-edit",
-    "meta": {
-      "auth": true,
-      "hideAside": true
-    }
-  },
-  {
-    "path": "/nodes-manage/node-detail/:id?",
-    "name": "nodes-manage/node-detail",
-    "meta": {
-      "auth": true,
-      "hideAside": true
     }
   },
   {

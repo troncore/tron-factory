@@ -1,5 +1,5 @@
 <template>
-  <div class="node-detail page-view">
+  <div class="node-detail im-card padding-20">
     node-detail
   </div>
 </template>
