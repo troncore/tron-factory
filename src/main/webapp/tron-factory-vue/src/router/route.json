@@ -7,7 +7,7 @@
     }
   },
   {
-    "path": "/configuring",
+    "path": "/configuring/:type(quick|define|import)/:step(genesis|base|network|database|p2p|modules_fn)?",
     "name": "configuring",
     "meta": {
       "auth": true

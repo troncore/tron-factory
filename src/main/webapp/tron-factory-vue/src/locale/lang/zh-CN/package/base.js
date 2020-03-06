@@ -12,6 +12,7 @@ export default {
   edit: '编辑',
   update: '更新',
   modify: '修改',
+  complete: '完成',
 
   detail: '详情',
   view: '查看',
