@@ -1,7 +1,7 @@
 <!-- node add、edit、detail-->
 <template>
   <div class="node-info">
-    <el-form :rules="formRules" :model="form" size="medium">
+    <el-form :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
       <div class="im-card padding-20">
         <div class="service-type">
           <div class="title">服务器类型</div>
@@ -19,7 +19,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.ip" tabindex="22" :maxlength="50" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
+          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
         </el-form-item>
 
         <el-form-item prop="port">
@@ -30,7 +30,7 @@
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.port" tabindex="23" :maxlength="50" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
+          <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
         </el-form-item>
 
         <br />
@@ -41,7 +41,7 @@
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.userName" tabindex="21" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.userName" tabindex="23" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="userName">
             <span slot="label">{{ $t('nodeList.sshUserName') }}
@@ -50,7 +50,7 @@
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.userName" tabindex="21" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.userName" tabindex="24" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="userName">
             <span slot="label">{{ $t('nodeList.sshUserName') }}
@@ -59,7 +59,7 @@
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.userName" tabindex="21" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.userName" tabindex="25" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </div>
 
@@ -271,7 +271,7 @@
       padding-bottom: 5px;
 
       .service-type {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         .title {
           margin-bottom: 15px;
           font-size: 16px;
@@ -317,6 +317,7 @@
       width: 300px;
 
       .el-form-item__label {
+        padding: 0;
         line-height: 30px;
       }
     }
