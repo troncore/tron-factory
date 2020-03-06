@@ -4,9 +4,9 @@
     <div class="nav-list">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/nodes-manage' }"><b>节点管理</b></el-breadcrumb-item>
-        <el-breadcrumb-item v-if="opType === 'node-add'">添加节点</el-breadcrumb-item>
-        <el-breadcrumb-item v-else-if="opType === 'node-edit'">修改节点</el-breadcrumb-item>
-        <el-breadcrumb-item v-else-if="opType === 'node-detail'">节点详情</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="pageType === 'add'">添加节点</el-breadcrumb-item>
+        <el-breadcrumb-item v-else-if="pageType === 'edit'">修改节点</el-breadcrumb-item>
+        <el-breadcrumb-item v-else-if="pageType === 'detail'">节点详情</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -25,36 +25,14 @@ export default {
     NodeList,
     NodeInfo: () => import('./node-info'),
   },
-  data () {
-    return {
-      componentPageList: ['node-add', 'node-edit', 'node-detail']
-    }
-  },
   computed: {
-    opType () {
+    pageType () {
       return this.$route.params.type
     },
     currentComponentPage () {
-      let result = 'NodeList'
-      switch (this.opType) {
-        case 'node-add':
-        case 'node-edit':
-        case 'node-detail':
-          result = 'NodeInfo'
-          break
-      }
-      return result
+      return ['add', 'edit', 'detail'].includes(this.pageType) ? 'NodeInfo' : 'NodeList'
     },
   },
-  watch: {
-    opType: {
-      handler(type) {
-        if (type && !this.componentPageList.includes(type))
-          this.$router.push({path: '/nodes-manage'})
-      },
-      immediate: true
-    }
-  }
 }
 </script>
 

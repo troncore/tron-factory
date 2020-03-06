@@ -1,6 +1,6 @@
 [
   {
-    "path": "/nodes-manage/:type?/:id?",
+    "path": "/nodes-manage/:type(add|edit|detail)?/:id(\\d+)?",
     "name": "nodes-manage",
     "meta": {
       "auth": true

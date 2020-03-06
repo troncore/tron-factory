@@ -67,19 +67,19 @@ export default {
 
     handleAddNode() {
       this.$router.push({
-        path: '/nodes-manage/node-add'
+        path: '/nodes-manage/add'
       })
     },
 
     handleUpdate(row) {
       this.$router.push({
-        path: '/nodes-manage/node-edit'
+        path: '/nodes-manage/edit/' + row.id
       })
     },
 
     handleDetail(row) {
       this.$router.push({
-        path: '/nodes-manage/node-detail'
+        path: '/nodes-manage/detail/' + row.id
       })
     },
 
