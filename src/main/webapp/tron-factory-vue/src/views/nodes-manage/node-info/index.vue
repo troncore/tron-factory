@@ -338,6 +338,8 @@
         })
       },
 
+      // TODO 重复IP
+
       // format submit params
       async initParams(params) {
         let baseParams = {
