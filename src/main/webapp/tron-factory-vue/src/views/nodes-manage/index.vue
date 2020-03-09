@@ -10,27 +10,23 @@
       </el-breadcrumb>
     </div>
 
-
     <transition name="fade" mode="out-in">
-      <component :is="currentComponentPage"/>
+      <node-list v-if="!pageType"></node-list>
+      <node-info v-else></node-info>
     </transition>
   </div>
 </template>
 
 <script>
-import NodeList from './node-list'
 export default {
   name: "nodes-manage",
   components: {
-    NodeList,
+    NodeList: () => import('./node-list'),
     NodeInfo: () => import('./node-info'),
   },
   computed: {
     pageType () {
       return this.$route.params.type
-    },
-    currentComponentPage () {
-      return ['add', 'edit', 'detail'].includes(this.pageType) ? 'NodeInfo' : 'NodeList'
     },
   },
 }

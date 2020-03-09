@@ -4,7 +4,7 @@ export default {
     getNodeLogs: '/getLogInfo',   // old
     getCrypto: '/getCrypto',      // old
 
-    getNodeDetail: '/api/nodesManage/nodeDetail',   // new
+    getNodeInfo: '/nodeInfo',   // new
   },
   post: {
     addNoteInfo: '/nodeInfo',     // old:

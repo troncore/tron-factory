@@ -103,31 +103,40 @@
 
         <br />
 
-        <el-form-item prop="privateKey">
-          <span slot="label">
-            privateKey
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-          </span>
-          <el-input v-model.trim="form.privateKey" tabindex="28" type="textarea" :maxlength="1000" :placeholder="$t('nodeList.valid.inputPrivateKey')"></el-input>
-        </el-form-item>
-
-        <el-form-item v-if="form.publicKey">
+        <el-form-item v-if="publicKey">
           <span slot="label">
             publicKey
             <el-tooltip effect="dark" :content="$t('nodeList.helpTips.publicKey')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          {{ form.publicKey }}
+          {{ publicKey }}
+        </el-form-item>
+        <br/>
+
+        <el-form-item prop="privateKey" class="private-key">
+          <span class="private-key__help" slot="label">
+            privateKey
+            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
+              <i class="fa fa-question-circle-o"></i>
+            </el-tooltip>
+            <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">Key 生成工具</a>
+          </span>
+          <el-input
+            v-model.trim="form.privateKey"
+            tabindex="28"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            :maxlength="1000"
+            :placeholder="$t('nodeList.valid.inputPrivateKey')">
+          </el-input>
         </el-form-item>
       </div>
     </el-form>
 
     <div class="page-footer align-right">
-      <el-button class="im-button large">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button large"  type="primary">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button large" type="primary" :loading="loading" @click="handleNodeInfo">{{ $t('base.complete') }}</el-button>
     </div>
   </div>
 </template>
@@ -151,6 +160,7 @@
           privateKey: '',
         },
         nodeInfo: {},
+        loading: false,
       }
     },
     computed: {
@@ -159,6 +169,9 @@
       },
       opNodeId () {
         return this.$route.params.id
+      },
+      publicKey () {
+        return this.nodeInfo.publicKey
       },
       formRules() {
         const validNum = (rule, value, callback) => {
@@ -252,9 +265,48 @@
     },
     methods: {
       getNodeInfo () {
-        if (this.opType === 'add' || !this.opNodeId) return
+        if (this.opType !== 'add' || !this.opNodeId) return
 
-        this.$_api.nodesManage.getNodeDetail({id: this.opNodeId}, (err, res) => {
+        this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
+
+          console.log(res)
+          if (err) return
+
+          this.nodeInfo = res || {}
+          this.initForm()
+        })
+      },
+      initForm() {
+
+      },
+
+      handleCancel () {
+        this.$router.push({
+          path: '/nodes-manage'
+        })
+      },
+
+      handleNodeInfo () {
+        this.loading = true
+      },
+
+      addNodeInfo () {
+        if (this.opType !== 'add' || !this.opNodeId) return
+
+        this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
+
+          console.log(res)
+          if (err) return
+
+          this.nodeInfo = res || {}
+        })
+      },
+      editNodeInfo () {
+        if (this.opType !== 'add' || !this.opNodeId) return
+
+        this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
+
+          console.log(res)
           if (err) return
 
           this.nodeInfo = res || {}
@@ -316,10 +368,19 @@
       margin-bottom: 15px;
       width: 300px;
 
+      &.private-key {
+        width: 720px;
+      }
+
       .el-form-item__label {
         padding: 0;
         line-height: 30px;
       }
+    }
+    .key-tool {
+      margin-left: 20px;
+      color: theme-color();
+      font-size: 12px;
     }
   }
 </style>
