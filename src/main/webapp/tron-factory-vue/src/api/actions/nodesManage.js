@@ -7,16 +7,16 @@ export default {
     getNodeInfo: '/api/nodeInfo',   // new
   },
   post: {
-    addNoteInfo: '/nodeInfo',     // old:
+    addNoteInfo: '/api/nodeInfo',     // old:
     checkNode: '/checkNode',      // old
     deployNode: '/deployNode',    // old
     updateCrypto: '/crypto',      // old
     initConfig: '/initConfig',    // old
   },
   put: {
-    editNoteInfo: '/nodeInfo',    // old:
+    editNoteInfo: '/api/nodeInfo',    // old:
   },
   delete: {
-    deleteNoteInfo: '/nodeInfo',  // old:
+    deleteNoteInfo: '/api/nodeInfo',  // old:
   },
 }

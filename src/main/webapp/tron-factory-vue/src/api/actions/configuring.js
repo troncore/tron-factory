@@ -1,6 +1,6 @@
 export default {
   get: {
-    checkBalance: '/checkBalance',
+    checkBalance: '/api/checkBalance',
     originConfig: '/originConfig',
     getConfigInfo: '/config',
 

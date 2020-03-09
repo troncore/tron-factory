@@ -27,6 +27,7 @@ export default {
   operate: '操作',
   emptyData: '暂无数据',
 
+  successful: '成功',
   success: {
     save: '保存成功',
     edit: '编辑成功',

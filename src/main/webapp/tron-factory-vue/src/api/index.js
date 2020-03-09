@@ -2,7 +2,7 @@ import { initActions } from '@/utils/common'
 
 import user from './actions/user'
 import nodesManage from './actions/nodesManage'
-import Configuring from './actions/configuring'
+import configuring from './actions/configuring'
 
 // import getStart from './actions/getStart'
 // import nodeList from './actions/nodeList'
@@ -12,7 +12,7 @@ import Configuring from './actions/configuring'
 const actions = {
   user,
   nodesManage,
-  Configuring,
+  configuring,
 
   // getStart,
   // nodeList,

@@ -18,7 +18,6 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-
           <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
         </el-form-item>
 
@@ -29,7 +28,6 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-
           <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :disabled="isView" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
         </el-form-item>
 
@@ -42,26 +40,25 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-
-            <el-input v-model.trim="form.sshPassword" tabindex="23" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.userName" tabindex="23" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
-          <el-form-item prop="userName">
+
+          <el-form-item prop="sshPassword">
             <span slot="label">SSH 密码
               <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-
-            <el-input v-model.trim="form.sshPort" tabindex="24" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
-          <el-form-item prop="userName">
+
+          <el-form-item prop="sshPort">
             <span slot="label">SSH 端口
               <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-
-            <el-input v-model.trim="form.userName" tabindex="25" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.sshPort" tabindex="25" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
         </template>
       </div>
@@ -119,7 +116,7 @@
 
           <br/>
 
-          <el-form-item prop="privateKey" class="private-key">
+          <el-form-item prop="privateKey" class="private-key" v-if="opType !== 'detail'">
             <span class="private-key__help" slot="label">
               privateKey
               <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
@@ -142,8 +139,8 @@
     </el-form>
 
     <div class="page-footer align-right">
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button large" type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t(opType !== 'detail' ? 'base.cancel' : 'base.return') }}</el-button>
+      <el-button v-if="opType !== 'detail'" class="im-button large" type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
     </div>
   </div>
 </template>
@@ -294,22 +291,23 @@
         })
       },
       initForm() {
+        const nodeInfo = this.nodeInfo
         this.form = {
-          serviceType: this.nodeInfo.serviceType || 'remote',
+          serviceType: nodeInfo.serviceType || 'remote',
 
-          ip: this.nodeInfo.ip || '',
-          port: this.nodeInfo.ip || '',
-          userName: this.nodeInfo.ip || '',
-          sshPassword: this.nodeInfo.ip || '',
-          sshPort: this.nodeInfo.ip || '',
+          ip: nodeInfo.ip || '',
+          port: nodeInfo.port || '',
+          userName: nodeInfo.userName || '',
+          sshPassword: nodeInfo.sshPassword || '',
+          sshPort: nodeInfo.sshPort || '',
 
-          isSR: this.nodeInfo.isSR !== undefined ? this.nodeInfo.isSR : true,
-          needSyncCheck: this.nodeInfo.needSyncCheck !== undefined ? this.nodeInfo.needSyncCheck : false,
-          url: this.nodeInfo.url || 'http://',
-          voteCount: this.nodeInfo.voteCount || '',
+          isSR: nodeInfo.isSR !== undefined ? Boolean(nodeInfo.isSR) : true,
+          needSyncCheck: nodeInfo.needSyncCheck !== undefined ? nodeInfo.needSyncCheck : false,
+          url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || 'http://',
+          voteCount: nodeInfo.voteCount || '',
           privateKey: this.safePrivateKey,
         }
-        this.publicKey = this.nodeInfo.publicKey
+        this.publicKey = nodeInfo.publicKey
       },
 
       async handleSubmit() {
@@ -326,8 +324,15 @@
               this.loading = false
               if (err) return
 
-              this.$emit('success', true)
-              this.$message.success(this.$t(msg))
+              this.$notify({
+                type: 'success',
+                title: this.$t('base.successful'),
+                message: this.$t(msg),
+              })
+
+              this.$router.push({
+                path: '/nodes-manage'
+              })
             })
           }
         })
@@ -373,7 +378,7 @@
       checkBalance(balance) {
         return new Promise(resolve => {
           this.$_api.configuring.checkBalance({ balance }, (err, res) => {
-            if (err) return resolve(false)
+            if (err) return resolve(true)
 
             if (res.result) {
               resolve(true)
