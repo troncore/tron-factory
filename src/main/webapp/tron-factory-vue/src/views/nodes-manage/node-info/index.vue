@@ -286,7 +286,7 @@
         this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
           if (err) return
 
-          this.nodeInfo = res || {}
+          this.nodeInfo = res
           this.initForm()
         })
       },
@@ -313,7 +313,7 @@
       async handleSubmit() {
         this.$refs['im-form'].validate(async valid => {
           if (valid) {
-            let params = {}
+            const params = {}
             this.loading = true
             if (!(await this.initParams(params))) return
 
