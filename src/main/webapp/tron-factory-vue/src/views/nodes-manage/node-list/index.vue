@@ -58,7 +58,6 @@ export default {
     getNodeList () {
       this.tableLoading = true
       this.$_api.nodesManage.getNodeList({}, (err, res) => {
-        console.log(res)
         this.tableLoading = false
         if (err) return
 

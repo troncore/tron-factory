@@ -1,11 +1,11 @@
 <!-- node add、edit、detail-->
 <template>
   <div class="node-info">
-    <el-form :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
+    <el-form ref="im-form" :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
       <div class="im-card padding-20">
         <div class="service-type">
           <div class="title">服务器类型</div>
-          <el-radio-group size="medium" v-model="form.serviceType">
+          <el-radio-group size="medium" v-model="form.serviceType" :disabled="isView">
             <el-radio-button label="local">本地部署</el-radio-button>
             <el-radio-button label="remote">远程部署</el-radio-button>
           </el-radio-group>
@@ -19,7 +19,7 @@
             </el-tooltip>
           </span>
 
-          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
+          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
         </el-form-item>
 
         <el-form-item prop="port">
@@ -30,37 +30,40 @@
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
+          <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :disabled="isView" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
         </el-form-item>
 
-        <br />
-        <el-form-item prop="userName">
+        <br/>
+
+        <template v-if="form.serviceType === 'remote'">
+          <el-form-item prop="userName">
             <span slot="label">{{ $t('nodeList.sshUserName') }}
               <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.userName" tabindex="23" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>
-        <el-form-item prop="userName">
-            <span slot="label">{{ $t('nodeList.sshUserName') }}
+            <el-input v-model.trim="form.sshPassword" tabindex="23" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+          </el-form-item>
+          <el-form-item prop="userName">
+            <span slot="label">SSH 密码
               <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.userName" tabindex="24" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>
-        <el-form-item prop="userName">
-            <span slot="label">{{ $t('nodeList.sshUserName') }}
+            <el-input v-model.trim="form.sshPort" tabindex="24" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+          </el-form-item>
+          <el-form-item prop="userName">
+            <span slot="label">SSH 端口
               <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
 
-          <el-input v-model.trim="form.userName" tabindex="25" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>
+            <el-input v-model.trim="form.userName" tabindex="25" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+          </el-form-item>
+        </template>
       </div>
 
       <div class="im-card padding-20">
@@ -70,73 +73,77 @@
             <el-tooltip effect="dark" :content="$t('nodeList.helpTips.isSR')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
-            <el-switch v-model="form.isSR"></el-switch>
+            <el-switch v-model="form.isSR" :disabled="isView"></el-switch>
           </div>
-          <div class="header-item">
+          <div class="header-item" v-if="form.isSR">
             <span class="gray">同步检测</span>
             <el-tooltip effect="dark" :content="$t('nodeList.helpTips.isSR')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
-            <el-switch v-model="form.needSyncCheck"></el-switch>
+            <el-switch v-model="form.needSyncCheck" :disabled="isView"></el-switch>
           </div>
         </div>
 
-        <el-form-item prop="url">
-          <span slot="label">
-            URL
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.url')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-          </span>
-          <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :placeholder="$t('nodeList.valid.inputURL')"></el-input>
-        </el-form-item>
+        <template v-if="form.isSR">
+          <el-form-item prop="url">
+            <span slot="label">
+              URL
+              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.url')" placement="top">
+                <i class="fa fa-question-circle-o"></i>
+              </el-tooltip>
+            </span>
+            <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :disabled="isView" :placeholder="$t('nodeList.valid.inputURL')"></el-input>
+          </el-form-item>
 
-        <el-form-item prop="voteCount">
-          <span slot="label">
-            voteCount
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.voteCount')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-          </span>
-          <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
-        </el-form-item>
+          <el-form-item prop="voteCount">
+            <span slot="label">
+              voteCount
+              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.voteCount')" placement="top">
+                <i class="fa fa-question-circle-o"></i>
+              </el-tooltip>
+            </span>
+            <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :disabled="isView" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
+          </el-form-item>
 
-        <br />
+          <br />
 
-        <el-form-item v-if="publicKey">
-          <span slot="label">
-            publicKey
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.publicKey')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-          </span>
-          {{ publicKey }}
-        </el-form-item>
-        <br/>
+          <el-form-item v-if="publicKey">
+            <span slot="label">
+              publicKey
+              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.publicKey')" placement="top">
+                <i class="fa fa-question-circle-o"></i>
+              </el-tooltip>
+            </span>
+            {{ publicKey }}
+          </el-form-item>
 
-        <el-form-item prop="privateKey" class="private-key">
-          <span class="private-key__help" slot="label">
-            privateKey
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-            <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">Key 生成工具</a>
-          </span>
-          <el-input
-            v-model.trim="form.privateKey"
-            tabindex="28"
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            :maxlength="1000"
-            :placeholder="$t('nodeList.valid.inputPrivateKey')">
-          </el-input>
-        </el-form-item>
+          <br/>
+
+          <el-form-item prop="privateKey" class="private-key">
+            <span class="private-key__help" slot="label">
+              privateKey
+              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
+                <i class="fa fa-question-circle-o"></i>
+              </el-tooltip>
+              <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">Key 生成工具</a>
+            </span>
+            <el-input
+              v-model.trim="form.privateKey"
+              tabindex="28"
+              type="textarea"
+              :autosize="{ minRows: 2, maxRows: 4}"
+              :maxlength="1000"
+              :disabled="isView"
+              :placeholder="$t('nodeList.valid.inputPrivateKey')">
+            </el-input>
+          </el-form-item>
+        </template>
       </div>
     </el-form>
 
     <div class="page-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button large" type="primary" :loading="loading" @click="handleNodeInfo">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
     </div>
   </div>
 </template>
@@ -150,15 +157,21 @@
       return {
         form: {
           serviceType: 'remote',
-          userName: '',
+
           ip: '',
           port: '',
+          userName: '',
+          sshPassword: '',
+          sshPort: '',
+
           isSR: true,
           needSyncCheck: false,
           url: 'http://',
           voteCount: '',
           privateKey: '',
         },
+        safePrivateKey: Array(64).fill('*').join(''),
+        publicKey: '',
         nodeInfo: {},
         loading: false,
       }
@@ -167,11 +180,11 @@
       opType () {
         return this.$route.params.type
       },
+      isView () {
+        return this.opType === 'detail'
+      },
       opNodeId () {
         return this.$route.params.id
-      },
-      publicKey () {
-        return this.nodeInfo.publicKey
       },
       formRules() {
         const validNum = (rule, value, callback) => {
@@ -225,14 +238,11 @@
           }
         }
         return {
-          id: [
+          /*id: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { required: true, validator: validNum, trigger: 'blur', },
             { required: true, validator: validMaxNum, trigger: 'blur', },
-          ],
-          userName: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ],
+          ],*/
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { required: true, validator: validIpRule, trigger: 'blur', },
@@ -242,6 +252,15 @@
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { required: true, validator: validNum, trigger: 'blur', },
             { required: true, validator: validPortNum, trigger: 'blur', },
+          ],
+          userName: [
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          ],
+          sshPassword: [
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          ],
+          sshPort: [
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
           url: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -265,11 +284,9 @@
     },
     methods: {
       getNodeInfo () {
-        if (this.opType !== 'add' || !this.opNodeId) return
+        if (this.opType === 'add' || !this.opNodeId) return
 
         this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
-
-          console.log(res)
           if (err) return
 
           this.nodeInfo = res || {}
@@ -277,7 +294,95 @@
         })
       },
       initForm() {
+        this.form = {
+          serviceType: this.nodeInfo.serviceType || 'remote',
 
+          ip: this.nodeInfo.ip || '',
+          port: this.nodeInfo.ip || '',
+          userName: this.nodeInfo.ip || '',
+          sshPassword: this.nodeInfo.ip || '',
+          sshPort: this.nodeInfo.ip || '',
+
+          isSR: this.nodeInfo.isSR !== undefined ? this.nodeInfo.isSR : true,
+          needSyncCheck: this.nodeInfo.needSyncCheck !== undefined ? this.nodeInfo.needSyncCheck : false,
+          url: this.nodeInfo.url || 'http://',
+          voteCount: this.nodeInfo.voteCount || '',
+          privateKey: this.safePrivateKey,
+        }
+        this.publicKey = this.nodeInfo.publicKey
+      },
+
+      async handleSubmit() {
+        this.$refs['im-form'].validate(async valid => {
+          if (valid) {
+            let params = {}
+            this.loading = true
+            if (!(await this.initParams(params))) return
+
+            let api = this.opType === 'add' ? 'addNoteInfo' : 'editNoteInfo'
+            let msg = this.opType === 'add' ? 'nodeList.addNodeSuccess' : 'nodeList.updateNodeSuccess'
+
+            this.$_api.nodesManage[api](params, err => {
+              this.loading = false
+              if (err) return
+
+              this.$emit('success', true)
+              this.$message.success(this.$t(msg))
+            })
+          }
+        })
+      },
+
+      // format submit params
+      async initParams(params) {
+        let baseParams = {
+          serviceType: this.form.serviceType,
+          ip: this.form.ip,
+          port: this.form.port,
+          isSR: this.form.isSR,
+        }
+
+        let remoteParams = {
+          userName: this.form.userName,
+          sshPassword: this.form.sshPassword,
+          sshPort: this.form.sshPort,
+        }
+
+        let srParams = {
+          needSyncCheck: this.form.needSyncCheck,
+          url: `"${this.form.url}"`,
+          voteCount: this.form.voteCount,
+          privateKey: this.form.privateKey,
+        }
+        if (srParams.privateKey === this.safePrivateKey) delete srParams.privateKey
+
+        if (srParams.voteCount && !(await this.checkBalance(params.voteCount))) {
+          this.loading = false
+          return false
+        }
+
+        Object.assign(params, {
+          ...baseParams,
+          ...(baseParams.serviceType === 'remote' && remoteParams),
+          ...(baseParams.isSR && srParams),
+        })
+
+        return true
+      },
+
+      checkBalance(balance) {
+        return new Promise(resolve => {
+          this.$_api.configuring.checkBalance({ balance }, (err, res) => {
+            if (err) return resolve(false)
+
+            if (res.result) {
+              resolve(true)
+            } else {
+              this.$message.error(this.$t('nodeList.valid.maxVoteCountValue'))
+              resolve(false)
+            }
+          })
+        })
       },
 
       handleCancel () {
@@ -285,33 +390,6 @@
           path: '/nodes-manage'
         })
       },
-
-      handleNodeInfo () {
-        this.loading = true
-      },
-
-      addNodeInfo () {
-        if (this.opType !== 'add' || !this.opNodeId) return
-
-        this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
-
-          console.log(res)
-          if (err) return
-
-          this.nodeInfo = res || {}
-        })
-      },
-      editNodeInfo () {
-        if (this.opType !== 'add' || !this.opNodeId) return
-
-        this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
-
-          console.log(res)
-          if (err) return
-
-          this.nodeInfo = res || {}
-        })
-      }
     }
   }
 </script>
