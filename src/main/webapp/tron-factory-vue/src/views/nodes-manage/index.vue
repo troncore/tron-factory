@@ -3,10 +3,10 @@
 
     <div class="nav-list">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/nodes-manage' }"><b>节点管理</b></el-breadcrumb-item>
-        <el-breadcrumb-item v-if="pageType === 'add'">添加节点</el-breadcrumb-item>
-        <el-breadcrumb-item v-else-if="pageType === 'edit'">修改节点</el-breadcrumb-item>
-        <el-breadcrumb-item v-else-if="pageType === 'detail'">节点详情</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/nodes-manage' }"><b>{{ $t('nodesManage.nodesManage') }}</b></el-breadcrumb-item>
+        <el-breadcrumb-item v-if="pageType === 'add'">{{ $t('nodesManage.addNode') }}</el-breadcrumb-item>
+        <el-breadcrumb-item v-else-if="pageType === 'edit'">{{ $t('nodesManage.modifyNode') }}</el-breadcrumb-item>
+        <el-breadcrumb-item v-else-if="pageType === 'detail'">{{ $t('nodesManage.nodeDetail') }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 

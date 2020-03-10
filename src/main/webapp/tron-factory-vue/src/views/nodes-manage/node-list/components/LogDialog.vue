@@ -8,7 +8,7 @@
     top="200px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('deployNodes.logDialogTitle') }}</div>
+      <div class="title">{{ $t('nodesManage.logDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content" style="min-height: 200px;" v-loading="initLoading">
@@ -41,7 +41,7 @@
         initLoading: true,
         processingShow: false,
         processingLoading: false,
-        processingText: this.$t('deployNodes.emptyLog'),
+        processingText: this.$t('nodesManage.emptyLog'),
         timeID: null,
       }
     },
@@ -73,11 +73,11 @@
           this.initLoading = false
           this.processingShow = true
           this.processingLoading = true
-          this.processingText = this.$t('deployNodes.loadingLog')
+          this.processingText = this.$t('nodesManage.loadingLog')
 
           if (err) {
             this.processingLoading = false
-            this.processingText = this.$t('deployNodes.emptyLog')
+            this.processingText = this.$t('nodesManage.emptyLog')
             clearInterval(this.timeID)
 
             return
@@ -95,14 +95,14 @@
 
               } else if (log === 'ssh connect failed') {
                 this.processingLoading = false
-                this.processingText = this.$t('deployNodes.deployFail')
+                this.processingText = this.$t('nodesManage.deployFail')
 
                 clearInterval(this.timeID)
               }
             })
           } else {
             this.processingLoading = false
-            this.processingText = this.$t('deployNodes.emptyLog')
+            this.processingText = this.$t('nodesManage.emptyLog')
 
             clearInterval(this.timeID)
           }

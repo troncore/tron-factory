@@ -94,7 +94,7 @@ export default {
     },
 
     handleDelete(row) {
-      this.$confirm(this.$t('nodeList.deleteNodeTips'), this.$t('nodeList.deleteNodeTipsTitle'), {
+      this.$confirm(this.$t('nodesManage.deleteNodeTips'), this.$t('nodesManage.deleteNodeTipsTitle'), {
         confirmButtonText: this.$t('base.confirm'),
         cancelButtonText: this.$t('base.cancel'),
         center: true,
@@ -124,17 +124,17 @@ export default {
     async handleDeploy (params) {
       let errorMsg = ''
       if (!this.tableData.length)
-        errorMsg = '请先添加节点'
+        errorMsg = this.$t('nodesManage.pleaseAddNode')
       else if (this.tableData.every(node => node.isDeployed))
-        errorMsg = '节点都已部署'
+        errorMsg = this.$t('nodesManage.allNodeDeployed')
       // else if ('是否已完成配置') // TODO
-      //   errorMsg = '请填写配置'
+      //   errorMsg = 'this.$t('nodesManage.pleaseAddNode')'
       else if (!this.tableData.some(node => node.isSR && !node.needSyncCheck))
-        errorMsg = '至少配置一个SR节点同步检测为false'
+        errorMsg = this.$t('nodesManage.needSRnoSyncCheck')
 
       if (errorMsg) {
         this.$notify({
-          title: '警告',
+          title: this.$t('base.warning'),
           message: errorMsg,
           type: 'warning'
         })
@@ -147,7 +147,7 @@ export default {
 
       this.$notify({
         title: this.$t('base.successful'),
-        message: this.$t('deployNodes.deployingTips'),
+        message: this.$t('nodesManage.deployingTips'),
         type: 'success'
       });
 

@@ -4,39 +4,39 @@
     <el-form ref="im-form" :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
       <div class="im-card padding-20">
         <div class="service-type">
-          <div class="title">服务器类型</div>
+          <div class="title">{{ $t('nodesManage.serviceType') }}</div>
           <el-radio-group size="medium" v-model="form.serviceType" :disabled="isView">
-            <el-radio-button label="local">本地部署</el-radio-button>
-            <el-radio-button label="remote">远程部署</el-radio-button>
+            <el-radio-button label="local">{{ $t('nodesManage.localDeploy') }}</el-radio-button>
+            <el-radio-button label="remote">{{ $t('nodesManage.remoteDeploy') }}</el-radio-button>
           </el-radio-group>
         </div>
 
         <el-form-item prop="ip">
           <span slot="label">
             FullNode IP
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.ip')" placement="top">
+            <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.ip')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" :placeholder="$t('nodeList.valid.rightIP')"></el-input>
+          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
         </el-form-item>
 
         <el-form-item prop="port">
             <span slot="label">
               FullNode Port
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.port')" placement="top">
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.port')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-          <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :disabled="isView" :placeholder="$t('nodeList.valid.maxPortValue')"></el-input>
+          <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :disabled="isView" :placeholder="$t('nodesManage.valid.maxPortValue')"></el-input>
         </el-form-item>
 
         <br/>
 
         <template v-if="form.serviceType === 'remote'">
           <el-form-item prop="userName">
-            <span slot="label">{{ $t('nodeList.sshUserName') }}
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
+            <span slot="label">{{ $t('nodesManage.sshUserName') }}
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshUserName')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
@@ -44,8 +44,8 @@
           </el-form-item>
 
           <el-form-item prop="sshPassword">
-            <span slot="label">SSH 密码
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
+            <span slot="label">{{ $t('nodesManage.sshPassword') }}
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPassword')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
@@ -53,8 +53,8 @@
           </el-form-item>
 
           <el-form-item prop="sshPort">
-            <span slot="label">SSH 端口
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.sshUserName')" placement="top">
+            <span slot="label">{{ $t('nodesManage.sshPort') }}
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPort')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
@@ -66,15 +66,15 @@
       <div class="im-card padding-20">
         <div class="sr-header">
           <div class="header-item">
-            <span class="title">SR节点</span>
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.isSR')" placement="top">
+            <span class="title">{{ $t('nodesManage.SRNode') }}</span>
+            <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.isSR')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
             <el-switch v-model="form.isSR" :disabled="isView"></el-switch>
           </div>
           <div class="header-item" v-if="form.isSR">
-            <span class="gray">同步检测</span>
-            <el-tooltip effect="dark" :content="$t('nodeList.helpTips.isSR')" placement="top">
+            <span class="gray">{{ $t('nodesManage.syncCheck') }}</span>
+            <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.needSyncCheck')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
             <el-switch v-model="form.needSyncCheck" :disabled="isView"></el-switch>
@@ -85,21 +85,21 @@
           <el-form-item prop="url">
             <span slot="label">
               URL
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.url')" placement="top">
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.url')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :disabled="isView" :placeholder="$t('nodeList.valid.inputURL')"></el-input>
+            <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :disabled="isView" :placeholder="$t('nodesManage.valid.inputURL')"></el-input>
           </el-form-item>
 
           <el-form-item prop="voteCount">
             <span slot="label">
               voteCount
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.voteCount')" placement="top">
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.voteCount')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :disabled="isView" :placeholder="$t('nodeList.valid.inputVoteCount')"></el-input>
+            <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :disabled="isView" :placeholder="$t('nodesManage.valid.inputVoteCount')"></el-input>
           </el-form-item>
 
           <br />
@@ -107,7 +107,7 @@
           <el-form-item v-if="publicKey">
             <span slot="label">
               publicKey
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.publicKey')" placement="top">
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.publicKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
@@ -119,7 +119,7 @@
           <el-form-item prop="privateKey" class="private-key" v-if="opType !== 'detail'">
             <span class="private-key__help" slot="label">
               privateKey
-              <el-tooltip effect="dark" :content="$t('nodeList.helpTips.privateKey')" placement="top">
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.privateKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
               <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">Key 生成工具</a>
@@ -131,7 +131,7 @@
               :autosize="{ minRows: 2, maxRows: 4}"
               :maxlength="1000"
               :disabled="isView"
-              :placeholder="$t('nodeList.valid.inputPrivateKey')">
+              :placeholder="$t('nodesManage.valid.inputPrivateKey')">
             </el-input>
           </el-form-item>
         </template>
@@ -159,7 +159,7 @@
           port: '',
           userName: '',
           sshPassword: '',
-          sshPort: '',
+          sshPort: '20',
 
           isSR: true,
           needSyncCheck: false,
@@ -186,28 +186,28 @@
       formRules() {
         const validNum = (rule, value, callback) => {
           if (!isvalidateNum(value)) {
-            callback(new Error(this.$t('nodeList.valid.positiveInteger')))
+            callback(new Error(this.$t('nodesManage.valid.positiveInteger')))
           } else {
             callback()
           }
         }
         const validVoteNum = (rule, value, callback) => {
           if (!isvalidateIntegerNum(value)) {
-            callback(new Error(this.$t('nodeList.valid.gteZeroInt')))
+            callback(new Error(this.$t('nodesManage.valid.gteZeroInt')))
           } else {
             callback()
           }
         }
         const validIpRule = (rule, value, callback) => {
           if (!isCorrectIp(value)) {
-            callback(new Error(this.$t('nodeList.valid.rightIP')))
+            callback(new Error(this.$t('nodesManage.valid.rightIP')))
           } else {
             callback()
           }
         }
         const validLocalRule = (rule, value, callback) => {
-          if (value == '127.0.0.1') {
-            callback(new Error(this.$t('nodeList.valid.disabledLocalIP')))
+          if (value === '127.0.0.1') {
+            callback(new Error(this.$t('nodesManage.valid.disabledLocalIP')))
           } else {
             callback()
           }
@@ -215,21 +215,21 @@
 
         const validMaxNum = (rule, value, callback) => {
           if (value > 2147483647) {
-            callback(new Error(this.$t('nodeList.valid.maxNumberValue')))
+            callback(new Error(this.$t('nodesManage.valid.maxNumberValue')))
           } else {
             callback()
           }
         }
         const validPortNum = (rule, value, callback) => {
           if (value > 65535) {
-            callback(new Error(this.$t('nodeList.valid.maxPortValue')))
+            callback(new Error(this.$t('nodesManage.valid.maxPortValue')))
           } else {
             callback()
           }
         }
         const validPrivateKey = (rule, value, callback) => {
           if (value.length !== 64) {
-            callback(new Error(this.$t('nodeList.valid.inputPrivateKey')))
+            callback(new Error(this.$t('nodesManage.valid.inputPrivateKey')))
           } else {
             callback()
           }
@@ -318,7 +318,7 @@
             if (!(await this.initParams(params))) return
 
             let api = this.opType === 'add' ? 'addNoteInfo' : 'editNoteInfo'
-            let msg = this.opType === 'add' ? 'nodeList.addNodeSuccess' : 'nodeList.updateNodeSuccess'
+            let msg = this.opType === 'add' ? 'nodesManage.addNodeSuccess' : 'nodesManage.updateNodeSuccess'
 
             this.$_api.nodesManage[api](params, err => {
               this.loading = false
@@ -385,7 +385,7 @@
             if (res.result) {
               resolve(true)
             } else {
-              this.$message.error(this.$t('nodeList.valid.maxVoteCountValue'))
+              this.$message.error(this.$t('nodesManage.valid.maxVoteCountValue'))
               resolve(false)
             }
           })
