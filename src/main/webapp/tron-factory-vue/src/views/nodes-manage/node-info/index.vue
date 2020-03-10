@@ -49,7 +49,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
           <el-form-item prop="sshPort">
@@ -58,7 +58,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.sshPort" tabindex="25" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.sshPort" tabindex="25" :maxlength="200" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
         </template>
       </div>
@@ -159,7 +159,7 @@
           port: '',
           userName: '',
           sshPassword: '',
-          sshPort: '20',
+          sshPort: 22,
 
           isSR: true,
           needSyncCheck: false,
