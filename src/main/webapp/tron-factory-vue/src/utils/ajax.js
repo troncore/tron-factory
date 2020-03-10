@@ -30,8 +30,7 @@ export const proxyMap = {
   mock: '/__mock__',
   service: '/__server__',
 }
-const currentProxy = 'mock'
-export const baseURL = isDevelopment ? proxyMap[currentProxy] : ''
+let globalProxy = 'mock'
 
 const $axios = Axios.create({
   headers: {
@@ -47,9 +46,20 @@ export default {
   },
   $http(method, url, params, callback) {
     const config = {
-      baseURL: baseURL,
       url: url,
       method: method,
+    }
+
+    // if  url like as '/__mock__/api/getTestInfo' which it has proxy prefix, it will ignore the global proxy
+    let isSingleProxy = Object.values(proxyMap).some(value => ~config.url.indexOf(value))
+    if (isDevelopment) {
+      // global proxy
+      if (!isSingleProxy) config.baseURL = proxyMap[globalProxy]
+    } else if (isSingleProxy) {
+      Object.values(proxyMap).forEach(value => {
+        // avoid the url has prefix proxy in production
+        if (~config.url.indexOf(value)) config.url = config.url.replace(value, '')
+      })
     }
 
     if (['post', 'put', 'patch'].includes(method)) {

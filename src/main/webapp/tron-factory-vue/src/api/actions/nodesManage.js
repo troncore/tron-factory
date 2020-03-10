@@ -1,6 +1,9 @@
+let prefix = ''
+// prefix = '/__server__'
+
 export default {
   get: {
-    getNodeList: '/api/allNodeInfo',  // old: deploy_status
+    getNodeList: prefix + '/api/allNodeInfo',  // old: deploy_status
     getNodeLog: '/api/getLogInfo',   // old
     getCrypto: '/api/getCrypto',      // old
 
