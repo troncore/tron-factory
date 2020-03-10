@@ -1,17 +1,18 @@
 export default {
   get: {
     getNodeList: '/api/allNodeInfo',  // old: deploy_status
-    getNodeLogs: '/getLogInfo',   // old
-    getCrypto: '/getCrypto',      // old
+    getNodeLog: '/api/getLogInfo',   // old
+    getCrypto: '/api/getCrypto',      // old
 
     getNodeInfo: '/api/nodeInfo',   // new
+
+    checkNode: '/api/checkNode',      // old
+    deployNode: '/api/deployNode',    // old
   },
   post: {
     addNoteInfo: '/api/nodeInfo',     // old:
-    checkNode: '/checkNode',      // old
-    deployNode: '/deployNode',    // old
-    updateCrypto: '/crypto',      // old
-    initConfig: '/initConfig',    // old
+    updateCrypto: '/api/crypto',      // old
+    initConfig: '/api/initConfig',    // old
   },
   put: {
     editNoteInfo: '/api/nodeInfo',    // old:

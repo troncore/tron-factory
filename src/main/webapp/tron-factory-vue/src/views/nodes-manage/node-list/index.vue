@@ -36,19 +36,29 @@
           <el-button v-if="!scope.row.isDeployed" type="text" @click="handleDelete(scope.row)">{{$t('base.delete') }}</el-button>
         </template>
       </el-table-column>
-
     </el-table>
+
+    <!-- view deploy log-->
+    <log-dialog
+      v-if="logDialogVisible"
+      :visible.sync="logDialogVisible"
+      :current-row="currentViewRow">
+    </log-dialog>
   </div>
 </template>
 
 <script>
+import LogDialog from "./components/LogDialog";
 export default {
   name: "node-list",
+  components: { LogDialog },
   data () {
     return {
       tableData: [],
       tableLoading: false,
       deployLoading: false,
+      logDialogVisible: false,
+      currentViewRow: {},
     }
   },
   created() {
@@ -84,15 +94,112 @@ export default {
     },
 
     handleDelete(row) {
+      this.$confirm(this.$t('nodeList.deleteNodeTips'), this.$t('nodeList.deleteNodeTipsTitle'), {
+        confirmButtonText: this.$t('base.confirm'),
+        cancelButtonText: this.$t('base.cancel'),
+        center: true,
+        customClass: 'im-message-box',
+        cancelButtonClass: 'im-message-cancel-button',
+        confirmButtonClass: 'im-message-confirm-button',
+      }).then(() => {
+        this.$_api.nodesManage.deleteNoteInfo({ id: row.id }, err => {
+          if (err) return
 
+          this.$notify({
+            type: 'success',
+            title: this.$t('base.successful'),
+            message: this.$t('base.success.delete'),
+          })
+          this.getNodeList()
+        })
+      }).catch(() => {
+        this.$notify.info({
+          title: this.$t('base.cancel'),
+          message: this.$t('base.cancelDelete'),
+        });
+      })
     },
 
-    handleDeploy() {
+    // start deploy node
+    async handleDeploy (params) {
+      let errorMsg = ''
+      if (!this.tableData.length)
+        errorMsg = '请先添加节点'
+      else if (this.tableData.every(node => node.isDeployed))
+        errorMsg = '节点都已部署'
+      // else if ('是否已完成配置') // TODO
+      //   errorMsg = '请填写配置'
+      else if (!this.tableData.some(node => node.isSR && !node.needSyncCheck))
+        errorMsg = '至少配置一个SR节点同步检测为false'
 
+      if (errorMsg) {
+        this.$notify({
+          title: '警告',
+          message: errorMsg,
+          type: 'warning'
+        })
+        return
+      }
+
+      this.deployLoading = true
+      let deployPromises = this.tableData.map(node => this.deployNode(node, params))
+      await Promise.all(deployPromises)
+
+      this.$notify({
+        title: this.$t('base.successful'),
+        message: this.$t('deployNodes.deployingTips'),
+        type: 'success'
+      });
+
+      this.pollCheckDeployment()
+    },
+
+    // deploy node
+    deployNode (node = {}, params = {}) {
+      return new Promise(resolve => {
+        this.$_api.nodesManage.deployNode({
+          id: node.id,
+          isSR: node.isSR,
+          path: params.filePath, // TODO  ignore params
+        }, err => {
+          if (err) resolve({id: node.id, ok: false})
+          else resolve({id: node.id, ok: true})
+        })
+      })
+    },
+
+    // refresh deployed node list
+    pollCheckDeployment () {
+      let deployedNodeIds = this.tableData.map(node => node.id)
+
+      let loading = false
+      let timeID = setInterval(() => {
+        if (!loading) {
+          loading = true // the network may slow
+
+          this.$_api.nodesManage.checkNode(deployedNodeIds, (err, res) => {
+            loading = false
+            if (err) {
+              this.deployLoading = false
+              clearInterval(timeID)
+              return
+            }
+
+            // check all deployed node whether if finish deployed
+            if (Object.values(res).every(val => val === 'deploy finish')) {
+              this.deployLoading = false
+              this.getNodeList()
+              clearInterval(timeID)
+            }
+          })
+        }
+
+      }, 1000 * 5)
     },
 
     handleLogs(row) {
-
+      this.logDialogVisible = true
+      this.currentRow = row
     },
   }
 }
