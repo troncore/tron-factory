@@ -41,7 +41,7 @@
 <style lang="scss" scoped>
 $step_color_done: rgba(0, 0, 0, .8);
 $step_color_active: theme-color();
-$step_color_wait: rgba(8, 28, 86, .5);
+$step_color_todo: rgba(8, 28, 86, .5);
 .define-config {
   .el-steps {
     padding: 15px 50px;
@@ -83,9 +83,9 @@ $step_color_wait: rgba(8, 28, 86, .5);
       }
     }
     .im-step.is-active ~ .im-step {
-      color: $step_color_wait;
+      color: $step_color_todo;
       .im-step__body-index {
-        border-color: $step_color_wait;
+        border-color: $step_color_todo;
       }
     }
 
@@ -100,7 +100,7 @@ $step_color_wait: rgba(8, 28, 86, .5);
       line-height: 20px;
       text-align: center;
       vertical-align: middle;
-      border: 2px solid $step_color_done;
+      border: 2px solid $step_color_todo;
       border-radius: 50%;
     }
     .im-step__body-title {
