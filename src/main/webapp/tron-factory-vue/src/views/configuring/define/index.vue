@@ -100,7 +100,7 @@ $step_color_todo: rgba(8, 28, 86, .5);
       line-height: 20px;
       text-align: center;
       vertical-align: middle;
-      border: 2px solid $step_color_todo;
+      border: 2px solid $step_color_done;
       border-radius: 50%;
     }
     .im-step__body-title {

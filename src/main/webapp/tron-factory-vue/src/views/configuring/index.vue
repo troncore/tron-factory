@@ -5,7 +5,7 @@
     <div class="im-card">
       <el-tabs v-model="activeName">
         <el-tab-pane label="快速配置" name="quick"></el-tab-pane>
-        <el-tab-pane label="自定义管理" name="define"></el-tab-pane>
+        <el-tab-pane label="自定义配置" name="define"></el-tab-pane>
         <el-tab-pane label="导入配置文件" name="import"></el-tab-pane>
       </el-tabs>
 
@@ -70,7 +70,10 @@ export default {
   }
 
   .im-card {
-    padding: 0 20px 20px;
+    padding: 10px 20px 20px;
+  }
+  .el-tabs {
+    margin-bottom: 10px;
   }
 }
 </style>
