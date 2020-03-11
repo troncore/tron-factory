@@ -12,6 +12,8 @@ import './assets/styles/index.scss' // global css
 import api from './api'
 Vue.prototype.$_api = api
 
+Vue.prototype.$eventBus = new Vue()
+
 Vue.config.productionTip = false
 
 new Vue({

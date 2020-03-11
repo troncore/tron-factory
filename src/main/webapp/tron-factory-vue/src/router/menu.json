@@ -6,7 +6,7 @@
     "icon": "el-icon-guide"
   },
   {
-    "path": "/configuring",
+    "path": "/configuring/quick",
     "name": "configuring",
     "title": "menu.configuring",
     "icon": "el-icon-s-operation",

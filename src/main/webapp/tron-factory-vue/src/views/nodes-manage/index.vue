@@ -26,9 +26,18 @@ export default {
   },
   computed: {
     pageType () {
+      this.activeMenuIndex()
       return this.$route.params.type
     },
   },
+  mounted () {
+    this.activeMenuIndex()
+  },
+  methods: {
+    activeMenuIndex () {
+      this.$eventBus.$emit('menuActiveIndex', '/nodes-manage')
+    }
+  }
 }
 </script>
 

@@ -2,7 +2,7 @@
   <div class="aside-nav">
     <el-menu
       ref="el-menu"
-      :default-active="$route.path"
+      :default-active="activeIndex"
       :collapse="isCollapseAside"
       mode="vertical"
       @select="handleSelectMenu">
@@ -23,6 +23,7 @@ export default {
   data () {
     return {
       menu: menu,
+      activeIndex: this.$route.path,
     }
   },
   computed: {
@@ -31,16 +32,21 @@ export default {
       'menuList',
     ]),
   },
+  created () {
+    this.$eventBus.$on('menuActiveIndex', index => this.activeIndex = index)
+  },
+  destroy () {
+    this.$off('menuActiveIndex')
+  },
   methods: {
-    handleSelectMenu(path) {
-      if (path.startsWith('http')) {
-        this.$refs['el-menu'].updateActiveIndex(this.$route.fullPath)
-        window.open(path, '_blank')
+    handleSelectMenu(index) {
+      if (index.startsWith('http')) {
+        this.$refs['el-menu'].updateActiveIndex(this.activeIndex)
+        window.open(index, '_blank')
       } else {
         this.$router.push({
-          path: path,
-          query: {},
-        }).catch(err => err)
+          path: index,
+        })
       }
     },
   },
