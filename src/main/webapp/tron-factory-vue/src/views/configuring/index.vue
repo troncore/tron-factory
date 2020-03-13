@@ -6,7 +6,7 @@
       <el-tabs v-model="activeName">
         <el-tab-pane label="快速配置" name="quick"></el-tab-pane>
         <el-tab-pane label="自定义配置" name="define"></el-tab-pane>
-        <el-tab-pane label="导入配置文件" name="import"></el-tab-pane>
+        <!--<el-tab-pane label="导入配置文件" name="import"></el-tab-pane>-->
       </el-tabs>
 
       <component :is="activeComponent" />
@@ -33,6 +33,8 @@ export default {
         return this.$route.params.type
       },
       set (val) {
+        if (val === 'define') val = 'define/genesis'
+
         this.$router.push({
           path: '/configuring/' + val
         })
@@ -62,6 +64,7 @@ export default {
 
 <style lang="scss" scoped>
 .configuring {
+  position: relative;
   .page-title {
     margin-bottom: 20px;
     font-weight: bold;

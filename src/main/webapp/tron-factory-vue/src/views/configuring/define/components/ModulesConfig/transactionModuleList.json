@@ -1,0 +1,114 @@
+[
+  {
+    "label": "AccountPermissionUpdate",
+    "value": "AccountPermissionUpdateActuator"
+  },
+  {
+    "label": "AssetIssue",
+    "value": "AssetIssueActuator"
+  },
+  {
+    "label": "ClearABIContract",
+    "value": "ClearABIContractActuator"
+  },
+  {
+    "label": "CreateAccount",
+    "value": "CreateAccountActuator"
+  },
+  {
+    "label": "ExchangeCreate",
+    "value": "ExchangeCreateActuator"
+  },
+  {
+    "label": "ExchangeInject",
+    "value": "ExchangeInjectActuator"
+  },
+  {
+    "label": "ExchangeTransaction",
+    "value": "ExchangeTransactionActuator"
+  },
+  {
+    "label": "ExchangeWithdraw",
+    "value": "ExchangeWithdrawActuator"
+  },
+  {
+    "label": "FreezeBalance",
+    "value": "FreezeBalanceActuator"
+  },
+  {
+    "label": "ParticipateAssetIssue",
+    "value": "ParticipateAssetIssueActuator"
+  },
+  {
+    "label": "ProposalApprove",
+    "value": "ProposalApproveActuator"
+  },
+  {
+    "label": "ProposalCreate",
+    "value": "ProposalCreateActuator"
+  },
+  {
+    "label": "ProposalDelete",
+    "value": "ProposalDeleteActuator"
+  },
+  {
+    "label": "SetAccountId",
+    "value": "SetAccountIdActuator"
+  },
+  {
+    "label": "ShieldedTransfer",
+    "value": "ShieldedTransferActuator"
+  },
+  {
+    "label": "Transfer",
+    "value": "TransferActuator"
+  },
+  {
+    "label": "TransferAsset",
+    "value": "TransferAssetActuator"
+  },
+  {
+    "label": "UnfreezeAsset",
+    "value": "UnfreezeAssetActuator"
+  },
+  {
+    "label": "UnfreezeBalance",
+    "value": "UnfreezeBalanceActuator"
+  },
+  {
+    "label": "UpdateAccount",
+    "value": "UpdateAccountActuator"
+  },
+  {
+    "label": "UpdateAsset",
+    "value": "UpdateAssetActuator"
+  },
+  {
+    "label": "UpdateBrokerage",
+    "value": "UpdateBrokerageActuator"
+  },
+  {
+    "label": "UpdateEnergyLimit",
+    "value": "UpdateEnergyLimitContractActuator"
+  },
+  {
+    "label": "UpdateSettingContract",
+    "value": "UpdateSettingContractActuator"
+  },
+  {
+    "label": "VoteWitness",
+    "value": "VoteWitnessActuator"
+  },
+  {
+    "label": "WithdrawBalance",
+    "value": "WithdrawBalanceActuator"
+  },
+  {
+    "label": "WitnessCreate",
+    "value": "WitnessCreateActuator"
+  },
+  {
+    "label": "WitnessUpdate",
+    "value": "WitnessUpdateActuator"
+  }
+]

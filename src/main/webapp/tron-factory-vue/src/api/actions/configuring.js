@@ -1,26 +1,30 @@
+let prefix = ''
+// prefix = '/__server__'
+
 export default {
   get: {
     checkBalance: '/api/checkBalance',
-    originConfig: '/originConfig',
-    getConfigInfo: '/config',
+    getConfigInfo: '/api/config',
+    getPluginConfig: '/api/pluginConfig',
 
-    pluginConfigApi: '/pluginConfig',
+    // todo api
+    originConfig: '/api/originConfig',
   },
   post: {
-    initConfig: '/initConfig',    // old
-    oneClick: '/oneClick',
+    genesisAssetConfig: '/api/genesisAssetConfig',
+    baseSettingConfig: '/api/baseSettingConfig',
+    p2pConfig: '/api/p2pconfig',
+    dbConfig: '/api/dbconfig',
+    networkConfig: '/api/networkconfig',
+    setTransactionModule: '/api/transaction',
 
-    genesisAssetConfig: '/genesisAssetConfig',
-    baseSettingConfig: '/baseSettingConfig',
-    p2pConfig: '/p2pconfig',
-    dbConfig: '/dbconfig',
-    networkConfig: '/networkconfig',
-    crossChainConfig: '/crossChainConfig',
-
-    dbEngineApi: '/dbEngine',
-    transactionApi: '/transaction',
-    consensusApi: '/consensus',
-    cryptoApi: '/crypto',
+    // todo api
+    initConfig: '/api/initConfig',    // old
+    oneClick: '/api/oneClick',
+    crossChainConfig: '/api/crossChainConfig',
+    dbEngineApi: '/api/dbEngine',
+    consensusApi: '/api/consensus',
+    cryptoApi: '/api/crypto',
   },
   put: {
   },
