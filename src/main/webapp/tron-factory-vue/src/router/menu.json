@@ -6,9 +6,9 @@
     "icon": "el-icon-guide"
   },
   {
-    "path": "/configuring/quick",
-    "name": "configuring",
-    "title": "menu.configuring",
+    "path": "/configuration/quick",
+    "name": "configuration",
+    "title": "menu.configuration",
     "icon": "el-icon-s-operation",
     "auth": true
   },

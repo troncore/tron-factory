@@ -2,14 +2,14 @@
   <div class="box-view import-plugin">
 
     <div class="box-card">
-      <div class="card-header">{{ $t('importPlugin.consensusModule') }}</div>
+      <div class="card-header">{{ $t('configuration.consensusModule') }}</div>
       <div class="consensus-list">
         <span class="consensus-item">DPoS</span>
       </div>
     </div>
 
     <div class="box-card">
-      <div class="card-header">{{ $t('importPlugin.transactionModule') }}</div>
+      <div class="card-header">{{ $t('configuration.transactionModule') }}</div>
       <el-form ref="form-box" :rules="formRules" :model="form" label-position="top">
 
         <el-form-item class="transaction-list" prop="transaction">
@@ -19,7 +19,7 @@
         </el-form-item>
 
         <div class="more-setting">
-          <el-checkbox v-model="checkCustomTransaction" @change="handleChangeCheckCustom">{{ $t('importPlugin.customTransactionModule') }}</el-checkbox>
+          <el-checkbox v-model="checkCustomTransaction" @change="handleChangeCheckCustom">{{ $t('configuration.customTransactionModule') }}</el-checkbox>
         </div>
         <el-form-item
           ref="custom-transaction"
@@ -31,7 +31,7 @@
             :autosize="{ minRows: 4, maxRows: 6 }"
             :maxlength="300"
             :disabled="!checkCustomTransaction"
-            :placeholder="$t(checkCustomTransaction ? 'importPlugin.valid.inputCustomTransaction': 'importPlugin.valid.checkCustomTransaction')">
+            :placeholder="$t(checkCustomTransaction ? 'configuration.valid.inputCustomTransaction': 'configuration.valid.checkCustomTransaction')">
           </el-input>
         </el-form-item>
       </el-form>
@@ -64,7 +64,7 @@ export default {
     formRules() {
       const pathEndJAR = (rule, value, callback) => {
         if (this.checkCustomTransaction && !this.form.customTransaction.endsWith('.jar')) {
-          callback(new Error(this.$t('importPlugin.valid.pathEndJAR')))
+          callback(new Error(this.$t('configuration.valid.pathEndJAR')))
         } else {
           callback()
         }
@@ -89,7 +89,7 @@ export default {
     // get plugin info
     initPluginInfo () {
       return new Promise(resolve => {
-        this.$_api.configuring.getPluginConfig({}, (err, res = {}) => {
+        this.$_api.configuration.getPluginConfig({}, (err, res = {}) => {
           if (err) return
 
           this.consensus = res.consensus
@@ -115,11 +115,15 @@ export default {
           }
 
           this.loading = true
-          this.$_api.configuring.setTransactionModule(params, (err, res) => {
+          this.$_api.configuration.setTransactionModule(params, (err, res) => {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('base.success.save'))
+            this.$notify({
+              type: 'success',
+              title: this.$t('base.successful'),
+              message: this.$t('base.complete')
+            })
           })
         }
       })
@@ -139,9 +143,9 @@ export default {
     }
     .card-header {
       margin-bottom: 20px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
-      color: #081C56;
+      color: rgba(8, 28, 86, .7);
     }
   }
 

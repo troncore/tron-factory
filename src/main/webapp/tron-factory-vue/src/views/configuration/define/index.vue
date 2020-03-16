@@ -30,12 +30,12 @@
     data () {
       return {
         stepsList: [
-          { title: '创世信息', path: 'genesis', component: 'GenesisConfig',},
-          { title: '基础配置', path: 'base', component: 'BaseConfig',},
-          { title: 'HTTP/RPC配置', path: 'network', component: 'NetworkConfig',},
-          { title: '数据库基础配置', path: 'database', component: 'DatabaseConfig',},
-          { title: 'P2P配置', path: 'p2p', component: 'P2PConfig',},
-          { title: '模块函数', path: 'modules', component: 'ModulesConfig',},
+          { title: this.$t('configuration.genesisInfo'), path: 'genesis', component: 'GenesisConfig',},
+          { title: this.$t('configuration.baseConfig'), path: 'base', component: 'BaseConfig',},
+          { title: this.$t('configuration.netWorkConfig'), path: 'network', component: 'NetworkConfig',},
+          { title: this.$t('configuration.databaseConfig'), path: 'database', component: 'DatabaseConfig',},
+          { title: this.$t('configuration.p2pConfig'), path: 'p2p', component: 'P2PConfig',},
+          { title: this.$t('configuration.moduleFunction'), path: 'modules', component: 'ModulesConfig',},
         ],
       }
     },
@@ -50,7 +50,7 @@
         },
         set (val) {
           this.$router.push({
-            path: '/configuring/define/' + this.stepsList[val - 1].path
+            path: '/configuration/define/' + this.stepsList[val - 1].path
           })
         }
       },
@@ -63,7 +63,7 @@
     },
     methods: {
       activeMenuIndex () {
-        this.$eventBus.$emit('menuActiveIndex', '/configuring/quick')
+        this.$eventBus.$emit('menuActiveIndex', '/configuration/quick')
       },
 
       handleStep (step, index) {
@@ -85,7 +85,7 @@
         stepConfig = stepConfig || this.stepPath // default current stepPath
 
         return new Promise(resolve => {
-          this.$_api.configuring.getConfigInfo({}, (err, res = {}) => {
+          this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
             if (err) return resolve({})
 
             if (stepConfig === 'genesis') {

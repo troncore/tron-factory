@@ -7,8 +7,8 @@
     }
   },
   {
-    "path": "/configuring/:type(quick|define|import)/:step(genesis|base|network|database|p2p|modules)?",
-    "name": "configuring",
+    "path": "/configuration/:type(quick|define|import)/:step(genesis|base|network|database|p2p|modules)?",
+    "name": "configuration",
     "meta": {
       "auth": true
     }

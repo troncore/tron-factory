@@ -2,19 +2,19 @@
   <div class="box-view genesis-config">
     <div class="box-body">
       <div class="asset-list">
-        <div class="asset-title">账户信息</div>
+        <div class="asset-title">{{ $t('configuration.accountInfo') }}</div>
         <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
           <el-button class="op-btn" @click="handleAddAsset(false, item, index)"><i class="el-icon-edit"></i> {{ item.accountName }}</el-button>
           <i class="op-icon el-icon-delete" @click="handleDeleteAssets(index)"></i>
         </div>
         <div class="asset-item new-add" @click="handleAddAsset">
-          <el-button class="op-btn">新增</el-button>
+          <el-button class="op-btn">{{ $t('configuration.addNew') }}</el-button>
           <i class="op-icon el-icon-circle-plus-outline"></i>
         </div>
       </div>
 
       <div class="asset-list">
-        <div class="asset-title">Witness 节点信息</div>
+        <div class="asset-title">{{ $t('configuration.witnessNodeInfo') }}</div>
         <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
           <el-button class="op-btn" @click="handleViewWitness(item, index)">{{ item.address }}</el-button>
         </div>
@@ -124,13 +124,13 @@ export default {
     handleDeleteAssets(index) {
       this.genesisBlockAssets.splice(index, 1)
 
-      this.$_api.configuring.genesisAssetConfig({ assets: this.genesisBlockAssets}, (err, res) => {
+      this.$_api.configuration.genesisAssetConfig({ assets: this.genesisBlockAssets}, (err, res) => {
         if (err) return
 
         this.$notify({
           type: 'success',
           title: this.$t('base.successful'),
-          message: this.$t('configManage.assetDeleteSuccess')
+          message: this.$t('configuration.assetDeleteSuccess')
         })
       })
     },

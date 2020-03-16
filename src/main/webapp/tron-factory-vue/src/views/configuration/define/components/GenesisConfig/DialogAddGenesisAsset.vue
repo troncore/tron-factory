@@ -7,7 +7,7 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('configManage.assetDialogTitle') }}</div>
+      <div class="title">{{ $t('configuration.assetDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content">
@@ -15,7 +15,7 @@
         <el-form-item prop="accountName">
           <span slot="label">
             accountName
-            <el-tooltip effect="dark" :content="$t('configManage.helpTips.accountName')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configuration.helpTips.accountName')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
@@ -25,7 +25,7 @@
         <el-form-item prop="accountType">
           <span slot="label">
             accountType
-            <el-tooltip effect="dark" :content="$t('configManage.helpTips.accountType')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configuration.helpTips.accountType')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
@@ -42,7 +42,7 @@
         <el-form-item prop="address">
           <span slot="label">
             address
-            <el-tooltip effect="dark" :content="$t('configManage.helpTips.address')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configuration.helpTips.address')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
@@ -52,7 +52,7 @@
         <el-form-item label="balance" prop="balance">
           <span slot="label">
             balance
-            <el-tooltip effect="dark" :content="$t('configManage.helpTips.balance')" placement="top">
+            <el-tooltip effect="dark" :content="$t('configuration.helpTips.balance')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
@@ -145,11 +145,11 @@ export default {
           let assets = [...this.genesisBlockAssets]
           assets.splice(this.assetIndex, 1, this.form)
 
-          this.$_api.configuring.genesisAssetConfig({ assets }, (err, res) => {
+          this.$_api.configuration.genesisAssetConfig({ assets }, (err, res) => {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('configManage.assetSaveSuccess'))
+            this.$message.success(this.$t('configuration.assetSaveSuccess'))
             this.$emit('success')
             this.dialogVisible = false
           })
@@ -159,13 +159,13 @@ export default {
 
     checkBalance(balance) {
       return new Promise(resolve => {
-        this.$_api.configuring.checkBalance({ balance }, (err, res) => {
+        this.$_api.configuration.checkBalance({ balance }, (err, res) => {
           if (err) return resolve(false)
 
           if (res.result) {
             resolve(true)
           } else {
-            this.$message.error(this.$t('configManage.valid.maxVoteCountValue'))
+            this.$message.error(this.$t('configuration.valid.maxVoteCountValue'))
             resolve(false)
           }
         })

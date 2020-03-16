@@ -1,9 +1,7 @@
 export default {
-  name: {
-    getStart: 'Get Started',
-    nodeList: 'Node List',
-    configManage: 'Configuration',
-    importPlugin: 'Import Plugins',
-    deployNodes: 'Deploy',
-  }
+  nodesManage: 'Nodes Manage',
+  configuration: 'Configuration',
+  ecologyApp: 'Ecology App',
+  walletCLI: 'Wallet CLI',
+  tronLink: 'TronLink',
 }

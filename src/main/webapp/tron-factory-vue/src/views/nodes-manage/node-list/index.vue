@@ -26,7 +26,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="javaTronVersion" :label="$t('nodesManage.version')+'(java-tron)'" align="center"></el-table-column>
+      <el-table-column prop="javaTronVersion" :label="$t('nodesManage.javaTronVersion')" align="center"></el-table-column>
 
       <el-table-column prop="status" :label="$t('base.operate')">
         <template slot-scope="scope">

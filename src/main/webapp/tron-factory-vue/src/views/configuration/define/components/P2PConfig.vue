@@ -4,20 +4,20 @@
       <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
 
         <el-form-item prop="node_p2p_version" label="p2pVersion">
-          <span slot="label">p2pVersion <i class="help-tips">({{ $t('configManage.helpTips.p2pVersion') }})</i></span>
+          <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
           <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="listenPort" prop="node_listen_port">
-          <span slot="label">listenPort <i class="help-tips">({{ $t('configManage.helpTips.listenPort') }})</i></span>
+          <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
           <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="seedNodeList" prop="seed_node_ip_list" class="seed-node-list">
-          <span slot="label">seedNodeList <i class="help-tips">({{ $t('configManage.helpTips.seedNodeList') }})</i></span>
+          <span slot="label">seedNodeList <i class="help-tips">({{ $t('configuration.helpTips.seedNodeList') }})</i></span>
           <el-checkbox-group v-model="form.seed_node_ip_list">
             <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
-              <el-input v-model="form.node_listen_port" :placeholder="$t('configManage.valid.listenPort')" disabled>
+              <el-input v-model="form.node_listen_port" :placeholder="$t('configuration.valid.listenPort')" disabled>
                 <template slot="prepend" style="width:100px">{{ ip }}</template>
               </el-input>
             </el-checkbox>
@@ -25,18 +25,18 @@
         </el-form-item>
 
         <div class="more-form">
-          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i> {{ $t('configManage.moreSetting') }}</el-button>
+          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i> {{ $t('configuration.moreSetting') }}</el-button>
         </div>
 
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
-              <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configManage.helpTips.maxActiveNodes') }})</i></span>
+              <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
               <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
-              <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configManage.helpTips.maxActiveNodesWithSameIp') }})</i></span>
+              <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
               <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
@@ -107,49 +107,49 @@ export default {
     formRules() {
       const validNum = (rule, value, callback) => {
         if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('configManage.valid.gteZeroInt')))
+          callback(new Error(this.$t('configuration.valid.gteZeroInt')))
         } else {
           callback()
         }
       }
       const validMaxNum = (rule, value, callback) => {
         if (value > 2147483647) {
-          callback(new Error(this.$t('configManage.valid.maxNumberValue')))
+          callback(new Error(this.$t('configuration.valid.maxNumberValue')))
         } else {
           callback()
         }
       }
       const validMainnet = (rule, value, callback) => {
         if (value == 11111) {
-          callback(new Error(this.$t('configManage.valid.mainnetPlaceholder')))
+          callback(new Error(this.$t('configuration.valid.mainnetPlaceholder')))
         } else {
           callback()
         }
       }
       const validTestNet = (rule, value, callback) => {
         if (value == 20180622) {
-          callback(new Error(this.$t('configManage.valid.testnetPlaceholder')))
+          callback(new Error(this.$t('configuration.valid.testnetPlaceholder')))
         } else {
           callback()
         }
       }
       const validSpecialNet = (rule, value, callback) => {
         if (value == 1) {
-          callback(new Error(this.$t('configManage.valid.specialPlaceholder')))
+          callback(new Error(this.$t('configuration.valid.specialPlaceholder')))
         } else {
           callback()
         }
       }
       const validPortNum = (rule, value, callback) => {
         if (value > 65535) {
-          callback(new Error(this.$t('configManage.valid.maxPortValue')))
+          callback(new Error(this.$t('configuration.valid.maxPortValue')))
         } else {
           callback()
         }
       }
       const validTwoDecimalFun = (rule, value, callback) => {
         if (!twoDecimal(value)) {
-          callback(new Error(this.$t('configManage.valid.validTwoDecimal')))
+          callback(new Error(this.$t('configuration.valid.validTwoDecimal')))
         } else {
           callback()
         }
@@ -233,11 +233,15 @@ export default {
           }
 
           this.loading = true
-          this.$_api.configuring.p2pConfig(params, err => {
+          this.$_api.configuration.p2pConfig(params, err => {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('configManage.p2pSaveSuccess'))
+            this.$notify({
+              type: 'success',
+              title: this.$t('base.successful'),
+              message: this.$t('configuration.p2pSaveSuccess')
+            })
             this.$emit('next-step')
           })
         }

@@ -379,7 +379,7 @@
 
       checkBalance(balance) {
         return new Promise(resolve => {
-          this.$_api.configuring.checkBalance({ balance }, (err, res) => {
+          this.$_api.configuration.checkBalance({ balance }, (err, res) => {
             if (err) return resolve(true)
 
             if (res.result) {

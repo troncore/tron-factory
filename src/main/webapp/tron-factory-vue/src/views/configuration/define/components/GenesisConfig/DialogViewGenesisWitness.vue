@@ -8,7 +8,7 @@
     center>
 
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('configManage.witnessDialogTitle') }}</div>
+      <div class="title">{{ $t('configuration.witnessDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content">

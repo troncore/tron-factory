@@ -1,8 +1,9 @@
 import base from './package/base'
 import menu from './package/menu'
 
-import userInfo from './package/userInfo'
+import sign from './package/sign'
 import nodesManage from './package/nodesManage'
+import configuration from './package/configuration'
 import walletCLI from './package/walletCLI'
 import tronLink from './package/tronLink'
 
@@ -17,8 +18,9 @@ export default {
   base,
   menu,
 
-  userInfo,
+  sign,
   nodesManage,
+  configuration,
   walletCLI,
   tronLink,
 

@@ -2,20 +2,20 @@
   <div class="box-view quick-config">
     <div class="box-body">
       <div class="box-card">
-        <div class="config-title">创世信息</div>
+        <div class="config-title">{{ $t('configuration.genesisInfo') }}</div>
         <genesis-config :init-config-info="initConfigInfo"></genesis-config>
       </div>
 
       <div class="box-card">
-        <div class="config-title">P2P 配置</div>
+        <div class="config-title">{{ $t('configuration.p2pConfig') }}</div>
         <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
           <el-form-item prop="node_p2p_version" label="p2pVersion">
-            <span slot="label">p2pVersion <i class="help-tips">({{ $t('configManage.helpTips.p2pVersion') }})</i></span>
+            <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
             <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
           <el-form-item label="listenPort" prop="node_listen_port">
-            <span slot="label">listenPort <i class="help-tips">({{ $t('configManage.helpTips.listenPort') }})</i></span>
+            <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
             <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
         </el-form>
@@ -48,42 +48,42 @@
       formRules() {
         const validNum = (rule, value, callback) => {
           if (!isvalidateIntegerNum(value)) {
-            callback(new Error(this.$t('configManage.valid.gteZeroInt')))
+            callback(new Error(this.$t('configuration.valid.gteZeroInt')))
           } else {
             callback()
           }
         }
         const validMaxNum = (rule, value, callback) => {
           if (value > 2147483647) {
-            callback(new Error(this.$t('configManage.valid.maxNumberValue')))
+            callback(new Error(this.$t('configuration.valid.maxNumberValue')))
           } else {
             callback()
           }
         }
         const validMainnet = (rule, value, callback) => {
           if (value == 11111) {
-            callback(new Error(this.$t('configManage.valid.mainnetPlaceholder')))
+            callback(new Error(this.$t('configuration.valid.mainnetPlaceholder')))
           } else {
             callback()
           }
         }
         const validTestNet = (rule, value, callback) => {
           if (value == 20180622) {
-            callback(new Error(this.$t('configManage.valid.testnetPlaceholder')))
+            callback(new Error(this.$t('configuration.valid.testnetPlaceholder')))
           } else {
             callback()
           }
         }
         const validSpecialNet = (rule, value, callback) => {
           if (value == 1) {
-            callback(new Error(this.$t('configManage.valid.specialPlaceholder')))
+            callback(new Error(this.$t('configuration.valid.specialPlaceholder')))
           } else {
             callback()
           }
         }
         const validPortNum = (rule, value, callback) => {
           if (value > 65535) {
-            callback(new Error(this.$t('configManage.valid.maxPortValue')))
+            callback(new Error(this.$t('configuration.valid.maxPortValue')))
           } else {
             callback()
           }
@@ -113,7 +113,7 @@
       // get configure info: invoke in genesis-config
       initConfigInfo (stepConfig) {
         return new Promise(resolve => {
-          this.$_api.configuring.getConfigInfo({}, (err, res = {}) => {
+          this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
             if (err) return resolve({})
             if (stepConfig === 'genesis') {
               resolve({
@@ -137,7 +137,7 @@
             }
 
             this.loading = true
-            this.$_api.configuring.p2pConfig(params, err => {
+            this.$_api.configuration.p2pConfig(params, err => {
               this.loading = false
               if (err) return
 

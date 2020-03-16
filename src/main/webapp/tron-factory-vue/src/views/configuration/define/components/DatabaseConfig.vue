@@ -3,21 +3,21 @@
     <div class="box-body">
       <el-form ref="database-config-form" :model="form" label-position="left" label-width="200px">
 
-        <el-form-item :label="$t('configManage.selectDatabaseConfig')" prop="storage_db_engine">
+        <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="storage_db_engine">
           <el-radio-group v-model="form.storage_db_engine">
             <el-radio :label="'LEVELDB'">LevelDB</el-radio>
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="$t('configManage.isWriteSync')" prop="storage_db_sync">
+        <el-form-item :label="$t('configuration.isWriteSync')" prop="storage_db_sync">
           <el-switch v-model="form.storage_db_sync"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('configManage.isOpenTransaction')" prop="storage_transHistory_switch">
+        <el-form-item :label="$t('configuration.isOpenTransaction')" prop="storage_transHistory_switch">
           <el-switch v-model="form.storage_transHistory_switch" active-value="on" inactive-value="off"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('configManage.isNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
+        <el-form-item :label="$t('configuration.isNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
           <el-switch v-model="form.storage_needToUpdateAsset"></el-switch>
         </el-form-item>
       </el-form>
@@ -65,11 +65,15 @@ export default {
           }
 
           this.loading = true
-          this.$_api.configuring.dbConfig(params, err => {
+          this.$_api.configuration.dbConfig(params, err => {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('configManage.databaseSaveSuccess'))
+            this.$notify({
+              type: 'success',
+              title: this.$t('base.successful'),
+              message: this.$t('configuration.databaseSaveSuccess')
+            })
             this.$emit('next-step')
           })
         }

@@ -11,9 +11,12 @@ export default {
   close: 'Close',
   edit: 'Edit',
   update: 'Update',
+  modify: 'Modify',
+  complete: 'Complete',
 
   detail: 'Detail',
   view: 'View',
+  logs: 'Log',
   viewDetail: 'View Detail',
   viewLog: 'View Log',
   goBack: 'Go Back',
@@ -24,6 +27,11 @@ export default {
   operate: 'Operate',
   emptyData: 'No Data',
 
+  successful: 'Successful',
+  failure: 'Failure',
+  warning: 'Warning',
+  error: 'Error',
+  cancel: 'Cancel',
   success: {
     save: 'Save Success',
     edit: 'Edit Success',
@@ -40,7 +48,6 @@ export default {
     operate: 'Operate Failed',
     delete: 'Delete Failed',
   },
-  cancel: 'Cancel',
   cancelUpdate: 'Cancel Update',
   cancelDelete: 'Cancel Delete',
 

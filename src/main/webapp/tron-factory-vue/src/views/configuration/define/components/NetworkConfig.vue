@@ -8,11 +8,11 @@
           <el-switch v-model="form.node_http_fullNodeEnable"></el-switch>
         </div>
         <el-form-item prop="node_maxHttpConnectNumber">
-          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configManage.helpTips.maxHttpConnectNumber') }})</i></span>
+          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') }})</i></span>
           <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="node_http_fullNodePort">
-          <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configManage.helpTips.httpFullNodePort') }})</i></span>
+          <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configuration.helpTips.httpFullNodePort') }})</i></span>
           <el-input v-model.trim="form.node_http_fullNodePort" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
@@ -22,19 +22,19 @@
         </div>
 
         <el-form-item prop="node_http_solidityPort">
-          <span slot="label">httpSolidityPort <i class="help-tips">({{ $t('configManage.helpTips.httpSolidityPort') }})</i></span>
+          <span slot="label">httpSolidityPort <i class="help-tips">({{ $t('configuration.helpTips.httpSolidityPort') }})</i></span>
           <el-input v-model.trim="form.node_http_solidityPort" :maxlength="50" :disabled="!form.node_http_solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <br>
 
         <el-form-item prop="node_rpc_port">
-          <span slot="label">rpcPort <i class="help-tips">({{ $t('configManage.helpTips.rpcPort') }})</i></span>
+          <span slot="label">rpcPort <i class="help-tips">({{ $t('configuration.helpTips.rpcPort') }})</i></span>
           <el-input v-model.trim="form.node_rpc_port" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_rpc_solidityPort">
-          <span slot="label">rpcSolidityPort <i class="help-tips">({{ $t('configManage.helpTips.rpcSolidityPort') }})</i></span>
+          <span slot="label">rpcSolidityPort <i class="help-tips">({{ $t('configuration.helpTips.rpcSolidityPort') }})</i></span>
           <el-input v-model.trim="form.node_rpc_solidityPort" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
@@ -76,21 +76,21 @@ export default {
     networkRules() {
       const validNum = (rule, value, callback) => {
         if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('configManage.valid.gteZeroInt')))
+          callback(new Error(this.$t('configuration.valid.gteZeroInt')))
         } else {
           callback()
         }
       }
       const validMaxNum = (rule, value, callback) => {
         if (value > 2147483647) {
-          callback(new Error(this.$t('configManage.valid.maxNumberValue')))
+          callback(new Error(this.$t('configuration.valid.maxNumberValue')))
         } else {
           callback()
         }
       }
       const validPortNum = (rule, value, callback) => {
         if (value > 65535) {
-          callback(new Error(this.$t('configManage.valid.maxPortValue')))
+          callback(new Error(this.$t('configuration.valid.maxPortValue')))
         } else {
           callback()
         }
@@ -169,11 +169,15 @@ export default {
           }
 
           this.loading = true
-          this.$_api.configuring.networkConfig(params, err => {
+          this.$_api.configuration.networkConfig(params, err => {
             this.loading = false
             if (err) return
 
-            this.$message.success(this.$t('configManage.networkSaveSuccess'))
+            this.$notify({
+              type: 'success',
+              title: this.$t('base.successful'),
+              message: this.$t('configuration.networkSaveSuccess')
+            })
             this.$emit('next-step')
           })
         }

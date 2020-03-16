@@ -3,7 +3,7 @@
 
     <div class="nav-list">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/nodes-manage' }"><b>{{ $t('nodesManage.nodesManage') }}</b></el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/nodes-manage' }">{{ $t('nodesManage.nodesManage') }}</el-breadcrumb-item>
         <el-breadcrumb-item v-if="pageType === 'add'">{{ $t('nodesManage.addNode') }}</el-breadcrumb-item>
         <el-breadcrumb-item v-else-if="pageType === 'edit'">{{ $t('nodesManage.modifyNode') }}</el-breadcrumb-item>
         <el-breadcrumb-item v-else-if="pageType === 'detail'">{{ $t('nodesManage.nodeDetail') }}</el-breadcrumb-item>
@@ -49,6 +49,11 @@ export default {
       font-size: 18px;
       .el-breadcrumb__inner {
         font-size: 18px;
+
+        &.is-link {
+          color: #000;
+          font-weight: bold;
+        }
       }
     }
   }

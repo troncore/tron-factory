@@ -8,9 +8,9 @@
           <span>ONE CLICK DEPLOYMENT</span>
         </div>
         <div class="summary">
-          <span>一键发链服务</span>
+          <span>{{ $t('sign.oneClickService') }}</span>
           <span>One Click Deployment</span>
-          <span>简称 ”OCD”</span>
+          <span>{{ $t('sign.shortcutOCD') }}</span>
         </div>
       </div>
     </div>
@@ -19,19 +19,20 @@
       <div class="form">
         <img class="logo-img" src="@/assets/images/logo.png" :title="siteTitle" :alt="siteTitle"/>
         <div class="form-item">
-          <label class="label">{{ $t('userInfo.account') }}</label>
-          <el-input v-model="form.account" clearable :placeholder="$t('userInfo.helpTips.account')"/>
+          <label class="label">{{ $t('sign.account') }}</label>
+          <el-input v-model="form.account" clearable :placeholder="$t('sign.helpTips.account')"/>
         </div>
         <div class="form-item">
-          <label class="label">{{ $t('userInfo.password') }}</label>
-          <el-input type="password" v-model="form.password" clearable :placeholder="$t('userInfo.helpTips.password')"/>
+          <label class="label">{{ $t('sign.password') }}</label>
+          <el-input type="password" v-model="form.password" clearable :placeholder="$t('sign.helpTips.password')"/>
         </div>
         <div class="form-item sign-in__box">
-          <el-button class="sign-in__btn" type="primary" :loading="loading" @click="handleSignIn">{{ $t('userInfo.signIn') }}</el-button>
+          <el-button class="sign-in__btn" type="primary" :loading="loading" @click="handleSignIn">{{ $t('sign.signIn') }}</el-button>
         </div>
         <div class="form-item help-footer">
-          <el-checkbox v-model="isSavePassword" @change="handleSavePassword">记住密码</el-checkbox>
-          <el-button type="text" @click="handleTestAccount">{{ $t('userInfo.testAccount') }}</el-button>
+          <span><!-- placeholder --></span>
+          <!--<el-checkbox v-model="isSavePassword" @change="handleSavePassword">{{ $t('sign.rememberPassword') }}</el-checkbox>-->
+          <el-button type="text" @click="handleTestAccount">{{ $t('sign.signInTestAccount') }}</el-button>
         </div>
       </div>
     </div>
@@ -82,8 +83,8 @@ export default {
 
       if (invalidEmail  || invalidPassword) {
         this.$notify.error({
-          title: '错误',
-          message: this.$t('userInfo.helpTips.emailOrPwd'),
+          title: this.$t('base.error'),
+          message: this.$t('sign.helpTips.emailOrPwdError'),
         })
         return
       }
@@ -121,8 +122,8 @@ export default {
     .detail {
       position: absolute;
       top: 50%;
-      left: 50%;
-      transform: translate(-80%, -80%);
+      left: 10%;
+      transform: translate(0, -80%);
       .title {
         margin-bottom: 20px;
         font-size: 42px;

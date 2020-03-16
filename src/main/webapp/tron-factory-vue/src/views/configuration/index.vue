@@ -1,12 +1,12 @@
 <template>
-  <div class="configuring padding-20">
-    <div class="page-title">配置</div>
+  <div class="configuration padding-20">
+    <div class="page-title">{{ $t('configuration.configuration')}}</div>
 
     <div class="im-card">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="快速配置" name="quick"></el-tab-pane>
-        <el-tab-pane label="自定义配置" name="define"></el-tab-pane>
-        <!--<el-tab-pane label="导入配置文件" name="import"></el-tab-pane>-->
+        <el-tab-pane :label="$t('configuration.quickConfig')" name="quick"></el-tab-pane>
+        <el-tab-pane :label="$t('configuration.defineConfig')" name="define"></el-tab-pane>
+        <!--<el-tab-pane label="$t('configuration.importConfig')" name="import"></el-tab-pane>-->
       </el-tabs>
 
       <component :is="activeComponent" />
@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "configuring",
+  name: "configuration",
   components: {
     QuickConfig: () => import('./quick'),
     DefineConfig: () => import('./define'),
@@ -36,7 +36,7 @@ export default {
         if (val === 'define') val = 'define/genesis'
 
         this.$router.push({
-          path: '/configuring/' + val
+          path: '/configuration/' + val
         })
       }
     },
@@ -56,14 +56,14 @@ export default {
   },
   methods: {
     activeMenuIndex () {
-      this.$eventBus.$emit('menuActiveIndex', '/configuring/quick')
+      this.$eventBus.$emit('menuActiveIndex', '/configuration/quick')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.configuring {
+.configuration {
   position: relative;
   .page-title {
     margin-bottom: 20px;

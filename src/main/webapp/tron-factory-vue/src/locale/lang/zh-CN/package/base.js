@@ -28,6 +28,10 @@ export default {
   emptyData: '暂无数据',
 
   successful: '成功',
+  failure: '失败',
+  warning: '警告',
+  error: '错误',
+  cancel: '取消',
   success: {
     save: '保存成功',
     edit: '编辑成功',
@@ -44,12 +48,9 @@ export default {
     operate: '操作失败',
     delete: '删除失败',
   },
-  cancel: '取消',
   cancelUpdate: '取消修改',
   cancelDelete: '取消删除',
 
   pleaseInput: '请输入',
   pleaseSelect: '请选择',
-  warning: '警告',
-  error: '错误',
 }

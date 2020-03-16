@@ -13,7 +13,7 @@ export default {
   deployStatus: '部署状态',
   unDeploy: '未部署',
   deployed: '已部署',
-  version: '版本号',
+  javaTronVersion: '版本号(java-tron)',
 
   addNodeSuccess: '添加节点成功',
   addNodeFail: '添加节点失败',
@@ -29,6 +29,19 @@ export default {
   sshPort: 'SSH 端口',
   SRNode: 'SR 节点',
   syncCheck: '同步检测',
+
+  pleaseAddNode: '请先添加节点',
+  allNodeDeployed: '节点都已部署',
+  pleaseDoneConfig: '请先填写配置',
+  needSRnoSyncCheck: '至少配置一个SR节点同步检测为false',
+  deployingTips: '正在部署, 请稍候, 点击列表查看详情查看部署状态',
+  viewLog: '查看日志',
+  logDialogTitle: '节点日志',
+  emptyLog: '当前部署暂无日志',
+  loadingLog: '正在查询节点记录，请稍等',
+  deployComplete: '部署完成',
+  deployFail: '部署完成',
+
   helpTips: {
     crypto: '添加节点之后，签名算法不可修改',
     id: 'ID 是节点唯一标识',
@@ -44,6 +57,7 @@ export default {
     publicKey: '地址',
     privateKey: '请输入私钥(256位, 16进制编码)',
   },
+
   valid: {
     maxNodeLength: '最多添加 20 个节点',
     inputID: '请输入 ID',
@@ -59,16 +73,4 @@ export default {
     maxVoteCountValue: 'Vote Count 填写额超过最大值',
     inputPrivateKey: '请输入256位 private key (hex编码)',
   },
-
-  pleaseAddNode: '请先添加节点',
-  allNodeDeployed: '节点都已部署',
-  pleaseDoneConfig: '请先填写配置',
-  needSRnoSyncCheck: '至少配置一个SR节点同步检测为false',
-  deployingTips: '正在部署, 请稍候, 点击列表查看详情查看部署状态',
-  viewLog: '查看日志',
-  logDialogTitle: '节点日志',
-  emptyLog: '当前部署暂无日志',
-  loadingLog: '正在查询节点记录，请稍等',
-  deployComplete: '部署完成',
-  deployFail: '部署完成',
 }
