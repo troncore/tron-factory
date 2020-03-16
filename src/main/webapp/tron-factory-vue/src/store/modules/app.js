@@ -29,12 +29,6 @@ export default {
   },
 
   mutations: {
-    signIn (state, payload) {
-      return undefined;
-    },
-    signOut (state) {
-      return undefined;
-    },
     setUserInfo (state, payload) {
       state.userInfo.account = localStorage.getItem('user_account') || ''
     },
@@ -60,6 +54,7 @@ export default {
       return new Promise(resolve => {
         state.isSignIn = false
         localStorage.setItem('isSignIn', state.isSignIn)
+        localStorage.removeItem('user_account')
 
         resolve()
       })
