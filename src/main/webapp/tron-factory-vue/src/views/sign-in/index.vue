@@ -16,6 +16,9 @@
     </div>
 
     <div class="right-box">
+      <div class="header">
+        <im-locale></im-locale>
+      </div>
       <div class="form">
         <img class="logo-img" src="@/assets/images/logo.png" :title="siteTitle" :alt="siteTitle"/>
         <div class="form-item">
@@ -41,8 +44,10 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
+import ImLocale from "@/components/ImLocale/index";
 export default {
   name: "sign-in",
+  components: { ImLocale },
   data () {
     return {
       siteTitle: 'TRON FACTORY',
@@ -149,6 +154,17 @@ export default {
   .right-box {
     flex: 1;
     position: relative;
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      width: 100%;
+      height: 60px;
+      .im-locale {
+        margin-left: auto;
+      }
+    }
 
     .form {
       position: absolute;

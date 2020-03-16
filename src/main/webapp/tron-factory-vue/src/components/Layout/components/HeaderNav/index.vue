@@ -17,39 +17,26 @@
       <i class="divider-line"></i>
 
       <!-- choose language -->
-      <el-dropdown class="lang-dropdown hover-effect" trigger="click" @command="handleCommand">
-        <div class="avatar-wrapper">{{ currentLang || 'Language' }}<i class="el-icon-caret-bottom" /></div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="(value, key) in languages"
-            :key="key"
-            :command="key">
-            {{ value }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <im-locale></im-locale>
     </div>
 
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Hamburger from './Hamburger'
+import ImLocale from "@/components/ImLocale";
 
 export default {
   name: 'header-nav',
   components: {
+    ImLocale,
     Hamburger,
   },
   data() {
     return {
       siteTitle: 'TRON FACTORY',
-      currentLang: '',
-      languages: {
-        'en-US': 'English',
-        'zh-CN': '简体中文',
-      },
     }
   },
   computed: {
@@ -58,28 +45,15 @@ export default {
       "userInfo"
     ])
   },
-  created () {
-    this.getLang()
-  },
   methods: {
     ...mapActions('app', [
       "signOut"
     ]),
-    getLang () {
-      let lang = localStorage.getItem('currentLang')
-      this.currentLang = this.languages[lang || 'en-US']
-    },
 
     handleSignOut () {
       this.signOut().then(() => {
         this.$router.push('/sign-in')
       })
-    },
-
-    handleCommand(val) {
-      this.currentLang = this.languages[val]
-      this.$i18n.locale = val
-      localStorage.setItem('currentLang', val)
     },
   },
 }
@@ -126,16 +100,6 @@ export default {
       background-color: rgba(0, 0, 0, .2);
       vertical-align: middle;
       margin: 0 15px;
-    }
-
-    .lang-dropdown {
-      &.hover-effect {
-        cursor: pointer;
-        transition: background 0.3s;
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.025);
-        }
-      }
     }
   }
 }
