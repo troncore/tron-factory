@@ -343,6 +343,7 @@
       // format submit params
       async initParams(params) {
         let baseParams = {
+          id: this.opType === 'edit' && this.opNodeId ? this.opNodeId : undefined,
           serviceType: this.form.serviceType,
           ip: this.form.ip,
           port: this.form.port,

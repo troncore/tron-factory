@@ -141,43 +141,35 @@ export default {
         return
       }
 
-      this.deployLoading = true
-      let deployPromises = this.tableData.map(node => this.deployNode(node, params))
-      await Promise.all(deployPromises)
 
-      this.$notify({
-        title: this.$t('base.successful'),
-        message: this.$t('nodesManage.deployingTips'),
-        type: 'success'
-      });
+      this.startDeploy()
+
 
       this.pollCheckDeployment()
     },
 
     // deploy node
-    deployNode (node = {}, params = {}) {
-      return new Promise(resolve => {
-        this.$_api.nodesManage.deployNode({
-          id: node.id,
-          isSR: node.isSR,
-          path: params.filePath, // TODO  ignore params
-        }, err => {
-          if (err) resolve({id: node.id, ok: false})
-          else resolve({id: node.id, ok: true})
-        })
+    startDeploy () {
+      this.deployLoading = true
+      this.$_api.nodesManage.deployNode({}, (err, res) => {
+        if (err) return
+
+        this.$notify({
+          title: this.$t('base.successful'),
+          message: this.$t('nodesManage.deployingTips'),
+          type: 'success'
+        });
       })
     },
 
     // refresh deployed node list
     pollCheckDeployment () {
-      let deployedNodeIds = this.tableData.map(node => node.id)
-
       let loading = false
       let timeID = setInterval(() => {
         if (!loading) {
           loading = true // the network may slow
 
-          this.$_api.nodesManage.checkNode(deployedNodeIds, (err, res) => {
+          this.$_api.nodesManage.checkNode({}, (err, res) => {
             loading = false
             if (err) {
               this.deployLoading = false
@@ -186,7 +178,7 @@ export default {
             }
 
             // check all deployed node whether if finish deployed
-            if (Object.values(res).every(val => val === 'deploy finish')) {
+            if (res === true) {
               this.deployLoading = false
               this.getNodeList()
               clearInterval(timeID)
