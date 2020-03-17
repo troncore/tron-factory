@@ -39,33 +39,33 @@ import tron.deployment.shellExecutor.BashExecutor;
 @RequestMapping(value = "/")
 @Slf4j
 public class DeployController {
-  protected static final Logger logger = LoggerFactory.getLogger("DeployController");
+    protected static final Logger logger = LoggerFactory.getLogger("DeployController");
 
-  private String checkNodeStatus(String path) {
-    File file = new File(path);
-    if (file.isFile() && file.exists()) {
-      try {
-        InputStreamReader read = new InputStreamReader(
-                new FileInputStream(file), Common.encoding);
-        BufferedReader bufferedReader = new BufferedReader(read);
-        String lineTxt;
+    private String checkNodeStatus(String path) {
+        File file = new File(path);
+        if (file.isFile() && file.exists()) {
+            try {
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), Common.encoding);
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt;
 
-        while ((lineTxt = bufferedReader.readLine()) != null) {
-          if (lineTxt.contains(Common.deployFinishStatus)) {
-            return Common.deployFinishStatus;
-          }
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    if (lineTxt.contains(Common.deployFinishStatus)) {
+                        return Common.deployFinishStatus;
+                    }
+                }
+                bufferedReader.close();
+                read.close();
+
+            } catch (Exception e) {
+                LOG.error(e.toString());
+            }
+        } else {
+            return Common.notFoundStatus;
         }
-        bufferedReader.close();
-        read.close();
-
-      } catch (Exception e) {
-        LOG.error(e.toString());
-      }
-    } else {
-      return Common.notFoundStatus;
+        return Common.deployFailedStatus;
     }
-    return Common.deployFailedStatus;
-  }
 //	private boolean isBlockNeedSync(JSONArray nodes, Long id) {
 //		for (int i = 0; i< nodes.size(); i++) {
 //			JSONObject node = (JSONObject) nodes.get(i);
@@ -77,118 +77,118 @@ public class DeployController {
 //		return false;
 //	}
 
-  @PostMapping(value = "/oneClick")
-  public JSONObject startDeployment() {
-    int currentTime = (int) (System.currentTimeMillis() / 1000);
-    ConfigGenerator configGenerator = new ConfigGenerator();
-    boolean result = configGenerator.updateConfig(new P2PVersion(currentTime), Common.configFiled);
-    if (!result) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-    }
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-  }
-
-  @PostMapping(value = "/checkNode")
-  public JSONObject checkDeployStatus(@RequestBody List<Long> idList) {
-    JSONObject result = new JSONObject();
-    if (idList.isEmpty()) return result;
-    for (Long id : idList) {
-      String status = checkNodeStatus(String.format(Common.logFormat, id.toString()));
-      result.put(id.toString(), status);
-    }
-    return new Response(ResultCode.OK.code, result).toJSONObject();
-  }
-
-  @PostMapping(value = "/deployNode")
-  public JSONObject deploy(@RequestBody JSONObject jsonData) {
-
-    String path = (String) jsonData.getOrDefault("path", "");
-    String chainName = (String) jsonData.getOrDefault("chainName", "Parachain");
-    Long id =jsonData.getOrDefault("id", "1") instanceof String ?
-        (Long.parseLong((String)jsonData.getOrDefault("id", "1"))) :
-        (int) jsonData.getOrDefault("id", 1);
-
-    JSONObject json = readJsonFile();
-    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
-    if (Objects.isNull(nodes)) {
-      nodes = new JSONArray();
-    }
-
-    JSONObject node = Util.getNodeInfo(nodes, id);
-    if (node == null) {
-      return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
-    }
-
-    boolean isSR = (Boolean) node.get(Common.isSRFiled);
-    String privateKeypath = (String) node.get(Common.privateKeyFiled);
-    String privateKey = null;
-    boolean blockNeedSync = true;
-    if (isSR) {
-      try {
-        privateKey = Wallet.getPrivateString(String.format("%s/%s", Common.walletFiled, privateKeypath));
-        blockNeedSync = (Boolean) node.get(Common.needSyncCheck);
-      } catch (CipherException | IOException e) {
-        LOG.error(e.toString());
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "load privateKey info failed").toJSONObject();
-      }
-    }
-
-    ConfigGenerator configGenerator = new ConfigGenerator();
-    boolean result = configGenerator.updateConfig(
-            new BlockSettingConfig(blockNeedSync), String.format("%s_%s", Common.configFiled, id.toString()));
-
-    if (!result) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-    }
-
-    String ip = (String) node.get(Common.ipFiled);
-    Long port = (Long) node.get(Common.portFiled);
-    String userName = (String) node.get(Common.userNameFiled);
-    BashExecutor bashExecutor = new BashExecutor();
-    String plugin = "null";
-    if (json.containsKey(Common.customTransactionFiled)
-            && ((String) json.get(Common.customTransactionFiled)).length() != 0) {
-      plugin = (String) json.get(Common.customTransactionFiled);
-    }
-
-    if (Objects.nonNull(privateKey)) {
-      bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin);
-    } else {
-      bashExecutor.callScript(ip, port, userName, path, "", id, plugin);
-    }
-
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-  }
-
-  @GetMapping(value = "/getLogInfo")
-  public JSONObject deploy(
-          @RequestParam(value = "id", required = false, defaultValue = "1") Long id
-  ) {
-    String logName = String.format(Common.logFormat, id.toString());
-    File file = new File(logName);
-    List<String> result = new ArrayList<>();
-    if (file.isFile() && file.exists()) {
-      try {
-        InputStreamReader read = new InputStreamReader(
-                new FileInputStream(file), Common.encoding);
-        BufferedReader bufferedReader = new BufferedReader(read);
-        String lineTxt;
-
-        while ((lineTxt = bufferedReader.readLine()) != null) {
-          result.add(lineTxt);
+    @PostMapping(value = "/api/oneClick")
+    public JSONObject startDeployment() {
+        int currentTime = (int) (System.currentTimeMillis() / 1000);
+        ConfigGenerator configGenerator = new ConfigGenerator();
+        boolean result = configGenerator.updateConfig(new P2PVersion(currentTime), Common.configFiled);
+        if (!result) {
+            return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
         }
-        bufferedReader.close();
-        read.close();
-
-      } catch (Exception e) {
-        LOG.error(e.getMessage());
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "read log info failed").toJSONObject();
-      }
-    } else {
-      return new Response(ResultCode.OK.code, "").toJSONObject();
+        return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
     }
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put(Common.logInfoFiled, result);
-    return new Response(ResultCode.OK.code, jsonObject).toJSONObject();
-  }
+
+    @GetMapping(value = "/api/checkNode")
+    public JSONObject checkDeployStatus() {
+        JSONObject json = readJsonFile();
+        JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+        boolean deployStatus = true;
+        for (int i = 0; i < nodes.size(); i++) {
+            JSONObject node = (JSONObject) nodes.get(i);
+            Long id = (Long) node.get(Common.idFiled);
+            boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
+            if (!isDeployed) {
+                deployStatus = false;
+            }
+        }
+        return new Response(ResultCode.OK.code, String.valueOf(deployStatus)).toJSONObject();
+    }
+
+    @GetMapping(value = "/api/deployNode")
+    public JSONObject deploy() {
+
+        JSONObject json = readJsonFile();
+        JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+        if (Objects.isNull(nodes)) {
+            nodes = new JSONArray();
+        }
+        for (int i = 0; i < nodes.size(); i++) {
+            JSONObject node = (JSONObject) nodes.get(i);
+            System.out.println(node);
+            boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
+            if (!isDeployed) {
+                Long id = (Long) node.get(Common.idFiled);
+                String path = (String) node.get(Common.pathFiled);
+                boolean isSR = (Boolean) node.get(Common.isSRFiled);
+                String privateKeypath = (String) node.get(Common.privateKeyFiled);
+                String privateKey = null;
+                boolean blockNeedSync = true;
+                if (isSR) {
+                    try {
+                        privateKey = Wallet.getPrivateString(String.format("%s/%s", Common.walletFiled, privateKeypath));
+                        blockNeedSync = (Boolean) node.get(Common.needSyncCheck);
+                    } catch (CipherException | IOException e) {
+                        LOG.error(e.toString());
+                        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "load privateKey info failed").toJSONObject();
+                    }
+                }
+                ConfigGenerator configGenerator = new ConfigGenerator();
+                boolean result = configGenerator.updateConfig(
+                        new BlockSettingConfig(blockNeedSync), String.format("%s_%s", Common.configFiled, id.toString()));
+
+                if (!result) {
+                    return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+                }
+
+                String ip = (String) node.get(Common.ipFiled);
+                Long port = (Long) node.get(Common.portFiled);
+                String userName = (String) node.get(Common.userNameFiled);
+                BashExecutor bashExecutor = new BashExecutor();
+                String plugin = "null";
+                if (json.containsKey(Common.customTransactionFiled)
+                        && ((String) json.get(Common.customTransactionFiled)).length() != 0) {
+                    plugin = (String) json.get(Common.customTransactionFiled);
+                }
+
+                if (Objects.nonNull(privateKey)) {
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin);
+                } else {
+                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin);
+                }
+            }
+        }
+        return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+    }
+
+    @GetMapping(value = "/api/getLogInfo")
+    public JSONObject deploy(
+            @RequestParam(value = "id", required = false, defaultValue = "1") Long id
+    ) {
+        String logName = String.format(Common.logFormat, id.toString());
+        File file = new File(logName);
+        List<String> result = new ArrayList<>();
+        if (file.isFile() && file.exists()) {
+            try {
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), Common.encoding);
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt;
+
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    result.add(lineTxt);
+                }
+                bufferedReader.close();
+                read.close();
+
+            } catch (Exception e) {
+                LOG.error(e.getMessage());
+                return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "read log info failed").toJSONObject();
+            }
+        } else {
+            return new Response(ResultCode.OK.code, "").toJSONObject();
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Common.logInfoFiled, result);
+        return new Response(ResultCode.OK.code, jsonObject).toJSONObject();
+    }
 }

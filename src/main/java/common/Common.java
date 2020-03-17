@@ -75,6 +75,18 @@ public class Common {
 
   public static final String allNodesField = "allNodes";
 
+  public static final String serviceTypeFiled = "serviceType";
+
+  public static final String sshPasswordFiled = "sshPassword";
+
+  public static final String sshPortFiled = "sshPort";
+
+  public static final String isDeployedFiled = "isDeployed";
+
+  public static final String javaTronVersionFiled = "javaTronVersion";
+
+  public static final String pathFiled = "path";
+
   // Node Status
   public static final String notFoundStatus = "not found";
 

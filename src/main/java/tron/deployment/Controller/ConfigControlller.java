@@ -179,7 +179,7 @@ public class ConfigControlller {
     return configObject;
   }
 
-  @PostMapping(value = "/dbconfig")
+  @PostMapping(value = "/api/dbconfig")
   public JSONObject dbConfig(@RequestBody LinkedHashMap<String,Object> data) {
     boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
     String isOpenTransaction = (String) data.getOrDefault("isOpenTransaction", "on");
@@ -198,7 +198,7 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/networkconfig")
+  @PostMapping(value = "/api/networkconfig")
   public JSONObject networkConfig(@RequestBody LinkedHashMap<String,Object> data) {
     int maxHttpConnectNumber =data.getOrDefault("maxHttpConnectNumber", "50") instanceof String ?
         (Integer.parseInt((String)data.getOrDefault("maxHttpConnectNumber", "50"))) :
@@ -230,7 +230,7 @@ public class ConfigControlller {
   }
 
 
-  @PostMapping("/p2pconfig")
+  @PostMapping("/api/p2pconfig")
   public JSONObject p2pConfig(@RequestBody LinkedHashMap<String,Object> data) {
     ArrayList<String> ipList= (ArrayList<String>) data.get("seed_node_ip_list");
     int p2pVersion =data.getOrDefault("p2pVersion", "0") instanceof String ?
@@ -262,7 +262,7 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/crossChainConfig")
+  @PostMapping(value = "/api/crossChainConfig")
   public JSONObject crossChainConfig(@RequestBody LinkedHashMap<String,Object> data) {
     boolean enableCrossChain = (boolean) data.getOrDefault("enableCrossChain", false);
     int maxValidatorNumber =data.getOrDefault("maxValidatorNumber", "4") instanceof String ?
@@ -287,7 +287,7 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/baseSettingConfig")
+  @PostMapping(value = "/api/baseSettingConfig")
   public JSONObject baseSettingConfig(@RequestBody JSONObject jsonData) {
 
     String chainId = (String) jsonData.getOrDefault("chainId", "1");
@@ -321,7 +321,7 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/genesisAssetConfig")
+  @PostMapping(value = "/api/genesisAssetConfig")
   public JSONObject genesisSettingConfig(@RequestBody JSONObject jsonObject) {
     if (!jsonObject.containsKey(Common.assetsFiled)) {
       return new Response(ResultCode.FAILED.code, "miss assets information").toJSONObject();
@@ -354,7 +354,7 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @GetMapping(value = "/config")
+  @GetMapping(value = "/api/config")
   public JSONObject getConfig() {
     refresh();
     parseConfig();
@@ -363,7 +363,7 @@ public class ConfigControlller {
 
   }
 
-  @GetMapping(value = "/checkBalance")
+  @GetMapping(value = "/api/checkBalance")
   public JSONObject checkBalance(
           @RequestParam(value = "balance", required = true, defaultValue = "0") String balance
   ) {

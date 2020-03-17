@@ -28,7 +28,7 @@ import response.Response;
 @RequestMapping(value = "/")
 public class PluginConfig {
 
-  @PostMapping(value = "/consensus")
+  @PostMapping(value = "/api/consensus")
   public JSONObject consensus(@RequestBody JSONObject jsonData){
     String consensus = (String) jsonData.getOrDefault("consensus", "dpos");
 //    @RequestParam(value = "consensus", required = false, defaultValue = "dpos") String consensus
@@ -40,7 +40,7 @@ public class PluginConfig {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/transaction")
+  @PostMapping(value = "/api/transaction")
   public JSONObject transaction(
       @RequestBody JSONObject jsonObject
   ){
@@ -66,7 +66,7 @@ public class PluginConfig {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/dbEngine")
+  @PostMapping(value = "/api/dbEngine")
   public JSONObject dbEngine(@RequestBody JSONObject jsonData){
     String dbEngine = (String) jsonData.getOrDefault("dbEngine", "leveldb");
 
@@ -81,7 +81,7 @@ public class PluginConfig {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/crypto")
+  @PostMapping(value = "/api/crypto")
   public JSONObject cryptoEngine(@RequestBody JSONObject jsonData){
     String eckey = (String) jsonData.getOrDefault("crypto", "eckey");
 
@@ -97,7 +97,7 @@ public class PluginConfig {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @GetMapping(value = "/pluginConfig")
+  @GetMapping(value = "/api/pluginConfig")
   public JSONObject pluginConfig() {
     JSONObject json = readJsonFile();
     JSONObject result = new JSONObject();
@@ -111,7 +111,7 @@ public class PluginConfig {
     return new Response(ResultCode.OK.code, result).toJSONObject();
   }
 
-  @GetMapping(value = "/getCrypto")
+  @GetMapping(value = "/api/getCrypto")
   public JSONObject getCrypto(@RequestParam(value = "crypto", required = false, defaultValue =
       "eckey") String eckeySm2) {
     parseConfig();

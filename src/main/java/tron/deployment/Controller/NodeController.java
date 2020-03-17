@@ -104,7 +104,7 @@ public class NodeController {
     return false;
   }
 
-  @PostMapping(value = "/nodeInfo")
+  @PostMapping(value = "/api/nodeInfo")
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
     refresh();
     String userName = (String) data.getOrDefault("userName", "node1");
@@ -114,20 +114,31 @@ public class NodeController {
     String privateKey = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
-    Long id =data.getOrDefault("id", "1") instanceof String ?
-        (Long.parseLong((String)data.getOrDefault("id", "1"))) :
-        (Long) data.getOrDefault("id", 1);
     int port =data.getOrDefault("port", "8090") instanceof String ?
-        (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
-        (int)data.getOrDefault("port", 8090);
-
+            (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
+            (int)data.getOrDefault("port", 8090);
+    String serviceType = (String) data.getOrDefault("serviceType", "");
+    String sshPassword = (String) data.getOrDefault("sshPassword", "");
+    int sshPort = (Integer) data.getOrDefault("sshPort", "");
+    boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
+    String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+
+    Long id = 0L;
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      Long nodeID = (Long) node.get(Common.idFiled);
+      if(id <= nodeID){
+        id = nodeID;
+      }
+    }
+    id++;
+
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
     }
-
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node != null) {
       return new Response(ResultCode.FORBIDDEND.code, "node id already exist").toJSONObject();
@@ -166,12 +177,17 @@ public class NodeController {
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
     newNode.put(Common.needSyncCheck, needSyncCheck);
+    newNode.put(Common.serviceTypeFiled, serviceType);
+    newNode.put(Common.sshPasswordFiled, sshPassword);
+    newNode.put(Common.sshPortFiled, sshPort);
+    newNode.put(Common.isDeployedFiled, isDeployed);
+    newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     nodes.add(newNode);
 
     return updateNodesInfo(nodes, json);
   }
 
-  @PutMapping(value = "/nodeInfo")
+  @PutMapping(value = "/api/nodeInfo")
   public JSONObject updateNode(@RequestBody LinkedHashMap<String,Object> data) {
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
@@ -181,12 +197,16 @@ public class NodeController {
     String voteCount = (String) data.getOrDefault("voteCount", "");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
     long id =data.getOrDefault("id", "1") instanceof String ?
-        (Long.parseLong((String)data.getOrDefault("id", "1"))) :
-        (int) data.getOrDefault("id", 1);
+            (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+            (int) data.getOrDefault("id", 1);
     int port =data.getOrDefault("port", "8090") instanceof String ?
-        (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
-        (int)data.getOrDefault("port", 8090);
-
+            (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
+            (int)data.getOrDefault("port", 8090);
+    String serviceType = (String) data.getOrDefault("serviceType", "");
+    String sshPassword = (String) data.getOrDefault("sshPassword", "");
+    int sshPort = (Integer) data.getOrDefault("sshPort", "");
+    boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
+    String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -224,6 +244,11 @@ public class NodeController {
     node.put(Common.urlFiled, url);
     node.put(Common.voteCountFiled, voteCount);
     node.put(Common.needSyncCheck, needSyncCheck);
+    node.put(Common.serviceTypeFiled, serviceType);
+    node.put(Common.sshPasswordFiled, sshPassword);
+    node.put(Common.sshPortFiled, sshPort);
+    node.put(Common.isDeployedFiled, isDeployed);
+    node.put(Common.javaTronVersionFiled, javaTronVersion);
     nodes.add(node);
     json.put(Common.nodesFiled, nodes);
 
@@ -231,7 +256,7 @@ public class NodeController {
   }
 
 
-  @GetMapping(value ="/nodeInfo" )
+  @GetMapping(value ="/api/nodeInfo" )
   public JSONObject getNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
 
     JSONObject json = readJsonFile();
@@ -247,7 +272,7 @@ public class NodeController {
     return new Response(ResultCode.OK.code, node).toJSONObject();
   }
 
-  @GetMapping(value = "/allNodeInfo")
+  @GetMapping(value = "/api/allNodeInfo")
   public JSONObject getAllNode(
   ) {
 
@@ -256,7 +281,7 @@ public class NodeController {
     return new Response(ResultCode.OK.code, nodes).toJSONObject();
   }
 
-  @PostMapping(value = "/initConfig")
+  @PostMapping(value = "/api/initConfig")
   public JSONObject initConfig() {
     ConfigGenerator configGenerator = new ConfigGenerator();
     if (!configGenerator.updateConfig(new SeedNodeConfig(new ArrayList<>()), Common.configFiled)) {
@@ -301,7 +326,7 @@ public class NodeController {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @DeleteMapping(value = "/nodeInfo")
+  @DeleteMapping(value = "/api/nodeInfo")
   public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
 
     JSONObject json = readJsonFile();
