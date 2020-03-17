@@ -3,21 +3,21 @@
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "title": "menu.nodesManage",
-    "icon": "el-icon-guide",
+    "icon": "el-icon-s-operation",
     "disabled": false
   },
   {
     "path": "/configuration/quick",
     "name": "configuration",
     "title": "menu.configuration",
-    "icon": "el-icon-s-operation",
+    "icon": "el-icon-set-up",
     "disabled": false
   },
   {
     "path": "/ecology-app",
     "name": "ecology-app",
     "title": "menu.ecologyApp",
-    "icon": "el-icon-setting",
+    "icon": "el-icon-guide",
     "disabled": true,
     "children": [
       {
