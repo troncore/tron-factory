@@ -12,7 +12,8 @@
     v-else
     class="im-submenu"
     :key="menuItem.name"
-    :index="menuItem.name">
+    :index="menuItem.name"
+    :disabled="menuItem.disabled">
     <template slot="title">
       <i class="menu-icon" :class="menuItem.icon" />
       <span> {{ $t(menuItem.title) }}</span>
