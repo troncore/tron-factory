@@ -3,35 +3,36 @@
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "title": "menu.nodesManage",
-    "icon": "el-icon-guide"
+    "icon": "el-icon-guide",
+    "disabled": false
   },
   {
     "path": "/configuration/quick",
     "name": "configuration",
     "title": "menu.configuration",
     "icon": "el-icon-s-operation",
-    "auth": true
+    "disabled": false
   },
   {
     "path": "/ecology-app",
     "name": "ecology-app",
     "title": "menu.ecologyApp",
     "icon": "el-icon-setting",
-    "auth": true,
+    "disabled": true,
     "children": [
       {
         "path": "/wallet-cli",
         "name": "wallet-cli",
         "title": "menu.walletCLI",
         "icon": "el-icon-upload",
-        "auth": true
+        "disabled": true
       },
       {
         "path": "/tron-link",
         "name": "tron-link",
         "title": "menu.tronLink",
         "icon": "el-icon-share",
-        "auth": true
+        "disabled": true
       }
     ]
   }
