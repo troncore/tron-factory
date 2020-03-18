@@ -305,7 +305,7 @@
           needSyncCheck: nodeInfo.needSyncCheck !== undefined ? nodeInfo.needSyncCheck : false,
           url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || 'http://',
           voteCount: nodeInfo.voteCount || '',
-          privateKey: this.safePrivateKey,
+          privateKey: nodeInfo.publicKey ? this.safePrivateKey : '',
         }
         this.publicKey = nodeInfo.publicKey
       },

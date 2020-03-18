@@ -30,7 +30,7 @@ export const proxyMap = {
   mock: '/__mock__',
   service: '/__server__',
 }
-let globalProxy = 'mock'
+let globalProxy = 'local'
 
 const $axios = Axios.create({
   headers: {

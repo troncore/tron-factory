@@ -42,7 +42,7 @@
     <log-dialog
       v-if="logDialogVisible"
       :visible.sync="logDialogVisible"
-      :current-row="currentViewRow">
+      :current-row="currentRow">
     </log-dialog>
   </div>
 </template>
@@ -58,7 +58,7 @@ export default {
       tableLoading: false,
       deployLoading: false,
       logDialogVisible: false,
-      currentViewRow: {},
+      currentRow: {},
     }
   },
   created() {
