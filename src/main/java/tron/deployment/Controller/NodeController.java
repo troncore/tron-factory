@@ -119,7 +119,9 @@ public class NodeController {
             (int)data.getOrDefault("port", 8090);
     String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
-    int sshPort = (Integer) data.getOrDefault("sshPort", "");
+    int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
+            (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
@@ -204,7 +206,9 @@ public class NodeController {
             (int)data.getOrDefault("port", 8090);
     String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
-    int sshPort = (Integer) data.getOrDefault("sshPort", "");
+    int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
+            (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
@@ -268,6 +272,10 @@ public class NodeController {
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+    }
+    String  serviceType = (String)node.get(Common.serviceTypeFiled);
+    if(serviceType.equals("local")){
+      node.put(Common.userNameFiled, "");
     }
     boolean isSR = (boolean)node.get(Common.isSRFiled);
     if(!isSR){
