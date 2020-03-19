@@ -113,7 +113,7 @@ public class NodeController {
     String url = (String) data.getOrDefault("url", "");
     String privateKey = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
-    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
+    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", false);
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
@@ -195,7 +195,7 @@ public class NodeController {
     String url = (String) data.getOrDefault("url", "");
     String key = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
-    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
+    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", false);
     long id =data.getOrDefault("id", "1") instanceof String ?
             (Long.parseLong((String)data.getOrDefault("id", "1"))) :
             (int) data.getOrDefault("id", 1);
@@ -268,6 +268,13 @@ public class NodeController {
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+    }
+    boolean isSR = (boolean)node.get(Common.isSRFiled);
+    if(!isSR){
+      node.put(Common.urlFiled, "");
+      node.put(Common.voteCountFiled, "");
+      node.put(Common.privateKeyFiled, "");
+      node.put(Common.publicKeyFiled, "");
     }
     return new Response(ResultCode.OK.code, node).toJSONObject();
   }
