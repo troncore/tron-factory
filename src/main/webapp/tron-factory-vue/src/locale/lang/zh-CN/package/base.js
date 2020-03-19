@@ -5,6 +5,9 @@ export default {
   clear: '清空',
   delete: '删除',
 
+  document: '文档',
+  helpDocument: '帮助文档',
+
   open: '打开',
   confirm: '确定',
   save: '保存',

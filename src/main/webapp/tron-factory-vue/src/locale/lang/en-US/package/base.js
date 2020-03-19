@@ -5,6 +5,9 @@ export default {
   clear: 'Clear',
   delete: 'Delete',
 
+  document: 'Document',
+  helpDocument: 'Help Document',
+
   open: 'Open',
   confirm: 'Confirm',
   save: 'Save',

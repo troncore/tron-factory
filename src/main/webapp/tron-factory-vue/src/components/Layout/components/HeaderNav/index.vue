@@ -7,17 +7,20 @@
       <router-link to="/"><img class="logo-img" src="@/assets/images/logo.png" :title="siteTitle" :alt="siteTitle"/></router-link>
     </div>
 
-    <div class="header-right">
+    <div class="header-right nav-list">
 
-      <div class="user-info" v-if="isSignIn">
+      <div class="nav-item view-document" @click="handleViewDocument">{{ $t('base.document') }}</div>
+
+      <!-- choose language -->
+      <im-locale class="nav-item"></im-locale>
+
+      <i class="nav-item divider-line"></i>
+
+      <div class="nav-item user-info" v-if="isSignIn">
         <span class="account">{{ userInfo.account }}</span>
         <i class="sign-out el-icon-switch-button" @click="handleSignOut"></i>
       </div>
 
-      <i class="divider-line"></i>
-
-      <!-- choose language -->
-      <im-locale></im-locale>
     </div>
 
   </div>
@@ -55,6 +58,15 @@ export default {
         this.$router.push('/sign-in')
       })
     },
+
+    handleViewDocument() {
+      let currentLanguage = localStorage.getItem('currentLang')
+      if (currentLanguage === 'en-US') {
+        window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/develop/README.md', '_blank')
+      } else {
+        window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/develop/README.zh-CN.md', '_blank')
+      }
+    },
   },
 }
 </script>
@@ -79,27 +91,36 @@ export default {
     display: flex;
     align-items: center;
     margin: 0 64px 0 auto;
+  }
 
-    .user-info {
-      color: #081C56;
-      font-size: 14px;
-      .sign-out {
-        margin-left: 5px;
-        vertical-align: middle;
-        cursor: pointer;
-        &:hover {
-          color: red;
-        }
-      }
+  .nav-list {
+    .nav-item {
+      margin-left: 20px;
     }
+  }
 
-    .divider-line {
-      display: inline-block;
-      height: 16px;
-      width: 1px;
-      background-color: rgba(0, 0, 0, .2);
+  .view-document {
+    cursor: pointer;
+  }
+
+  .divider-line {
+    display: inline-block;
+    height: 16px;
+    width: 1px;
+    background-color: rgba(0, 0, 0, .2);
+    vertical-align: middle;
+  }
+
+  .user-info {
+    color: #081C56;
+    font-size: 14px;
+    .sign-out {
+      margin-left: 5px;
       vertical-align: middle;
-      margin: 0 15px;
+      cursor: pointer;
+      &:hover {
+        color: red;
+      }
     }
   }
 }
