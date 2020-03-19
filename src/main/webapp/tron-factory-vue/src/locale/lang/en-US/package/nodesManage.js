@@ -57,6 +57,7 @@ export default {
     voteCount: 'Corresponding Vote Count',
     publicKey: 'Address',
     privateKey: 'Private Key(256-bits, hex encoded)',
+    deployFile: 'Deploy requires local release file path like /Users/xxx/xxx/java-tron-1.0.0.zip',
   },
 
   valid: {
@@ -73,5 +74,8 @@ export default {
     maxNumberValue: 'maximum exceeded',
     maxVoteCountValue: 'Vote Count exceeds maximum',
     inputPrivateKey: 'Please input 256-bits private key (hex encoded)',
+
+    inputFilePath: 'Enter path of java-tron release file',
+    inputRightPath: 'Enter path of java-tron release file like java-tron-1.0.0.zip',
   },
 }

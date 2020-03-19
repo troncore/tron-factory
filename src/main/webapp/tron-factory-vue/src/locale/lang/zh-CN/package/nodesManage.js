@@ -56,6 +56,7 @@ export default {
     voteCount: '对应投票数量',
     publicKey: '地址',
     privateKey: '请输入私钥(256位, 16进制编码)',
+    deployFile: '部署前首先需要填写本地文件路径, 例如：/Users/xxx/xxx/java-tron-1.0.0.zip',
   },
 
   valid: {
@@ -72,5 +73,8 @@ export default {
     maxNumberValue: '数字超过最大限额',
     maxVoteCountValue: 'Vote Count 填写额超过最大值',
     inputPrivateKey: '请输入256位 private key (hex编码)',
+
+    inputFilePath: '请输入 java-tron 软件包路径',
+    inputRightPath: '软件包路径以 java-tron-1.0.0.zip 结尾',
   },
 }

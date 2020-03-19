@@ -38,26 +38,30 @@
       </el-table-column>
     </el-table>
 
+    <!-- deploy node  -->
+    <deploy-dialog v-if="deployDialogVisible" :visible.sync="deployDialogVisible" :deployLoading.sync="deployLoading"/>
+
     <!-- view deploy log-->
-    <log-dialog
-      v-if="logDialogVisible"
-      :visible.sync="logDialogVisible"
-      :current-row="currentRow">
-    </log-dialog>
+    <log-dialog v-if="logDialogVisible" :visible.sync="logDialogVisible" :current-row="currentRow" />
+
   </div>
 </template>
 
 <script>
 import LogDialog from "./components/LogDialog";
+import DeployDialog from "./components/DeployDialog";
 export default {
   name: "node-list",
-  components: { LogDialog },
+  components: { LogDialog, DeployDialog },
   data () {
     return {
       tableData: [],
       tableLoading: false,
       deployLoading: false,
+
+      deployDialogVisible: false,
       logDialogVisible: false,
+
       currentRow: {},
     }
   },
@@ -120,15 +124,13 @@ export default {
       })
     },
 
-    // start deploy node
-    async handleDeploy (params) {
+    // ready deploy node
+    handleDeploy() {
       let errorMsg = ''
       if (!this.tableData.length)
         errorMsg = this.$t('nodesManage.pleaseAddNode')
       else if (this.tableData.every(node => node.isDeployed))
         errorMsg = this.$t('nodesManage.allNodeDeployed')
-      // else if ('是否已完成配置') // TODO
-      //   errorMsg = 'this.$t('nodesManage.pleaseAddNode')'
       else if (!this.tableData.some(node => node.isSR && !node.needSyncCheck))
         errorMsg = this.$t('nodesManage.needSRnoSyncCheck')
 
@@ -141,52 +143,7 @@ export default {
         return
       }
 
-
-      this.startDeploy()
-
-
-      this.pollCheckDeployment()
-    },
-
-    // deploy node
-    startDeploy () {
-      this.deployLoading = true
-      this.$_api.nodesManage.deployNode({}, (err, res) => {
-        if (err) return
-
-        this.$notify({
-          title: this.$t('base.successful'),
-          message: this.$t('nodesManage.deployingTips'),
-          type: 'success'
-        });
-      })
-    },
-
-    // refresh deployed node list
-    pollCheckDeployment () {
-      let loading = false
-      let timeID = setInterval(() => {
-        if (!loading) {
-          loading = true // the network may slow
-
-          this.$_api.nodesManage.checkNode({}, (err, res) => {
-            loading = false
-            if (err) {
-              this.deployLoading = false
-              clearInterval(timeID)
-              return
-            }
-
-            // check all deployed node whether if finish deployed
-            if (res === true) {
-              this.deployLoading = false
-              this.getNodeList()
-              clearInterval(timeID)
-            }
-          })
-        }
-
-      }, 1000 * 5)
+      this.deployDialogVisible = true
     },
 
     handleLogs(row) {
