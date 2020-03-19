@@ -100,7 +100,7 @@
       pollCheckDeployment () {
         this.$emit('update:deployLoading', true)
         let flag = false
-        let timeID = setInterval(() => {
+        this.timeID = setInterval(() => {
           if (!flag) {
             flag = true // the network may slow，avoid frequently to call ajax
 
@@ -108,7 +108,7 @@
               flag = false
               if (err) {
                 this.$emit('update:deployLoading', false)
-                clearInterval(timeID)
+                clearInterval(this.timeID)
                 return
               }
 
@@ -116,13 +116,16 @@
               if (res === true) {
                 this.$emit('update:deployLoading', false)
                 this.getNodeList()
-                clearInterval(timeID)
+                clearInterval(this.timeID)
               }
             })
           }
 
         }, 1000 * 5)
       },
+    },
+    destroyed() {
+      clearTimeout(this.timeID)
     }
   }
 </script>
