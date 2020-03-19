@@ -18,7 +18,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
+          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
         </el-form-item>
 
         <el-form-item prop="port">
@@ -28,7 +28,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-          <el-input v-model.trim="form.port" tabindex="22" :maxlength="50" :disabled="isView" :placeholder="$t('nodesManage.valid.maxPortValue')"></el-input>
+          <el-input v-model.trim="form.port" type="number" tabindex="22" :maxlength="50" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.maxPortValue')"></el-input>
         </el-form-item>
 
         <br/>
@@ -40,7 +40,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.userName" tabindex="23" :maxlength="50" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.userName" tabindex="23" :maxlength="50" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
           <el-form-item prop="sshPassword">
@@ -49,7 +49,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
           <el-form-item prop="sshPort">
@@ -58,7 +58,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.sshPort" tabindex="25" :maxlength="200" :disabled="isView" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.sshPort" type="number" tabindex="25" :maxlength="200" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
         </template>
       </div>
@@ -89,7 +89,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :disabled="isView" :placeholder="$t('nodesManage.valid.inputURL')"></el-input>
+            <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputURL')"></el-input>
           </el-form-item>
 
           <el-form-item prop="voteCount">
@@ -99,7 +99,7 @@
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            <el-input v-model.trim="form.voteCount" tabindex="27" type="number" :maxlength="20" :disabled="isView" :placeholder="$t('nodesManage.valid.inputVoteCount')"></el-input>
+            <el-input v-model.trim="form.voteCount" type="number" tabindex="27" :maxlength="20" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')"></el-input>
           </el-form-item>
 
           <br />
@@ -299,7 +299,7 @@
           port: nodeInfo.port || '',
           userName: nodeInfo.userName || '',
           sshPassword: nodeInfo.sshPassword || '',
-          sshPort: nodeInfo.sshPort || '',
+          sshPort: nodeInfo.sshPort || 22,
 
           isSR: nodeInfo.isSR !== undefined ? Boolean(nodeInfo.isSR) : true,
           needSyncCheck: nodeInfo.needSyncCheck !== undefined ? nodeInfo.needSyncCheck : false,

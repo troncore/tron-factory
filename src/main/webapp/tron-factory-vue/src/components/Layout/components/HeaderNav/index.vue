@@ -108,7 +108,6 @@ export default {
     height: 16px;
     width: 1px;
     background-color: rgba(0, 0, 0, .2);
-    vertical-align: middle;
   }
 
   .user-info {
