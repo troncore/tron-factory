@@ -89,7 +89,7 @@
             this.logInfo.forEach(log => {
               if (log.indexOf('deploy finish') > -1) {
                 this.processingLoading = false
-                this.processingText = this.$t('deployNodes.deployComplete')
+                this.processingText = this.$t('nodesManage.deployComplete')
 
                 clearInterval(this.timeID)
 
