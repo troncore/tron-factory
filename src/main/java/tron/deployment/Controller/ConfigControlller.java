@@ -232,6 +232,7 @@ public class ConfigControlller {
 
   @PostMapping("/api/p2pconfig")
   public JSONObject p2pConfig(@RequestBody LinkedHashMap<String,Object> data) {
+
     ArrayList<String> ipList= (ArrayList<String>) data.get("seed_node_ip_list");
     int p2pVersion =data.getOrDefault("p2pVersion", "0") instanceof String ?
         (Integer.parseInt((String)data.getOrDefault("p2pVersion", "0"))) :

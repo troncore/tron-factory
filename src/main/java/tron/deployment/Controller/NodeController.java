@@ -7,6 +7,7 @@ import static common.Util.writeJsonFile;
 import static wallet.Wallet.*;
 
 import common.Common;
+import config.P2PConfig;
 import config.SeedNodeConfig;
 import java.util.LinkedHashMap;
 
@@ -60,9 +61,15 @@ public class NodeController {
         witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
                 (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
       }
+      ArrayList<String> ipList = (ArrayList<String>) node.get(Common.ipListFiled);
+      boolean result = configGenerator.updateConfig(new P2PConfig(ipList), Common.configFiled);
+      if (!result) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+      }
     }
     GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
     witnessConfig.setGenesisBlockWitnesses(witnessnodes);
+
     if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
       LOG.error("update witness config file failed");
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
@@ -129,9 +136,13 @@ public class NodeController {
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
 
     Long id = 0L;
+
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       Long nodeID = (Long) node.get(Common.idFiled);
+      /*String nodeIp = (String) node.get(Common.ipFiled);
+      String nodePort = (String) node.get(Common.portFiled);
+      ipList.add(nodeIp+"\":\""+nodePort);*/
       if(id <= nodeID){
         id = nodeID;
       }
@@ -146,11 +157,15 @@ public class NodeController {
       return new Response(ResultCode.FORBIDDEND.code, "node id already exist").toJSONObject();
     }
 
-
     if (isIpExist(nodes, ip)) {
       return new Response(ResultCode.FORBIDDEND.code, "ip should be different").toJSONObject();
     }
-
+    ArrayList<String> ipList =new ArrayList<>();
+    if(!nodes.isEmpty()){
+      JSONObject nodeLast = (JSONObject) nodes.get(nodes.size()-1);
+      ipList = (ArrayList<String>) nodeLast.get(Common.ipListFiled);
+    }
+    ipList.add(ip+"\":\""+port);
     JSONObject newNode = new JSONObject();
     if (isSR) {
       String path;
@@ -175,6 +190,7 @@ public class NodeController {
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
+    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -185,7 +201,6 @@ public class NodeController {
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     nodes.add(newNode);
-
     return updateNodesInfo(nodes, json);
   }
 
