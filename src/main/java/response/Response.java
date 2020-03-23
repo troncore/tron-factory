@@ -22,6 +22,12 @@ public class Response {
     jsonObject.put("data", json);
   }
 
+  public Response(int code, boolean flag) {
+    jsonObject = new JSONObject();
+    jsonObject.put("code", code);
+    jsonObject.put("data", flag);
+  }
+
   public JSONObject toJSONObject() {
     return jsonObject;
   }

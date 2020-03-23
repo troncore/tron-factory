@@ -7,6 +7,7 @@ import static common.Util.writeJsonFile;
 import static wallet.Wallet.*;
 
 import common.Common;
+import config.P2PConfig;
 import config.SeedNodeConfig;
 import java.util.LinkedHashMap;
 
@@ -60,9 +61,15 @@ public class NodeController {
         witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
                 (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
       }
+      ArrayList<String> ipList = (ArrayList<String>) node.get(Common.ipListFiled);
+      boolean result = configGenerator.updateConfig(new P2PConfig(ipList), Common.configFiled);
+      if (!result) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+      }
     }
     GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
     witnessConfig.setGenesisBlockWitnesses(witnessnodes);
+
     if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
       LOG.error("update witness config file failed");
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
@@ -113,13 +120,15 @@ public class NodeController {
     String url = (String) data.getOrDefault("url", "");
     String privateKey = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
-    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
+    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", false);
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
     String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
-    int sshPort = (Integer) data.getOrDefault("sshPort", "");
+    int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
+            (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
@@ -127,9 +136,13 @@ public class NodeController {
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
 
     Long id = 0L;
+
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       Long nodeID = (Long) node.get(Common.idFiled);
+      /*String nodeIp = (String) node.get(Common.ipFiled);
+      String nodePort = (String) node.get(Common.portFiled);
+      ipList.add(nodeIp+"\":\""+nodePort);*/
       if(id <= nodeID){
         id = nodeID;
       }
@@ -144,11 +157,15 @@ public class NodeController {
       return new Response(ResultCode.FORBIDDEND.code, "node id already exist").toJSONObject();
     }
 
-
     if (isIpExist(nodes, ip)) {
       return new Response(ResultCode.FORBIDDEND.code, "ip should be different").toJSONObject();
     }
-
+    ArrayList<String> ipList =new ArrayList<>();
+    if(!nodes.isEmpty()){
+      JSONObject nodeLast = (JSONObject) nodes.get(nodes.size()-1);
+      ipList = (ArrayList<String>) nodeLast.get(Common.ipListFiled);
+    }
+    ipList.add(ip+"\":\""+port);
     JSONObject newNode = new JSONObject();
     if (isSR) {
       String path;
@@ -173,6 +190,7 @@ public class NodeController {
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
+    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -183,7 +201,6 @@ public class NodeController {
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     nodes.add(newNode);
-
     return updateNodesInfo(nodes, json);
   }
 
@@ -195,7 +212,7 @@ public class NodeController {
     String url = (String) data.getOrDefault("url", "");
     String key = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
-    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
+    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", false);
     long id =data.getOrDefault("id", "1") instanceof String ?
             (Long.parseLong((String)data.getOrDefault("id", "1"))) :
             (int) data.getOrDefault("id", 1);
@@ -204,7 +221,9 @@ public class NodeController {
             (int)data.getOrDefault("port", 8090);
     String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
-    int sshPort = (Integer) data.getOrDefault("sshPort", "");
+    int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
+            (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
@@ -268,6 +287,17 @@ public class NodeController {
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+    }
+    String  serviceType = (String)node.get(Common.serviceTypeFiled);
+    if(serviceType.equals("local")){
+      node.put(Common.userNameFiled, "");
+    }
+    boolean isSR = (boolean)node.get(Common.isSRFiled);
+    if(!isSR){
+      node.put(Common.urlFiled, "");
+      node.put(Common.voteCountFiled, "");
+      node.put(Common.privateKeyFiled, "");
+      node.put(Common.publicKeyFiled, "");
     }
     return new Response(ResultCode.OK.code, node).toJSONObject();
   }

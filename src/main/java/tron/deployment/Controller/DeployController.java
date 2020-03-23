@@ -95,13 +95,13 @@ public class DeployController {
         boolean deployStatus = true;
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject node = (JSONObject) nodes.get(i);
-            Long id = (Long) node.get(Common.idFiled);
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
             if (!isDeployed) {
                 deployStatus = false;
             }
         }
-        return new Response(ResultCode.OK.code, String.valueOf(deployStatus)).toJSONObject();
+        return new Response(ResultCode.OK.code, deployStatus).toJSONObject();
+
     }
 
     @GetMapping(value = "/api/deployNode")
@@ -114,7 +114,6 @@ public class DeployController {
         }
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject node = (JSONObject) nodes.get(i);
-            System.out.println(node);
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
             if (!isDeployed) {
                 Long id = (Long) node.get(Common.idFiled);
