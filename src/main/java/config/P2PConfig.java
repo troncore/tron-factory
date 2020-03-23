@@ -24,4 +24,7 @@ public class P2PConfig implements Serializable {
     this.seed_node_ip_list = seed_node_ip_list;
     this.node_listen_port = node_listen_port;
   }
+  public P2PConfig(List<String> seed_node_ip_list) {
+    this.seed_node_ip_list = seed_node_ip_list;
+  }
 }
