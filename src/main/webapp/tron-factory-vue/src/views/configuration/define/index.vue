@@ -11,19 +11,20 @@
 
     <div class="config-title">{{ activeIndex + '. ' + activeStep.title }}</div>
 
-    <component :is="activeStep.component" :init-config-info="initConfigInfo" @prev-step="handlePrevStep" @next-step="handleNextStep"/>
 
+    <component :is="activeStep.component" :init-config-info="initConfigInfo" @prev-step="handlePrevStep" @next-step="handleNextStep"/>
   </div>
 </template>
 
 <script>
+  import DatabaseConfig from './components/DatabaseConfig'
   export default {
     name: "define-config",
     components: {
       GenesisConfig: () => import('./components/GenesisConfig'),
       BaseConfig: () => import('./components/BaseConfig'),
       NetworkConfig: () => import('./components/NetworkConfig'),
-      DatabaseConfig: () => import('./components/DatabaseConfig'),
+      DatabaseConfig,
       P2PConfig: () => import('./components/P2PConfig'),
       ModulesConfig: () => import('./components/ModulesConfig'),
     },
