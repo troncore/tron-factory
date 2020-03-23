@@ -208,9 +208,6 @@ export default {
 
         this.seedNodeIpList = res.allNodes || []
 
-        // TODO default all select in back end
-        if (!seedNodeIpList.length) seedNodeIpList = [...this.seedNodeIpList]
-
         this.form = {
           ...this.form,
           ...res,
