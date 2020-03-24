@@ -1,7 +1,7 @@
 <template>
   <div class="box-view cross-chain-config">
     <div class="box-body">
-      <el-form ref="cross-chain-config-form" :model="form" :rules="crossChainRules" label-position="top">
+      <el-form class="im-form" ref="cross-chain-config-form" :model="form" :rules="crossChainRules" label-position="top">
         <el-form-item label="enableCrossChain" prop="enableCrossChain" class="baseFormItem mgt20">
           <el-switch disabled  v-model="form.enableCrossChain"></el-switch>
         </el-form-item>

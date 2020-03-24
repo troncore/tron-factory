@@ -1,7 +1,7 @@
 <!-- node add、edit、detail-->
 <template>
   <div class="node-info">
-    <el-form ref="im-form" :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
+    <el-form class="im-form" ref="im-form" :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
       <div class="im-card padding-20">
         <div class="service-type">
           <div class="title">{{ $t('nodesManage.serviceType') }}</div>
@@ -104,17 +104,19 @@
 
           <br />
 
-          <el-form-item v-if="publicKey">
+          <template v-if="publicKey">
+            <el-form-item>
             <span slot="label">
               publicKey
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.publicKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            {{ publicKey }}
-          </el-form-item>
+              {{ publicKey }}
+            </el-form-item>
 
-          <br/>
+            <br />
+          </template>
 
           <el-form-item prop="privateKey" class="private-key" v-if="opType !== 'detail'">
             <span class="private-key__help" slot="label">
@@ -456,11 +458,6 @@
 
       &.private-key {
         width: 720px;
-      }
-
-      .el-form-item__label {
-        padding: 0;
-        line-height: 30px;
       }
     }
     .key-tool {

@@ -185,8 +185,6 @@ $step_color_todo: rgba(8, 28, 86, .5);
   }
 }
 
-
-
 /deep/ .box-view {
   padding: 0;
 
@@ -198,23 +196,6 @@ $step_color_todo: rgba(8, 28, 86, .5);
       .el-button {
         font-size: 18px;
         font-weight: bold;
-      }
-    }
-
-    /deep/ .el-form-item {
-      .el-form-item__label {
-        padding: 0;
-        font-size: 16px;
-        color: rgba(8, 28, 86, .7);
-
-        .unit {
-          font-size: 14px;
-          color: rgba(8, 28, 86, .5);
-        }
-        .help-tips {
-          font-size: 14px;
-          color: rgba(8, 28, 86, .5);
-        }
       }
     }
   }

@@ -8,9 +8,7 @@
           <span>ONE CLICK DEPLOYMENT</span>
         </div>
         <div class="summary">
-          <span>{{ $t('sign.oneClickService') }}</span>
           <span>One Click Deployment</span>
-          <span>{{ $t('sign.shortcutOCD') }}</span>
         </div>
       </div>
     </div>
@@ -128,7 +126,7 @@ export default {
       position: absolute;
       top: 50%;
       left: 10%;
-      transform: translate(0, -80%);
+      transform: translate(0, -100%);
       .title {
         margin-bottom: 20px;
         font-size: 42px;

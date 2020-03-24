@@ -43,13 +43,25 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   }
 }
 
-.el-form-item__label {
-  span {
-    display: inline-flex;
-    align-items: center;
-    i {
-      margin-left: 8px;
+.im-form {
+  .el-form-item {
+    margin-bottom: 15px;
+  }
+  .el-form-item__label {
+    padding: 0;
+    line-height: 30px;
+    color: font-color();
+    > span {
+      display: inline-flex;
+      align-items: center;
+      i {
+        margin-left: 8px;
+      }
     }
+  }
+  .help-tips {
+    font-size: 13px;
+    color: font-color(.8);
   }
 }
 

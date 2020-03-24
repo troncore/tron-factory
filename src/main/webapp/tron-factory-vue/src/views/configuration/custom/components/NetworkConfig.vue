@@ -1,7 +1,7 @@
 <template>
   <div class="box-view  network-config">
     <div class="box-body">
-      <el-form ref="network-config-form" :rules="networkRules" :model="form">
+      <el-form class="im-form" ref="network-config-form" :rules="networkRules" :model="form">
 
         <div class="switch-item">
           <span class="label">fullNodeEnable </span>

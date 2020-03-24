@@ -1,7 +1,7 @@
 <template>
   <div class="box-view database-config">
     <div class="box-body">
-      <el-form ref="database-config-form" :model="form" label-position="left" label-width="200px">
+      <el-form class="im-form" ref="database-config-form" :model="form" label-position="left" label-width="200px">
 
         <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="storage_db_engine">
           <el-radio-group v-model="form.storage_db_engine">

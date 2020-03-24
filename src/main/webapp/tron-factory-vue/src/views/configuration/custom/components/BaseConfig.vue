@@ -1,7 +1,7 @@
 <template>
   <div class="box-view base-config">
     <div class="box-body">
-      <el-form ref="base-config-form" :rules="baseRules" :model="form">
+      <el-form class="im-form" ref="base-config-form" :rules="baseRules" :model="form">
         <el-form-item prop="chainId">
           <span slot="label">chainId <i class="help-tips">({{ $t('configuration.helpTips.chainId') }})</i></span>
           <el-input v-model.trim="form.chainId" type="number" min="0" max="2147483647" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>

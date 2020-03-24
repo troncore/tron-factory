@@ -167,7 +167,8 @@ export default {
       position: absolute;
       top: 12px;
       left: 0;
-      font-size: 16px;
+      font-size: 14px;
+      color: font-color();
     }
 
     .asset-item {

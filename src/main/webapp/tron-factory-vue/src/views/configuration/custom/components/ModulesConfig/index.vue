@@ -144,8 +144,7 @@ export default {
     .card-header {
       margin-bottom: 20px;
       font-size: 16px;
-      font-weight: bold;
-      color: rgba(8, 28, 86, .7);
+      color: font-color();
     }
   }
 
@@ -163,12 +162,21 @@ export default {
     }
   }
 
+
+  /deep/ .el-form-item {
+    .el-form-item__label {
+      padding: 0;
+      font-size: 16px;
+      color: font-color();
+    }
+  }
+
   /deep/ .more-setting {
-    margin: 20px 0 10px;
+    margin: 10px 0;
 
     .el-checkbox__label {
-      font-size: 16px;
-      color: rgba(8, 28, 86, .7);
+      font-size: 14px;
+      color: font-color();
     }
   }
 
@@ -176,13 +184,6 @@ export default {
     width: 50%;
   }
 
-  /deep/ .el-form-item {
-    .el-form-item__label {
-      padding: 0;
-      font-size: 16px;
-      color: rgba(8, 28, 86, .7);
-    }
-  }
 }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="box-view p2p-config">
     <div class="box-body">
-      <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
+      <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
 
         <el-form-item prop="node_p2p_version" label="p2pVersion">
           <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
