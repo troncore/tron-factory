@@ -15,7 +15,7 @@ export default {
   moreSetting: '高级配置',
 
   accountInfo: '账户信息',
-  addNew: '新增',
+  addNew: '添加',
   witnessNodeInfo: 'Witness 节点信息',
   assetDialogTitle: 'Asset 配置',
   assetAddSuccess: '添加 asset 成功',
@@ -27,7 +27,7 @@ export default {
   witnessDialogTitle: 'Witness 配置',
 
   selectDatabaseConfig: '数据库引擎',
-  isWriteSync: '是否同步写入',
+  isWriteSync: '同步写入',
   isOpenTransaction: '是否打开 transaction',
   isOpenIndexDirectory: '是否打开 index 开关',
   isNeedToUpdateAsset: '是否需要更新 assets',

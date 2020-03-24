@@ -8,8 +8,6 @@ export default {
   rememberPassword: '记住密码',
   signInTestAccount: '登录测试账号',
   signIn: '登录',
-  oneClickService: '一键发链服务',
-  shortcutOCD: '简称 ”OCD”',
   helpTips: {
     account: '请输入邮箱',
     email: '请输入邮箱',

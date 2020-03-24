@@ -5,15 +5,13 @@ export default {
   account: 'Account',
   email: 'Email',
   password: 'Password',
-  rememberPassword: 'Remember Password',
+  rememberPassword: 'Remember me',
   signInTestAccount: 'Test Account',
   signIn: 'Sign In',
-  oneClickService: 'One Click Service',
-  shortcutOCD: 'Shorthand ”OCD”',
   helpTips: {
-    account: 'Require Account',
-    email: 'Require Email',
-    password: 'Require Password',
-    emailOrPwdError: 'Error Email or Password',
+    account: 'Email address',
+    email: 'Email requires',
+    password: 'Password',
+    emailOrPwdError: 'Invalid login information',
   }
 }
