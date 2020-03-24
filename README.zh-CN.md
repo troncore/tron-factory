@@ -53,7 +53,7 @@ cd tron-factory
 # 安装依赖
 ./install.sh
 
-# 启动服务
+# 启动服务：http://localhost:8080
 ./deploy.sh
 
 # 部署完成

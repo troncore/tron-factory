@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import GenesisConfig from "../define/components/GenesisConfig";
+  import GenesisConfig from "../custom/components/GenesisConfig";
   import { isvalidateIntegerNum } from "@/utils/validate";
   export default {
     name: "quick-config",

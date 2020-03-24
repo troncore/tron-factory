@@ -1,5 +1,5 @@
 <template>
-  <div class="define-config">
+  <div class="custom-config">
     <ul class="im-steps config-steps">
       <li v-for="(step, index) in stepsList" class="im-step" :class="{'is-active': activeIndex === index + 1}">
         <div class="im-step__body" @click="handleStep(step, index + 1)">
@@ -19,7 +19,7 @@
 <script>
   import DatabaseConfig from './components/DatabaseConfig'
   export default {
-    name: "define-config",
+    name: "custom-config",
     components: {
       GenesisConfig: () => import('./components/GenesisConfig'),
       BaseConfig: () => import('./components/BaseConfig'),
@@ -51,7 +51,7 @@
         },
         set (val) {
           this.$router.push({
-            path: '/configuration/define/' + this.stepsList[val - 1].path
+            path: '/configuration/custom/' + this.stepsList[val - 1].path
           })
         }
       },
@@ -114,7 +114,7 @@
 $step_color_done: rgba(0, 0, 0, .8);
 $step_color_active: theme-color();
 $step_color_todo: rgba(8, 28, 86, .5);
-.define-config {
+.custom-config {
   .im-steps {
     display: flex;
     justify-content: space-between;

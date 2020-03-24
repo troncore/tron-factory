@@ -1,8 +1,8 @@
 export default {
   configuration: 'Configuration',
-  quickConfig: '快速配置',
-  defineConfig: '自定义配置',
-  importConfig: '导入配置文件',
+  quickConfig: 'Simple Configuration',
+  customConfig: 'Custom Configuration',
+  importConfig: 'Import Configuration File',
 
   genesisInfo: 'Genesis Configuration',
   baseConfig: 'Basic Configuration',
@@ -10,13 +10,13 @@ export default {
   databaseConfig: 'Database Configuration',
   p2pConfig: 'P2P Configuration',
   crossChainConfig: 'Cross-Chain Configuration',
-  moduleFunction: '模块函数',
+  moduleFunction: 'Module Configuration',
 
   moreSetting: 'Advanced Configuration',
 
-  accountInfo: '账户信息', // asset list
-  addNew: '新增',
-  witnessNodeInfo: 'Witness 节点信息', // witness list
+  accountInfo: 'Asset List', // asset list
+  addNew: 'Add New One',
+  witnessNodeInfo: 'Witness List', // witness list
   assetDialogTitle: 'Asset Configuration',
   assetAddSuccess: 'Add Asset Successful',
   assetAddFail: 'Add Asset Failed',
