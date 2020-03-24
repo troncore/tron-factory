@@ -37,7 +37,7 @@ export default {
       this.currentLang = this.languages[val]
       this.$i18n.locale = val
       localStorage.setItem('currentLang', val)
-      // window.location.reload()
+      window.location.reload()
     },
   },
 }
