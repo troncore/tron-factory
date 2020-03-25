@@ -12,7 +12,7 @@
       class="custom-table im-card"
       header-align="center">
       <el-table-column prop="ip" :label="$t('nodesManage.nodeIP')" align="center"></el-table-column>
-      <el-table-column prop="port" :label="$t('nodesManage.nodePort')" align="center"></el-table-column>
+      <!--<el-table-column prop="port" :label="$t('nodesManage.nodePort')" align="center"></el-table-column>-->
       <el-table-column :label="$t('nodesManage.isSR')" align="center">
         <template slot-scope="scope">
           <span class="color-success" v-if="scope.row.isSR">YES</span>
