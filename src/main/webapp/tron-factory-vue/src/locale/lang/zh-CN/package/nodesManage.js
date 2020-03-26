@@ -14,6 +14,7 @@ export default {
   unDeploy: '未部署',
   deployed: '已部署',
   javaTronVersion: '版本号(java-tron)',
+  tronConvertTool: 'Key 生成工具',
 
   addNodeSuccess: '添加节点成功',
   addNodeFail: '添加节点失败',

@@ -123,7 +123,7 @@
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.privateKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
-              <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">Key 生成工具</a>
+              <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">{{ $t('nodesManage.tronConvertTool') }}</a>
             </span>
             <el-input
               v-model.trim="form.privateKey"

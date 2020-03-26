@@ -14,6 +14,7 @@ export default {
   unDeploy: 'Pending',
   deployed: 'Success',
   javaTronVersion: 'Version of java-tron',
+  tronConvertTool: 'Key Convert Tool',
 
   addNodeSuccess: 'Successfully added',
   addNodeFail: 'Failed added',
