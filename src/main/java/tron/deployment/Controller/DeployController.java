@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,6 +67,43 @@ public class DeployController {
         }
         return Common.deployFailedStatus;
     }
+
+    private String checkIsDeployed(String path) {
+        boolean isDeployed = true;
+        File file = new File(path);
+        if (file.isFile() && file.exists()) {
+            try {
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), Common.encoding);
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt;
+
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    if (lineTxt.contains(Common.pid)) {
+                        String[] logArray = lineTxt.split(" ");
+                        for(int i=0;i<logArray.length;i++){
+                            if(logArray[i].equals("")){
+                               isDeployed = false;
+                            }
+                        }
+                        if(isDeployed){
+                            return Common.deployFinishStatus;
+                        }
+                    }
+
+                }
+
+                bufferedReader.close();
+                read.close();
+
+            } catch (Exception e) {
+                LOG.error(e.toString());
+            }
+        } else {
+            return Common.notFoundStatus;
+        }
+        return Common.deployFailedStatus;
+    }
 //	private boolean isBlockNeedSync(JSONArray nodes, Long id) {
 //		for (int i = 0; i< nodes.size(); i++) {
 //			JSONObject node = (JSONObject) nodes.get(i);
@@ -90,23 +128,27 @@ public class DeployController {
 
     @GetMapping(value = "/api/checkNode")
     public JSONObject checkDeployStatus() {
+        JSONObject result = new JSONObject();
+        boolean isDeployed = true;
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
-        boolean deployStatus = true;
+
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject node = (JSONObject) nodes.get(i);
-            boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
-            if (!isDeployed) {
-                deployStatus = false;
-            }
+            Long id = (Long) node.get(Common.idFiled);
+            String status = checkNodeStatus(String.format(Common.logFormat, id.toString()));
+            if(!status.equals(Common.deployFinishStatus)) isDeployed = false;
         }
-        return new Response(ResultCode.OK.code, deployStatus).toJSONObject();
+        if(isDeployed) result.put("successful", isDeployed);
+        else result.put("fail", isDeployed);
+        return new Response(ResultCode.OK.code, result).toJSONObject();
 
     }
 
     @GetMapping(value = "/api/deployNode")
-    public JSONObject deploy() {
+    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
+        JSONObject deployresult = new JSONObject();
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -117,7 +159,8 @@ public class DeployController {
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
             if (!isDeployed) {
                 Long id = (Long) node.get(Common.idFiled);
-                String path = (String) node.get(Common.pathFiled);
+//                String path = (String) node.get(Common.pathFiled);
+                String path = filePath;
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
                 String privateKeypath = (String) node.get(Common.privateKeyFiled);
                 String privateKey = null;
@@ -142,6 +185,8 @@ public class DeployController {
                 String ip = (String) node.get(Common.ipFiled);
                 Long port = (Long) node.get(Common.portFiled);
                 String userName = (String) node.get(Common.userNameFiled);
+                String sshPassword = (String) node.get(Common.sshPasswordFiled);
+                String serviceType = (String) node.get(Common.serviceTypeFiled);
                 BashExecutor bashExecutor = new BashExecutor();
                 String plugin = "null";
                 if (json.containsKey(Common.customTransactionFiled)
@@ -150,11 +195,25 @@ public class DeployController {
                 }
 
                 if (Objects.nonNull(privateKey)) {
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin);
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType);
                 } else {
-                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin);
+                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType);
                 }
+
+                String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
+                if(status.equals(Common.deployFinishStatus)) isDeployed = true;
+
+                if(isDeployed) deployresult.put("successful", isDeployed);
+                else deployresult.put("fail", isDeployed);
+
+                NodeController nc  = new NodeController();
+                JSONObject nodeOld = Util.getNodeInfo(nodes, id);
+                nodeOld.put(Common.isDeployedFiled, isDeployed);
+                json.put(Common.nodesFiled, nodes);
+                nc.updateNodesInfo(nodes, json);
+                return new Response(ResultCode.OK.code, deployresult).toJSONObject();
             }
+
         }
         return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
     }

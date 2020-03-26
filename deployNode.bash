@@ -34,6 +34,7 @@ else
 fi
 
 result=`ssh -p $2 $3@$1 "cd java-tron&&unzip -o ./${APP}.zip > /dev/null"`
+echo $result
 if [ "$?" != "0" ]; then
    echo "unzip failed, unzip cmd is not installed or java-tron zip upload failed, ${finish}"
    echo $result
@@ -53,13 +54,12 @@ if [ $6 != "null" ]; then
     exit
   fi
 fi
-
-if [ -z $7 ]; then
+if [ -z $8 ]; then
    echo "deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"
 else
    echo "deploy WitnessNode"
-   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${7}"
+   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${8}"
 fi
 
 rm -rf $5

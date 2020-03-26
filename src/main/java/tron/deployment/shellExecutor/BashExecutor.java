@@ -12,11 +12,17 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType){
         try {
-            String absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
+//            String absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
+            String absolutePath = "";
+            if(serviceType.equals("remote")){
+                absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
+            }else{
+                absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
+            }
             String configPath = String.format("%s_%s", Common.configFiled, id.toString());
-            String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin};
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword};
             if (privateKey.length() != 0) {
                 cmdArray = ArrayUtils.add(cmdArray, privateKey);
             }

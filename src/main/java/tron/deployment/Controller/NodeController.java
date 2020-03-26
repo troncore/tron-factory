@@ -6,6 +6,8 @@ import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
 import static wallet.Wallet.*;
 
+import com.typesafe.config.Config;
+import common.Args;
 import common.Common;
 import config.P2PConfig;
 import config.SeedNodeConfig;
@@ -40,6 +42,10 @@ public class NodeController {
 
   private static boolean isEckey = true;
 
+  private static ArrayList<String> ipList = new ArrayList<>();
+
+  private static int listenPort = 0;
+  private static long id = 0L;
   static {
     refresh();
   }
@@ -49,7 +55,7 @@ public class NodeController {
       isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
-  private JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
+  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
     ConfigGenerator configGenerator = new ConfigGenerator();
 
     ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
@@ -61,12 +67,9 @@ public class NodeController {
         witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
                 (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
       }
-      ArrayList<String> ipList = (ArrayList<String>) node.get(Common.ipListFiled);
-      boolean result = configGenerator.updateConfig(new P2PConfig(ipList), Common.configFiled);
-      if (!result) {
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-      }
     }
+    configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
+
     GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
     witnessConfig.setGenesisBlockWitnesses(witnessnodes);
 
@@ -97,6 +100,8 @@ public class NodeController {
         newNodes.add(node);
       }
     }
+    ConfigGenerator configGenerator = new ConfigGenerator();
+    configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
     return newNodes;
   }
 
@@ -135,18 +140,18 @@ public class NodeController {
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
 
-    Long id = 0L;
+    /*Long id = 0L;
 
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       Long nodeID = (Long) node.get(Common.idFiled);
-      /*String nodeIp = (String) node.get(Common.ipFiled);
+      *//*String nodeIp = (String) node.get(Common.ipFiled);
       String nodePort = (String) node.get(Common.portFiled);
-      ipList.add(nodeIp+"\":\""+nodePort);*/
+      ipList.add(nodeIp+"\":\""+nodePort);*//*
       if(id <= nodeID){
         id = nodeID;
       }
-    }
+    }*/
     id++;
 
     if (Objects.isNull(nodes)) {
@@ -160,12 +165,18 @@ public class NodeController {
     if (isIpExist(nodes, ip)) {
       return new Response(ResultCode.FORBIDDEND.code, "ip should be different").toJSONObject();
     }
-    ArrayList<String> ipList =new ArrayList<>();
-    if(!nodes.isEmpty()){
+//    ArrayList<String> ipList =new ArrayList<>();
+    /*if(!nodes.isEmpty()){
       JSONObject nodeLast = (JSONObject) nodes.get(nodes.size()-1);
       ipList = (ArrayList<String>) nodeLast.get(Common.ipListFiled);
-    }
-    ipList.add(ip+"\":\""+port);
+    }*/
+    Util util = new Util();
+    util.parseConfig();
+    Config config = util.config;
+    Args args = new Args();
+    listenPort = (Integer)args.getListenPort(config);
+
+    ipList.add(ip+"\":\""+listenPort);
     JSONObject newNode = new JSONObject();
     if (isSR) {
       String path;
@@ -190,7 +201,7 @@ public class NodeController {
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
-    newNode.put(Common.ipListFiled, ipList);
+//    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -232,6 +243,12 @@ public class NodeController {
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+    }
+
+    String ipOld = (String)node.get(Common.ipFiled);
+    if(ipOld != ip){
+      ipList.remove(ipOld+"\":\""+listenPort);
+      ipList.add(ip+"\":\""+listenPort);
     }
 
     boolean flag = key.length() != 0;
@@ -364,6 +381,12 @@ public class NodeController {
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
     }
+    JSONObject node = Util.getNodeInfo(nodes, id);
+    if (node == null) {
+      return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+    }
+    String ip = (String) node.get(Common.ipFiled);
+    ipList.remove(ip+"\":\""+listenPort);
 
     JSONArray newNodes = removeNodeInfo(nodes, id, true);
     if (newNodes.size() == nodes.size()) {
