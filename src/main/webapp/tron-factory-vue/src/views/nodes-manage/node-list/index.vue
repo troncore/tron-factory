@@ -39,7 +39,11 @@
     </el-table>
 
     <!-- deploy node  -->
-    <deploy-dialog v-if="deployDialogVisible" :visible.sync="deployDialogVisible" :deployLoading.sync="deployLoading"/>
+    <deploy-dialog
+      v-if="deployDialogVisible"
+      :visible.sync="deployDialogVisible"
+      :deployLoading.sync="deployLoading"
+      @checkDeployStatus="checkDeployStatus"/>
 
     <!-- view deploy log-->
     <log-dialog v-if="logDialogVisible" :visible.sync="logDialogVisible" :current-row="currentRow" />
@@ -63,10 +67,14 @@ export default {
       logDialogVisible: false,
 
       currentRow: {},
+      timeID: null,
     }
   },
   created() {
     this.getNodeList()
+  },
+  destroyed() {
+    clearTimeout(this.timeID)
   },
   methods: {
     getNodeList () {
@@ -144,6 +152,34 @@ export default {
       }
 
       this.deployDialogVisible = true
+    },
+
+
+    // refresh deployed node list
+    checkDeployStatus () {
+      let flag = false
+      this.deployLoading = true
+      this.timeID = setInterval(() => {
+        if (!flag) {
+          flag = true // the network may slow，avoid frequently to call ajax
+
+          this.$_api.nodesManage.checkNode({}, (err, res) => {
+            flag = false
+            if (err) {
+              this.deployLoading = false
+              clearInterval(this.timeID)
+              return
+            }
+
+            // check all deployed node whether if finish deployed
+            if (res === true) {
+              this.deployLoading = false
+              this.getNodeList()
+              clearInterval(this.timeID)
+            }
+          })
+        }
+      }, 1000 * 3)
     },
 
     handleLogs(row) {
