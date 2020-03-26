@@ -39,7 +39,7 @@
 
     <div class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
     </div>
   </div>
 </template>
@@ -58,6 +58,7 @@ export default {
       checkCustomTransaction: false,
       transactionList: require('./transactionModuleList.json') || [],
       loading: false,
+      configLoading: false,
     }
   },
   computed: {
@@ -89,7 +90,9 @@ export default {
     // get plugin info
     initPluginInfo () {
       return new Promise(resolve => {
+        this.configLoading = true
         this.$_api.configuration.getPluginConfig({}, (err, res = {}) => {
+          this.configLoading = false
           if (err) return
 
           this.consensus = res.consensus

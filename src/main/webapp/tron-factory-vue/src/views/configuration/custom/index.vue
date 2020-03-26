@@ -11,8 +11,12 @@
 
     <div class="config-title">{{ activeIndex + '. ' + activeStep.title }}</div>
 
-
-    <component :is="activeStep.component" :init-config-info="initConfigInfo" @prev-step="handlePrevStep" @next-step="handleNextStep"/>
+    <component
+      :is="activeStep.component"
+      :config-loading.sync="configLoading"
+      :init-config-info="initConfigInfo"
+      @prev-step="handlePrevStep"
+      @next-step="handleNextStep"/>
   </div>
 </template>
 
@@ -38,6 +42,7 @@
           { title: this.$t('configuration.p2pConfig'), path: 'p2p', component: 'P2PConfig',},
           { title: this.$t('configuration.moduleFunction'), path: 'modules', component: 'ModulesConfig',},
         ],
+        configLoading: false,
       }
     },
     computed: {
@@ -86,7 +91,9 @@
         stepConfig = stepConfig || this.stepPath // default current stepPath
 
         return new Promise(resolve => {
+          this.configLoading = true
           this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
+            this.configLoading = false
             if (err) return resolve({})
 
             if (stepConfig === 'genesis') {

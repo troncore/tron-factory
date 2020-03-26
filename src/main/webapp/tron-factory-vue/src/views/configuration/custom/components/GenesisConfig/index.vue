@@ -22,7 +22,7 @@
     </div>
 
     <div class="box-footer align-right">
-      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
 
 
@@ -59,7 +59,8 @@ export default {
       default () {
         return () => Promise.resolve({})
       }
-    }
+    },
+    configLoading: Boolean,
   },
   data() {
     return {

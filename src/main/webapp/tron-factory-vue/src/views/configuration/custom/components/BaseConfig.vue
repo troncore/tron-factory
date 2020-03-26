@@ -44,7 +44,7 @@
 
     <div  class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -56,7 +56,8 @@ export default {
     initConfigInfo: {
       type: Function,
       required: true,
-    }
+    },
+    configLoading: Boolean,
   },
   data() {
     return {

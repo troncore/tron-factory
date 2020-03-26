@@ -23,7 +23,7 @@
     </div>
 
     <div class="box-footer align-right">
-      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
     </div>
 
   </div>
@@ -42,6 +42,7 @@
           node_listen_port: '',
         },
         loading: false,
+        configLoading: false,
       }
     },
     computed: {
@@ -106,14 +107,13 @@
         return rules
       },
     },
-    created () {
-
-    },
     methods: {
       // get configure info: invoke in genesis-config
       initConfigInfo (stepConfig) {
         return new Promise(resolve => {
+          this.configLoading = true
           this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
+            this.configLoading = false
             if (err) return resolve({})
             if (stepConfig === 'genesis') {
               resolve({
