@@ -8,7 +8,7 @@
 
       <div class="box-card">
         <div class="config-title">{{ $t('configuration.p2pConfig') }}</div>
-        <el-form ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
+        <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
           <el-form-item prop="node_p2p_version" label="p2pVersion">
             <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
             <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
@@ -23,14 +23,14 @@
     </div>
 
     <div class="box-footer align-right">
-      <el-button class="im-button large" :loading="loading" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
     </div>
 
   </div>
 </template>
 
 <script>
-  import GenesisConfig from "../define/components/GenesisConfig";
+  import GenesisConfig from "../custom/components/GenesisConfig";
   import { isvalidateIntegerNum } from "@/utils/validate";
   export default {
     name: "quick-config",
@@ -42,6 +42,7 @@
           node_listen_port: '',
         },
         loading: false,
+        configLoading: false,
       }
     },
     computed: {
@@ -106,14 +107,13 @@
         return rules
       },
     },
-    created () {
-
-    },
     methods: {
       // get configure info: invoke in genesis-config
       initConfigInfo (stepConfig) {
         return new Promise(resolve => {
+          this.configLoading = true
           this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
+            this.configLoading = false
             if (err) return resolve({})
             if (stepConfig === 'genesis') {
               resolve({
@@ -179,23 +179,6 @@
 
   .el-form {
     width: 500px;
-
-    /deep/ .el-form-item {
-      .el-form-item__label {
-        padding: 0;
-        font-size: 16px;
-        color: rgba(8, 28, 86, .7);
-
-        .unit {
-          font-size: 14px;
-          color: rgba(8, 28, 86, .5);
-        }
-        .help-tips {
-          font-size: 14px;
-          color: rgba(8, 28, 86, .5);
-        }
-      }
-    }
   }
   .box-footer {
     position: absolute;

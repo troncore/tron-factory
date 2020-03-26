@@ -1,7 +1,7 @@
 <!-- node add、edit、detail-->
 <template>
   <div class="node-info">
-    <el-form ref="im-form" :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
+    <el-form class="im-form" ref="im-form" :rules="formRules" :model="form" label-width="100%" label-position="top" size="medium">
       <div class="im-card padding-20">
         <div class="service-type">
           <div class="title">{{ $t('nodesManage.serviceType') }}</div>
@@ -13,22 +13,12 @@
 
         <el-form-item prop="ip">
           <span slot="label">
-            FullNode IP
+            HOST IP
             <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.ip')" placement="top">
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
-        </el-form-item>
-
-        <el-form-item prop="port">
-            <span slot="label">
-              FullNode Port
-              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.port')" placement="top">
-                <i class="fa fa-question-circle-o"></i>
-              </el-tooltip>
-            </span>
-          <el-input v-model.trim="form.port" type="number" tabindex="22" :maxlength="50" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.maxPortValue')"></el-input>
+          <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView || form.serviceType === 'local'" clearable :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
         </el-form-item>
 
         <br/>
@@ -52,13 +42,22 @@
             <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
-          <el-form-item prop="sshPort">
+          <!--<el-form-item prop="sshPort">
             <span slot="label">{{ $t('nodesManage.sshPort') }}
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPort')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
             <el-input v-model.trim="form.sshPort" type="number" tabindex="25" :maxlength="200" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          </el-form-item>-->
+
+          <el-form-item prop="port">
+            <span slot="label">{{ $t('nodesManage.sshPort') }}
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPort')" placement="top">
+                <i class="fa fa-question-circle-o"></i>
+              </el-tooltip>
+            </span>
+            <el-input v-model.trim="form.port" type="number" tabindex="25" :maxlength="50" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.maxPortValue')"></el-input>
           </el-form-item>
         </template>
       </div>
@@ -104,17 +103,19 @@
 
           <br />
 
-          <el-form-item v-if="publicKey">
+          <template v-if="publicKey">
+            <el-form-item>
             <span slot="label">
               publicKey
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.publicKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-            {{ publicKey }}
-          </el-form-item>
+              {{ publicKey }}
+            </el-form-item>
 
-          <br/>
+            <br />
+          </template>
 
           <el-form-item prop="privateKey" class="private-key" v-if="opType !== 'detail'">
             <span class="private-key__help" slot="label">
@@ -122,7 +123,7 @@
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.privateKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
-              <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">Key 生成工具</a>
+              <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">{{ $t('nodesManage.tronConvertTool') }}</a>
             </span>
             <el-input
               v-model.trim="form.privateKey"
@@ -167,6 +168,7 @@
           voteCount: '',
           privateKey: '',
         },
+        tempIP: '',
         safePrivateKey: Array(64).fill('*').join(''),
         publicKey: '',
         nodeInfo: {},
@@ -206,7 +208,7 @@
           }
         }
         const validLocalRule = (rule, value, callback) => {
-          if (value === '127.0.0.1') {
+          if (this.form.serviceType === 'remote' && value === '127.0.0.1') {
             callback(new Error(this.$t('nodesManage.valid.disabledLocalIP')))
           } else {
             callback()
@@ -243,7 +245,7 @@
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { required: true, validator: validIpRule, trigger: 'blur', },
-            { required: true, validator: validLocalRule, trigger: 'blur', },
+            // { required: true, validator: validLocalRule, trigger: 'blur', },
           ],
           port: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -253,9 +255,9 @@
           userName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
-          sshPassword: [
+          /*sshPassword: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ],
+          ],*/
           sshPort: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
@@ -278,6 +280,17 @@
         handler: 'getNodeInfo',
         immediate: true
       },
+      'form.serviceType': {
+        handler (val) {
+          if (val === 'local') {
+            this.tempIP = this.form.ip
+            this.form.ip = '127.0.0.1'
+          } else  {
+            this.form.ip = this.tempIP
+          }
+        },
+        immediate: true,
+      }
     },
     methods: {
       getNodeInfo () {
@@ -346,14 +359,13 @@
           id: this.opType === 'edit' && this.opNodeId ? this.opNodeId : undefined,
           serviceType: this.form.serviceType,
           ip: this.form.ip,
-          port: this.form.port,
           isSR: this.form.isSR,
         }
 
         let remoteParams = {
           userName: this.form.userName,
           sshPassword: this.form.sshPassword,
-          sshPort: this.form.sshPort,
+          port: this.form.port,
         }
 
         let srParams = {
@@ -456,11 +468,6 @@
 
       &.private-key {
         width: 720px;
-      }
-
-      .el-form-item__label {
-        padding: 0;
-        line-height: 30px;
       }
     }
     .key-tool {

@@ -77,7 +77,7 @@
         this.startDeploy()
       },
 
-      // start deploy node
+      // deploy node
       startDeploy () {
         this.loading = true
         this.$_api.nodesManage.deployNode(this.form, (err, res) => {
@@ -91,42 +91,11 @@
             type: 'success'
           });
 
+          this.$emit('checkDeployStatus')
           this.$emit('update:visible', false)
-          this.pollCheckDeployment()
         })
       },
-
-      // refresh deployed node list
-      pollCheckDeployment () {
-        this.$emit('update:deployLoading', true)
-        let flag = false
-        this.timeID = setInterval(() => {
-          if (!flag) {
-            flag = true // the network may slow，avoid frequently to call ajax
-
-            this.$_api.nodesManage.checkNode({}, (err, res) => {
-              flag = false
-              if (err) {
-                this.$emit('update:deployLoading', false)
-                clearInterval(this.timeID)
-                return
-              }
-
-              // check all deployed node whether if finish deployed
-              if (res === true) {
-                this.$emit('update:deployLoading', false)
-                this.getNodeList()
-                clearInterval(this.timeID)
-              }
-            })
-          }
-
-        }, 1000 * 5)
-      },
     },
-    destroyed() {
-      clearTimeout(this.timeID)
-    }
   }
 </script>
 

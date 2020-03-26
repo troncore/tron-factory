@@ -5,7 +5,7 @@
     <div class="im-card">
       <el-tabs v-model="activeName">
         <el-tab-pane :label="$t('configuration.quickConfig')" name="quick"></el-tab-pane>
-        <el-tab-pane :label="$t('configuration.defineConfig')" name="define"></el-tab-pane>
+        <el-tab-pane :label="$t('configuration.customConfig')" name="custom"></el-tab-pane>
         <!--<el-tab-pane label="$t('configuration.importConfig')" name="import"></el-tab-pane>-->
       </el-tabs>
 
@@ -19,7 +19,7 @@ export default {
   name: "configuration",
   components: {
     QuickConfig: () => import('./quick'),
-    DefineConfig: () => import('./define'),
+    CustomConfig: () => import('./custom'),
     ImportConfig: () => import('./import'),
   },
   data () {
@@ -33,7 +33,7 @@ export default {
         return this.$route.params.type
       },
       set (val) {
-        if (val === 'define') val = 'define/genesis'
+        if (val === 'custom') val = 'custom/genesis'
 
         this.$router.push({
           path: '/configuration/' + val
@@ -44,8 +44,8 @@ export default {
       switch (this.activeName) {
         case 'quick':
           return 'QuickConfig'
-        case 'define':
-          return 'DefineConfig'
+        case 'custom':
+          return 'CustomConfig'
         case 'import':
           return 'ImportConfig'
       }
