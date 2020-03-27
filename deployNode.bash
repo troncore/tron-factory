@@ -54,12 +54,12 @@ if [ $6 != "null" ]; then
     exit
   fi
 fi
-if [ -z $8 ]; then
+if [ -z $9 ]; then
    echo "deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"
 else
    echo "deploy WitnessNode"
-   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${8}"
+   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${9}"
 fi
 
 rm -rf $5

@@ -387,7 +387,6 @@ public class NodeController {
     }
     String ip = (String) node.get(Common.ipFiled);
     ipList.remove(ip+"\":\""+listenPort);
-
     JSONArray newNodes = removeNodeInfo(nodes, id, true);
     if (newNodes.size() == nodes.size()) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();

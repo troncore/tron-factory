@@ -83,7 +83,8 @@ public class DeployController {
                         String[] logArray = lineTxt.split(" ");
                         for(int i=0;i<logArray.length;i++){
                             if(logArray[i].equals("")){
-                               isDeployed = false;
+                                isDeployed = false;
+                                break;
                             }
                         }
                         if(isDeployed){
@@ -128,7 +129,6 @@ public class DeployController {
 
     @GetMapping(value = "/api/checkNode")
     public JSONObject checkDeployStatus() {
-        JSONObject result = new JSONObject();
         boolean isDeployed = true;
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -139,16 +139,13 @@ public class DeployController {
             String status = checkNodeStatus(String.format(Common.logFormat, id.toString()));
             if(!status.equals(Common.deployFinishStatus)) isDeployed = false;
         }
-        if(isDeployed) result.put("successful", isDeployed);
-        else result.put("fail", isDeployed);
-        return new Response(ResultCode.OK.code, result).toJSONObject();
+        return new Response(ResultCode.OK.code, isDeployed).toJSONObject();
 
     }
 
     @GetMapping(value = "/api/deployNode")
-    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
+    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) throws InterruptedException {
 
-        JSONObject deployresult = new JSONObject();
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -200,23 +197,34 @@ public class DeployController {
                     bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType);
                 }
 
+                Thread.sleep(60000);
+
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
                 if(status.equals(Common.deployFinishStatus)) isDeployed = true;
-
-                if(isDeployed) deployresult.put("successful", isDeployed);
-                else deployresult.put("fail", isDeployed);
 
                 NodeController nc  = new NodeController();
                 JSONObject nodeOld = Util.getNodeInfo(nodes, id);
                 nodeOld.put(Common.isDeployedFiled, isDeployed);
-                json.put(Common.nodesFiled, nodes);
-                nc.updateNodesInfo(nodes, json);
-                return new Response(ResultCode.OK.code, deployresult).toJSONObject();
+                nc.deleteNode(id);
+                json = readJsonFile();
+                JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+                if (Objects.isNull(newNodes)) {
+                    newNodes = new JSONArray();
+                }
+                newNodes.add(nodeOld);
+                json.put(Common.nodesFiled, newNodes);
+                nc.updateNodesInfo(newNodes, json);
+
+                if(isDeployed) return new Response(ResultCode.OK.code, "successful", isDeployed).toJSONObject();
+                else return new Response(ResultCode.OK.code, "fail", isDeployed).toJSONObject();
+
             }
 
         }
         return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
     }
+
+
 
     @GetMapping(value = "/api/getLogInfo")
     public JSONObject deploy(
