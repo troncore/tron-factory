@@ -11,7 +11,7 @@ import static org.tron.core.config.args.Storage.getIndexDirectoryFromConfig;
 import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromConfig;
 
 
-import com.google.inject.internal.cglib.core.$CodeGenerationException;
+//import com.google.inject.internal.cglib.core.$CodeGenerationException;
 import com.typesafe.config.Config;
 import common.Util;
 import entity.AssetsEntity;
@@ -20,7 +20,7 @@ import common.Common;
 import java.util.LinkedHashMap;
 
 import org.springframework.web.bind.annotation.*;
-import response.ResultCode;
+//import response.ResultCode;
 import config.BaseSettingConfig;
 import config.CrossChainConfig;
 import config.DBConfig;
@@ -40,6 +40,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import response.Response;
 import config.ConfigGenerator;
+import response.ResultCode;
 import wallet.Wallet;
 
 

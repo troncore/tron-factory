@@ -42,8 +42,6 @@ public class NodeController {
 
   private static boolean isEckey = true;
 
-  private static ArrayList<String> ipList = new ArrayList<>();
-
   private static int listenPort = 0;
   private static long id = 0L;
   static {
@@ -55,7 +53,7 @@ public class NodeController {
       isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
-  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
+  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, ArrayList<String> ipList) {
     ConfigGenerator configGenerator = new ConfigGenerator();
 
     ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
@@ -100,8 +98,8 @@ public class NodeController {
         newNodes.add(node);
       }
     }
-    ConfigGenerator configGenerator = new ConfigGenerator();
-    configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
+//    ConfigGenerator configGenerator = new ConfigGenerator();
+//    configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
     return newNodes;
   }
 
@@ -137,22 +135,28 @@ public class NodeController {
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
 
+    Util util = new Util();
+    util.parseConfig();
+    Config config = util.config;
+    Args args = new Args();
+    listenPort = (Integer)args.getListenPort(config);
+
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
 
-    /*Long id = 0L;
+    ArrayList<String> ipList = new ArrayList<>();
 
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
       Long nodeID = (Long) node.get(Common.idFiled);
-      *//*String nodeIp = (String) node.get(Common.ipFiled);
-      String nodePort = (String) node.get(Common.portFiled);
-      ipList.add(nodeIp+"\":\""+nodePort);*//*
+      String nodeIp = (String) node.get(Common.ipFiled);
+      ipList.add(nodeIp+"\":\""+listenPort);
       if(id <= nodeID){
         id = nodeID;
       }
-    }*/
+    }
     id++;
+    ipList.add(ip+"\":\""+listenPort);
 
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
@@ -170,13 +174,9 @@ public class NodeController {
       JSONObject nodeLast = (JSONObject) nodes.get(nodes.size()-1);
       ipList = (ArrayList<String>) nodeLast.get(Common.ipListFiled);
     }*/
-    Util util = new Util();
-    util.parseConfig();
-    Config config = util.config;
-    Args args = new Args();
-    listenPort = (Integer)args.getListenPort(config);
 
-    ipList.add(ip+"\":\""+listenPort);
+
+//    ipList.add(ip+"\":\""+listenPort);
     JSONObject newNode = new JSONObject();
     if (isSR) {
       String path;
@@ -201,7 +201,7 @@ public class NodeController {
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
-//    newNode.put(Common.ipListFiled, ipList);
+    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -212,7 +212,7 @@ public class NodeController {
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     nodes.add(newNode);
-    return updateNodesInfo(nodes, json);
+    return updateNodesInfo(nodes, json, ipList);
   }
 
   @PutMapping(value = "/api/nodeInfo")
@@ -246,10 +246,16 @@ public class NodeController {
     }
 
     String ipOld = (String)node.get(Common.ipFiled);
-    if(ipOld != ip){
-      ipList.remove(ipOld+"\":\""+listenPort);
-      ipList.add(ip+"\":\""+listenPort);
+
+    ArrayList<String> ipList = new ArrayList<>();
+
+    for (int i = 0; i < nodes.size(); i++) {
+      String nodeIp = (String) node.get(Common.ipFiled);
+      if(ipOld != nodeIp) {
+        ipList.add(nodeIp + "\":\"" + listenPort);
+      }
     }
+    ipList.add(ip+"\":\""+listenPort);
 
     boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
@@ -288,7 +294,7 @@ public class NodeController {
     nodes.add(node);
     json.put(Common.nodesFiled, nodes);
 
-    return updateNodesInfo(nodes, json);
+    return updateNodesInfo(nodes, json, ipList);
   }
 
 
@@ -386,13 +392,23 @@ public class NodeController {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
     String ip = (String) node.get(Common.ipFiled);
-    ipList.remove(ip+"\":\""+listenPort);
+
+    ArrayList<String> ipList = new ArrayList<>();
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject nodeObj = (JSONObject) nodes.get(i);
+      String nodeIp = (String) nodeObj.get(Common.ipFiled);
+      if(nodeIp != ip){
+        ipList.add(nodeIp+"\":\""+listenPort);
+      }
+    }
+//    ipList.remove(ip+"\":\""+listenPort);
+
     JSONArray newNodes = removeNodeInfo(nodes, id, true);
     if (newNodes.size() == nodes.size()) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
 
-    return updateNodesInfo(newNodes, json);
+    return updateNodesInfo(newNodes, json, ipList);
   }
 
 }

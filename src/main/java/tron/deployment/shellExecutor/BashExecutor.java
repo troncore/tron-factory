@@ -13,11 +13,17 @@ import org.apache.commons.lang3.StringUtils;
 public class BashExecutor {
 
     public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType){
+
         try {
 //            String absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
             String absolutePath = "";
             if(serviceType.equals("remote")){
-                absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
+                if(sshPassword.equals("")){
+                    absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
+                }else{
+                    absolutePath = System.getProperty("user.dir").concat("/deployNodePWD.bash");
+                }
+
             }else{
                 absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
             }
@@ -29,8 +35,10 @@ public class BashExecutor {
             String logName = String.format("> ".concat(logFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");
-            Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
             LOG.info("deploy cmd: {}", cmd);
+
         }
         catch (Exception e){
             e.printStackTrace();

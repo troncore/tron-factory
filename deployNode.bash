@@ -5,6 +5,17 @@ echo "Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
 
+echo $1
+echo $2
+echo $3
+echo $4
+echo $5
+echo $6
+echo $7
+echo $8
+echo $9
+
+
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron"
 result=`ssh -p $2 $3@$1 "mkdir java-tron" 2>&1`
 if [ -z $result ];then
@@ -54,12 +65,14 @@ if [ $6 != "null" ]; then
     exit
   fi
 fi
-if [ -z $9 ]; then
+
+echo $8
+if [ -z $8 ] ; then
    echo "deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"
 else
    echo "deploy WitnessNode"
-   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${9}"
+   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${8}"
 fi
 
 rm -rf $5

@@ -35,6 +35,8 @@ public class Common {
 
   public static final String ipFiled = "ip";
 
+  public static final String ipListFiled = "ipList";
+
   public static final String isSRFiled = "isSR";
 
   public static final String privateKeyFiled = "privateKey";

@@ -3,6 +3,8 @@ package tron.deployment.Controller;
 import static common.LogConfig.LOG;
 import static common.Util.readJsonFile;
 
+import com.typesafe.config.Config;
+import common.Args;
 import common.Common;
 import config.BlockSettingConfig;
 import config.ConfigGenerator;
@@ -151,6 +153,19 @@ public class DeployController {
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
+
+        Util util = new Util();
+        util.parseConfig();
+        Config config = util.config;
+        Args args = new Args();
+        int listenPort = (Integer)args.getListenPort(config);
+        ArrayList<String> ipList = new ArrayList<>();
+        for (int i = 0; i < nodes.size(); i++) {
+            JSONObject node = (JSONObject) nodes.get(i);
+            String nodeIp = (String) node.get(Common.ipFiled);
+            ipList.add(nodeIp + "\":\"" + listenPort);
+        }
+
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject node = (JSONObject) nodes.get(i);
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
@@ -197,8 +212,6 @@ public class DeployController {
                     bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType);
                 }
 
-                Thread.sleep(60000);
-
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
                 if(status.equals(Common.deployFinishStatus)) isDeployed = true;
 
@@ -213,7 +226,7 @@ public class DeployController {
                 }
                 newNodes.add(nodeOld);
                 json.put(Common.nodesFiled, newNodes);
-                nc.updateNodesInfo(newNodes, json);
+                nc.updateNodesInfo(newNodes, json, ipList);
 
                 if(isDeployed) return new Response(ResultCode.OK.code, "successful", isDeployed).toJSONObject();
                 else return new Response(ResultCode.OK.code, "fail", isDeployed).toJSONObject();
