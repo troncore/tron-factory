@@ -25,6 +25,7 @@ lsp
 if [ $? = 0 ];then
 echo "rm java-tron done"
 else
+echo "ssh connect failed, ${finish}"
 echo "error"
 exit
 fi
