@@ -95,6 +95,7 @@ export default {
       this.signIn({
         account: this.form.account,
       }).then(() => {
+        this.$_api.configuration.initConfig({}, err => {})
         this.$router.push('/')
       })
     },
