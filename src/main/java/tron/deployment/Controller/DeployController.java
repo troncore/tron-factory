@@ -228,8 +228,8 @@ public class DeployController {
                 json.put(Common.nodesFiled, newNodes);
                 nc.updateNodesInfo(newNodes, json, ipList);
 
-                if(isDeployed) return new Response(ResultCode.OK.code, "successful", isDeployed).toJSONObject();
-                else return new Response(ResultCode.OK.code, "fail", isDeployed).toJSONObject();
+                if(isDeployed) return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+                else return new Response(ResultCode.FAILED.code, "Deploy fail", isDeployed).toJSONObject();
 
             }
 
