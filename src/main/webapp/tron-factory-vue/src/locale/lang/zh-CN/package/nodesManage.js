@@ -25,8 +25,8 @@ export default {
   serviceType: '服务器配置',
   localDeploy: '本地部署',
   remoteDeploy: '远程部署',
-  sshPassword: 'SSH-密码',
-  sshPort: 'SSH-端口',
+  sshPassword: 'SSH 密码',
+  sshPort: 'SSH 端口',
   SRNode: 'SR节点(超级代表节点)',
   syncCheck: 'needSyncCheck',
 
@@ -42,11 +42,11 @@ export default {
   deployComplete: '部署完成',
   deployFail: '部署失败',
 
-  sshConnectType: '登录方式',
+  sshConnectType: '授权登录方式',
   passwordConnect: '口令登录',
   keyConnect: '密钥登录',
   saveAddressPriKey: '请保管好你的地址和私钥，节点创建完成后丢失将无法找回',
-  todoConfig: '你还没填写配置，请先填写配置',
+  todoConfig: '配置未填写，请先填写配置',
   inputLater: '稍后再说',
   inputNow: '立即填写',
   sureConfigDeploy: '确认使用当前配置进行部署',
@@ -85,6 +85,7 @@ export default {
     gteZeroInt: '请输入大于或等于0的整数',
     maxNumberValue: '数字超过最大限额',
     maxVoteCountValue: 'Vote Count 填写额超过最大值',
+    publicKey: '请输入格式为 Base58Check 的地址',
     inputPrivateKey: '请输入256位 private key (hex编码)',
 
     inputFilePath: '请输入 java-tron 软件包路径',

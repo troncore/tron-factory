@@ -12,7 +12,7 @@ export default {
     account: 'Email address',
     email: 'Email requires',
     password: 'Password',
-    emailError: '邮箱格式错误',
+    emailError: 'Invalid email format',
     emailOrPwdError: 'Invalid login information',
   }
 }
