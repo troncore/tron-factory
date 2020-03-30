@@ -5,7 +5,7 @@
       <div class="im-card padding-20">
         <div class="service-type">
           <div class="title">{{ $t('nodesManage.serviceType') }}</div>
-          <el-radio-group size="medium" v-model="form.serviceType" :disabled="isView">
+          <el-radio-group size="medium" v-model="form.serviceType" :disabled="isView || isEdit">
             <el-radio-button label="local">{{ $t('nodesManage.localDeploy') }}</el-radio-button>
             <el-radio-button label="remote">{{ $t('nodesManage.remoteDeploy') }}</el-radio-button>
           </el-radio-group>
@@ -41,15 +41,6 @@
             </span>
             <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
-
-          <!--<el-form-item prop="sshPort">
-            <span slot="label">{{ $t('nodesManage.sshPort') }}
-              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPort')" placement="top">
-                <i class="fa fa-question-circle-o"></i>
-              </el-tooltip>
-            </span>
-            <el-input v-model.trim="form.sshPort" type="number" tabindex="25" :maxlength="200" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-          </el-form-item>-->
 
           <el-form-item prop="port">
             <span slot="label">{{ $t('nodesManage.sshPort') }}
@@ -157,10 +148,9 @@
           serviceType: 'remote',
 
           ip: '',
-          port: '',
+          port: 22,
           userName: '',
           sshPassword: '',
-          sshPort: 22,
 
           isSR: true,
           needSyncCheck: false,
@@ -181,6 +171,9 @@
       },
       isView () {
         return this.opType === 'detail'
+      },
+      isEdit () {
+        return this.opType === 'edit'
       },
       opNodeId () {
         return this.$route.params.id
@@ -237,11 +230,6 @@
           }
         }
         return {
-          /*id: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { required: true, validator: validNum, trigger: 'blur', },
-            { required: true, validator: validMaxNum, trigger: 'blur', },
-          ],*/
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { required: true, validator: validIpRule, trigger: 'blur', },
@@ -253,12 +241,6 @@
             { required: true, validator: validPortNum, trigger: 'blur', },
           ],
           userName: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ],
-          /*sshPassword: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ],*/
-          sshPort: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
           url: [
@@ -309,10 +291,9 @@
           serviceType: nodeInfo.serviceType || 'remote',
 
           ip: nodeInfo.ip || '',
-          port: nodeInfo.port || '',
+          port: nodeInfo.port || 22,
           userName: nodeInfo.userName || '',
           sshPassword: nodeInfo.sshPassword || '',
-          sshPort: nodeInfo.sshPort || 22,
 
           isSR: nodeInfo.isSR !== undefined ? Boolean(nodeInfo.isSR) : true,
           needSyncCheck: nodeInfo.needSyncCheck !== undefined ? nodeInfo.needSyncCheck : false,
