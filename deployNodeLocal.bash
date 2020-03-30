@@ -33,13 +33,12 @@ if [ $6 != "null" ]; then
   echo "already upload plugin"
 fi
 
-echo $9
-if [ -z $9 ]; then
+if [ -z $8 ]; then
    echo "deploy FullNode"
    cd ~/java-tron&& nohup bash start.sh
 else
    echo "deploy WitnessNode"
-   cd ~/java-tron&& nohup bash start.sh ${9}
+   cd ~/java-tron&& nohup bash start.sh ${8}
 fi
 
 rm -rf $5
