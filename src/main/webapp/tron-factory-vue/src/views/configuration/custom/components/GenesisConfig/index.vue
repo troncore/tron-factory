@@ -2,7 +2,7 @@
   <div class="box-view genesis-config">
     <div class="box-body">
       <div class="asset-list">
-        <div class="asset-title">{{ $t('configuration.accountInfo') }}</div>
+        <div class="asset-title">{{ $t('configuration.accountInfo') }}<span class="numbers">（{{ genesisBlockAssets.length }}）</span></div>
         <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
           <el-button class="op-btn" @click="handleAddAsset(false, item, index)"><i class="el-icon-edit"></i> {{ item.accountName }}</el-button>
           <i class="op-icon el-icon-delete" @click="handleDeleteAssets(index)"></i>
@@ -14,7 +14,7 @@
       </div>
 
       <div class="asset-list">
-        <div class="asset-title">{{ $t('configuration.witnessNodeInfo') }}</div>
+        <div class="asset-title">{{ $t('configuration.witnessNodeInfo') }}<span class="numbers">（{{ genesisBlockWitnesses.length }}）</span></div>
         <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
           <el-button class="op-btn" @click="handleViewWitness(item, index)">{{ item.address }}</el-button>
         </div>

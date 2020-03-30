@@ -6,48 +6,42 @@
         <div class="service-type">
           <div class="title">{{ $t('nodesManage.serviceType') }}</div>
           <el-radio-group size="medium" v-model="form.serviceType" :disabled="isView || isEdit">
-            <el-radio-button label="local">{{ $t('nodesManage.localDeploy') }}</el-radio-button>
             <el-radio-button label="remote">{{ $t('nodesManage.remoteDeploy') }}</el-radio-button>
+            <el-radio-button label="local">{{ $t('nodesManage.localDeploy') }}</el-radio-button>
           </el-radio-group>
         </div>
 
         <el-form-item prop="ip">
-          <span slot="label">
-            HOST IP
-            <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.ip')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-          </span>
+          <span slot="label">{{ $t('nodesManage.nodeIP') }}</span>
           <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView || form.serviceType === 'local'" clearable :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
         </el-form-item>
 
         <br/>
 
         <template v-if="form.serviceType === 'remote'">
+
+          <el-form-item prop="sshConnectType">
+            <span slot="label">{{ $t('nodesManage.sshConnectType') }}</span>
+            <el-radio v-model="form.sshConnectType" :label="1">{{ $t('nodesManage.passwordConnect') }}</el-radio>
+            <el-radio v-model="form.sshConnectType" :label="2">{{ $t('nodesManage.keyConnect') }}</el-radio>
+          </el-form-item>
+          <br/>
           <el-form-item prop="userName">
-            <span slot="label">{{ $t('nodesManage.sshUserName') }}
-              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshUserName')" placement="top">
-                <i class="fa fa-question-circle-o"></i>
-              </el-tooltip>
-            </span>
+            <span slot="label">{{ $t('nodesManage.sshUserName') }}</span>
             <el-input v-model.trim="form.userName" tabindex="23" :maxlength="50" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
+          <br/>
 
-          <el-form-item prop="sshPassword">
-            <span slot="label">{{ $t('nodesManage.sshPassword') }}
-              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPassword')" placement="top">
-                <i class="fa fa-question-circle-o"></i>
-              </el-tooltip>
-            </span>
-            <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-          </el-form-item>
+          <template  v-if="form.sshConnectType === 1">
+            <el-form-item prop="sshPassword">
+              <span slot="label">{{ $t('nodesManage.sshPassword') }}</span>
+              <el-input v-model.trim="form.sshPassword" tabindex="24" :maxlength="100" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+            </el-form-item>
+            <br>
+          </template>
 
           <el-form-item prop="port">
-            <span slot="label">{{ $t('nodesManage.sshPort') }}
-              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.sshPort')" placement="top">
-                <i class="fa fa-question-circle-o"></i>
-              </el-tooltip>
-            </span>
+            <span slot="label">{{ $t('nodesManage.sshPort') }}</span>
             <el-input v-model.trim="form.port" type="number" tabindex="25" :maxlength="50" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.maxPortValue')"></el-input>
           </el-form-item>
         </template>
@@ -62,16 +56,19 @@
             </el-tooltip>
             <el-switch v-model="form.isSR" :disabled="isView"></el-switch>
           </div>
-          <div class="header-item" v-if="form.isSR">
-            <span class="gray">{{ $t('nodesManage.syncCheck') }}</span>
-            <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.needSyncCheck')" placement="top">
-              <i class="fa fa-question-circle-o"></i>
-            </el-tooltip>
-            <el-switch v-model="form.needSyncCheck" :disabled="isView"></el-switch>
-          </div>
         </div>
 
         <template v-if="form.isSR">
+          <el-form-item class="flex-horizontal">
+            <span slot="label">
+              {{ $t('nodesManage.syncCheck') }}
+              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.needSyncCheck')" placement="top">
+                <i class="fa fa-question-circle-o"></i>
+              </el-tooltip>
+            </span>
+            <el-switch v-model="form.needSyncCheck" :disabled="isView"></el-switch>
+          </el-form-item>
+
           <el-form-item prop="url">
             <span slot="label">
               URL
@@ -81,6 +78,7 @@
             </span>
             <el-input v-model.trim="form.url" tabindex="26" :maxlength="100" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputURL')"></el-input>
           </el-form-item>
+          <br>
 
           <el-form-item prop="voteCount">
             <span slot="label">
@@ -91,22 +89,19 @@
             </span>
             <el-input v-model.trim="form.voteCount" type="number" tabindex="27" :maxlength="20" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')"></el-input>
           </el-form-item>
-
           <br />
 
-          <template v-if="publicKey">
-            <el-form-item>
+          <el-form-item prop="publicKey" class="address">
             <span slot="label">
-              publicKey
+              address
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.publicKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
             </span>
-              {{ publicKey }}
-            </el-form-item>
+            <el-input v-model.trim="form.publicKey" tabindex="27" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.publicKey')"></el-input>
+          </el-form-item>
 
-            <br />
-          </template>
+          <br />
 
           <el-form-item prop="privateKey" class="private-key" v-if="opType !== 'detail'">
             <span class="private-key__help" slot="label">
@@ -114,7 +109,6 @@
               <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.privateKey')" placement="top">
                 <i class="fa fa-question-circle-o"></i>
               </el-tooltip>
-              <a class="key-tool" href="https://tronscan.org/#/tools/tron-convert-tool" target="_blank">{{ $t('nodesManage.tronConvertTool') }}</a>
             </span>
             <el-input
               v-model.trim="form.privateKey"
@@ -150,17 +144,19 @@
           ip: '',
           port: 22,
           userName: '',
+          sshConnectType: 1, // 1 public key, 2 password
           sshPassword: '',
 
           isSR: true,
           needSyncCheck: false,
           url: 'http://',
           voteCount: '',
+          publicKey: '',
           privateKey: '',
         },
         tempIP: '',
+        tempPublicKey: '',
         safePrivateKey: Array(64).fill('*').join(''),
-        publicKey: '',
         nodeInfo: {},
         loading: false,
       }
@@ -243,12 +239,18 @@
           userName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
+          sshPassword: [
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          ],
           url: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
           voteCount: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { required: true, validator: validVoteNum, trigger: 'blur', },
+          ],
+          publicKey: [
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           ],
           privateKey: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -293,15 +295,17 @@
           ip: nodeInfo.ip || '',
           port: nodeInfo.port || 22,
           userName: nodeInfo.userName || '',
+          sshConnectType: nodeInfo.sshConnectType || 1,
           sshPassword: nodeInfo.sshPassword || '',
 
           isSR: nodeInfo.isSR !== undefined ? Boolean(nodeInfo.isSR) : true,
           needSyncCheck: nodeInfo.needSyncCheck !== undefined ? nodeInfo.needSyncCheck : false,
           url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || 'http://',
           voteCount: nodeInfo.voteCount || '',
+          publicKey: nodeInfo.publicKey || '',
           privateKey: nodeInfo.publicKey ? this.safePrivateKey : '',
         }
-        this.publicKey = nodeInfo.publicKey
+        this.tempPublicKey = nodeInfo.publicKey
       },
 
       async handleSubmit() {
@@ -311,22 +315,58 @@
             this.loading = true
             if (!(await this.initParams(params))) return
 
-            let api = this.opType === 'add' ? 'addNoteInfo' : 'editNoteInfo'
-            let msg = this.opType === 'add' ? 'nodesManage.addNodeSuccess' : 'nodesManage.updateNodeSuccess'
+            if (this.tempPublicKey !== params.publicKey || this.safePrivateKey !== params.privateKey) {
+              this.$confirm(this.$t('nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
+                cancelButtonText: this.$t('base.cancel'),
+                confirmButtonText: this.$t('base.continue'),
+                center: true,
+                customClass: 'im-message-box',
+                cancelButtonClass: 'im-message-cancel-button primary',
+                confirmButtonClass: 'im-message-confirm-button primary',
+              }).then(() => {
+                this.addNode(params)
+              }).catch(() => {
 
-            this.$_api.nodesManage[api](params, err => {
-              this.loading = false
-              if (err) return
-
-              this.$notify({
-                type: 'success',
-                title: this.$t('base.successful'),
-                message: this.$t(msg),
+                this.$notify.info({
+                  title: this.$t('base.cancel'),
+                  message: this.$t('base.cancel'),
+                })
+                this.loading = false
               })
+            } else {
+              this.addNode(params)
+            }
+          }
+        })
+      },
 
-              this.$router.push({
-                path: '/nodes-manage'
-              })
+      addNode (params) {
+        let api = this.opType === 'add' ? 'addNoteInfo' : 'editNoteInfo'
+        let msg = this.opType === 'add' ? 'nodesManage.addNodeSuccess' : 'nodesManage.updateNodeSuccess'
+        this.$_api.nodesManage[api](params, (err, res = {}) => {
+          this.loading = false
+          if (err) return
+
+          if (!res.status) {
+            this.$notify({
+              type: 'success',
+              title: this.$t('base.successful'),
+              message: this.$t(msg),
+            })
+
+            this.$router.push({
+              path: '/nodes-manage'
+            })
+          } else {
+            let errorMsg = 'base.error'
+            if (res.status === 1)
+              errorMsg = 'nodesManage.helpTips.sshConnectFail'
+            else if (res.status === 2)
+              errorMsg = 'nodesManage.helpTips.addressNotPrikey'
+
+            this.$notify.error({
+              title: this.$t('base.error'),
+              message: this.$t(errorMsg),
             })
           }
         })
@@ -353,6 +393,7 @@
           needSyncCheck: this.form.needSyncCheck,
           url: `"${this.form.url}"`,
           voteCount: this.form.voteCount,
+          publicKey: this.form.publicKey,
           privateKey: this.form.privateKey,
         }
         if (srParams.privateKey === this.safePrivateKey) delete srParams.privateKey
@@ -447,6 +488,18 @@
       margin-bottom: 15px;
       width: 300px;
 
+      &.flex-horizontal {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .el-form-item__label {
+          margin-right: 20px;
+        }
+      }
+      &.address {
+        width: 720px;
+      }
       &.private-key {
         width: 720px;
       }

@@ -134,6 +134,7 @@
             let params = {
               p2pVersion: this.form.node_p2p_version,
               listenPort: this.form.node_listen_port,
+              configStatus: 0,
             }
 
             this.loading = true

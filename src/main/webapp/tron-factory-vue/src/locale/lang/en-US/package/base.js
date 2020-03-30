@@ -4,6 +4,7 @@ export default {
   reset: 'Reset',
   clear: 'Clear',
   delete: 'Delete',
+  tips: 'Tips',
 
   document: 'Document',
   helpDocument: 'Help Document',

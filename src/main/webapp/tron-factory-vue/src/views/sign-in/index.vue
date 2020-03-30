@@ -7,9 +7,9 @@
           <span>TRON FACTORY</span>
           <span>ONE CLICK DEPLOYMENT</span>
         </div>
-        <div class="summary">
-          <span>One Click Deployment</span>
-        </div>
+        <!--<div class="summary">-->
+        <!--  <span>One Click Deployment</span>-->
+        <!--</div>-->
       </div>
     </div>
 
@@ -19,11 +19,11 @@
       </div>
       <div class="form">
         <img class="logo-img" src="@/assets/images/logo.png" :title="siteTitle" :alt="siteTitle"/>
-        <div class="form-item">
+        <div class="form-item" :class="{'warning-item': isInvalid && !form.account}">
           <label class="label">{{ $t('sign.account') }}</label>
-          <el-input v-model="form.account" clearable :placeholder="$t('sign.helpTips.account')"/>
+          <el-input v-model="form.account" class="warning-input" clearable :placeholder="$t('sign.helpTips.account')"/>
         </div>
-        <div class="form-item">
+        <div class="form-item" :class="{'warning-item': isInvalid && !form.password}">
           <label class="label">{{ $t('sign.password') }}</label>
           <el-input type="password" v-model="form.password" clearable :placeholder="$t('sign.helpTips.password')"/>
         </div>
@@ -32,7 +32,6 @@
         </div>
         <div class="form-item help-footer">
           <span><!-- placeholder --></span>
-          <!--<el-checkbox v-model="isSavePassword" @change="handleSavePassword">{{ $t('sign.rememberPassword') }}</el-checkbox>-->
           <el-button type="text" @click="handleTestAccount">{{ $t('sign.signInTestAccount') }}</el-button>
         </div>
       </div>
@@ -53,6 +52,7 @@ export default {
         account: '',
         password: '',
       },
+      isInvalid: false,
       formRules: {
 
       },
@@ -81,10 +81,24 @@ export default {
       let emailReg = /^\w+@\w+\.\w+$/
       let passwordReg = /^(?=.*[0-9])(?=.*[a-zA-Z])\S{8,20}$/
 
-      let invalidEmail = !this.form.account || this.form.account !== this.currentAccount.account
-      let invalidPassword = !this.form.password || this.form.password !== this.currentAccount.password
+      if (!this.form.account || !this.form.password) {
+        this.isInvalid = true
+        return
+      }
 
-      if (invalidEmail  || invalidPassword) {
+
+      if (!emailReg.test(this.form.account)) {
+        this.$notify.error({
+          title: this.$t('base.error'),
+          message: this.$t('sign.helpTips.emailError'),
+        })
+        return
+      }
+
+      let invalidAccount = this.form.account !== this.currentAccount.account
+      let invalidPassword = this.form.password !== this.currentAccount.password
+
+      if (invalidAccount  || invalidPassword) {
         this.$notify.error({
           title: this.$t('base.error'),
           message: this.$t('sign.helpTips.emailOrPwdError'),
@@ -127,7 +141,7 @@ export default {
       position: absolute;
       top: 50%;
       left: 10%;
-      transform: translate(0, -100%);
+      transform: translate(0, -120%);
       .title {
         margin-bottom: 20px;
         font-size: 42px;
@@ -194,6 +208,14 @@ export default {
           color: #081C56;
           font-weight: bold;
         }
+
+        &.warning-item {
+          /deep/ .el-input {
+            input {
+              border-color: red;
+            }
+          }
+        }
       }
 
       .sign-in__box {
@@ -210,5 +232,6 @@ export default {
       }
     }
   }
+
 }
 </style>

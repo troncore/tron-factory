@@ -151,7 +151,49 @@ export default {
         return
       }
 
-      this.deployDialogVisible = true
+      this.checkConfigStatus()
+    },
+
+    checkConfigStatus () {
+      this.deployLoading = true
+      this.$_api.configuration.checkConfig({}, (err, res = {}) => {
+        this.deployLoading = false
+        if (err) return
+        if (res.status === 0) {
+          // config ok
+          this.$confirm(this.$t('nodesManage.sureConfigDeploy'), this.$t('base.tips'), {
+            cancelButtonText: this.$t('nodesManage.updateConfig'),
+            confirmButtonText: this.$t('nodesManage.sureDeploy'),
+            center: true,
+            customClass: 'im-message-box',
+            cancelButtonClass: 'im-message-cancel-button primary',
+            confirmButtonClass: 'im-message-confirm-button primary',
+          }).then(() => {
+            setTimeout(() => this.deployDialogVisible = true, 200)
+
+          }).catch(() => {
+            this.$router.push({
+              path: '/configuration/quick'
+            })
+          })
+
+        } else if (res.status === 1) {
+          // do config
+
+          this.$confirm(this.$t('nodesManage.todoConfig'), this.$t('base.tips'), {
+            cancelButtonText: this.$t('nodesManage.inputLater'),
+            confirmButtonText: this.$t('nodesManage.inputNow'),
+            center: true,
+            customClass: 'im-message-box',
+            cancelButtonClass: 'im-message-cancel-button primary',
+            confirmButtonClass: 'im-message-confirm-button primary',
+          }).then(() => {
+            this.$router.push({
+              path: '/configuration/quick'
+            })
+          }).catch(() => {})
+        }
+      })
     },
 
 

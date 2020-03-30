@@ -114,7 +114,8 @@ export default {
         if (valid) {
           let params = {
             transaction: this.form.transaction,
-            customTransaction: this.checkCustomTransaction ? this.form.customTransaction : ''
+            customTransaction: this.checkCustomTransaction ? this.form.customTransaction : '',
+            configStatus: 0,
           }
 
           this.loading = true

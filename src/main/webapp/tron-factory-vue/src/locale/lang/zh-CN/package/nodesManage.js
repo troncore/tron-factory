@@ -13,7 +13,7 @@ export default {
   deployStatus: '部署状态',
   unDeploy: '未部署',
   deployed: '已部署',
-  javaTronVersion: '版本号(java-tron)',
+  javaTronVersion: '版本号',
 
   addNodeSuccess: '添加节点成功',
   addNodeFail: '添加节点失败',
@@ -45,10 +45,13 @@ export default {
   sshConnectType: '登录方式',
   passwordConnect: '口令登录',
   keyConnect: '密钥登录',
-  addNodeTipsTitle: '提示',
   saveAddressPriKey: '请保管好你的地址和私钥，节点创建完成后丢失将无法找回',
+  todoConfig: '你还没填写配置，请先填写配置',
   inputLater: '稍后再说',
   inputNow: '立即填写',
+  sureConfigDeploy: '确认使用当前配置进行部署',
+  updateConfig: '修改配置',
+  sureDeploy: '确认部署',
 
   helpTips: {
     crypto: '添加节点之后，签名算法不可修改',
@@ -62,7 +65,7 @@ export default {
     needSyncCheck: '同步检测开启后会定期同步链上各节点信息，新链需要有一个 SR 为 false，其他为 true',
     url: '超级代表的官方网址',
     voteCount: 'SR节点投票数量',
-    publicKey: '地址',
+    publicKey: 'Base58Check 地址',
     privateKey: '请输入私钥(256位, 16进制编码)',
     sshConnectFail: 'SSH无法连接，请重新配置',
     addressNotPrikey: '你的地址与私钥不相匹配',

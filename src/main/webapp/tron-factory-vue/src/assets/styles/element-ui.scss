@@ -169,9 +169,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       border-color: error-color(.1);
       background-color: error-color(.1);
     }
+    &.im-message-cancel-button.primary {
+      &:focus,
+      &:hover{
+        color: theme-color();
+        border-color: theme-color(.1);
+        background-color: theme-color(.1);
+      }
+    }
     &.im-message-confirm-button {
       border-color: error-color();
       background-color: error-color();
+      &.primary {
+        border-color: theme-color();
+        background-color: theme-color();
+      }
     }
   }
 }

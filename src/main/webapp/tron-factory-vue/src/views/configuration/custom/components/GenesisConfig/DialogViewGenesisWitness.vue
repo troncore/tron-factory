@@ -13,8 +13,8 @@
 
     <div class="dialog-content">
 
-      <el-form :model="witnessInfo" label-width="120px" label-position="right">
-        <el-form-item label="Address :" prop="address">
+      <el-form :model="witnessInfo" label-width="90px" label-position="left">
+        <el-form-item label="address :" prop="address">
           {{ witnessInfo.address }}
         </el-form-item>
 
@@ -22,7 +22,7 @@
           {{ witnessInfo.url }}
         </el-form-item>
 
-        <el-form-item label="VoteCount :" prop="voteCount">
+        <el-form-item label="voteCount :" prop="voteCount">
           {{ witnessInfo.voteCount }}
         </el-form-item>
       </el-form>

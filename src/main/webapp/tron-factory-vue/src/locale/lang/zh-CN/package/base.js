@@ -4,6 +4,7 @@ export default {
   reset: '重置',
   clear: '清空',
   delete: '删除',
+  tips: '提示',
 
   document: '文档',
   helpDocument: '帮助文档',

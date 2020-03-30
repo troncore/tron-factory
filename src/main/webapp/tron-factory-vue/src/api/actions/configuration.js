@@ -5,6 +5,7 @@ export default {
   get: {
     checkBalance: '/api/checkBalance',
     getConfigInfo: '/api/config',
+    checkConfig: '/api/checkConfig',
     getPluginConfig: '/api/pluginConfig',
 
     // todo api

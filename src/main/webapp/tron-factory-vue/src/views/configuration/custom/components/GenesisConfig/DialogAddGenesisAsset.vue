@@ -11,7 +11,7 @@
     </div>
 
     <div class="dialog-content">
-      <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="150px" label-position="right">
+      <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="150px" label-position="left">
         <el-form-item prop="accountName">
           <span slot="label">
             accountName
