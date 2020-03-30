@@ -88,7 +88,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] made the directory"
+echo "[$time] made the directory: java-tron"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] ssh connect failed, ${finish}"
@@ -98,18 +98,18 @@ fi
 ###################################
 #echo "检验压缩包是否存在"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] check java-tron zip path"
+echo "[$time] check java-tron-1.0.0.zip path"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] can't find java-tron zip, ${finish}"
+echo "[$time] can't find java-tron-1.0.0.zip, ${finish}"
 exit
 fi
 
 ###################################
 #echo "传压缩包"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] uploading java-tron zip"
+echo "[$time] uploading java-tron-1.0.0.zip"
 
 /usr/bin/expect <<lsp
 log_user 0
@@ -127,11 +127,11 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploading java-tron zip"
+echo "[$time] already uploaded java-tron-1.0.0.zip"
 else
 echo $?
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] update java-tron zip failed, ${finish}"
+echo "[$time] upload java-tron-1.0.0.zip failed, ${finish}"
 #exit
 fi
 
@@ -156,10 +156,10 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploading config"
+echo "[$time] already uploaded config"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] update config failed, ${finish}"
+echo "[$time] upload config failed, ${finish}"
 #exit
 fi
 
@@ -184,14 +184,16 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] unzip success"
+echo "[$time] unzip java-tron-1.0.0.zip success"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] unzip failed, unzip cmd is not installed or java-tron zip upload failed, ${finish}"
+echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed, ${finish}"
 exit
 fi
 
 ###################################
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] uploading start.sh"
 #echo "start脚本"
 /usr/bin/expect <<lsp
 log_user 0
@@ -209,10 +211,10 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploading start.sh"
+echo "[$time] already uploaded start.sh"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] uploading start.sh failed, ${finish}"
+echo "[$time] upload start.sh failed, ${finish}"
 #exit
 fi
 
@@ -239,10 +241,10 @@ if [ $6 != "null" ]; then
 lsp
   if [ $? = 0 ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] already upload plugin"
+  echo "[$time] already uploaded plugin"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] update plugin failed"
+  echo "[$time] upload plugin failed"
   #exit
   fi
 fi
@@ -314,7 +316,7 @@ fi
    expect eof
 lsp
    if [ $? != 0 ];then
-     time=$(date "+%Y-%m-%d %H:%M:%S")
+   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] error"
    exit
    fi
