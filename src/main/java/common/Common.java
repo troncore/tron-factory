@@ -75,6 +75,8 @@ public class Common {
 
   public static final String logFormat = "logs/result_%s.log" ;
 
+  public static final String sshLogFormat = "logs/sshTemp.log" ;
+
   public static final String allNodesField = "allNodes";
 
   public static final String serviceTypeFiled = "serviceType";
@@ -89,12 +91,16 @@ public class Common {
 
   public static final String pathFiled = "path";
 
+  public static final String sshConnectTypeField = "sshConnectType";
+
   // Node Status
   public static final String notFoundStatus = "not found";
 
   public static final String deployFinishStatus = "deploy finish";
 
   public static final String deployFailedStatus = "deploying";
+
+  public static final String connectSuccessStatus ="ssh connect success";
 
   public static final String connectFailedStatus = "ssh connect failed";
 

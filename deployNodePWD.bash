@@ -2,15 +2,17 @@
 APP="java-tron-1.0.0"
 Program="program.FullNode"
 
-echo "Start ssh deployment"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
 
 ##################################
 #检查是否安装expect指令
-which expect
+which expect > /dev/null
 if [ $? != 0 ]; then
-echo "expect is not installed, ${finish}"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] expect is not installed, ${finish}"
 exit
 fi
 
@@ -34,9 +36,11 @@ expect eof
 lsp
 
 if [ $? = 0 ];then
-echo "ssh connect success"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ssh connect success"
 else
-echo $1: "ssh connect failed, ${finish}"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] $1: ssh connect failed, ${finish}"
 exit
 fi
 ###################################
@@ -57,9 +61,11 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 if [ $? = 0 ];then
-echo "rm java-tron done"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] rm java-tron done"
 else
-echo "ssh connect failed, ${finish}"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ssh connect failed, ${finish}"
 exit
 fi
 
@@ -81,25 +87,29 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 if [ $? = 0 ];then
-echo "made the directory"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] made the directory"
 else
-echo "ssh connect failed, ${finish}"
-echo "error"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ssh connect failed, ${finish}"
 exit
 fi
 
 ###################################
 #echo "检验压缩包是否存在"
-echo "check java-tron zip path"
-find $4
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] check java-tron zip path"
+find $4  > /dev/null
 if [ $? != 0 ];then
-echo "can't find java-tron zip, ${finish}"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] can't find java-tron zip, ${finish}"
 exit
 fi
 
 ###################################
 #echo "传压缩包"
-echo "uploading java-tron zip"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] uploading java-tron zip"
 
 /usr/bin/expect <<lsp
 log_user 0
@@ -116,17 +126,19 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 if [ $? = 0 ];then
-echo "already uploading java-tron zip"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] already uploading java-tron zip"
 else
 echo $?
-echo "update java-tron zip failed, ${finish}"
-echo "error"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] update java-tron zip failed, ${finish}"
 #exit
 fi
 
 ###################################
 #echo "配置文件"
-echo "uploading config.conf"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] uploading config.conf"
 
 /usr/bin/expect <<lsp
 log_user 0
@@ -143,10 +155,11 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 if [ $? = 0 ];then
-echo "already uploading config"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] already uploading config"
 else
-echo "update config failed, ${finish}"
-echo "error"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] update config failed, ${finish}"
 #exit
 fi
 
@@ -170,10 +183,11 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 if [ $? = 0 ];then
-echo "ok"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] unzip success"
 else
-echo "unzip failed, unzip cmd is not installed or java-tron zip upload failed, ${finish}"
-echo "error"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] unzip failed, unzip cmd is not installed or java-tron zip upload failed, ${finish}"
 exit
 fi
 
@@ -194,10 +208,11 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 if [ $? = 0 ];then
-echo "already uploading start.sh"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] already uploading start.sh"
 else
-echo "uploading start.sh failed, ${finish}"
-echo "error"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] uploading start.sh failed, ${finish}"
 #exit
 fi
 
@@ -205,7 +220,8 @@ fi
 ###################################
 #echo "插件"
 if [ $6 != "null" ]; then
-  echo "uploading plugin"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] uploading plugin"
 
   /usr/bin/expect <<lsp
   log_user 0
@@ -222,10 +238,11 @@ if [ $6 != "null" ]; then
   expect eof
 lsp
   if [ $? = 0 ];then
-  echo "already upload plugin"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] already upload plugin"
   else
-  echo "update plugin failed"
-  echo "error"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] update plugin failed"
   #exit
   fi
 fi
@@ -233,8 +250,8 @@ fi
 ###################################
 #echo "部署"
 if [ -z $9 ]; then
-   echo "deploy FullNode"
-
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] deploy FullNode"
    /usr/bin/expect <<lsp
    log_user 0
    #set timeout 3600
@@ -252,12 +269,14 @@ if [ -z $9 ]; then
    expect eof
 lsp
    if [ $? != 0 ];then
-   echo "run start.sh error"
+     time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] run start.sh error"
    exit
    fi
 
 else
-   echo "deploy WitnessNode"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] deploy WitnessNode"
 
    /usr/bin/expect <<lsp
    #set timeout 3600
@@ -276,7 +295,8 @@ else
    expect eof
 lsp
    if [ $? != 0 ];then
-   echo "run start.sh error"
+     time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] run start.sh error"
    exit
    fi
 
@@ -294,12 +314,15 @@ fi
    expect eof
 lsp
    if [ $? != 0 ];then
-   echo "error"
+     time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] error"
    exit
    fi
 
-   tail -1 start.log
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo `tail -1 start.log`
    rm -rf start.log
 ###################################
 rm -rf $5
-echo  "${finish}"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo  "[$time] ${finish}"
