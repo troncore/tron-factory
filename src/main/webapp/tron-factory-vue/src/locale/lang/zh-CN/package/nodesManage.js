@@ -42,6 +42,7 @@ export default {
   loadingLog: '正在查询节点记录，请稍等',
   deployComplete: '部署完成',
   deployFail: '部署失败',
+  tronConvertTool: 'key生成工具',
 
   helpTips: {
     crypto: '添加节点之后，签名算法不可修改',

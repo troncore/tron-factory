@@ -10,7 +10,7 @@ export default {
   databaseConfig: '数据库基础配置',
   p2pConfig: 'P2P 配置',
   crossChainConfig: '跨链配置',
-  moduleFunction: '模块函数',
+  moduleFunction: '模块订制化',
 
   moreSetting: '高级配置',
 

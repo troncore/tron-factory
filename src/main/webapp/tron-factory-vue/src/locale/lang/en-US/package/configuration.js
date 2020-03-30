@@ -1,7 +1,7 @@
 export default {
   configuration: 'Configuration',
-  quickConfig: 'Fast',
-  customConfig: 'Custom',
+  quickConfig: 'Fast Config',
+  customConfig: 'Custom Config',
   importConfig: 'Import Config',
 
   genesisInfo: 'Genesis',
