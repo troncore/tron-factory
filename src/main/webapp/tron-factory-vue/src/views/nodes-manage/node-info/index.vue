@@ -303,7 +303,7 @@
           url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || 'http://',
           voteCount: nodeInfo.voteCount || '',
           publicKey: nodeInfo.publicKey || '',
-          privateKey: nodeInfo.publicKey ? this.safePrivateKey : '',
+          privateKey: this.safePrivateKey,
         }
         this.tempPublicKey = nodeInfo.publicKey
       },
@@ -315,7 +315,7 @@
             this.loading = true
             if (!(await this.initParams(params))) return
 
-            if (this.tempPublicKey !== params.publicKey || this.safePrivateKey !== params.privateKey) {
+            if (params.publicKey !== this.tempPublicKey || params.privateKey) {
               this.$confirm(this.$t('nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
                 cancelButtonText: this.$t('base.cancel'),
                 confirmButtonText: this.$t('base.confirm'),
