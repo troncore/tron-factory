@@ -60,6 +60,12 @@ public class PluginConfig {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
 
+    int configStatus = jsonObject.getOrDefault("configStatus", "1") instanceof String ?
+            (Integer.parseInt((String)jsonObject.getOrDefault("configStatus", "1"))) :
+            (int)jsonObject.getOrDefault("configStatus", 1);
+    if(configStatus == 0) {
+      json.put(Common.configStatusFiled, configStatus);
+    }
     if (!writeJsonFile(json)) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }

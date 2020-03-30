@@ -120,6 +120,21 @@ public class NodeController {
     return false;
   }
 
+  public static String SSHconnectPWD(String ip, String username, String sshPassword) {
+    Connection conn = null;
+    try {
+      conn = new Connection(ip);
+      conn.connect();
+      boolean isAuthenticated = conn.authenticateWithPassword(username, sshPassword);
+      if (isAuthenticated == false) {
+        return Common.connectFailedStatus;
+      }
+    } catch (IOException e) {
+      return Common.connectFailedStatus;
+    }
+    return Common.connectSuccessStatus;
+  }
+
   private String checkSSHStatus(String path) {
     File file = new File(path);
     if (file.isFile() && file.exists()) {
@@ -178,7 +193,12 @@ public class NodeController {
     JSONObject statusObj = new JSONObject();
     //1 password, 2 key
     if(sshConnectType == 1){
-
+      String sshPwdStatus = SSHconnectPWD(ip, userName, sshPassword);
+      if(sshPwdStatus.equals(Common.connectFailedStatus)) {
+        status = 1;
+        statusObj.put("status",status);
+        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+      }
     }else if(sshConnectType == 2){
       BashExecutor bashExecutor = new BashExecutor();
       bashExecutor.callSSHScript(ip, port, userName);
@@ -189,7 +209,6 @@ public class NodeController {
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
       }
     }
-
 
     Util util = new Util();
     util.parseConfig();
@@ -225,14 +244,7 @@ public class NodeController {
     if (isIpExist(nodes, ip)) {
       return new Response(ResultCode.FORBIDDEND.code, "ip should be different").toJSONObject();
     }
-//    ArrayList<String> ipList =new ArrayList<>();
-    /*if(!nodes.isEmpty()){
-      JSONObject nodeLast = (JSONObject) nodes.get(nodes.size()-1);
-      ipList = (ArrayList<String>) nodeLast.get(Common.ipListFiled);
-    }*/
 
-
-//    ipList.add(ip+"\":\""+listenPort);
     JSONObject newNode = new JSONObject();
     if (isSR) {
       String path;
@@ -280,6 +292,7 @@ public class NodeController {
 
   @PutMapping(value = "/api/nodeInfo")
   public JSONObject updateNode(@RequestBody LinkedHashMap<String,Object> data) {
+    int status = 0;
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
@@ -300,6 +313,29 @@ public class NodeController {
             (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
+    int sshConnectType = data.getOrDefault("sshConnectType", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshConnectType", "1"))) :
+            (int)data.getOrDefault("sshConnectType", 1);
+    String publicKey = (String) data.getOrDefault("publicKey", "");
+    JSONObject statusObj = new JSONObject();
+    //1 password, 2 key
+    if(sshConnectType == 1){
+      String sshPwdStatus = SSHconnectPWD(ip, userName, sshPassword);
+      if(sshPwdStatus.equals(Common.connectFailedStatus)) {
+        status = 1;
+        statusObj.put("status",status);
+        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+      }
+    }else if(sshConnectType == 2){
+      BashExecutor bashExecutor = new BashExecutor();
+      bashExecutor.callSSHScript(ip, port, userName);
+      String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+      if(sshStatus.equals(Common.connectFailedStatus)) {
+        status = 1;
+        statusObj.put("status",status);
+        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+      }
+    }
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -320,19 +356,38 @@ public class NodeController {
     }
     ipList.add(ip+"\":\""+listenPort);
 
+//    String privateKey = (String)node.get(Common.privateKeyFiled);
+//    String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
+
     boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
+    if(key.length() == 0){
+      String privateKey = (String)node.get(Common.privateKeyFiled);
+      String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
+      if(!publicKey.equals(privateKeyCheck)){
+        status = 2;
+        statusObj.put("status",status);
+        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+      }
+      node.put(Common.privateKeyFiled, privateKey);
+      node.put(Common.publicKeyFiled, publicKey);
+    }
     if (key.length() != 0) {
       String path;
-      String publicKey;
+      String publicKeyCheck;
       refresh();
       try {
         path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
         refresh();
         if (isEckey) {
-          publicKey = private2AddressEckey(hexs2Bytes(key.getBytes()));
+          publicKeyCheck = private2AddressEckey(hexs2Bytes(key.getBytes()));
         } else {
-          publicKey = private2AddressSm2(hexs2Bytes(key.getBytes()));
+          publicKeyCheck = private2AddressSm2(hexs2Bytes(key.getBytes()));
+        }
+        if(!publicKey.equals(publicKeyCheck)){
+          status = 2;
+          statusObj.put("status",status);
+          return new Response(ResultCode.OK.code, statusObj).toJSONObject();
         }
         node.put(Common.privateKeyFiled, path);
         node.put(Common.publicKeyFiled, publicKey);
@@ -354,6 +409,7 @@ public class NodeController {
     node.put(Common.sshPortFiled, sshPort);
     node.put(Common.isDeployedFiled, isDeployed);
     node.put(Common.javaTronVersionFiled, javaTronVersion);
+    node.put(Common.sshConnectTypeField, sshConnectType);
     nodes.add(node);
     json.put(Common.nodesFiled, nodes);
 

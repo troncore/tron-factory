@@ -253,7 +253,16 @@ public class ConfigControlller {
     int listenPort =data.getOrDefault("listenPort", "18883") instanceof String ?
         (Integer.parseInt((String)data.getOrDefault("listenPort", "18883"))) :
         (int)data.getOrDefault("listenPort", 18883);
-
+    int configStatus = data.getOrDefault("configStatus", "1") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("configStatus", "1"))) :
+            (int)data.getOrDefault("configStatus", 1);
+    if(configStatus == 0){
+      JSONObject json = readJsonFile();
+      json.put(Common.configStatusFiled, configStatus);
+      if (!writeJsonFile(json)) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+      }
+    }
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new P2PConfig(p2pVersion, node_max_active_nodes,
             activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), Common.configFiled);

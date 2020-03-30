@@ -22,6 +22,7 @@ public class Common {
 
   public static final String dbEngineFiled = "dbEngine";
 
+  public static final String configStatusFiled = "configStatus";
 
   public static final String resultField = "result";
 

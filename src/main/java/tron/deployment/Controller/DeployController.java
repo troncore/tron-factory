@@ -154,6 +154,15 @@ public class DeployController {
 
     }
 
+    @GetMapping(value = "/api/checkConfig")
+    public JSONObject checkConfigStatus() {
+        JSONObject json = readJsonFile();
+        Long configStatus = (Long) json.get(Common.configStatusFiled);
+        JSONObject statusObj = new JSONObject();
+        statusObj.put("status",configStatus);
+        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+    }
+
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
