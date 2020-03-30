@@ -126,7 +126,11 @@ export default {
             this.$notify({
               type: 'success',
               title: this.$t('base.successful'),
-              message: this.$t('base.complete')
+              message: this.$t('base.success.operate')
+            })
+
+            this.$router.push({
+              path: '/nodes-manage'
             })
           })
         }

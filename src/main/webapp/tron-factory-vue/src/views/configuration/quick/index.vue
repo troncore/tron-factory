@@ -147,6 +147,10 @@
                 title: this.$t('base.successful'),
                 message: this.$t('base.success.operate')
               })
+
+              this.$router.push({
+                path: '/nodes-manage'
+              })
             })
           }
         })
