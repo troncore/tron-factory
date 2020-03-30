@@ -36,7 +36,7 @@ lsp
 if [ $? = 0 ];then
 echo "ssh connect success"
 else
-echo "ssh connect failed, ${finish}"
+echo $1: "ssh connect failed, ${finish}"
 exit
 fi
 ###################################

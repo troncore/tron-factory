@@ -227,7 +227,7 @@ public class DeployController {
                     return new Response(ResultCode.FAILED.code, "expect is not installed").toJSONObject();
                 }
                 if(status.equals(Common.connectFailedStatus)){
-                    return new Response(ResultCode.UNAUTHORIZED.code, "ssh connect failed").toJSONObject();
+                    return new Response(ResultCode.UNAUTHORIZED.code, ip+": ssh connect failed").toJSONObject();
                 }
                 if(status.equals(Common.canNotFindZip)){
                     return new Response(ResultCode.UNAUTHORIZED.code, "can't find java-tron zip").toJSONObject();
