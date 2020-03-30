@@ -144,7 +144,7 @@
           ip: '',
           port: 22,
           userName: '',
-          sshConnectType: 1, // 1 public key, 2 password
+          sshConnectType: 1, // 1 password, 2 key
           sshPassword: '',
 
           isSR: true,
@@ -318,7 +318,7 @@
             if (this.tempPublicKey !== params.publicKey || this.safePrivateKey !== params.privateKey) {
               this.$confirm(this.$t('nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
                 cancelButtonText: this.$t('base.cancel'),
-                confirmButtonText: this.$t('base.continue'),
+                confirmButtonText: this.$t('base.confirm'),
                 center: true,
                 customClass: 'im-message-box',
                 cancelButtonClass: 'im-message-cancel-button primary',
@@ -371,8 +371,6 @@
           }
         })
       },
-
-      // TODO 重复IP
 
       // format submit params
       async initParams(params) {
