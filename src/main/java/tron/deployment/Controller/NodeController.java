@@ -1,27 +1,32 @@
 package tron.deployment.Controller;
 
+import static common.Common.logFormat;
 import static common.LogConfig.LOG;
 import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
 import static wallet.Wallet.*;
 
+import ch.ethz.ssh2.Connection;
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
 import config.P2PConfig;
 import config.SeedNodeConfig;
+
+import java.io.*;
 import java.util.LinkedHashMap;
 
 import entity.AssetsEntity;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.tron.core.config.args.Account;
 import response.ResultCode;
 import common.Util;
 import entity.WitnessEntity;
 import config.GenesisWitnessConfig;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +36,7 @@ import org.springframework.stereotype.Component;
 import org.tron.keystore.CipherException;
 import response.Response;
 import config.ConfigGenerator;
+import tron.deployment.shellExecutor.BashExecutor;
 
 
 @CrossOrigin
@@ -114,9 +120,40 @@ public class NodeController {
     return false;
   }
 
+  private String checkSSHStatus(String path) {
+    File file = new File(path);
+    if (file.isFile() && file.exists()) {
+      try {
+        InputStreamReader read = new InputStreamReader(
+                new FileInputStream(file), Common.encoding);
+        BufferedReader bufferedReader = new BufferedReader(read);
+        String lineTxt;
+
+        while ((lineTxt = bufferedReader.readLine()) != null) {
+          if (lineTxt.contains(Common.connectSuccessStatus)) {
+            return Common.connectSuccessStatus;
+          }
+          if (lineTxt.contains(Common.connectFailedStatus)) {
+            return Common.connectFailedStatus;
+          }
+        }
+        bufferedReader.close();
+        read.close();
+
+      } catch (Exception e) {
+        LOG.error(e.toString());
+      }
+    } else {
+      return Common.notFoundStatus;
+    }
+    return Common.connectFailedStatus;
+  }
+
+
   @PostMapping(value = "/api/nodeInfo")
-  public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
+  public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) throws IOException, InterruptedException {
     refresh();
+    int status = 0;
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
@@ -134,6 +171,25 @@ public class NodeController {
             (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
+    int sshConnectType = data.getOrDefault("sshConnectType", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshConnectType", "1"))) :
+            (int)data.getOrDefault("sshConnectType", 1);
+    String publicKey = (String) data.getOrDefault("publicKey", "");
+    JSONObject statusObj = new JSONObject();
+    //1 password, 2 key
+    if(sshConnectType == 1){
+
+    }else if(sshConnectType == 2){
+      BashExecutor bashExecutor = new BashExecutor();
+      bashExecutor.callSSHScript(ip, port, userName);
+      String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+      if(sshStatus.equals(Common.connectFailedStatus)) {
+        status = 1;
+        statusObj.put("status",status);
+        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+      }
+    }
+
 
     Util util = new Util();
     util.parseConfig();
@@ -180,15 +236,21 @@ public class NodeController {
     JSONObject newNode = new JSONObject();
     if (isSR) {
       String path;
-      String publicKey;
+      String publicKeyCheck;
       try {
         path = Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
         refresh();
         if (isEckey) {
-          publicKey = private2AddressEckey(hexs2Bytes(privateKey.getBytes()));
+          publicKeyCheck = private2AddressEckey(hexs2Bytes(privateKey.getBytes()));
         } else {
-          publicKey = private2AddressSm2(hexs2Bytes(privateKey.getBytes()));
+          publicKeyCheck = private2AddressSm2(hexs2Bytes(privateKey.getBytes()));
         }
+        if(!publicKey.equals(publicKeyCheck)){
+          status = 2;
+          statusObj.put("status",status);
+          return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+        }
+
         newNode.put(Common.privateKeyFiled, path);
         newNode.put(Common.publicKeyFiled, publicKey);
       } catch (CipherException | IOException e) {
@@ -211,6 +273,7 @@ public class NodeController {
     newNode.put(Common.sshPortFiled, sshPort);
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
+    newNode.put(Common.sshConnectTypeField, sshConnectType);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, ipList);
   }

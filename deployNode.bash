@@ -1,67 +1,83 @@
 #!/usr/bin/env bash
 APP="java-tron-1.0.0"
 
-echo "Start ssh deployment"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
 
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron"
 result=`ssh -p $2 $3@$1 "mkdir java-tron" 2>&1`
 if [ -z $result ];then
-  echo "made the directory"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] made the directory"
 else
-  echo "ssh connect failed, ${finish}"
-  echo $result
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ssh connect failed, ${finish}"
   exit
 fi
 
-echo "uploading java-tron zip"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] uploading java-tron zip"
 result=`scp -P $2  $4 $3@$1:./java-tron/  2>&1`
 if [ -z $result ];then
- echo "already uploading java-tron zip"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+ echo "[$time] already uploading java-tron zip"
 else
-  echo "update java-tron zip failed, ${finish}"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] update java-tron zip failed, ${finish}"
   exit
 fi
 
-echo "uploading config.conf"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] uploading config.conf"
 result=`scp -P $2 $5 $3@$1:./java-tron/config.conf 2>&1`
 if [ -z $result ];then
-  echo "already uploading config"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] already uploading config"
 else
-  echo "update config failed, ${finish}"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] update config failed, ${finish}"
   exit
 fi
 
 result=`ssh -p $2 $3@$1 "cd java-tron&&unzip -o ./${APP}.zip > /dev/null"`
-echo $result
 if [ "$?" != "0" ]; then
-   echo "unzip failed, unzip cmd is not installed or java-tron zip upload failed, ${finish}"
-   echo $result
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] unzip failed, unzip cmd is not installed or java-tron zip upload failed, ${finish}"
    exit
+else
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] java-tron zip unzip success"
 fi
 
 scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
 
 if [ $6 != "null" ]; then
-  echo "uploading plugin"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] uploading plugin"
   result=`scp -P $2 $6 $3@$1:./java-tron/$APP/lib/ 2>&1`
 
   if [ -z $result ];then
-    echo "already upload plugin"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] already upload plugin"
   else
-    echo "update plugin failed"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] update plugin failed"
     exit
   fi
 fi
 
 if [ -z $8 ] ; then
-   echo "deploy FullNode"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"
 else
-   echo "deploy WitnessNode"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] deploy WitnessNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${8}"
 fi
 
 rm -rf $5
-echo  "${finish}"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo  "[$time] ${finish}"
