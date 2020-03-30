@@ -96,9 +96,15 @@ public class Common {
 
   public static final String deployFailedStatus = "deploying";
 
+  public static final String connectFailedStatus = "ssh connect failed";
+
   public static final String pid = "start java-tron with pid";
 
   public static final String encoding = "GBK";
+
+  public static final String expectIsNotInstalled = "expect is not installed";
+
+  public static final String canNotFindZip = "can't find java-tron zip";
 
   public static final String writeJsonFileFailed = "write json file failed";
 

@@ -5,13 +5,47 @@ Program="program.FullNode"
 echo "Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
+
+##################################
+#检查是否安装expect指令
+which expect
+if [ $? != 0 ]; then
+echo "expect is not installed, ${finish}"
+exit
+fi
+
+##################################
+#校验IP，密码正确性，是否成功连接目标主机
+/usr/bin/expect <<lsp
+log_user 0
+spawn ssh -p $2 $3@$1 -o "${noCheck}"
+expect {
+"*assword*" {
+send "$7\r"
+expect {
+"]*"
+{ send "exit\r" }
+timeout { send_error "expect_timeout\n";exit 1 }
+}
+}
+timeout { send_error "expect_timeout\n";exit 1 }
+}
+expect eof
+lsp
+
+if [ $? = 0 ];then
+echo "ssh connect success"
+else
+echo "ssh connect failed, ${finish}"
+exit
+fi
 ###################################
 #echo "删除java-tron"
 /usr/bin/expect <<lsp
 log_user 0
 spawn ssh -p $2 $3@$1 -o "${noCheck}"
 expect {
-"Password*" {
+"*assword*" {
 send "$7\r"
 expect "]*"
 send "rm -rf java-tron\r"
@@ -26,7 +60,6 @@ if [ $? = 0 ];then
 echo "rm java-tron done"
 else
 echo "ssh connect failed, ${finish}"
-echo "error"
 exit
 fi
 
@@ -36,7 +69,7 @@ fi
 log_user 0
 spawn ssh -p $2 $3@$1
 expect {
-"Password*" {
+"*assword*" {
 send "$7\r"
 expect "]*"
 send "mkdir java-tron\r"
@@ -56,6 +89,15 @@ exit
 fi
 
 ###################################
+#echo "检验压缩包是否存在"
+echo "check java-tron zip path"
+find $4
+if [ $? != 0 ];then
+echo "can't find java-tron zip, ${finish}"
+exit
+fi
+
+###################################
 #echo "传压缩包"
 echo "uploading java-tron zip"
 
@@ -64,7 +106,7 @@ log_user 0
 #set timeout 3600
 spawn scp -P $2  $4 $3@$1:./java-tron/
 expect {
-"Password*" {
+"*assword*" {
 send "$7\r"
 #expect "]*"
 #send "exit\r"
@@ -91,7 +133,7 @@ log_user 0
 #set timeout 3600
 spawn scp -P $2 $5 $3@$1:./java-tron/config.conf
 expect {
-"Password*" {
+"*assword*" {
 send "$7\r"
 #expect "]*"
 #send "exit\r"
@@ -116,7 +158,7 @@ log_user 0
 #set timeout 3600
 spawn ssh -p $2 $3@$1
 expect {
-"Password*" {
+"*assword*" {
 send "$7\r"
 expect "]*"
 send "cd java-tron&&unzip -o ./${APP}.zip > /dev/null \r"
@@ -142,7 +184,7 @@ log_user 0
 #set timeout 3600
 spawn scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
 expect {
-"Password*" {
+"*assword*" {
 send "$7\r"
 #expect "]*"
 #send "exit\r"
@@ -170,7 +212,7 @@ if [ $6 != "null" ]; then
   #set timeout 3600
   spawn scp -P $2 $6 $3@$1:./java-tron/$APP/lib/
   expect {
-  "Password*" {
+  "*assword*" {
   send "$7\r"
   #expect "]*"
   #send "exit\r"
@@ -198,7 +240,7 @@ if [ -z $9 ]; then
    #set timeout 3600
    spawn ssh -p $2 $3@$1
    expect {
-   "Password*" {
+   "*assword*" {
    send "$7\r"
    expect "]*"
    send "cd java-tron&& bash start.sh > start.log \r"
@@ -222,7 +264,7 @@ else
    log_user 0
    spawn ssh -p $2 $3@$1
    expect {
-   "Password*" {
+   "*assword*" {
    send "$7\r"
    expect "]*"
    send "cd java-tron&& bash start.sh ${9} > start.log\r"
@@ -244,7 +286,7 @@ fi
    log_user 0
    spawn scp -p $2 $3@$1:./java-tron/start.log .
    expect {
-   "Password*" {
+   "*assword*" {
    send "$7\r"
    }
    timeout { send_error "expect_timeout\n";exit 1 }
@@ -257,6 +299,7 @@ lsp
    fi
 
    tail -1 start.log
+   rm -rf start.log
 ###################################
 rm -rf $5
 echo  "${finish}"

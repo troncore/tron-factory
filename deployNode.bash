@@ -55,7 +55,6 @@ if [ $6 != "null" ]; then
   fi
 fi
 
-echo $8
 if [ -z $8 ] ; then
    echo "deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"

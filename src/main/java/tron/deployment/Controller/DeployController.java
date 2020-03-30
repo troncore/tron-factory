@@ -93,6 +93,15 @@ public class DeployController {
                             return Common.deployFinishStatus;
                         }
                     }
+                    if(lineTxt.contains(Common.expectIsNotInstalled)){
+                        return Common.expectIsNotInstalled;
+                    }
+                    if (lineTxt.contains(Common.connectFailedStatus)) {
+                        return Common.connectFailedStatus;
+                    }
+                    if(lineTxt.contains(Common.canNotFindZip)){
+                        return Common.canNotFindZip;
+                    }
 
                 }
 
@@ -146,7 +155,7 @@ public class DeployController {
     }
 
     @GetMapping(value = "/api/deployNode")
-    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) throws InterruptedException {
+    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -214,7 +223,15 @@ public class DeployController {
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
                 if(status.equals(Common.deployFinishStatus)) isDeployed = true;
-
+                if(status.equals(Common.expectIsNotInstalled)){
+                    return new Response(ResultCode.FAILED.code, "expect is not installed").toJSONObject();
+                }
+                if(status.equals(Common.connectFailedStatus)){
+                    return new Response(ResultCode.UNAUTHORIZED.code, "ssh connect failed").toJSONObject();
+                }
+                if(status.equals(Common.canNotFindZip)){
+                    return new Response(ResultCode.UNAUTHORIZED.code, "can't find java-tron zip").toJSONObject();
+                }
                 NodeController nc  = new NodeController();
                 JSONObject nodeOld = Util.getNodeInfo(nodes, id);
                 nodeOld.put(Common.isDeployedFiled, isDeployed);
