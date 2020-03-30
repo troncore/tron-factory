@@ -21,6 +21,18 @@ else
   exit
 fi
 
+###################################
+#echo "检验压缩包是否存在"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] check java-tron-1.0.0.zip path"
+find $4  > /dev/null
+if [ $? != 0 ];then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] can't find java-tron-1.0.0.zip, ${finish}"
+exit
+fi
+
+###################################
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading java-tron-1.0.0.zip"
 result=`scp -P $2  $4 $3@$1:./java-tron/  2>&1`

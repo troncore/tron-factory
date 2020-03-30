@@ -127,6 +127,32 @@ public class DeployController {
 //		return false;
 //	}
 
+    private String checkZipPath(String path) {
+        File file = new File(path);
+        if (file.isFile() && file.exists()) {
+            try {
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), Common.encoding);
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt;
+
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    if (lineTxt.contains(Common.canNotFindZip)) {
+                        return Common.canNotFindZip;
+                    }
+                }
+                bufferedReader.close();
+                read.close();
+
+            } catch (Exception e) {
+                LOG.error(e.toString());
+            }
+        } else {
+            return Common.notFoundStatus;
+        }
+        return Common.connectFailedStatus;
+    }
+
     @PostMapping(value = "/api/oneClick")
     public JSONObject startDeployment() {
         int currentTime = (int) (System.currentTimeMillis() / 1000);
@@ -166,6 +192,12 @@ public class DeployController {
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
+        BashExecutor bashExecutor = new BashExecutor();
+        bashExecutor.callZipPathScript(filePath);
+        String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
+        if(checkZipPath.equals(Common.canNotFindZip)) {
+            return new Response(ResultCode.OK.code, Common.canNotFindZip).toJSONObject();
+        }
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -217,7 +249,7 @@ public class DeployController {
                 String userName = (String) node.get(Common.userNameFiled);
                 String sshPassword = (String) node.get(Common.sshPasswordFiled);
                 String serviceType = (String) node.get(Common.serviceTypeFiled);
-                BashExecutor bashExecutor = new BashExecutor();
+//                BashExecutor bashExecutor = new BashExecutor();
                 String plugin = "null";
                 if (json.containsKey(Common.customTransactionFiled)
                         && ((String) json.get(Common.customTransactionFiled)).length() != 0) {

@@ -78,6 +78,8 @@ public class Common {
 
   public static final String sshLogFormat = "logs/sshTemp.log" ;
 
+  public static final String ZipPathFormat = "logs/zipPath.log" ;
+
   public static final String allNodesField = "allNodes";
 
   public static final String serviceTypeFiled = "serviceType";
@@ -111,7 +113,7 @@ public class Common {
 
   public static final String expectIsNotInstalled = "expect is not installed";
 
-  public static final String canNotFindZip = "can't find java-tron zip";
+  public static final String canNotFindZip = "can't find java-tron-1.0.0.zip";
 
   public static final String writeJsonFileFailed = "write json file failed";
 

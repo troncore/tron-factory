@@ -60,4 +60,21 @@ public class BashExecutor {
             e.printStackTrace();
         }
     }
+
+    public void callZipPathScript(String filePath){
+
+        try {
+            String absolutePath = System.getProperty("user.dir").concat("/sshConnect.bash");
+            String[] cmdArray = {filePath};
+            String logName = String.format("> ".concat(Common.ZipPathFormat));
+            cmdArray = ArrayUtils.add(cmdArray, logName);
+            String cmd = StringUtils.join(cmdArray, " ");
+            Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

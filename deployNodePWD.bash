@@ -256,7 +256,7 @@ if [ -z $9 ]; then
    echo "[$time] deploy FullNode"
    /usr/bin/expect <<lsp
    log_user 0
-   #set timeout 3600
+   set timeout 20
    spawn ssh -p $2 $3@$1
    expect {
    "*assword*" {
@@ -281,7 +281,7 @@ else
    echo "[$time] deploy WitnessNode"
 
    /usr/bin/expect <<lsp
-   #set timeout 3600
+   set timeout 20
    log_user 0
    spawn ssh -p $2 $3@$1
    expect {
