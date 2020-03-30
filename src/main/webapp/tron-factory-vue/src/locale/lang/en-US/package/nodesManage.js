@@ -14,7 +14,6 @@ export default {
   unDeploy: 'Pending',
   deployed: 'Success',
   javaTronVersion: 'Version of java-tron',
-  tronConvertTool: 'Key Convert Tool',
 
   addNodeSuccess: 'Successfully added',
   addNodeFail: 'Failed added',
@@ -28,9 +27,8 @@ export default {
   remoteDeploy: 'Remote Deployment',
   sshPassword: 'SSH-Password',
   sshPort: 'SSH-Port',
-  SRNode: 'SR(witness node)',
-  syncCheck: 'SyncCheck',
-  tronConvertTool: 'Key generation tool',
+  SRNode: 'SR node(witness node)',
+  syncCheck: 'needSyncCheck',
 
   pleaseAddNode: 'Please add at least one node',
   allNodeDeployed: 'All nodes are deployed ',
@@ -44,6 +42,14 @@ export default {
   deployComplete: 'Succcessfully deployed',
   deployFail: 'Failed deployed',
 
+  sshConnectType: '登录方式',
+  passwordConnect: '口令登录',
+  keyConnect: '密钥登录',
+  addNodeTipsTitle: '提示',
+  saveAddressPriKey: '请保管好你的地址和私钥，节点创建完成后丢失将无法找回',
+  inputLater: '稍后再说',
+  inputNow: '立即填写',
+
   helpTips: {
     crypto: 'Signature Algorithm can not be changed after nodes added',
     id: 'ID is the unique identifier',
@@ -52,12 +58,14 @@ export default {
     sshPort: 'SSH Port',
     ip: 'FullNode IP',
     port: 'FullNode Port',
-    isSR: 'ON for a witness node, OFF for a bare FullNode',
+    isSR: 'SR is witnessnode, ON for a witness node, OFF for a bare FullNode',
     needSyncCheck: 'The infromation of each node on the chain is regularly synchronized if SyncCheck is ON. One chain must have one SR with SyncCheck OFF',
-    url: 'Witness URL',
-    voteCount: 'Vote Count',
+    url: 'Official website of witness node',
+    voteCount: 'voteCount',
     publicKey: 'Address',
     privateKey: 'Private Key(256-bits, hex encoded)',
+    sshConnectFail: 'SSH无法连接，请重新配置',
+    addressNotPrikey: '你的地址与私钥不相匹配',
     deployFile: 'Deploy requires local release file path like /Users/xxx/xxx/java-tron-1.0.0.zip',
   },
 

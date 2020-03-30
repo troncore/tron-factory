@@ -12,6 +12,7 @@ export default {
     account: '请输入邮箱',
     email: '请输入邮箱',
     password: '请输入密码',
+    emailError: '邮箱格式错误',
     emailOrPwdError: '邮箱或密码错误',
   }
 }

@@ -21,8 +21,9 @@ Mainly show the content operation steps of the one-click deployment and related 
 
 ### 3.Add node
 
-Click on the Add node in the [upper left corner](./steps/img/add_node.png) to add a Witness node and a FullNode node to the one-click chain network.
-
+Click on the Add node in the upper left corner to add a Witness node and a FullNode node to the one-click chain network.
+The server can choose local or remote deployment. Local deployment will deploy the node to the local host, and remote deployment will deploy the node to the remote server via SSH.
+  
 Required fields include：
 
 |               Required field                |                                    Explanation                                     |

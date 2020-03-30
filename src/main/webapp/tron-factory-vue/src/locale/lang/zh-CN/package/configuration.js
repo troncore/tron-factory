@@ -4,13 +4,13 @@ export default {
   customConfig: '自定义配置',
   importConfig: '导入配置文件',
 
-  genesisInfo: '创世信息',
+  genesisInfo: '创世块信息',
   baseConfig: '基础配置',
   netWorkConfig: 'HTTP/RPC 配置',
   databaseConfig: '数据库基础配置',
   p2pConfig: 'P2P 配置',
   crossChainConfig: '跨链配置',
-  moduleFunction: '模块订制化',
+  moduleFunction: '模块定制化',
 
   moreSetting: '高级配置',
 
@@ -33,12 +33,12 @@ export default {
   isNeedToUpdateAsset: '是否需要更新 assets',
 
   consensusModule: '共识模块',
-  transactionModule: '交易模块',
-  customTransactionModule: '自定义交易模块',
+  transactionModule: 'Transaction模块',
+  customTransactionModule: '自定义Transaction模块',
   consensusModuleSaveSuccess: '保存共识模块成功',
-  transactionModuleSaveSuccess: '保存交易模块成功',
+  transactionModuleSaveSuccess: '保存Transaction模块成功',
 
-  assetSaveSuccess: '保存创世信息配置成功',
+  assetSaveSuccess: '保存创世块信息配置成功',
   baseSaveSuccess: '保存基础配置成功',
   networkSaveSuccess: '保存网络链接配置成功',
   databaseSaveSuccess: '保存数据库配置成功',
@@ -62,7 +62,7 @@ export default {
     rpcPort: 'FullNode RPC 端口',
     rpcSolidityPort: 'FullNode RPC Solidity 端口',
 
-    p2pVersion: 'P2P 版本号',
+    p2pVersion: 'P2P节点版本号',
     listenPort: '监听端口',
     seedNodeList: '初始种子节点列表',
     maxActiveNodes: '最大活跃节点数',
@@ -82,8 +82,8 @@ export default {
     specialPlaceholder: '特定网络 p2pversion 不可使用',
     validTwoDecimal: '精度不对',
 
-    checkCustomTransaction: '请勾选自定义交易模块',
-    inputCustomTransaction: '请填写自定义交易模块路径（以.jar结束）',
+    checkCustomTransaction: '请勾选自定义Transaction模块',
+    inputCustomTransaction: '请填写自定义Transaction模块路径（以.jar结束）',
     pathEndJAR: '请填写以.jar为结尾的路径',
   },
 }

@@ -62,7 +62,7 @@ export default {
     rpcPort: 'FullNode RPC Port',
     rpcSolidityPort: 'FullNode Solidity RPC Port',
 
-    p2pVersion: 'P2P Version Number',
+    p2pVersion: 'P2P Version',
     listenPort: 'Listen Port',
     seedNodeList: 'Initial Seed Nodes List',
     maxActiveNodes: 'Maximum Active Nodes Number',
