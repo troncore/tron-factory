@@ -382,6 +382,7 @@
         }
 
         let remoteParams = {
+          sshConnectType: this.form.sshConnectType,
           userName: this.form.userName,
           sshPassword: this.form.sshPassword,
           port: this.form.port,
