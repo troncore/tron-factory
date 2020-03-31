@@ -1,7 +1,7 @@
 <template>
   <div class="box-view database-config">
     <div class="box-body">
-      <el-form class="im-form" ref="database-config-form" :model="form" label-position="left" label-width="200px">
+      <el-form ref="database-config-form" :model="form" label-position="left" label-width="200px">
 
         <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="storage_db_engine">
           <el-radio-group v-model="form.storage_db_engine">
@@ -89,5 +89,16 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 .database-config {
+  .el-form {
+    /deep/.el-form-item {
+      margin-bottom: 10px;
+      &:last-child {
+        margin-bottom: 10px;
+      }
+      .el-form-item__label {
+        color: font-color();
+      }
+    }
+  }
 }
 </style>
