@@ -103,7 +103,7 @@ public class Common {
 
   public static final String deployFailedStatus = "deploying";
 
-  public static final String connectSuccessStatus ="ssh connect success";
+  public static final String connectSuccessStatus ="ssh connect successfully";
 
   public static final String connectFailedStatus = "ssh connect failed";
 
@@ -117,7 +117,7 @@ public class Common {
 
   public static final String writeJsonFileFailed = "write json file failed";
 
-  public static final String updateConfigFileFailed = "update config file failed";
+  public static final String updateConfigFileFailed = "upload config failed";
 
   public static final String invalidBase58CheckAddress = "Invalid Base58Check Address";
 

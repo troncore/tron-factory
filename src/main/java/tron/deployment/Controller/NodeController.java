@@ -314,8 +314,8 @@ public class NodeController {
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
     int sshConnectType = data.getOrDefault("sshConnectType", "") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("sshConnectType", "1"))) :
-            (int)data.getOrDefault("sshConnectType", 1);
+            (Integer.parseInt((String)data.getOrDefault("sshConnectType", "0"))) :
+            (int)data.getOrDefault("sshConnectType", 0);
     String publicKey = (String) data.getOrDefault("publicKey", "");
     JSONObject statusObj = new JSONObject();
     //1 password, 2 key

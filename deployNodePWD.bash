@@ -37,7 +37,7 @@ lsp
 
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] ssh connect success"
+echo "[$time] ssh connect successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] $1: ssh connect failed, ${finish}"
@@ -127,7 +127,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploaded java-tron-1.0.0.zip"
+echo "[$time] upload java-tron-1.0.0.zip successfully"
 else
 echo $?
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -156,7 +156,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploaded config"
+echo "[$time] upload config successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] upload config failed, ${finish}"
@@ -184,7 +184,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] unzip java-tron-1.0.0.zip success"
+echo "[$time] unzip java-tron-1.0.0.zip successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed, ${finish}"
@@ -211,7 +211,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploaded start.sh"
+echo "[$time] upload start.sh successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] upload start.sh failed, ${finish}"
@@ -241,7 +241,7 @@ if [ $6 != "null" ]; then
 lsp
   if [ $? = 0 ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] already uploaded plugin"
+  echo "[$time] upload plugin successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload plugin failed"

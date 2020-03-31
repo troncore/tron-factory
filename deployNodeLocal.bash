@@ -30,13 +30,13 @@ time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading java-tron-1.0.0.zip"
 cp $4 ~/java-tron/  2>&1
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploaded java-tron-1.0.0.zip"
+echo "[$time] upload java-tron-1.0.0.zip successfully"
 
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading config.conf"
 cp $5 ~/java-tron/config.conf 2>&1
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] already uploaded config"
+echo "[$time] upload config successfully"
 
 cd ~/java-tron&&unzip -o ${APP}.zip > /dev/null
 if [ "$?" != "0" ]; then
@@ -54,7 +54,7 @@ if [ $6 != "null" ]; then
   echo "[$time] uploading plugin"
   cp $6 ~/java-tron/$APP/lib/ 2>&1
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] already uploaded plugin"
+  echo "[$time] upload plugin successfully"
 fi
 
 if [ -z $8 ]; then

@@ -38,7 +38,7 @@ echo "[$time] uploading java-tron-1.0.0.zip"
 result=`scp -P $2  $4 $3@$1:./java-tron/  2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
- echo "[$time] already uploaded java-tron-1.0.0.zip"
+ echo "[$time] upload java-tron-1.0.0.zip successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload java-tron-1.0.0.zip failed, ${finish}"
@@ -50,7 +50,7 @@ echo "[$time] uploading config.conf"
 result=`scp -P $2 $5 $3@$1:./java-tron/config.conf 2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] already uploaded config"
+  echo "[$time] upload config successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload config failed, ${finish}"
@@ -64,7 +64,7 @@ if [ "$?" != "0" ]; then
    exit
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] unzip java-tron-1.0.0.zip success"
+  echo "[$time] unzip java-tron-1.0.0.zip successfully"
 fi
 
 scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
@@ -76,7 +76,7 @@ if [ $6 != "null" ]; then
 
   if [ -z $result ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] already uploaded plugin"
+    echo "[$time] upload plugin successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
     echo "[$time] upload plugin failed"
