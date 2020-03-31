@@ -22,8 +22,8 @@
 
           <el-form-item prop="sshConnectType">
             <span slot="label">{{ $t('nodesManage.sshConnectType') }}</span>
-            <el-radio v-model="form.sshConnectType" :label="1">{{ $t('nodesManage.passwordConnect') }}</el-radio>
-            <el-radio v-model="form.sshConnectType" :label="2">{{ $t('nodesManage.keyConnect') }}</el-radio>
+            <el-radio v-model="form.sshConnectType" :label="1" :disabled="isView">{{ $t('nodesManage.passwordConnect') }}</el-radio>
+            <el-radio v-model="form.sshConnectType" :label="2" :disabled="isView">{{ $t('nodesManage.keyConnect') }}</el-radio>
           </el-form-item>
           <br/>
           <el-form-item prop="userName">
