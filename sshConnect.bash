@@ -8,7 +8,7 @@ ssh -p $2 $3@$1 exit
 #result=`ssh -p $2 $3@$1 "mkdir java-tron" 2>&1`
 #echo $?
 if [ $? = 0 ];then
-  echo "ssh connect success"
+  echo "ssh connect successfully"
 else
   echo "ssh connect failed"
   exit
