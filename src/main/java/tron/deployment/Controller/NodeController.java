@@ -199,7 +199,8 @@ public class NodeController {
         statusObj.put("status",status);
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
       }
-    }else if(sshConnectType == 2){
+    }
+    if(sshConnectType == 2){
       BashExecutor bashExecutor = new BashExecutor();
       bashExecutor.callSSHScript(ip, port, userName);
       String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
@@ -326,7 +327,8 @@ public class NodeController {
         statusObj.put("status",status);
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
       }
-    }else if(sshConnectType == 2){
+    }
+    if(sshConnectType == 2){
       BashExecutor bashExecutor = new BashExecutor();
       bashExecutor.callSSHScript(ip, port, userName);
       String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));

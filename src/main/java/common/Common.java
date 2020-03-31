@@ -113,7 +113,7 @@ public class Common {
 
   public static final String expectIsNotInstalled = "expect is not installed";
 
-  public static final String canNotFindZip = "can't find java-tron-1.0.0.zip";
+  public static final String canNotFindZip = "Please upload java-tron.1.0.0.zip generated after java-tron build";
 
   public static final String writeJsonFileFailed = "write json file failed";
 
