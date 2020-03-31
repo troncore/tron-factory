@@ -271,7 +271,7 @@ public class DeployController {
                     return new Response(ResultCode.UNAUTHORIZED.code, ip+": ssh connect failed").toJSONObject();
                 }
                 if(status.equals(Common.canNotFindZip)){
-                    return new Response(ResultCode.UNAUTHORIZED.code, "Please upload java-tron.1.0.0.zip generated after java-tron build").toJSONObject();
+                    return new Response(ResultCode.UNAUTHORIZED.code, "path is not found or zip is error!").toJSONObject();
                 }
                 NodeController nc  = new NodeController();
                 JSONObject nodeOld = Util.getNodeInfo(nodes, id);
