@@ -81,12 +81,7 @@
           <br>
 
           <el-form-item prop="voteCount">
-            <span slot="label">
-              voteCount
-              <el-tooltip effect="dark" :content="$t('nodesManage.helpTips.voteCount')" placement="top">
-                <i class="fa fa-question-circle-o"></i>
-              </el-tooltip>
-            </span>
+            <span slot="label">voteCount</span>
             <el-input v-model.trim="form.voteCount" type="number" tabindex="27" :maxlength="20" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')"></el-input>
           </el-form-item>
           <br />
@@ -315,7 +310,7 @@
             this.loading = true
             if (!(await this.initParams(params))) return
 
-            if (params.publicKey !== this.tempPublicKey || params.privateKey) {
+            if (params.isSR && params.publicKey !== this.tempPublicKey || params.privateKey) {
               this.$confirm(this.$t('nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
                 cancelButtonText: this.$t('base.cancel'),
                 confirmButtonText: this.$t('base.confirm'),

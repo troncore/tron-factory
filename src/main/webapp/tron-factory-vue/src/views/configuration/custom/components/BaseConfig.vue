@@ -17,28 +17,20 @@
           <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <div class="more-form">
-          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i> {{ $t('configuration.moreSetting') }}</el-button>
-        </div>
+        <el-form-item prop="block_proposalExpireTime">
+          <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configuration.helpTips.blockProposalExpireTime') }}: ms)</i></span>
+          <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+        </el-form-item>
 
-        <el-collapse-transition>
-          <div v-if="showMore">
-            <el-form-item prop="block_proposalExpireTime">
-              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configuration.helpTips.blockProposalExpireTime') }}: ms)</i></span>
-              <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
+        <el-form-item prop="node_blockProducedTimeOut">
+          <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configuration.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100%)</i></span>
+          <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+        </el-form-item>
 
-            <el-form-item prop="node_blockProducedTimeOut">
-              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configuration.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100%)</i></span>
-              <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="node_minParticipationRate">
-              <span slot="label">participationRate <i class="help-tips">({{ $t('configuration.helpTips.nodeMinParticipationRate') }})</i></span>
-              <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
-          </div>
-        </el-collapse-transition>
+        <el-form-item prop="node_minParticipationRate">
+          <span slot="label">participationRate <i class="help-tips">({{ $t('configuration.helpTips.nodeMinParticipationRate') }})</i></span>
+          <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+        </el-form-item>
       </el-form>
     </div>
 

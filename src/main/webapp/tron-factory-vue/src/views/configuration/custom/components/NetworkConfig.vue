@@ -9,7 +9,7 @@
         </div>
         <el-form-item prop="node_maxHttpConnectNumber">
           <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') }})</i></span>
-          <el-input v-model.trim="form.node_maxHttpConnectNumber" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" max="200" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="node_http_fullNodePort">
           <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configuration.helpTips.httpFullNodePort') }})</i></span>
@@ -83,7 +83,7 @@ export default {
         }
       }
       const validMaxNum = (rule, value, callback) => {
-        if (value > 2147483647) {
+        if (value > 200) {
           callback(new Error(this.$t('configuration.valid.maxNumberValue')))
         } else {
           callback()

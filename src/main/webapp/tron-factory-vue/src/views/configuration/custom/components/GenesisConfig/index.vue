@@ -16,7 +16,7 @@
       <div class="asset-list">
         <div class="asset-title">{{ $t('configuration.witnessNodeInfo') }}<span class="numbers">（{{ genesisBlockWitnesses.length }}）</span></div>
         <div class="asset-item" v-for="(item, index) in genesisBlockWitnesses" :key="index">
-          <el-button class="op-btn" @click="handleViewWitness(item, index)">{{ item.address }}</el-button>
+          <el-button class="op-btn" @click="handleViewWitness(item, index)"><i class="el-icon-view"></i> {{ item.address }}</el-button>
         </div>
       </div>
     </div>
