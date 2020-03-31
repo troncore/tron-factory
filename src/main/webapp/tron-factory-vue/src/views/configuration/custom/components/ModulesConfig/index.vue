@@ -4,7 +4,9 @@
     <div class="box-card">
       <div class="card-header">{{ $t('configuration.consensusModule') }}</div>
       <div class="consensus-list">
-        <span class="consensus-item">DPoS</span>
+        <el-select v-model="consensus" filterable placeholder="请选择">
+          <el-option label="DPoS" value="dpos"></el-option>
+        </el-select>
       </div>
     </div>
 
@@ -54,7 +56,7 @@ export default {
         transaction: [],
         customTransaction: '',
       },
-      consensus: '',
+      consensus: [],
       checkCustomTransaction: false,
       transactionList: require('./transactionModuleList.json') || [],
       loading: false,
