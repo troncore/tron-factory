@@ -21,7 +21,7 @@ echo "[$time] check java-tron-1.0.0.zip path"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] can't find java-tron-1.0.0.zip, ${finish}"
+echo "[$time] Please upload java-tron.1.0.0.zip generated after java-tron build, ${finish}"
 exit
 fi
 
