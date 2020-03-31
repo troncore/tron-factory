@@ -4,7 +4,7 @@
     <div class="box-card">
       <div class="card-header">{{ $t('configuration.consensusModule') }}</div>
       <div class="consensus-list">
-        <el-select v-model="consensus" filterable placeholder="请选择">
+        <el-select v-model="consensus" placeholder="请选择">
           <el-option label="DPoS" value="dpos"></el-option>
         </el-select>
       </div>

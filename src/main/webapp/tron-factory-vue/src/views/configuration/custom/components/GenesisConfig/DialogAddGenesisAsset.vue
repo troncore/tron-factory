@@ -29,7 +29,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="form.accountType" filterable clearable :placeholder="$t('base.pleaseSelect')">
+          <el-select v-model="form.accountType" clearable :placeholder="$t('base.pleaseSelect')">
             <el-option
               v-for="item in accountTypeOptions"
               :key="item.value"
