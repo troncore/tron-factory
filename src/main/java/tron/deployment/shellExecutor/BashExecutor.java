@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType, String dbjarPath){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType, String dbCustom){
 
         try {
             String absolutePath = "";
@@ -27,7 +27,7 @@ public class BashExecutor {
                 absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
             }
             String configPath = String.format("%s_%s", Common.configFiled, id.toString());
-            String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword, id.toString()};
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword, id.toString(), dbCustom};
             if (privateKey.length() != 0) {
                 cmdArray = ArrayUtils.add(cmdArray, privateKey);
             }
@@ -60,12 +60,30 @@ public class BashExecutor {
         }
     }
 
+    //检查用户上传的zip包路径是否正确
     public void callZipPathScript(String filePath){
 
         try {
-            String absolutePath = System.getProperty("user.dir").concat("/sshConnect.bash");
-            String[] cmdArray = {filePath};
+            String absolutePath = System.getProperty("user.dir").concat("/checkZipPath.bash");
+            String[] cmdArray = {absolutePath, filePath};
             String logName = String.format("> ".concat(Common.ZipPathFormat));
+            cmdArray = ArrayUtils.add(cmdArray, logName);
+            String cmd = StringUtils.join(cmdArray, " ");
+            Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //检查用户上传的自定义jar包路径是否正确
+    public void callDBJarPathScript(String filePath){
+
+        try {
+            String absolutePath = System.getProperty("user.dir").concat("/checkDBJarPath.bash");
+            String[] cmdArray = {absolutePath, filePath};
+            String logName = String.format("> ".concat(Common.dbJarPathFormat));
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");
             Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});

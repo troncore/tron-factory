@@ -82,6 +82,8 @@ public class Common {
 
   public static final String ZipPathFormat = "logs/zipPath.log" ;
 
+  public static final String dbJarPathFormat = "logs/dbJarPath.log" ;
+
   public static final String allNodesField = "allNodes";
 
   public static final String serviceTypeFiled = "serviceType";
@@ -116,6 +118,12 @@ public class Common {
   public static final String expectIsNotInstalled = "expect is not installed";
 
   public static final String canNotFindZip = "Please upload java-tron.1.0.0.zip generated after java-tron build";
+
+  public static final String canNotFindJar = "can't find jar";
+
+  public static final String findZip = "find java-tron-1.0.0.zip successfully";
+
+  public static final String findJar = "find jar successfully";
 
   public static final String writeJsonFileFailed = "write json file failed";
 

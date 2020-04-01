@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 APP="java-tron-1.0.0"
-
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
 finish="deploy finish"
@@ -67,6 +66,25 @@ else
   echo "[$time] unzip java-tron-1.0.0.zip successfully"
 fi
 
+############################################################
+##远程chainbase.jar路径
+chainbasePath=`ssh -p $2 $3@$1 "cd java-tron/java-tron-1.0.0/lib&&find chainbase*"`
+#用户自定义数据库jar包路径
+dbCustom=$8
+dbPath=${dbCustom##*/}
+
+#上传用户自定义jar包
+result=`scp -P $2 $8 $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+if [ -z $result ];then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+ echo "[$time] upload ${dbPath} successfully"
+else
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] upload ${dbPath} failed, ${finish}"
+  exit
+fi
+############################################################
+
 scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
 
 if [ $6 != "null" ]; then
@@ -84,14 +102,14 @@ if [ $6 != "null" ]; then
   fi
 fi
 
-if [ -z $8 ] ; then
+if [ -z $9 ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy WitnessNode"
-   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${8}"
+   ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${9}"
 fi
 
 rm -rf $5

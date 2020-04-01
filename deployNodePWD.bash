@@ -192,6 +192,73 @@ exit
 fi
 
 ###################################
+
+#获取原chainbase.java名字，并保存在远程服务器~/java-tron/dbJarName文件中
+/usr/bin/expect <<lsp
+log_user 0
+#set timeout 3600
+spawn ssh -p $2 $3@$1
+expect {
+"*assword*" {
+send "$7\r"
+expect "]*"
+send "cd java-tron/java-tron-1.0.0/lib&&find chainbase* >~/java-tron/dbJarName\r"
+expect "]*"
+send "exit\r"
+}
+timeout { send_error "expect_timeout\n";exit 1 }
+}
+expect eof
+lsp
+
+#将远程dbJarName文件传到本地家目录下
+/usr/bin/expect <<lsp
+log_user 0
+#set timeout 3600
+spawn scp -P $2 $3@$1:~/java-tron/dbJarName /tmp/
+expect {
+"*assword*" {
+send "$7\r"
+#expect "]*"
+#send "exit\r"
+}
+timeout { send_error "expect_timeout\n";exit 1 }
+}
+expect eof
+lsp
+
+##远程chainbase.jar路径
+chainbasePath=`cat /tmp/dbJarName`
+#用户自定义数据库jar包路径
+dbCustom=$9
+dbPath=${dbCustom##*/}
+
+/usr/bin/expect <<lsp
+log_user 0
+#set timeout 3600
+spawn scp -P $2 $9 $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath
+expect {
+"*assword*" {
+send "$7\r"
+#expect "]*"
+#send "exit\r"
+}
+timeout { send_error "expect_timeout\n";exit 1 }
+}
+expect eof
+lsp
+#上传用户自定义jar包
+#result=`scp -P $2 $9 $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+if [ $? = 0 ];then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+ echo "[$time] upload ${dbPath} successfully"
+else
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] upload ${dbPath} failed, ${finish}"
+  exit
+fi
+############################################################
+
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading start.sh"
 #echo "start脚本"
@@ -251,7 +318,7 @@ fi
 
 ###################################
 #echo "部署"
-if [ -z $9 ]; then
+if [ -z ${10} ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy FullNode"
    /usr/bin/expect <<lsp
@@ -288,7 +355,7 @@ else
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron&& bash start.sh ${9} > start.log\r"
+   send "cd java-tron&& bash start.sh ${10} > start.log\r"
    expect "]*"
    send "exit\r"
    }

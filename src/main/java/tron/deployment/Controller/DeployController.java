@@ -43,7 +43,6 @@ import tron.deployment.shellExecutor.BashExecutor;
 @Slf4j
 public class DeployController {
     protected static final Logger logger = LoggerFactory.getLogger("DeployController");
-    String dbJarPath = "";
     private String checkNodeStatus(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -140,6 +139,9 @@ public class DeployController {
                     if (lineTxt.contains(Common.canNotFindZip)) {
                         return Common.canNotFindZip;
                     }
+                    if(lineTxt.contains((Common.findZip))){
+                        return Common.findZip;
+                    }
                 }
                 bufferedReader.close();
                 read.close();
@@ -153,9 +155,9 @@ public class DeployController {
         return Common.connectFailedStatus;
     }
 
-    public void dbJarPath(String dbJarPath){
+   /* public void dbJarPath(String dbJarPath){
         this.dbJarPath = dbJarPath;
-    }
+    }*/
 
     @PostMapping(value = "/api/oneClick")
     public JSONObject startDeployment() {
@@ -260,10 +262,12 @@ public class DeployController {
                     plugin = (String) json.get(Common.customTransactionFiled);
                 }
 
+                String dbCustom = (String) json.get(Common.dbCustomFiled);
+
                 if (Objects.nonNull(privateKey)) {
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbJarPath);
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom);
                 } else {
-                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbJarPath);
+                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom);
                 }
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
