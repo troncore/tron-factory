@@ -14,6 +14,7 @@ import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromC
 //import com.google.inject.internal.cglib.core.$CodeGenerationException;
 import com.typesafe.config.Config;
 import common.Util;
+import config.*;
 import entity.AssetsEntity;
 import common.Args;
 import common.Common;
@@ -21,13 +22,6 @@ import java.util.LinkedHashMap;
 
 import org.springframework.web.bind.annotation.*;
 //import response.ResultCode;
-import config.BaseSettingConfig;
-import config.CrossChainConfig;
-import config.DBConfig;
-import config.GenesisAssetConfig;
-import config.GenesisWitnessConfig;
-import config.NetworkConfig;
-import config.P2PConfig;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -39,7 +33,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import response.Response;
-import config.ConfigGenerator;
 import response.ResultCode;
 import wallet.Wallet;
 
@@ -53,6 +46,7 @@ public class ConfigControlller {
   String chainName;
   // db
   DBConfig dbConfig;
+  String dbCustom;
 
   // p2p
   P2PConfig p2pConfig;
@@ -70,6 +64,7 @@ public class ConfigControlller {
 
   // genesisWitnessConfig
   GenesisWitnessConfig genesisWitnessConfig;
+
   private void refresh() {
     Util util = new Util();
     util.parseConfig();
@@ -89,6 +84,12 @@ public class ConfigControlller {
     chainName = (String) json.get(Common.chainNameFiled);
     baseSettingConfig = new BaseSettingConfig(Args.getBlockProducedTimeOut(config), Args.getMaintenanceTimeInterval(config),
             Args.getProposalExpireTime(config), Args.getMinParticipationRate(config));
+  }
+
+  private String dbCustomConfig() {
+    JSONObject json = readJsonFile();
+    dbCustom = (String) json.get(Common.dbCustomFiled);
+    return dbCustom;
   }
 
   private List<String> getSeedNode() {
@@ -153,7 +154,9 @@ public class ConfigControlller {
   private JSONObject getConfigJsonObject(com.typesafe.config.Config loadConfig) {
     loadConfig(loadConfig);
     JSONObject configObject = new JSONObject();
+
     JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
+    dbObject.put("storage_db_custom",dbCustomConfig());
     configObject.put("dbConfig", dbObject);
 
     JSONObject p2pObject = generateJSONObject(p2pConfig.getClass().getFields(), p2pConfig);
@@ -187,6 +190,18 @@ public class ConfigControlller {
     String dbEnine = (String) data.getOrDefault("dbEnine", "LEVELDB");
 //    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");
     boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
+
+    // 自定义数据库配置
+    String dbCustom = (String) data.getOrDefault("dbCustom", "");
+    DeployController dc = new DeployController();
+    dc.dbJarPath(dbCustom);
+//    JSONObject json = new JSONObject();
+    JSONObject json = readJsonFile();
+//    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    json.put(Common.dbCustomFiled, dbCustom);
+    if (!writeJsonFile(json)) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+    }
 
     ConfigGenerator configGenerator = new ConfigGenerator();
 //    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,

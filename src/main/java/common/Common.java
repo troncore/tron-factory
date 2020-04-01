@@ -64,6 +64,8 @@ public class Common {
 
   public static final String chainNameFiled = "chainName";
 
+  public static final String dbCustomFiled = "dbCustom";
+
   public static final String logInfoFiled = "logInfo";
 
   public static final String walletFiled = "Wallet";
