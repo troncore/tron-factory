@@ -100,6 +100,8 @@ export default {
         this.form.isOpenTransaction = res.storage_transHistory_switch
         this.form.needToUpdateAsset = res.storage_needToUpdateAsset
         this.form.dbCustom = res.storage_db_custom || ''
+
+        this.checkDBCustom = !!this.form.dbCustom
       })
     },
 
