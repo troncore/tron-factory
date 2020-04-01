@@ -6,6 +6,7 @@
       <div class="consensus-list">
         <el-select v-model="consensus" placeholder="请选择">
           <el-option label="DPoS" value="dpos"></el-option>
+          <el-option :label="`PBFT(${$t('configuration.tempNotSupport')})`" value="pbft" disabled></el-option>
         </el-select>
       </div>
     </div>

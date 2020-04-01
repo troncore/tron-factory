@@ -31,8 +31,10 @@ export default {
   isOpenTransaction: 'Transaction',
   isOpenIndexDirectory: 'Index switch opened',
   isNeedToUpdateAsset: 'Update asset',
+  dbCustomModule: 'Custom chainbase Module',
 
   consensusModule: 'Consensus Module',
+  tempNotSupport: 'Not Supported',
   transactionModule: 'Transaction Module',
   customTransactionModule: 'Custom Transaction Module',
   consensusModuleSaveSuccess: 'Saving Consensus Module Successful',
@@ -82,6 +84,8 @@ export default {
     specialPlaceholder: 'specific p2pversion is illegal',
     validTwoDecimal: 'invalid precision',
 
+    checkDBCustom: 'Please enable custom chainbase module first',
+    inputDBCustom: 'Please input custom chainbase module path (ended with .jar)',
     checkCustomTransaction: 'Please enable custom transaction module first',
     inputCustomTransaction: 'Please input custom transaction module path (ended with .jar)',
     pathEndJAR: 'Please input a path ended with .jar',

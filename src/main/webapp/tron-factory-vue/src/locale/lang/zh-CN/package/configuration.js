@@ -31,8 +31,10 @@ export default {
   isOpenTransaction: '是否打开 transaction',
   isOpenIndexDirectory: '是否打开 index 开关',
   isNeedToUpdateAsset: '是否需要更新 assets',
+  dbCustomModule: '自定义chainbase模块',
 
   consensusModule: '共识模块',
+  tempNotSupport: '暂不支持',
   transactionModule: 'Transaction模块',
   customTransactionModule: '自定义Transaction模块',
   consensusModuleSaveSuccess: '保存共识模块成功',
@@ -82,6 +84,8 @@ export default {
     specialPlaceholder: '特定网络 p2pversion 不可使用',
     validTwoDecimal: '精度不对',
 
+    checkDBCustom: '请勾选自定义chainbase模块',
+    inputDBCustom: '请填写自定义chainbase模块路径（以.jar结束）',
     checkCustomTransaction: '请勾选自定义Transaction模块',
     inputCustomTransaction: '请填写自定义Transaction模块路径（以.jar结束）',
     pathEndJAR: '请填写以.jar为结尾的路径',
