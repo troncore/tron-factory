@@ -1,7 +1,7 @@
 <template>
   <div class="box-view database-config">
     <div class="box-body">
-      <el-form ref="database-config-form" :model="form" label-position="left" label-width="200px">
+      <el-form ref="database-config-form" :model="form" :rules="formRules" label-position="left" label-width="200px">
 
         <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="storage_db_engine">
           <el-radio-group v-model="form.dbEnine">
@@ -69,6 +69,23 @@ export default {
       showContent: true,
       loading: false,
     }
+  },
+  computed: {
+    formRules() {
+      const pathEndJAR = (rule, value, callback) => {
+        if (this.checkDBCustom && !this.form.dbCustom.endsWith('.jar')) {
+          callback(new Error(this.$t('configuration.valid.pathEndJAR')))
+        } else {
+          callback()
+        }
+      }
+      return {
+        dbCustom: [
+          { required: this.checkDBCustom, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: pathEndJAR, trigger: 'blur', },
+        ]
+      }
+    },
   },
 
   created () {

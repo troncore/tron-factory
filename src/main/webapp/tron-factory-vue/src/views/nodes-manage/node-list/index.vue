@@ -1,9 +1,20 @@
 <template>
   <div class="node-list">
+    <div class="form-item">
+      <span class="label">
+        {{$t('nodesManage.encryption')}}<el-tooltip effect="dark" :content="$t('nodesManage.helpTips.crypto')" placement="top"><i class="fa fa-question-circle-o" style="margin: 0 5px;"></i> </el-tooltip>:
+      </span>
+      <el-radio-group v-model="form.crypto" :disabled="!!tableData.length" @change="handleChangeCrypto">
+        <el-radio :label="'eckey'">ECKey</el-radio>
+        <el-radio :label="'sm2'">SM2</el-radio>
+      </el-radio-group>
+    </div>
+
     <div class="help-tools">
       <el-button class="el-icon-plus" type="primary" @click="handleAddNode"> {{ $t('nodesManage.addNode') }}</el-button>
       <el-button class="el-icon-caret-right" type="success" :loading="deployLoading" @click="handleDeploy"> {{ $t('nodesManage.deploy') }}</el-button>
     </div>
+
 
     <el-table
       :data="tableData"
@@ -59,6 +70,9 @@ export default {
   components: { LogDialog, DeployDialog },
   data () {
     return {
+      form: {
+        crypto: '',
+      },
       tableData: [],
       tableLoading: false,
       deployLoading: false,
@@ -71,12 +85,32 @@ export default {
     }
   },
   created() {
+    this.getCrypto()
     this.getNodeList()
   },
   destroyed() {
     clearTimeout(this.timeID)
   },
   methods: {
+    getCrypto () {
+      this.$_api.nodesManage.getCrypto(this.form, (err, res = {}) => {
+        if (err) return
+        this.form.crypto = res.crypto || this.form.crypto
+      })
+    },
+
+    handleChangeCrypto () {
+      this.$_api.nodesManage.updateCrypto(this.form, (err, res) => {
+        if (err) return
+        this.$notify({
+          type: 'success',
+          title: this.$t('base.successful'),
+          message: this.$t('base.success.update'),
+        })
+      })
+    },
+
+
     getNodeList () {
       this.tableLoading = true
       this.$_api.nodesManage.getNodeList({}, (err, res) => {
@@ -234,6 +268,14 @@ export default {
 
 <style lang="scss" scoped>
 .node-list {
+  .form-item {
+    margin-bottom: 20px;
+    span {
+      margin-right: 10px;
+      color: #606266;
+    }
+  }
+
   .help-tools {
     margin-bottom: 20px;
     .el-button + .el-button {
