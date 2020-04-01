@@ -310,7 +310,7 @@
             this.loading = true
             if (!(await this.initParams(params))) return
 
-            if (params.isSR && params.publicKey !== this.tempPublicKey || params.privateKey) {
+            if (params.isSR && (params.publicKey !== this.tempPublicKey || params.privateKey)) {
               this.$confirm(this.$t('nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
                 cancelButtonText: this.$t('base.cancel'),
                 confirmButtonText: this.$t('base.confirm'),
