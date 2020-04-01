@@ -43,7 +43,7 @@ import tron.deployment.shellExecutor.BashExecutor;
 @Slf4j
 public class DeployController {
     protected static final Logger logger = LoggerFactory.getLogger("DeployController");
-
+    String dbJarPath = "";
     private String checkNodeStatus(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -153,6 +153,10 @@ public class DeployController {
         return Common.connectFailedStatus;
     }
 
+    public void dbJarPath(String dbJarPath){
+        this.dbJarPath = dbJarPath;
+    }
+
     @PostMapping(value = "/api/oneClick")
     public JSONObject startDeployment() {
         int currentTime = (int) (System.currentTimeMillis() / 1000);
@@ -257,9 +261,9 @@ public class DeployController {
                 }
 
                 if (Objects.nonNull(privateKey)) {
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType);
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbJarPath);
                 } else {
-                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType);
+                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbJarPath);
                 }
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
