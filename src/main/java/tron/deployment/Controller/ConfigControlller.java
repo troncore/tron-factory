@@ -195,9 +195,7 @@ public class ConfigControlller {
     String dbCustom = (String) data.getOrDefault("dbCustom", "");
     DeployController dc = new DeployController();
     dc.dbJarPath(dbCustom);
-//    JSONObject json = new JSONObject();
     JSONObject json = readJsonFile();
-//    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     json.put(Common.dbCustomFiled, dbCustom);
     if (!writeJsonFile(json)) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();

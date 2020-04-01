@@ -12,10 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType, String dbjarPath){
 
         try {
-//            String absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
             String absolutePath = "";
             if(serviceType.equals("remote")){
                 if(sshPassword.equals("")){
