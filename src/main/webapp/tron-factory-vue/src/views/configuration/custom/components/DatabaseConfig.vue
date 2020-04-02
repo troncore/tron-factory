@@ -114,7 +114,10 @@ export default {
       this.$refs['database-config-form'].validate(valid => {
         if (valid) {
           this.loading = true
-          this.$_api.configuration.dbConfig(this.form, err => {
+          this.$_api.configuration.dbConfig({
+            ...this.form,
+            dbCustom:this.checkDBCustom ? this.form.dbCustom : '',
+          }, err => {
             this.loading = false
             if (err) return
 
