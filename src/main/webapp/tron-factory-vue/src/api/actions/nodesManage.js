@@ -3,24 +3,21 @@ let prefix = ''
 
 export default {
   get: {
-    getNodeList: prefix + '/api/allNodeInfo',
+    getNodeList: '/api/allNodeInfo',
     getNodeLog: '/api/getLogInfo',
-    getNodeInfo: '/api/nodeInfo',   // new
-    checkNode: '/api/checkNode',      // old
-    deployNode: '/api/deployNode',    // old
-    getCrypto: '/api/getCrypto',      // old
+    getNodeInfo: '/api/nodeInfo',
+    checkNode: '/api/checkNode',
+    deployNode: '/api/deployNode',
+    getCrypto: '/api/getCrypto',
   },
   post: {
-    addNoteInfo: '/api/nodeInfo',     // old:
-    updateCrypto: '/api/crypto',      // old
-
-    // todo api
-    initConfig: '/api/initConfig',    // old
+    addNoteInfo: '/api/nodeInfo',
+    updateCrypto: '/api/crypto',
   },
   put: {
-    editNoteInfo: '/api/nodeInfo',    // old:
+    editNoteInfo: '/api/nodeInfo',
   },
   delete: {
-    deleteNoteInfo: '/api/nodeInfo',  // old:
+    deleteNoteInfo: '/api/nodeInfo',
   },
 }

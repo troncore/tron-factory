@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     getCrypto () {
-      this.$_api.nodesManage.getCrypto(this.form, (err, res = {}) => {
+      this.$_api.nodesManage.getCrypto({}, (err, res = {}) => {
         if (err) return
         this.form.crypto = res.crypto || this.form.crypto
       })
