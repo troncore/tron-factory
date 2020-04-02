@@ -153,6 +153,24 @@ public class ConfigControlller {
     genesisWitnessConfig = new GenesisWitnessConfig(Args.getWitnessesFromConfig(loadConfig));
   }
 
+  @PostMapping(value = "/api/oneClick")
+  public JSONObject startDeployment() {
+    refresh();
+    parseConfig();
+    JSONObject configObject = getConfigJsonObject(config);
+    JSONObject p2pConfig = (JSONObject) configObject.get("p2pConfig");
+    int p2pVersion = (Integer) p2pConfig.get(Common.p2pVersionField);
+    if(p2pVersion == 0){
+      int currentTime = (int) (System.currentTimeMillis() / 1000);
+      ConfigGenerator configGenerator = new ConfigGenerator();
+      boolean result = configGenerator.updateConfig(new P2PVersion(currentTime), Common.configFiled);
+      if (!result) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+      }
+    }
+    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+  }
+
   private JSONObject getConfigJsonObject(com.typesafe.config.Config loadConfig) {
     loadConfig(loadConfig);
     JSONObject configObject = new JSONObject();

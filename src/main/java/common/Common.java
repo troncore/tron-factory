@@ -102,6 +102,8 @@ public class Common {
 
   public static final String sshConnectTypeField = "sshConnectType";
 
+  public static final String p2pVersionField = "node_p2p_version";
+
   // Node Status
   public static final String notFoundStatus = "not found";
 

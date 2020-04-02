@@ -159,9 +159,8 @@ public class DeployController {
         this.dbJarPath = dbJarPath;
     }*/
 
-    @PostMapping(value = "/api/oneClick")
+   /* @PostMapping(value = "/api/oneClick")
     public JSONObject startDeployment() {
-
         int currentTime = (int) (System.currentTimeMillis() / 1000);
         ConfigGenerator configGenerator = new ConfigGenerator();
         boolean result = configGenerator.updateConfig(new P2PVersion(currentTime), Common.configFiled);
@@ -169,7 +168,7 @@ public class DeployController {
             return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
         }
         return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-    }
+    }*/
 
     @GetMapping(value = "/api/checkNode")
     public JSONObject checkDeployStatus() {
