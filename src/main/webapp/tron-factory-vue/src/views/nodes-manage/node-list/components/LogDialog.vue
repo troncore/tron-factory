@@ -15,10 +15,10 @@
 
       <el-timeline>
         <el-timeline-item
-          v-for="(activity, index) in logInfo"
+          v-for="(log, index) in logInfo"
           :key="index"
           type="primary">
-          {{activity }}
+          <div class="log-content" v-html="log"></div>
         </el-timeline-item>
       </el-timeline>
 
@@ -83,23 +83,18 @@
             return
           }
 
-          this.logInfo = res.logInfo || []
-
-          if (this.logInfo.length) {
-            this.logInfo.forEach(log => {
+          if (Array.isArray(res.logInfo)) {
+            this.logInfo = res.logInfo.map(log => {
               if (log.indexOf('deploy finish') > -1) {
                 this.processingLoading = false
                 this.processingText = this.$t('nodesManage.deployComplete')
-
-                clearInterval(this.timeID)
-
-              } else if (log === 'ssh connect failed') {
-                this.processingLoading = false
-                this.processingText = this.$t('nodesManage.deployFail')
-
                 clearInterval(this.timeID)
               }
+
+              return log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2')
             })
+
+            console.log(this.logInfo)
           } else {
             this.processingLoading = false
             this.processingText = this.$t('nodesManage.emptyLog')
@@ -113,6 +108,12 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+/deep/ .log-content {
+  .remark-time {
+    font-style: normal;
+    font-size: 13px;
+    color: font-color(.8);
+  }
+}
 </style>
