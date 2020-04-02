@@ -18,14 +18,13 @@ export default {
     dbConfig: '/api/dbconfig',
     networkConfig: '/api/networkconfig',
     setTransactionModule: '/api/transaction',
+    initConfig: '/api/initConfig',
 
     // todo api
-    initConfig: '/api/initConfig',    // old
     oneClick: '/api/oneClick',
     crossChainConfig: '/api/crossChainConfig',
     dbEngineApi: '/api/dbEngine',
     consensusApi: '/api/consensus',
-    cryptoApi: '/api/crypto',
   },
   put: {
   },
