@@ -457,6 +457,7 @@ public class NodeController {
 
   @PostMapping(value = "/api/initConfig")
   public JSONObject initConfig() {
+    refresh();
     ConfigGenerator configGenerator = new ConfigGenerator();
     if (!configGenerator.updateConfig(new SeedNodeConfig(new ArrayList<>()), Common.configFiled)) {
       LOG.error("update seed node config file failed");
