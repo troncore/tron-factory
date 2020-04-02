@@ -17,6 +17,7 @@ import org.spongycastle.util.Strings;
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -100,6 +101,27 @@ public class PluginConfig {
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }
+    ConfigControlller configControlller = new ConfigControlller();
+    JSONObject jsonObject = new JSONObject();
+    String address = null;
+    if (eckey.equals("eckey")) {
+      address = "TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB";
+    } else {
+      address = "TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu";
+    }
+
+    LinkedHashMap<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
+
+    stringStringLinkedHashMap.put("accountName", "Blackhole");
+    stringStringLinkedHashMap.put("accountType", "AssetIssue");
+    stringStringLinkedHashMap.put("address", address);
+    stringStringLinkedHashMap.put("balance", "-9223372036854775808");
+    ArrayList<LinkedHashMap> linkedHashMaps = new ArrayList<>();
+
+    linkedHashMaps.add(stringStringLinkedHashMap);
+    jsonObject.put("assets", linkedHashMaps);
+
+    configControlller.genesisSettingConfig(jsonObject);
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
