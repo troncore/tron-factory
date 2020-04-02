@@ -161,6 +161,7 @@ public class DeployController {
 
     @PostMapping(value = "/api/oneClick")
     public JSONObject startDeployment() {
+
         int currentTime = (int) (System.currentTimeMillis() / 1000);
         ConfigGenerator configGenerator = new ConfigGenerator();
         boolean result = configGenerator.updateConfig(new P2PVersion(currentTime), Common.configFiled);

@@ -83,9 +83,11 @@ public class NodeController {
     }
 
     json.put(Common.nodesFiled, nodes);
+
     if (!writeJsonFile(json)) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }
+
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
@@ -220,18 +222,20 @@ public class NodeController {
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
 
+    Long idMax = (Long) json.get(Common.idMaxFiled);
     ArrayList<String> ipList = new ArrayList<>();
 
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
-      Long nodeID = (Long) node.get(Common.idFiled);
+//      Long nodeID = (Long) node.get(Common.idFiled);
       String nodeIp = (String) node.get(Common.ipFiled);
       ipList.add(nodeIp+"\":\""+listenPort);
-      if(id <= nodeID){
+      /*if(id <= nodeID){
         id = nodeID;
-      }
+      }*/
     }
-    id++;
+    id = idMax + 1;
+    json.put(Common.idMaxFiled, id);
     ipList.add(ip+"\":\""+listenPort);
 
     if (Objects.isNull(nodes)) {
