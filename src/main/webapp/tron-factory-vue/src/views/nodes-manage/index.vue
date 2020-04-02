@@ -31,11 +31,15 @@ export default {
     },
   },
   mounted () {
+    this.initP2PVersion()
     this.activeMenuIndex()
   },
   methods: {
     activeMenuIndex () {
       this.$eventBus.$emit('menuActiveIndex', '/nodes-manage')
+    },
+    initP2PVersion (){
+      this.$_api.configuration.oneClick({}, err => {})
     }
   }
 }
