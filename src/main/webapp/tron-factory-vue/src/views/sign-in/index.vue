@@ -109,6 +109,7 @@ export default {
       this.signIn({
         account: this.form.account,
       }).then(() => {
+        this.$_api.configuration.oneClick({}, err => {})
         this.$router.push('/')
       })
     },

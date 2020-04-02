@@ -12,16 +12,16 @@ export default {
     originConfig: '/api/originConfig',
   },
   post: {
+    oneClick: '/api/oneClick', // init p2p version once
     genesisAssetConfig: '/api/genesisAssetConfig',
     baseSettingConfig: '/api/baseSettingConfig',
     p2pConfig: '/api/p2pconfig',
     dbConfig: '/api/dbconfig',
     networkConfig: '/api/networkconfig',
     setTransactionModule: '/api/transaction',
-    initConfig: '/api/initConfig',
 
     // todo api
-    oneClick: '/api/oneClick',
+    initConfig: '/api/initConfig',
     crossChainConfig: '/api/crossChainConfig',
     dbEngineApi: '/api/dbEngine',
     consensusApi: '/api/consensus',
