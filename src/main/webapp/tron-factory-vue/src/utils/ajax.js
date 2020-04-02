@@ -20,8 +20,8 @@ function responseFail(error, callback) {
   Notification.error({
     title: 'Error',
     message: error_msg,
-    customClass: 'res-notification',
-    offset: 60,
+    // customClass: 'res-notification',
+    // offset: 60,
   })
 
   callback(error_msg)
