@@ -46,21 +46,24 @@ if [ "$?" != "0" ]; then
 fi
 
 ############################################################
-##远程chainbase.jar路径
-chainbasePath=`cd java-tron/java-tron-1.0.0/lib&&find chainbase*`
-#用户自定义数据库jar包路径
-dbCustom=$8
-dbPath=${dbCustom##*/}
 
-#上传用户自定义jar包
-result=`cp $8 ~/java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
-if [ -z $result ];then
-  time=$(date "+%Y-%m-%d %H:%M:%S")
- echo "[$time] upload ${dbPath} successfully"
-else
-  time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload ${dbPath} failed, ${finish}"
-  exit
+if [ $9 != "null" ]; then
+  ##远程chainbase.jar路径
+  chainbasePath=`cd java-tron/java-tron-1.0.0/lib&&find chainbase*`
+  #用户自定义数据库jar包路径
+  dbCustom=$9
+  dbPath=${dbCustom##*/}
+
+  #上传用户自定义jar包
+  result=`cp $9 ~/java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+  if [ -z $result ];then
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] upload ${dbPath} successfully"
+  else
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] upload ${dbPath} failed, ${finish}"
+    exit
+  fi
 fi
 ############################################################
 
@@ -76,14 +79,14 @@ if [ $6 != "null" ]; then
   echo "[$time] upload plugin successfully"
 fi
 
-if [ -z $9 ]; then
+if [ -z $8 ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy FullNode"
    cd ~/java-tron&& nohup bash start.sh
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy WitnessNode"
-   cd ~/java-tron&& nohup bash start.sh ${9}
+   cd ~/java-tron&& nohup bash start.sh ${8}
 fi
 
 rm -rf $5

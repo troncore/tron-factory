@@ -264,6 +264,7 @@ public class NodeController {
           return new Response(ResultCode.OK.code, statusObj).toJSONObject();
         }
 
+
         newNode.put(Common.privateKeyFiled, path);
         newNode.put(Common.publicKeyFiled, publicKey);
       } catch (CipherException | IOException e) {

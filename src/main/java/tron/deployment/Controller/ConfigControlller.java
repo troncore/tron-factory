@@ -196,11 +196,13 @@ public class ConfigControlller {
     // 自定义数据库配置
     String dbCustom = (String) data.getOrDefault("dbCustom", "");
     //检查自定义数据库jar包路径是否正确
-    BashExecutor bashExecutor = new BashExecutor();
-    bashExecutor.callDBJarPathScript(dbCustom);
-    String checkDBJarPath = checkDBJarPath(String.format(Common.dbJarPathFormat));
-    if (checkDBJarPath.equals(Common.canNotFindJar)) {
-      return new Response(ResultCode.OK.code, Common.canNotFindJar).toJSONObject();
+    if(!dbCustom.equals("")){
+      BashExecutor bashExecutor = new BashExecutor();
+      bashExecutor.callDBJarPathScript(dbCustom);
+      String checkDBJarPath = checkDBJarPath(String.format(Common.dbJarPathFormat));
+      if (checkDBJarPath.equals(Common.canNotFindJar)) {
+        return new Response(ResultCode.NOT_FOUND.code, Common.canNotFindJar).toJSONObject();
+      }
     }
 
     JSONObject json = readJsonFile();
