@@ -15,6 +15,49 @@ if [ $? != 0 ]; then
 echo "[$time] expect is not installed, ${finish}"
 exit
 fi
+###################################
+#echo "检测端口"
+
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] check port"
+#远程检查端口占用
+/usr/bin/expect <<lsp
+log_user 0
+spawn ssh -P $2 $3@$1
+expect {
+"*assword*" {
+send "$7\r"
+expect "]*"
+send "lsof -i:${10} > ~/java-tron/checkPort.log\r"
+expect "]*"
+send "exit\r"
+}
+timeout { send_error "expect_timeout\n";exit 1 }
+}
+expect eof
+lsp
+#检查结果传到本地
+/usr/bin/expect <<lsp
+  log_user 0
+  #set timeout 3600
+  spawn scp -P $2 $3@$1:~/java-tron/checkPort.log /tmp/
+  expect {
+  "*assword*" {
+  send "$7\r"
+  #expect "]*"
+  #send "exit\r"
+  }
+  timeout { send_error "expect_timeout\n";exit 1 }
+  }
+  expect eof
+lsp
+result=`cat /tmp/checkPort.log`
+echo $result;
+if [ ! -z "$result" ]; then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${10}: port is occupied, ${finish}"
+  exit
+fi
 
 ##################################
 #校验IP，密码正确性，是否成功连接目标主机
@@ -317,51 +360,6 @@ lsp
   fi
 fi
 
-###################################
-#echo "检测端口"
-
-time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] check port"
-#远程检查端口占用
-/usr/bin/expect <<lsp
-log_user 0
-spawn ssh -P $2 $3@$1
-expect {
-"*assword*" {
-send "$7\r"
-expect "]*"
-send "netstat -an | grep ${10} > ~/java-tron/checkPort.log\r"
-expect "]*"
-send "exit\r"
-}
-timeout { send_error "expect_timeout\n";exit 1 }
-}
-expect eof
-lsp
-#检查结果传到本地
-/usr/bin/expect <<lsp
-  log_user 0
-  #set timeout 3600
-  spawn scp -P $2 $3@$1:~/java-tron/checkPort.log /tmp/
-  expect {
-  "*assword*" {
-  send "$7\r"
-  #expect "]*"
-  #send "exit\r"
-  }
-  timeout { send_error "expect_timeout\n";exit 1 }
-  }
-  expect eof
-lsp
-result=`cat /tmp/checkPort.log`
-echo $result;
-if [ ! -z "$result" ]; then
-  time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ${10}: port is occupied, ${finish}"
-  exit
-fi
-
-###################################
 #echo "部署"
 if [ -z $9 ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
