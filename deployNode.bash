@@ -5,6 +5,19 @@ echo "[$time] Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
 
+############################################################
+#校验端口是否被占用
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] check port"
+result=`ssh -p $2 $3@$1 "lsof -i:$9"`
+echo $result;
+if [ ! -z "$result" ]; then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] $9: port is occupied, ${finish}"
+  exit
+fi
+############################################################
+
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron"
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] ssh connect success"
@@ -85,18 +98,7 @@ if [ ${10} != "null" ]; then
     exit
   fi
 fi
-############################################################
-#校验端口是否被占用
-time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] check port"
-result=`ssh -p $2 $3@$1 "netstat -an | grep $9"`
-echo result;
-if [ ! -z "$result" ]; then
-  time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] $9: port is occupied, ${finish}"
-  exit
-fi
-############################################################
+
 
 scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
 
