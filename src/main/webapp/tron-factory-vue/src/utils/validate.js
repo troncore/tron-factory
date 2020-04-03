@@ -51,7 +51,9 @@ export function isCorrectUrl(str) {
 }
 
 /* form rules validate */
-class FormRules {
+export class FormRules {
+  static numMax(value, msg) {
 
+  }
 }
-export const formRules = new FormRules()
+
