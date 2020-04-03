@@ -11,7 +11,7 @@
           </el-radio-group>
         </div>
 
-        <el-form-item prop="ip">
+        <el-form-item prop="ip" ref="node-ip">
           <span slot="label">{{ $t('nodesManage.nodeIP') }}</span>
           <el-input v-model.trim="form.ip" tabindex="21" :maxlength="50" :disabled="isView || form.serviceType === 'local'" clearable :placeholder="$t('nodesManage.valid.rightIP')"></el-input>
         </el-form-item>
@@ -261,6 +261,8 @@
       },
       'form.serviceType': {
         handler (val) {
+          this.$refs['node-ip'] && this.$refs['node-ip'].clearValidate()
+
           if (val === 'local') {
             this.tempIP = this.form.ip
             this.form.ip = '127.0.0.1'

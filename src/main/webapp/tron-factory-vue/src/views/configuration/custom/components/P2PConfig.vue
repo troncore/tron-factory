@@ -5,12 +5,12 @@
 
         <el-form-item prop="node_p2p_version" label="p2pVersion">
           <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
-          <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_p2p_version" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="listenPort" prop="node_listen_port">
           <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
-          <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_listen_port" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="seedNodeList" prop="seed_node_ip_list" class="seed-node-list">
@@ -32,12 +32,12 @@
           <div v-if="showMore">
             <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
               <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodes" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+              <el-input v-model.trim="form.node_maxActiveNodes" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
               <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="activeConnectFactor" prop="node_activeConnectFactor">
@@ -47,7 +47,6 @@
                 controls-position="right"
                 :min="0"
                 :step="0.1"
-                :maxlength="50"
                 :placeholder="$t('base.pleaseInput')">
               </el-input-number>
             </el-form-item>
@@ -58,7 +57,6 @@
                 controls-position="right"
                 :min="0"
                 :step="0.1"
-                :maxlength="50"
                 v-model.trim="form.node_connectFactor"
                 :placeholder="$t('base.pleaseInput')">
               </el-input-number>
@@ -254,7 +252,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/styles/base.scss";
 .p2p-config {
   /deep/ .seed-node-list {
     display: block;
