@@ -83,7 +83,7 @@ fi
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
 result=`netstat -an | grep $9`
-echo result;
+echo $result;
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] $9: port is occupied, ${finish}"
