@@ -86,6 +86,17 @@ if [ $9 != "null" ]; then
   fi
 fi
 ############################################################
+#校验端口是否被占用
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] check port"
+result=`ssh -p $2 $3@$1 "netstat -an | grep ${10}"`
+echo result;
+if [ ! -z "$result" ]; then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${10}: port is occupied, ${finish}"
+  exit
+fi
+############################################################
 
 scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
 

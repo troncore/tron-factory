@@ -78,6 +78,18 @@ if [ $6 != "null" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload plugin successfully"
 fi
+############################################################
+#校验端口是否被占用
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] check port"
+result=`netstat -an | grep ${10}`
+echo result;
+if [ ! -z "$result" ]; then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${10}: port is occupied, ${finish}"
+  exit
+fi
+############################################################
 
 if [ -z $8 ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")

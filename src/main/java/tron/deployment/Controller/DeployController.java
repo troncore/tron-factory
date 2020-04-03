@@ -1,6 +1,7 @@
 package tron.deployment.Controller;
 
 import static common.LogConfig.LOG;
+import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
 
 import com.typesafe.config.Config;
@@ -101,6 +102,9 @@ public class DeployController {
                     if(lineTxt.contains(Common.canNotFindZip)){
                         return Common.canNotFindZip;
                     }
+                    if(lineTxt.contains(Common.portIsOccupied)){
+                        return Common.portIsOccupied;
+                    }
 
                 }
 
@@ -198,6 +202,11 @@ public class DeployController {
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
+        String fullNodePort ="8090";
+        parseConfig();
+        if (Util.config.hasPath("node.http.fullNodePort")) {
+            fullNodePort =Util.config.getString("node.http.fullNodePort");
+        }
         BashExecutor bashExecutor = new BashExecutor();
         bashExecutor.callZipPathScript(filePath);
         String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
@@ -265,9 +274,9 @@ public class DeployController {
                 String dbCustom = (String) json.get(Common.dbCustomFiled);
 
                 if (Objects.nonNull(privateKey)) {
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom);
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, fullNodePort);
                 } else {
-                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom);
+                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, fullNodePort);
                 }
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
@@ -280,6 +289,9 @@ public class DeployController {
                 }
                 if(status.equals(Common.canNotFindZip)){
                     return new Response(ResultCode.UNAUTHORIZED.code, "path is not found or zip is error!").toJSONObject();
+                }
+                if(status.equals(Common.portIsOccupied)){
+                    return new Response(ResultCode.FAILED.code, "port is occupied").toJSONObject();
                 }
                 NodeController nc  = new NodeController();
                 JSONObject nodeOld = Util.getNodeInfo(nodes, id);

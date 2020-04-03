@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType, String dbCustom){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType, String dbCustom, String fullNodePort){
 
         try {
             String absolutePath = "";
@@ -32,6 +32,7 @@ public class BashExecutor {
                 cmdArray = ArrayUtils.add(cmdArray, privateKey);
             }
             cmdArray = ArrayUtils.add(cmdArray, dbCustom);
+            cmdArray = ArrayUtils.add(cmdArray, fullNodePort);
             String logName = String.format("> ".concat(logFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");
