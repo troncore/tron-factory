@@ -92,7 +92,7 @@
         const rules = {
           node_p2p_version: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { validator: validNum, trigger: 'blur', },
+            { validator: validNum(1, 2), trigger: 'blur', },
             { validator: validMainnet, trigger: 'blur', },
             { validator: validTestNet, trigger: 'blur', },
             { validator: validSpecialNet, trigger: 'blur', },
