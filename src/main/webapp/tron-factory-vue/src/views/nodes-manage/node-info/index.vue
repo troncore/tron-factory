@@ -298,7 +298,7 @@
           url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || 'http://',
           voteCount: nodeInfo.voteCount || '',
           publicKey: nodeInfo.publicKey || '',
-          privateKey: this.safePrivateKey,
+          privateKey: nodeInfo.publicKey ? this.safePrivateKey : '',
         }
         this.tempPublicKey = nodeInfo.publicKey
       },

@@ -4,7 +4,7 @@
       <span class="label">
         {{$t('nodesManage.encryption')}}<el-tooltip effect="dark" :content="$t('nodesManage.helpTips.crypto')" placement="top"><i class="fa fa-question-circle-o" style="margin: 0 5px;"></i> </el-tooltip>:
       </span>
-      <el-radio-group v-model="form.crypto" :disabled="tableLoading || tableData.length" @change="handleChangeCrypto">
+      <el-radio-group v-model="form.crypto" :disabled="tableLoading || !!tableData.length" @change="handleChangeCrypto">
         <el-radio :label="'eckey'">ECKey</el-radio>
         <el-radio :label="'sm2'">SM2</el-radio>
       </el-radio-group>
