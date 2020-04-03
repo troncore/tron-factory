@@ -2,6 +2,10 @@
  * https://cli.vuejs.org/config/
  */
 const path = require('path')
+
+const execa = require('execa')
+const branch = execa.sync('git', ['rev-parse', '--abbrev-ref', 'HEAD']).stdout
+
 function resolve (dir) {
  return  path.resolve(__dirname, dir)
 }
@@ -45,8 +49,14 @@ module.exports = {
       }
     }
   },
-  chainWebpack: () => {
+  chainWebpack: (config) => {
     // https://cli.vuejs.org/config/#chainwebpack
+    config
+      .plugin('define')
+      .tap(args => {
+        args[0]['process.env.GIT_BRANCH'] = JSON.stringify(branch)
+        return args
+      })
   },
   css: {
     loaderOptions: {
