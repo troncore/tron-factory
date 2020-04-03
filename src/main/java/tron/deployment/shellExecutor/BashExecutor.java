@@ -31,8 +31,9 @@ public class BashExecutor {
             if (privateKey.length() != 0) {
                 cmdArray = ArrayUtils.add(cmdArray, privateKey);
             }
-            cmdArray = ArrayUtils.add(cmdArray, dbCustom);
             cmdArray = ArrayUtils.add(cmdArray, fullNodePort);
+            cmdArray = ArrayUtils.add(cmdArray, dbCustom);
+
             String logName = String.format("> ".concat(logFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");

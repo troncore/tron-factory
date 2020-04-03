@@ -192,7 +192,7 @@ exit
 fi
 
 ###################################
-if [ ${10} != "null" ]; then
+if [ ${11} != "null" ]; then
   #获取原chainbase.java名字，并保存在远程服务器~/java-tron/dbJarName文件中
   /usr/bin/expect <<lsp
   log_user 0
@@ -230,13 +230,13 @@ lsp
   ##远程chainbase.jar路径
   chainbasePath=`cat /tmp/dbJarName`
   #用户自定义数据库jar包路径
-  dbCustom=${10}
+  dbCustom=${11}
   dbPath=${dbCustom##*/}
 
   /usr/bin/expect <<lsp
   log_user 0
   #set timeout 3600
-  spawn scp -P $2 ${10} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath
+  spawn scp -P $2 ${11} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath
   expect {
   "*assword*" {
   send "$7\r"
@@ -330,7 +330,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "netstat -an | grep ${11} > ~/java-tron/checkPort.log\r"
+send "netstat -an | grep ${10} > ~/java-tron/checkPort.log\r"
 expect "]*"
 send "exit\r"
 }
@@ -357,7 +357,7 @@ result=`cat /tmp/checkPort.log`
 echo $result;
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ${11}: port is occupied, ${finish}"
+  echo "[$time] ${10}: port is occupied, ${finish}"
   exit
 fi
 

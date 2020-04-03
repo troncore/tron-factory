@@ -47,15 +47,15 @@ fi
 
 ############################################################
 
-if [ $9 != "null" ]; then
+if [ ${10} != "null" ]; then
   ##远程chainbase.jar路径
   chainbasePath=`cd java-tron/java-tron-1.0.0/lib&&find chainbase*`
   #用户自定义数据库jar包路径
-  dbCustom=$9
+  dbCustom=${10}
   dbPath=${dbCustom##*/}
 
   #上传用户自定义jar包
-  result=`cp $9 ~/java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+  result=`cp ${10} ~/java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
   if [ -z $result ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
     echo "[$time] upload ${dbPath} successfully"
@@ -82,11 +82,11 @@ fi
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
-result=`netstat -an | grep ${10}`
+result=`netstat -an | grep $9`
 echo result;
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ${10}: port is occupied, ${finish}"
+  echo "[$time] $9: port is occupied, ${finish}"
   exit
 fi
 ############################################################
