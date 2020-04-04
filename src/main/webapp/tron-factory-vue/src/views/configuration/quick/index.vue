@@ -11,12 +11,12 @@
         <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
           <el-form-item prop="node_p2p_version" label="p2pVersion">
             <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
-            <el-input v-model.trim="form.node_p2p_version" type="number" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.node_p2p_version" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
           <el-form-item label="listenPort" prop="node_listen_port">
             <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
-            <el-input v-model.trim="form.node_listen_port" :maxlength="50" :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.node_listen_port" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
         </el-form>
       </div>

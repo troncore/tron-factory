@@ -4,7 +4,7 @@
       <el-form class="im-form" ref="base-config-form" :rules="baseRules" :model="form">
         <el-form-item prop="chainId">
           <span slot="label">chainId <i class="help-tips">({{ $t('configuration.helpTips.chainId') }})</i></span>
-          <el-input v-model.trim="form.chainId" type="number" min="0" max="2147483647" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.chainId" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="chainName">
@@ -14,22 +14,22 @@
 
         <el-form-item prop="block_maintenanceTimeInterval">
           <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('configuration.helpTips.maintenanceTimeInterval') }}: ms)</i></span>
-          <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="block_proposalExpireTime">
           <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configuration.helpTips.blockProposalExpireTime') }}: ms)</i></span>
-          <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_blockProducedTimeOut">
           <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configuration.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100%)</i></span>
-          <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_minParticipationRate">
           <span slot="label">participationRate <i class="help-tips">({{ $t('configuration.helpTips.nodeMinParticipationRate') }})</i></span>
-          <el-input v-model.trim="form.node_minParticipationRate" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_minParticipationRate" type="number" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>

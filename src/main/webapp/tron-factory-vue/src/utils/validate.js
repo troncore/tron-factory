@@ -45,8 +45,15 @@ export function isCorrectIp(str) {
 }
 
 /* test url*/
-
 export function isCorrectUrl(str) {
   const reg = /^((https|http):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
   return reg.test(str)
 }
+
+/* form rules validate */
+export class FormRules {
+  static numMax(value, msg) {
+
+  }
+}
+
