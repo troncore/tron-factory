@@ -5,7 +5,6 @@ FullNode="FullNode"
 MAX_STOP_TIME=60
 Program="program.FullNode"
 SRKEY=$1
-time=$(date "+%Y-%m-%d %H:%M:%S")
 
 checkpid() {
  pid=`ps ux | grep $Program |grep -v grep | awk '{print $2}'`
@@ -20,6 +19,7 @@ stopService() {
        kill -15 $pid
        sleep 1
     else
+       time=$(date "+%Y-%m-%d %H:%M:%S")
        echo "[$time] java-tron stop"
        return
     fi
@@ -43,6 +43,7 @@ startService() {
  fi
  sleep 1
  pid=`ps ux |grep $Program |grep -v grep |awk '{print $2}'`
+ time=$(date "+%Y-%m-%d %H:%M:%S")
  echo "[$time] start java-tron with pid $pid on $HOSTNAME"
 }
 

@@ -10,12 +10,16 @@ noCheck="StrictHostKeyChecking no"
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
-result=`lsof -i:$9`
+portArray=(${10} ${11} ${12} ${13} ${14})
+for port in ${portArray[@]}
+do
+result=`lsof -i:${port}`
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] $9: port is occupied, ${finish}"
+  echo "[$time] ${port}: port is occupied, ${finish}"
   exit
 fi
+done
 ############################################################
 rm -rf ~/java-tron
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -58,15 +62,15 @@ fi
 
 ############################################################
 
-if [ ${10} != "null" ]; then
+if [ $9 != "null" ]; then
   ##远程chainbase.jar路径
   chainbasePath=`cd java-tron/java-tron-1.0.0/lib&&find chainbase*`
   #用户自定义数据库jar包路径
-  dbCustom=${10}
+  dbCustom=$9
   dbPath=${dbCustom##*/}
 
   #上传用户自定义jar包
-  result=`cp ${10} ~/java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+  result=`cp $9 ~/java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
   if [ -z $result ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
     echo "[$time] upload ${dbPath} successfully"

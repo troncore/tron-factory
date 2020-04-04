@@ -9,12 +9,19 @@ noCheck="StrictHostKeyChecking no"
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
-result=`ssh -p $2 $3@$1 "lsof -i:$9"`
+portArray=(${10} ${11} ${12} ${13} ${14})
+for port in ${portArray[@]}
+do
+if [ "$port" = "null" ];then
+continue
+fi
+result=`ssh -p $2 $3@$1 "lsof -i:$port"`
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] $9: port is occupied, ${finish}"
+  echo "[$time] $port: port is occupied, ${finish}"
   exit
 fi
+done
 ############################################################
 
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron"
@@ -79,15 +86,15 @@ else
 fi
 
 ############################################################
-if [ ${10} != "null" ]; then
+if [ ${9} != "null" ]; then
   ##远程chainbase.jar路径
   chainbasePath=`ssh -p $2 $3@$1 "cd java-tron/java-tron-1.0.0/lib&&find chainbase*"`
   #用户自定义数据库jar包路径
-  dbCustom=${10}
+  dbCustom=${9}
   dbPath=${dbCustom##*/}
 
   #上传用户自定义jar包
-  result=`scp -P $2 ${10} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+  result=`scp -P $2 ${9} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath  2>&1`
   if [ -z $result ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload ${dbPath} successfully"
@@ -116,7 +123,7 @@ if [ $6 != "null" ]; then
   fi
 fi
 
-if [ -z $8 ] ; then
+if [ $8 = "null" ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy FullNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh"
