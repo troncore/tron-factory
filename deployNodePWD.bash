@@ -52,7 +52,6 @@ lsp
   expect eof
 lsp
 result=`cat /tmp/checkPort.log`
-echo $result;
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${10}: port is occupied, ${finish}"

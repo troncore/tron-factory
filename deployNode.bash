@@ -10,7 +10,6 @@ noCheck="StrictHostKeyChecking no"
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
 result=`ssh -p $2 $3@$1 "lsof -i:$9"`
-echo $result;
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] $9: port is occupied, ${finish}"

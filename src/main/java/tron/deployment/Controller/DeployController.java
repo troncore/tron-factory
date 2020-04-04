@@ -293,20 +293,22 @@ public class DeployController {
                 if(status.equals(Common.portIsOccupied)){
                     return new Response(ResultCode.FAILED.code, "port is occupied").toJSONObject();
                 }
-                NodeController nc  = new NodeController();
-                JSONObject nodeOld = Util.getNodeInfo(nodes, id);
-                nodeOld.put(Common.isDeployedFiled, isDeployed);
-                nc.deleteNode(id);
-                json = readJsonFile();
-                JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
-                if (Objects.isNull(newNodes)) {
-                    newNodes = new JSONArray();
-                }
-                newNodes.add(nodeOld);
-                json.put(Common.nodesFiled, newNodes);
-                nc.updateNodesInfo(newNodes, json, ipList);
+                if(isDeployed){
+                    NodeController nc  = new NodeController();
+                    JSONObject nodeOld = Util.getNodeInfo(nodes, id);
+                    nodeOld.put(Common.isDeployedFiled, isDeployed);
+                    nc.deleteNode(id);
+                    json = readJsonFile();
+                    JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+                    if (Objects.isNull(newNodes)) {
+                        newNodes = new JSONArray();
+                    }
+                    newNodes.add(nodeOld);
+                    json.put(Common.nodesFiled, newNodes);
+                    nc.updateNodesInfo(newNodes, json, ipList);
 
-                if(isDeployed) return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+                }
                 else return new Response(ResultCode.FAILED.code, "Deploy fail", isDeployed).toJSONObject();
 
             }
