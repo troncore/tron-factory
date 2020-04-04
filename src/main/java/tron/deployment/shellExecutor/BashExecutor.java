@@ -53,7 +53,8 @@ public class BashExecutor {
             e.printStackTrace();
         }
     }
-
+    
+//添加节点时检查ssh连通性
     public void callSSHScript(String ip, int port, String userName){
 
         try {
