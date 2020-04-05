@@ -1,5 +1,6 @@
 <template>
-  <el-tooltip effect="dark" :content="content" placement="top">
+  <el-tooltip effect="dark" placement="top">
+    <div slot="content" v-html="content"></div>
     <i class="icon-question fa fa-question-circle-o" :style="myStyle"></i>
   </el-tooltip>
 </template>
