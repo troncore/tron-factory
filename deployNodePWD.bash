@@ -421,7 +421,7 @@ fi
 
 /usr/bin/expect <<lsp
    log_user 0
-   spawn scp -p $2 $3@$1:./java-tron/startPid.log .
+   spawn scp -P $2 $3@$1:./java-tron/startPid.log .
    expect {
    "*assword*" {
    send "$7\r"
