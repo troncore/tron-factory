@@ -140,7 +140,7 @@ pid=`cat startPid`
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start java-tron with pid $pid on $HOSTNAME"
 
-rm -rf startPid
+#rm -rf startPid
 
 rm -rf $5
 time=$(date "+%Y-%m-%d %H:%M:%S")
