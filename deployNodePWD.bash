@@ -33,7 +33,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "lsof -i:$port > ~/java-tron/checkPort.log\r"
+send "netstat -anp|grep $port > ~/java-tron/checkPort.log\r"
 expect "]*"
 send "exit\r"
 }

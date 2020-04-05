@@ -307,30 +307,8 @@ public class DeployController {
                 }
 
                 if (Objects.nonNull(privateKey)) {
-                    /*if(isfullNodeEnable&&issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, solidityPort, listenPort, rpcPort, rpcsolidityPort);
-                    }
-                    else if(!isfullNodeEnable&&issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, "", solidityPort, listenPort, rpcPort, rpcsolidityPort);
-                    }else if(isfullNodeEnable&&!issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, "", listenPort, rpcPort, rpcsolidityPort);
-                    }
-                    else if(!isfullNodeEnable&&!issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, "", "", listenPort, rpcPort, rpcsolidityPort);
-                    }*/
                     bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort );
                 } else {
-                    /*if(isfullNodeEnable&&issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, solidityPort, listenPort, rpcPort, rpcsolidityPort);
-                    }
-                    else if(!isfullNodeEnable&&issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, "", solidityPort, listenPort, rpcPort, rpcsolidityPort);
-                    }else if(isfullNodeEnable&&!issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, "", listenPort, rpcPort, rpcsolidityPort);
-                    }
-                    else if(!isfullNodeEnable&&!issolidityEnable){
-                        bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, "", "", listenPort, rpcPort, rpcsolidityPort);
-                    }*/
                     bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort);
                 }
 

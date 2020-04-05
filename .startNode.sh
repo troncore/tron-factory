@@ -42,10 +42,9 @@ startService() {
    nohup $APP/bin/$FullNode -w --private-key $SRKEY -c config.conf  >> start.log 2>&1 &
  fi
  sleep 1
- pid=`ps ux |grep $Program |grep -v grep |awk '{print $2}'`
- time=$(date "+%Y-%m-%d %H:%M:%S")
- echo "[$time] start java-tron with pid $pid on $HOSTNAME"
+ #pid=`ps ux |grep $Program |grep -v grep |awk '{print $2}'`
+ #time=$(date "+%Y-%m-%d %H:%M:%S")
+ #echo "[$time] start java-tron with pid $pid on $HOSTNAME"
 }
-
 stopService
 startService
