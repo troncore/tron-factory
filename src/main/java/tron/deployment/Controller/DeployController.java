@@ -293,7 +293,7 @@ public class DeployController {
                 Long port = (Long) node.get(Common.portFiled);
                 String userName = (String) node.get(Common.userNameFiled);
                 String sshPassword = (String) node.get(Common.sshPasswordFiled);
-                String serviceType = (String) node.get(Common.serviceTypeFiled);
+//                String serviceType = (String) node.get(Common.serviceTypeFiled);
 //                BashExecutor bashExecutor = new BashExecutor();
                 String plugin = "null";
                 if (json.containsKey(Common.customTransactionFiled)
@@ -318,7 +318,7 @@ public class DeployController {
                     else if(!isfullNodeEnable&&!issolidityEnable){
                         bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, "", "", listenPort, rpcPort, rpcsolidityPort);
                     }*/
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort );
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort );
                 } else {
                     /*if(isfullNodeEnable&&issolidityEnable){
                         bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, solidityPort, listenPort, rpcPort, rpcsolidityPort);
@@ -331,7 +331,7 @@ public class DeployController {
                     else if(!isfullNodeEnable&&!issolidityEnable){
                         bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, "", "", listenPort, rpcPort, rpcsolidityPort);
                     }*/
-                    bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, serviceType, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort);
+                    bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort);
                 }
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));

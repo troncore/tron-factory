@@ -6,7 +6,7 @@ time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
-
+echo $*
 ##################################
 #检查是否安装expect指令
 which expect > /dev/null

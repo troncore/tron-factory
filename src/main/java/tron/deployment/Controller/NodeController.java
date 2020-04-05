@@ -181,7 +181,7 @@ public class NodeController {
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
-    String serviceType = (String) data.getOrDefault("serviceType", "");
+//    String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
     int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
@@ -286,7 +286,7 @@ public class NodeController {
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
     newNode.put(Common.needSyncCheck, needSyncCheck);
-    newNode.put(Common.serviceTypeFiled, serviceType);
+//    newNode.put(Common.serviceTypeFiled, serviceType);
     newNode.put(Common.sshPasswordFiled, sshPassword);
     newNode.put(Common.sshPortFiled, sshPort);
     newNode.put(Common.isDeployedFiled, isDeployed);
@@ -312,7 +312,7 @@ public class NodeController {
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
-    String serviceType = (String) data.getOrDefault("serviceType", "");
+//    String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
     int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
@@ -411,7 +411,7 @@ public class NodeController {
     node.put(Common.urlFiled, url);
     node.put(Common.voteCountFiled, voteCount);
     node.put(Common.needSyncCheck, needSyncCheck);
-    node.put(Common.serviceTypeFiled, serviceType);
+//    node.put(Common.serviceTypeFiled, serviceType);
     node.put(Common.sshPasswordFiled, sshPassword);
     node.put(Common.sshPortFiled, sshPort);
     node.put(Common.isDeployedFiled, isDeployed);
@@ -437,10 +437,10 @@ public class NodeController {
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
-    String  serviceType = (String)node.get(Common.serviceTypeFiled);
+    /*String  serviceType = (String)node.get(Common.serviceTypeFiled);
     if(serviceType.equals("local")){
       node.put(Common.userNameFiled, "");
-    }
+    }*/
     boolean isSR = (boolean)node.get(Common.isSRFiled);
     if(!isSR){
       node.put(Common.urlFiled, "");
