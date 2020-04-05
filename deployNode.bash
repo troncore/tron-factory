@@ -4,7 +4,7 @@ time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
-
+echo $*
 ############################################################
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -12,6 +12,7 @@ echo "[$time] check port"
 portArray=(${10} ${11} ${12} ${13} ${14})
 for port in ${portArray[@]}
 do
+echo $port
 if [ "$port" = "null" ];then
 continue
 fi
