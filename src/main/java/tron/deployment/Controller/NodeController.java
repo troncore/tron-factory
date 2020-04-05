@@ -299,8 +299,9 @@ public class NodeController {
   @PutMapping(value = "/api/nodeInfo")
   public JSONObject updateNode(@RequestBody LinkedHashMap<String,Object> data) {
     int status = 0;
+
     String userName = (String) data.getOrDefault("userName", "node1");
-    String ip = (String) data.getOrDefault("ip", "127.0.0.1");
+    String ip = (String) data.getOrDefault("ip", "");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
     String url = (String) data.getOrDefault("url", "");
     String key = (String) data.getOrDefault("privateKey", "");
@@ -368,41 +369,44 @@ public class NodeController {
 
     boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
-    if(key.length() == 0){
-      String privateKey = (String)node.get(Common.privateKeyFiled);
-      String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
-      if(!publicKey.equals(privateKeyCheck)){
-        status = 2;
-        statusObj.put("status",status);
-        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-      }
-      node.put(Common.privateKeyFiled, privateKey);
-      node.put(Common.publicKeyFiled, publicKey);
-    }
-    if (key.length() != 0) {
-      String path;
-      String publicKeyCheck;
-      refresh();
-      try {
-        path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
-        refresh();
-        if (isEckey) {
-          publicKeyCheck = private2AddressEckey(hexs2Bytes(key.getBytes()));
-        } else {
-          publicKeyCheck = private2AddressSm2(hexs2Bytes(key.getBytes()));
-        }
-        if(!publicKey.equals(publicKeyCheck)){
+    if (isSR) {
+      if(key.length() == 0){
+        String privateKey = (String)node.get(Common.privateKeyFiled);
+        String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
+        if(!publicKey.equals(privateKeyCheck)){
           status = 2;
           statusObj.put("status",status);
           return new Response(ResultCode.OK.code, statusObj).toJSONObject();
         }
-        node.put(Common.privateKeyFiled, path);
+        node.put(Common.privateKeyFiled, privateKey);
         node.put(Common.publicKeyFiled, publicKey);
-      } catch (CipherException | IOException e) {
-        LOG.error(e.toString());
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.savePrivateKeyFailed).toJSONObject();
+      }
+      if (key.length() != 0) {
+        String path;
+        String publicKeyCheck;
+        refresh();
+        try {
+          path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
+          refresh();
+          if (isEckey) {
+            publicKeyCheck = private2AddressEckey(hexs2Bytes(key.getBytes()));
+          } else {
+            publicKeyCheck = private2AddressSm2(hexs2Bytes(key.getBytes()));
+          }
+          if(!publicKey.equals(publicKeyCheck)){
+            status = 2;
+            statusObj.put("status",status);
+            return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+          }
+          node.put(Common.privateKeyFiled, path);
+          node.put(Common.publicKeyFiled, publicKey);
+        } catch (CipherException | IOException e) {
+          LOG.error(e.toString());
+          return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.savePrivateKeyFailed).toJSONObject();
+        }
       }
     }
+
 
     node.put(Common.userNameFiled, userName);
     node.put(Common.portFiled, port);
