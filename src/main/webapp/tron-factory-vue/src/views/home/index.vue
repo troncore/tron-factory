@@ -57,15 +57,15 @@ export default {
 
     .left-box {
       position: relative;
-      flex: 1.5;
+      flex: 1;
       height: 100%;
       background-color: theme-color();
 
       .detail {
         position: absolute;
         top: 50%;
-        left: 10%;
-        transform: translate(0, -50%);
+        left: 50%;
+        transform: translate(-50%, -50%);
         .title {
           margin-bottom: 20px;
           font-size: 42px;
