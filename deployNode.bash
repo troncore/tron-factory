@@ -135,10 +135,10 @@ fi
 
 #将pid存到startPid文件中，在执行完start.sh后检查pid是否存在
 ssh -p $2 $3@$1 "ps ux |grep $Program |grep -v grep |awk '{print \$2}' > startPid"
-ssh -p $2 $3@$1 "echo $HOSTNAME >> startPid"
+ssh -p $2 $3@$1 "echo \$HOSTNAME >> startPid"
 scp -P $2 $3@$1:./startPid .
 pid=`head -1 startPid`
-hostName=`head -n 2 startPid`
+hostName=`tail -1 startPid`
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start java-tron with pid $pid on $hostName"
 
