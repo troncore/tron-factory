@@ -16,7 +16,7 @@ echo $port
 if [ "$port" = "null" ];then
 continue
 fi
-result=`ssh -p $2 $3@$1 "lsof -i:$port"`
+result=`ssh -p $2 $3@$1 "netstat -anp|grep $port"`
 echo $result
 if [ ! -z $result ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
