@@ -3,6 +3,7 @@ export default {
   addNode: '添加节点',
   modifyNode: '修改节点',
   nodeDetail: '节点详情',
+  oneClickDeployment: '一键部署',
   deploy: '部署',
   encryption: '签名算法',
 

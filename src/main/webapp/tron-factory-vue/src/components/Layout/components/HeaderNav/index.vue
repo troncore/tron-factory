@@ -9,25 +9,17 @@
 
     <div class="header-right nav-list">
 
-      <div class="nav-item view-document" @click="handleViewDocument">{{ $t('base.document') }}</div>
+      <div class="nav-item view-document" @click="viewDocument()">{{ $t('base.document') }}</div>
 
       <!-- choose language -->
       <im-locale class="nav-item"></im-locale>
-
-      <i class="nav-item divider-line"></i>
-
-      <div class="nav-item user-info" v-if="isSignIn">
-        <span class="account">{{ userInfo.account }}</span>
-        <i class="sign-out el-icon-switch-button" @click="handleSignOut"></i>
-      </div>
-
     </div>
 
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 import Hamburger from './Hamburger'
 import ImLocale from "@/components/ImLocale";
 
@@ -40,34 +32,12 @@ export default {
   data() {
     return {
       siteTitle: 'TRON FACTORY',
-      currentGitBranch: process.env.GIT_BRANCH || 'master',
     }
   },
-  computed: {
-    ...mapGetters('app', [
-      "isSignIn",
-      "userInfo"
-    ])
-  },
   methods: {
-    ...mapActions('app', [
-      "signOut"
+    ...mapMutations('app', [
+      "viewDocument"
     ]),
-
-    handleSignOut () {
-      this.signOut().then(() => {
-        this.$router.push('/sign-in')
-      })
-    },
-
-    handleViewDocument() {
-      let currentLanguage = localStorage.getItem('currentLang')
-      if (currentLanguage === 'en-US') {
-        window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/'+ this.currentGitBranch + '/README.md', '_blank')
-      } else {
-        window.open('http://39.106.174.213/kangjiancheng/tron-factory/blob/'+ this.currentGitBranch + '/README.zh-CN.md', '_blank')
-      }
-    },
   },
 }
 </script>
@@ -102,26 +72,6 @@ export default {
 
   .view-document {
     cursor: pointer;
-  }
-
-  .divider-line {
-    display: inline-block;
-    height: 16px;
-    width: 1px;
-    background-color: rgba(0, 0, 0, .2);
-  }
-
-  .user-info {
-    color: #081C56;
-    font-size: 14px;
-    .sign-out {
-      margin-left: 5px;
-      vertical-align: middle;
-      cursor: pointer;
-      &:hover {
-        color: red;
-      }
-    }
   }
 }
 </style>

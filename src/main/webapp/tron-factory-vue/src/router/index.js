@@ -12,9 +12,9 @@ Vue.use(VueRouter)
 
 const baseRoutes = [
   {
-    path: "/sign-in",
-    name: "sign-in",
-    component: () => import('@/views/sign-in')
+    path: "/",
+    name: "home",
+    component: () => import('@/views/home')
   },
 ]
 
@@ -31,7 +31,6 @@ const routes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/nodes-manage',
     children: [
       ...authRoutes,
     ],
@@ -50,16 +49,15 @@ const router = new VueRouter({
 router.beforeEach( async (to, from, next) => {
   try {
     let isAuth = ~authRoutes.findIndex(route => route.name === to.name) // !== -1
-    if ( isAuth && !store.getters['app/isSignIn']) {
-      next('/sign-in')
+    let oneClick = localStorage.getItem('oneClick') === 'true'
+    if ( isAuth && !oneClick) {
+      next('/')
     } else {
-      if(store.getters['app/isSignIn']) store.commit('app/setUserInfo')
-
       next()
     }
 
   } catch (e) {
-    next('/sign-in')
+    next('/')
   }
 })
 

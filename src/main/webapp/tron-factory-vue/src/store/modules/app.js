@@ -11,6 +11,8 @@ export default {
     },
     isCollapseAside: localStorage.getItem('isCollapseAside') === 'true',
     menuList: menuList,
+    gitHome: 'http://39.106.174.213/kangjiancheng/tron-factory',
+    currentGitBranch: process.env.GIT_BRANCH || 'master',
   },
 
   getters: {
@@ -36,6 +38,13 @@ export default {
       state.isCollapseAside = !state.isCollapseAside
       localStorage.setItem('isCollapseAside', state.isCollapseAside)
     },
+    viewDocument (state) {
+      let currentLanguage = localStorage.getItem('currentLang')
+      let docLang = currentLanguage === 'zh-CN' ? 'README.zh-CN.md' : 'README.md'
+      let docURL = `${state.gitHome}/blob/${state.currentGitBranch}/${docLang}`
+
+      window.open(docURL, '_blank')
+    }
   },
 
   actions: {

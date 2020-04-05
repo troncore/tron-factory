@@ -3,6 +3,7 @@ export default {
   addNode: 'Add Node',
   modifyNode: 'Edit Node',
   nodeDetail: 'Node Detail',
+  oneClickDeployment: '一键部署',
   deploy: 'Deploy',
   encryption: 'Signature Algorithm',
 
