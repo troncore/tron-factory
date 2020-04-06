@@ -4,7 +4,7 @@ time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
 finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
-
+Program="program.FullNode"
 ############################################################
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -15,7 +15,7 @@ do
 if [ "$port" = "null" ];then
 continue
 fi
-result=`ssh -p $2 $3@$1 "lsof -i:$port"`
+result=`ssh -p $2 $3@$1 "netstat -anp|grep $port"`
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] $port: port is occupied, ${finish}"
@@ -132,6 +132,17 @@ else
    echo "[$time] deploy WitnessNode"
    ssh -p $2 $3@$1 "cd java-tron&& nohup bash start.sh ${8}"
 fi
+
+#将pid存到startPid文件中，在执行完start.sh后检查pid是否存在
+ssh -p $2 $3@$1 "ps ux |grep $Program |grep -v grep |awk '{print \$2}' > startPid"
+ssh -p $2 $3@$1 "echo \$HOSTNAME >> startPid"
+scp -P $2 $3@$1:./startPid .
+pid=`head -1 startPid`
+hostName=`tail -1 startPid`
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] start java-tron with pid $pid on $hostName"
+
+rm -rf startPid
 
 rm -rf $5
 time=$(date "+%Y-%m-%d %H:%M:%S")
