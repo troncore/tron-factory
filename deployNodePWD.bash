@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 APP="java-tron-1.0.0"
 Program="program.FullNode"
-
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
 #finish="deploy finish"
@@ -88,7 +87,6 @@ timeout { send_error "expect_timeout\n";exit 1 }
 }
 expect eof
 lsp
-
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] ssh connect successfully"
@@ -162,10 +160,10 @@ echo "[$time] check java-tron-1.0.0.zip path"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] Please upload java-tron.1.0.0.zip generated after java-tron build!"
+  echo "[$time] No such file or directory!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
-exit
+  exit
 fi
 
 ###################################
@@ -403,7 +401,7 @@ if [ $9 = "null" ]; then
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron&& bash start.sh > startPid.log \r"
+   send "cd java-tron&& bash start.sh \r"
    expect "]*"
    send "exit\r"
    }
@@ -429,7 +427,7 @@ else
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron&& bash start.sh $9 > startPid.log\r"
+   send "cd java-tron&& bash start.sh $9\r"
    expect "]*"
    send "exit\r"
    }
@@ -445,9 +443,30 @@ lsp
 
 fi
 
+###################################输出远端进程pid和远端hostname，保存到startPid文件
 /usr/bin/expect <<lsp
    log_user 0
-   spawn scp -P $2 $3@$1:./java-tron/startPid.log .
+   set timeout 20
+   spawn ssh -p $2 $3@$1
+   expect {
+   "*assword*" {
+   send "$7\r"
+   expect "]*"
+   send "ps ux |grep $Program |grep -v grep |awk '{print \\\$2}' > startPid \r"
+   expect "]*"
+   send "echo \\\$HOSTNAME >> startPid \r"
+   expect "]*"
+   send "exit\r"
+   }
+   timeout { send_error "expect_timeout\n";exit 1 }
+   }
+   expect eof
+lsp
+
+   ######################复制远端进程pid和远端hostname到本地
+/usr/bin/expect <<lsp
+   log_user 0
+   spawn scp -P $2 $3@$1:./startPid .
    expect {
    "*assword*" {
    send "$7\r"
@@ -462,9 +481,22 @@ lsp
    exit
    fi
 
+pid=`head -1 startPid`
+hostname=`tail -1 startPid`
+host="on $hostname"
+
+if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-   echo `tail -1 startPid.log`
-   rm -rf startPid.log
+  echo "[$time] ${failed}"
+  exit
+else
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] start java-tron with pid $pid $host"
+  echo  "[$time] ${success}"
+  exit
+fi
+
+rm -rf startPid
 ###################################
 rm -rf $5
 time=$(date "+%Y-%m-%d %H:%M:%S")

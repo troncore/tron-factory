@@ -46,8 +46,8 @@ public class PluginConfig {
       @RequestBody JSONObject jsonObject
   ){
 
-    if (!jsonObject.containsKey(Common.transactionFiled) || !jsonObject.containsKey(Common.customTransactionFiled)) {
-      return new Response(ResultCode.FAILED.code, "miss transaction or custom transaction").toJSONObject();
+    if (!jsonObject.containsKey(Common.customTransactionFiled)) {
+      return new Response(ResultCode.FAILED.code, "miss custom transaction").toJSONObject();
     }
 
     JSONObject json = readJsonFile();

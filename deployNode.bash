@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 APP="java-tron-1.0.0"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] start ssh $1 deployment"
+echo "[$time] start deployment"
 #finish="deploy finish"
 success="deploy successfully!"
 failed="deploy failed!"
@@ -162,10 +162,13 @@ echo "[$time] start java-tron with pid $pid on $hostName"
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
+  exit
+else
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo  "[$time] ${success}"
+  exit
 fi
 
 rm -rf startPid
 
 rm -rf $5
-time=$(date "+%Y-%m-%d %H:%M:%S")
-echo  "[$time] ${success}"
