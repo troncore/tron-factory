@@ -54,8 +54,8 @@ public class DeployController {
                 String lineTxt;
 
                 while ((lineTxt = bufferedReader.readLine()) != null) {
-                    if (lineTxt.contains(Common.deployFinishStatus)) {
-                        return Common.deployFinishStatus;
+                    if (lineTxt.contains(Common.deploySuccessStatus)) {
+                        return Common.deploySuccessStatus;
                     }
                 }
                 bufferedReader.close();
@@ -184,7 +184,7 @@ public class DeployController {
             JSONObject node = (JSONObject) nodes.get(i);
             Long id = (Long) node.get(Common.idFiled);
             String status = checkNodeStatus(String.format(Common.logFormat, id.toString()));
-            if(!status.equals(Common.deployFinishStatus)) isDeployed = false;
+            if(status.equals(Common.deployFailStatus)) isDeployed = false;
         }
         return new Response(ResultCode.OK.code, isDeployed).toJSONObject();
 

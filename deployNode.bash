@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 APP="java-tron-1.0.0"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] Start ssh deployment"
+echo "[$time] start ssh $1 deployment"
 #finish="deploy finish"
 success="deploy successfully!"
 failed="deploy failed!"
