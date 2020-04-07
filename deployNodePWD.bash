@@ -4,7 +4,9 @@ Program="program.FullNode"
 
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
-finish="deploy finish"
+#finish="deploy finish"
+success="deploy successfully!"
+failed="deploy failed!"
 noCheck="StrictHostKeyChecking no"
 
 ##################################
@@ -12,7 +14,9 @@ noCheck="StrictHostKeyChecking no"
 which expect > /dev/null
 if [ $? != 0 ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] expect is not installed, ${finish}"
+  echo "[$time] expect is not installed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 exit
 fi
 ###################################
@@ -59,7 +63,9 @@ lsp
 result=`cat /tmp/checkPort.log`
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] $port: port is occupied, ${finish}"
+  echo "[$time] $port: port is occupied!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
   exit
 fi
 done
@@ -88,7 +94,9 @@ if [ $? = 0 ];then
 echo "[$time] ssh connect successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] $1: ssh connect failed, ${finish}"
+  echo "[$time] $1: ssh connect failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 exit
 fi
 ###################################
@@ -113,7 +121,9 @@ if [ $? = 0 ];then
 echo "[$time] rm java-tron done"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] ssh connect failed, ${finish}"
+  echo "[$time] ssh connect failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 exit
 fi
 
@@ -139,7 +149,9 @@ if [ $? = 0 ];then
 echo "[$time] made the directory: java-tron"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] ssh connect failed, ${finish}"
+  echo "[$time] ssh connect failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 exit
 fi
 
@@ -150,7 +162,9 @@ echo "[$time] check java-tron-1.0.0.zip path"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] Please upload java-tron.1.0.0.zip generated after java-tron build, ${finish}"
+  echo "[$time] Please upload java-tron.1.0.0.zip generated after java-tron build!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 exit
 fi
 
@@ -179,7 +193,9 @@ echo "[$time] upload java-tron-1.0.0.zip successfully"
 else
 echo $?
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] upload java-tron-1.0.0.zip failed, ${finish}"
+echo "[$time] upload java-tron-1.0.0.zip failed!"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ${failed}"
 #exit
 fi
 
@@ -207,7 +223,9 @@ if [ $? = 0 ];then
 echo "[$time] upload config successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] upload config failed, ${finish}"
+  echo "[$time] upload config failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 #exit
 fi
 
@@ -235,7 +253,9 @@ if [ $? = 0 ];then
 echo "[$time] unzip java-tron-1.0.0.zip successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed, ${finish}"
+  echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 exit
 fi
 
@@ -302,7 +322,9 @@ lsp
    echo "[$time] upload ${dbPath} successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] upload ${dbPath} failed, ${finish}"
+    echo "[$time] upload ${dbPath} failed!"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] ${failed}"
     exit
   fi
 fi
@@ -330,7 +352,9 @@ if [ $? = 0 ];then
 echo "[$time] upload start.sh successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] upload start.sh failed, ${finish}"
+  echo "[$time] upload start.sh failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
 #exit
 fi
 
@@ -360,7 +384,9 @@ lsp
   echo "[$time] upload plugin successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload plugin failed"
+    echo "[$time] upload plugin failed!"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] ${failed}"
   #exit
   fi
 fi
@@ -442,4 +468,4 @@ lsp
 ###################################
 rm -rf $5
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo  "[$time] ${finish}"
+echo  "[$time] ${success}"

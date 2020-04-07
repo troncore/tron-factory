@@ -107,7 +107,13 @@ public class Common {
   // Node Status
   public static final String notFoundStatus = "not found";
 
+  public static final String deployStatus = "status";
+
   public static final String deployFinishStatus = "deploy finish";
+
+  public static final String deploySuccessStatus = "deploy successfully!";
+
+  public static final String deployFailStatus = "deploy failed!";
 
   public static final String deployFailedStatus = "deploying";
 
@@ -121,9 +127,11 @@ public class Common {
 
   public static final String expectIsNotInstalled = "expect is not installed";
 
-  public static final String canNotFindZip = "Please upload java-tron.1.0.0.zip generated after java-tron build";
+  public static final String canNotFindZip = "No such file or directory!";
 
   public static final String canNotFindJar = "can't find jar";
+
+  public static final String  noFile = ": No such file or directory!";
 
   public static final String portIsOccupied = "port is occupied";
 

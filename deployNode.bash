@@ -2,7 +2,9 @@
 APP="java-tron-1.0.0"
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] Start ssh deployment"
-finish="deploy finish"
+#finish="deploy finish"
+success="deploy successfully!"
+failed="deploy failed!"
 noCheck="StrictHostKeyChecking no"
 Program="program.FullNode"
 ############################################################
@@ -18,7 +20,9 @@ fi
 result=`ssh -p $2 $3@$1 "netstat -anp|grep $port"`
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] $port: port is occupied, ${finish}"
+  echo "[$time] $port: port is occupied!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
   exit
 fi
 done
@@ -35,7 +39,9 @@ if [ -z $result ];then
   echo "[$time] made the directory: java-tron"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ssh connect failed, ${finish}"
+  echo "[$time] ssh connect failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
   exit
 fi
 
@@ -46,8 +52,10 @@ echo "[$time] check java-tron-1.0.0.zip path"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] Please upload java-tron.1.0.0.zip generated after java-tron build, ${finish}"
-exit
+  echo "[$time] No such file or directory!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
+  exit
 fi
 
 ###################################
@@ -59,7 +67,9 @@ if [ -z $result ];then
  echo "[$time] upload java-tron-1.0.0.zip successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload java-tron-1.0.0.zip failed, ${finish}"
+  echo "[$time] upload java-tron-1.0.0.zip failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
   exit
 fi
 
@@ -71,14 +81,18 @@ if [ -z $result ];then
   echo "[$time] upload config successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload config failed, ${finish}"
+  echo "[$time] upload config failed!"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
   exit
 fi
 
 result=`ssh -p $2 $3@$1 "cd java-tron&&unzip -o ./${APP}.zip > /dev/null"`
 if [ "$?" != "0" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-   echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed, ${finish}"
+   echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed!"
+   time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] ${failed}"
    exit
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -100,7 +114,9 @@ if [ ${9} != "null" ]; then
   echo "[$time] upload ${dbPath} successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] upload ${dbPath} failed, ${finish}"
+    echo "[$time] upload ${dbPath} failed!"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] ${failed}"
     exit
   fi
 fi
@@ -118,7 +134,9 @@ if [ $6 != "null" ]; then
     echo "[$time] upload plugin successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] upload plugin failed"
+    echo "[$time] upload plugin failed!"
+    time=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[$time] ${failed}"
     exit
   fi
 fi
@@ -141,9 +159,13 @@ pid=`head -1 startPid`
 hostName=`tail -1 startPid`
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start java-tron with pid $pid on $hostName"
+if [ $pid = "" ] ; then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] ${failed}"
+fi
 
 rm -rf startPid
 
 rm -rf $5
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo  "[$time] ${finish}"
+echo  "[$time] ${success}"
