@@ -321,7 +321,7 @@ public class DeployController {
                     return new Response(ResultCode.UNAUTHORIZED.code, ip+": ssh connect failed").toJSONObject();
                 }
                 if(status.equals(Common.canNotFindZip)){
-                    return new Response(ResultCode.UNAUTHORIZED.code, "path is not found or zip is error!").toJSONObject();
+                    return new Response(ResultCode.UNAUTHORIZED.code, path+Common.noFile).toJSONObject();
                 }
                 if(status.equals(Common.portIsOccupied)){
                     return new Response(ResultCode.FAILED.code, "port is occupied").toJSONObject();
@@ -356,6 +356,7 @@ public class DeployController {
     public JSONObject deploy(
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id
     ) {
+        int status = 0;
         String logName = String.format(Common.logFormat, id.toString());
         File file = new File(logName);
         List<String> result = new ArrayList<>();
@@ -368,6 +369,12 @@ public class DeployController {
 
                 while ((lineTxt = bufferedReader.readLine()) != null) {
                     result.add(lineTxt);
+                    if(lineTxt.contains(Common.deploySuccessStatus)) {
+                        status = 1;
+                    }
+                    if(lineTxt.contains(Common.deployFailStatus)) {
+                        status = -1;
+                    }
                 }
                 bufferedReader.close();
                 read.close();
@@ -381,6 +388,7 @@ public class DeployController {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Common.logInfoFiled, result);
+        jsonObject.put(Common.deployStatus, status);
         return new Response(ResultCode.OK.code, jsonObject).toJSONObject();
     }
 }

@@ -219,7 +219,7 @@ public class ConfigControlller {
       bashExecutor.callDBJarPathScript(dbCustom);
       String checkDBJarPath = checkDBJarPath(String.format(Common.dbJarPathFormat));
       if (checkDBJarPath.equals(Common.canNotFindJar)) {
-        return new Response(ResultCode.NOT_FOUND.code, Common.canNotFindJar).toJSONObject();
+        return new Response(ResultCode.NOT_FOUND.code, dbCustom+Common.noFile).toJSONObject();
       }
     }
 
