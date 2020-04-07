@@ -93,8 +93,6 @@
 
               return log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2')
             })
-
-            console.log(this.logInfo)
           } else {
             this.processingLoading = false
             this.processingText = this.$t('nodesManage.emptyLog')

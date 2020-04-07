@@ -30,11 +30,11 @@
           <el-form-item prop="voteCount" label-width="140px">
             <span slot="label" class="space-between">voteCount <im-tooltip :content="$t('nodesManage.helpTips.voteCount')" /></span>
             <el-input v-model.trim="form.voteCount" tabindex="22" type="number" :maxlength="20" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')" />
-          </el-form-item>
+          </el-form-item><br />
           <el-form-item class="address" prop="publicKey" label-width="140px">
             <span slot="label" class="space-between">address <im-tooltip :content="$t('nodesManage.helpTips.publicKey')" /></span>
             <el-input v-model.trim="form.publicKey" tabindex="23" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.publicKey')" />
-          </el-form-item>
+          </el-form-item><br />
           <el-form-item class="private-key" v-if="opType !== 'detail'" prop="privateKey" label-width="140px">
             <span slot="label" class="space-between">privateKey <im-tooltip :content="$t('nodesManage.helpTips.privateKey')" /></span>
             <el-input v-model.trim="form.privateKey" tabindex="24" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" :disabled="isView" :placeholder="$t('nodesManage.valid.inputPrivateKey')" />
@@ -63,12 +63,12 @@
         <el-form-item class="ssh-port" prop="port" label-width="100px">
           <span slot="label">{{ $t('nodesManage.sshPort') }}</span>
           <el-input v-model.trim="form.port" type="number" tabindex="27" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')" />
-        </el-form-item>
+        </el-form-item><br />
         <el-form-item prop="sshConnectType" label-width="140px">
           <span slot="label">{{ $t('nodesManage.sshConnectType') }}</span>
           <el-radio v-model="form.sshConnectType" :label="2" :disabled="isView">{{ $t('nodesManage.keyConnect') }}</el-radio>
           <el-radio v-model="form.sshConnectType" :label="1" :disabled="isView">{{ $t('nodesManage.passwordConnect') }}</el-radio>
-        </el-form-item>
+        </el-form-item><br />
         <el-form-item v-if="form.sshConnectType === 1" class="ssh-password" prop="sshPassword" label-width="140px">
           <span slot="label">{{ $t('nodesManage.sshPassword') }}</span>
           <el-input v-model.trim="form.sshPassword" tabindex="28" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')" />
@@ -389,9 +389,6 @@
       &.ssh-port {
         width: 250px;
         margin-right: 0;
-      }
-      &.ssh-password {
-        display: block;
       }
       &.address {
         width: 750px;

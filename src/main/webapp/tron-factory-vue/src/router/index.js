@@ -49,7 +49,7 @@ const router = new VueRouter({
 router.beforeEach( async (to, from, next) => {
   try {
     let isAuth = ~authRoutes.findIndex(route => route.name === to.name) // !== -1
-    let oneClick = localStorage.getItem('oneClick') === 'true'
+    let oneClick = sessionStorage.getItem('oneClick') === 'true'
     if ( isAuth && !oneClick) {
       next('/')
     } else {
