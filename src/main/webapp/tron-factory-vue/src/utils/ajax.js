@@ -16,13 +16,20 @@ function responseSuccess(response, callback) {
 
 // the server responses error or network error
 function responseFail(error, callback) {
-  let error_msg = '' + (error || 'Exception Error')
+  let errorTitle = 'Error'
+  let errorMsg = '' + (error || 'Exception Error')
+  // current use the default error for java
+  if (error && error.response && error.response.data) {
+    let errorData = error.response.data
+    errorTitle = errorData.error
+    errorMsg = errorData.path + ': ' + errorData.message
+  }
   Notification.error({
-    title: 'Error',
-    message: error_msg,
+    title: errorTitle,
+    message: errorMsg,
   })
 
-  callback(error_msg)
+  callback(error)
 }
 
 export const proxyMap = {

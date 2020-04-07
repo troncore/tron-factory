@@ -8,31 +8,31 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String serviceType, String dbCustom, String fullNodePort){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort){
 
         try {
             String absolutePath = "";
-            if(serviceType.equals("remote")){
-                if(sshPassword.equals("")){
-                    absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
-                }else{
-                    absolutePath = System.getProperty("user.dir").concat("/deployNodePWD.bash");
-                }
-
+            if(sshPassword.equals("")){
+                absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
             }else{
-                absolutePath = System.getProperty("user.dir").concat("/deployNodeLocal.bash");
+                absolutePath = System.getProperty("user.dir").concat("/deployNodePWD.bash");
             }
             String configPath = String.format("%s_%s", Common.configFiled, id.toString());
             String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword, id.toString()};
-            if (privateKey.length() != 0) {
-                cmdArray = ArrayUtils.add(cmdArray, privateKey);
-            }
-            cmdArray = ArrayUtils.add(cmdArray, fullNodePort);
+            cmdArray = ArrayUtils.add(cmdArray, privateKey);
             cmdArray = ArrayUtils.add(cmdArray, dbCustom);
+            cmdArray = ArrayUtils.add(cmdArray, fullNodePort);
+            cmdArray = ArrayUtils.add(cmdArray, solidityPort);
+            cmdArray = ArrayUtils.add(cmdArray, listenPort);
+            cmdArray = ArrayUtils.add(cmdArray, rpcPort);
+            cmdArray = ArrayUtils.add(cmdArray, rpcsolidityPort);
 
             String logName = String.format("> ".concat(logFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
@@ -47,6 +47,7 @@ public class BashExecutor {
         }
     }
 
+//添加节点时检查ssh连通性
     public void callSSHScript(String ip, int port, String userName){
 
         try {

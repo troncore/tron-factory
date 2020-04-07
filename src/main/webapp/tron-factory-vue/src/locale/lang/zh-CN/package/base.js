@@ -8,6 +8,7 @@ export default {
 
   document: '文档',
   helpDocument: '帮助文档',
+  viewDocument: '查看文档',
 
   open: '打开',
   confirm: '确定',

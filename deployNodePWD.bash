@@ -17,9 +17,14 @@ exit
 fi
 ###################################
 #echo "检测端口"
-
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
+portArray=(${11} ${12} ${13} ${14} ${15})
+for port in ${portArray[@]}
+do
+if [ "$port" = "null" ];then
+continue
+fi
 #远程检查端口占用
 /usr/bin/expect <<lsp
 log_user 0
@@ -28,7 +33,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "lsof -i:${10} > ~/java-tron/checkPort.log\r"
+send "netstat -anp|grep $port > ~/java-tron/checkPort.log\r"
 expect "]*"
 send "exit\r"
 }
@@ -52,15 +57,15 @@ lsp
   expect eof
 lsp
 result=`cat /tmp/checkPort.log`
-echo $result;
 if [ ! -z "$result" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ${10}: port is occupied, ${finish}"
+  echo "[$time] $port: port is occupied, ${finish}"
   exit
 fi
+done
 
 ##################################
-#校验IP，密码正确性，是否成功连接目标主机
+# 校验IP，密码正确性，是否成功连接目标主机
 /usr/bin/expect <<lsp
 log_user 0
 spawn ssh -p $2 $3@$1 -o "${noCheck}"
@@ -235,7 +240,7 @@ exit
 fi
 
 ###################################
-if [ ${11} != "null" ]; then
+if [ ${10} != "null" ]; then
   #获取原chainbase.java名字，并保存在远程服务器~/java-tron/dbJarName文件中
   /usr/bin/expect <<lsp
   log_user 0
@@ -273,13 +278,13 @@ lsp
   ##远程chainbase.jar路径
   chainbasePath=`cat /tmp/dbJarName`
   #用户自定义数据库jar包路径
-  dbCustom=${11}
+  dbCustom=${10}
   dbPath=${dbCustom##*/}
 
   /usr/bin/expect <<lsp
   log_user 0
   #set timeout 3600
-  spawn scp -P $2 ${11} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath
+  spawn scp -P $2 ${10} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath
   expect {
   "*assword*" {
   send "$7\r"
@@ -361,7 +366,7 @@ lsp
 fi
 
 #echo "部署"
-if [ -z $9 ]; then
+if [ $9 = "null" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy FullNode"
    /usr/bin/expect <<lsp
@@ -372,7 +377,7 @@ if [ -z $9 ]; then
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron&& bash start.sh > start.log \r"
+   send "cd java-tron&& bash start.sh > startPid.log \r"
    expect "]*"
    send "exit\r"
    }
@@ -398,7 +403,7 @@ else
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron&& bash start.sh $9 > start.log\r"
+   send "cd java-tron&& bash start.sh $9 > startPid.log\r"
    expect "]*"
    send "exit\r"
    }
@@ -416,7 +421,7 @@ fi
 
 /usr/bin/expect <<lsp
    log_user 0
-   spawn scp -p $2 $3@$1:./java-tron/start.log .
+   spawn scp -P $2 $3@$1:./java-tron/startPid.log .
    expect {
    "*assword*" {
    send "$7\r"
@@ -432,8 +437,8 @@ lsp
    fi
 
   time=$(date "+%Y-%m-%d %H:%M:%S")
-   echo `tail -1 start.log`
-   rm -rf start.log
+   echo `tail -1 startPid.log`
+   rm -rf startPid.log
 ###################################
 rm -rf $5
 time=$(date "+%Y-%m-%d %H:%M:%S")

@@ -8,6 +8,7 @@ export default {
 
   document: 'Document',
   helpDocument: 'Help Document',
+  viewDocument: 'View Document',
 
   open: 'Open',
   confirm: 'Confirm',

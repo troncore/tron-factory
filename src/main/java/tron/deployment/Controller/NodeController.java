@@ -181,7 +181,7 @@ public class NodeController {
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
-    String serviceType = (String) data.getOrDefault("serviceType", "");
+//    String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
     int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
@@ -286,7 +286,7 @@ public class NodeController {
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
     newNode.put(Common.needSyncCheck, needSyncCheck);
-    newNode.put(Common.serviceTypeFiled, serviceType);
+//    newNode.put(Common.serviceTypeFiled, serviceType);
     newNode.put(Common.sshPasswordFiled, sshPassword);
     newNode.put(Common.sshPortFiled, sshPort);
     newNode.put(Common.isDeployedFiled, isDeployed);
@@ -299,8 +299,9 @@ public class NodeController {
   @PutMapping(value = "/api/nodeInfo")
   public JSONObject updateNode(@RequestBody LinkedHashMap<String,Object> data) {
     int status = 0;
+
     String userName = (String) data.getOrDefault("userName", "node1");
-    String ip = (String) data.getOrDefault("ip", "127.0.0.1");
+    String ip = (String) data.getOrDefault("ip", "");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
     String url = (String) data.getOrDefault("url", "");
     String key = (String) data.getOrDefault("privateKey", "");
@@ -312,7 +313,7 @@ public class NodeController {
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
-    String serviceType = (String) data.getOrDefault("serviceType", "");
+//    String serviceType = (String) data.getOrDefault("serviceType", "");
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
     int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
@@ -368,41 +369,44 @@ public class NodeController {
 
     boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
-    if(key.length() == 0){
-      String privateKey = (String)node.get(Common.privateKeyFiled);
-      String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
-      if(!publicKey.equals(privateKeyCheck)){
-        status = 2;
-        statusObj.put("status",status);
-        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-      }
-      node.put(Common.privateKeyFiled, privateKey);
-      node.put(Common.publicKeyFiled, publicKey);
-    }
-    if (key.length() != 0) {
-      String path;
-      String publicKeyCheck;
-      refresh();
-      try {
-        path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
-        refresh();
-        if (isEckey) {
-          publicKeyCheck = private2AddressEckey(hexs2Bytes(key.getBytes()));
-        } else {
-          publicKeyCheck = private2AddressSm2(hexs2Bytes(key.getBytes()));
-        }
-        if(!publicKey.equals(publicKeyCheck)){
+    if (isSR) {
+      if(key.length() == 0){
+        String privateKey = (String)node.get(Common.privateKeyFiled);
+        String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
+        if(!publicKey.equals(privateKeyCheck)){
           status = 2;
           statusObj.put("status",status);
           return new Response(ResultCode.OK.code, statusObj).toJSONObject();
         }
-        node.put(Common.privateKeyFiled, path);
+        node.put(Common.privateKeyFiled, privateKey);
         node.put(Common.publicKeyFiled, publicKey);
-      } catch (CipherException | IOException e) {
-        LOG.error(e.toString());
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.savePrivateKeyFailed).toJSONObject();
+      }
+      if (key.length() != 0) {
+        String path;
+        String publicKeyCheck;
+        refresh();
+        try {
+          path = Util.importPrivateKey(hexs2Bytes(key.getBytes()));
+          refresh();
+          if (isEckey) {
+            publicKeyCheck = private2AddressEckey(hexs2Bytes(key.getBytes()));
+          } else {
+            publicKeyCheck = private2AddressSm2(hexs2Bytes(key.getBytes()));
+          }
+          if(!publicKey.equals(publicKeyCheck)){
+            status = 2;
+            statusObj.put("status",status);
+            return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+          }
+          node.put(Common.privateKeyFiled, path);
+          node.put(Common.publicKeyFiled, publicKey);
+        } catch (CipherException | IOException e) {
+          LOG.error(e.toString());
+          return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.savePrivateKeyFailed).toJSONObject();
+        }
       }
     }
+
 
     node.put(Common.userNameFiled, userName);
     node.put(Common.portFiled, port);
@@ -411,7 +415,7 @@ public class NodeController {
     node.put(Common.urlFiled, url);
     node.put(Common.voteCountFiled, voteCount);
     node.put(Common.needSyncCheck, needSyncCheck);
-    node.put(Common.serviceTypeFiled, serviceType);
+//    node.put(Common.serviceTypeFiled, serviceType);
     node.put(Common.sshPasswordFiled, sshPassword);
     node.put(Common.sshPortFiled, sshPort);
     node.put(Common.isDeployedFiled, isDeployed);
@@ -437,10 +441,10 @@ public class NodeController {
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
-    String  serviceType = (String)node.get(Common.serviceTypeFiled);
+    /*String  serviceType = (String)node.get(Common.serviceTypeFiled);
     if(serviceType.equals("local")){
       node.put(Common.userNameFiled, "");
-    }
+    }*/
     boolean isSR = (boolean)node.get(Common.isSRFiled);
     if(!isSR){
       node.put(Common.urlFiled, "");

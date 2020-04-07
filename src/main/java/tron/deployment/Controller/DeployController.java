@@ -202,11 +202,41 @@ public class DeployController {
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
-        String fullNodePort ="8090";
+        String fullNodePort = "null";
+        String solidityPort = "null";
+        String listenPort = "18889";
+        String rpcPort = "50051";
+        String rpcsolidityPort = "50061";
+
+        boolean isfullNodeEnable = false;
+        boolean issolidityEnable = false;
         parseConfig();
-        if (Util.config.hasPath("node.http.fullNodePort")) {
-            fullNodePort =Util.config.getString("node.http.fullNodePort");
+        if (Util.config.hasPath("node.http.fullNodeEnable")) {
+            isfullNodeEnable = Util.config.getBoolean("node.http.fullNodeEnable");
+            if(isfullNodeEnable){
+                if (Util.config.hasPath("node.http.fullNodePort")) {
+                    fullNodePort =Util.config.getString("node.http.fullNodePort");
+                }
+            }
         }
+        if (Util.config.hasPath("node.http.solidityEnable")) {
+            issolidityEnable = Util.config.getBoolean("node.http.solidityEnable");
+            if(issolidityEnable){
+                if (Util.config.hasPath("node.http.solidityPort")) {
+                    solidityPort =Util.config.getString("node.http.solidityPort");
+                }
+            }
+        }
+        if (Util.config.hasPath("node.listen.port")) {
+            listenPort =Util.config.getString("node.listen.port");
+        }
+        if (Util.config.hasPath("node.rpc.port")) {
+            rpcPort =Util.config.getString("node.rpc.port");
+        }
+        if (Util.config.hasPath("node.rpc.solidityPort")) {
+            rpcsolidityPort =Util.config.getString("node.rpc.solidityPort");
+        }
+
         BashExecutor bashExecutor = new BashExecutor();
         bashExecutor.callZipPathScript(filePath);
         String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
@@ -223,12 +253,12 @@ public class DeployController {
         util.parseConfig();
         Config config = util.config;
         Args args = new Args();
-        int listenPort = (Integer)args.getListenPort(config);
+        int listenPort_ip = (Integer)args.getListenPort(config);
         ArrayList<String> ipList = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject node = (JSONObject) nodes.get(i);
             String nodeIp = (String) node.get(Common.ipFiled);
-            ipList.add(nodeIp + "\":\"" + listenPort);
+            ipList.add(nodeIp + "\":\"" + listenPort_ip);
         }
 
         for (int i = 0; i < nodes.size(); i++) {
@@ -263,7 +293,7 @@ public class DeployController {
                 Long port = (Long) node.get(Common.portFiled);
                 String userName = (String) node.get(Common.userNameFiled);
                 String sshPassword = (String) node.get(Common.sshPasswordFiled);
-                String serviceType = (String) node.get(Common.serviceTypeFiled);
+//                String serviceType = (String) node.get(Common.serviceTypeFiled);
 //                BashExecutor bashExecutor = new BashExecutor();
                 String plugin = "null";
                 if (json.containsKey(Common.customTransactionFiled)
@@ -272,11 +302,14 @@ public class DeployController {
                 }
 
                 String dbCustom = (String) json.get(Common.dbCustomFiled);
+                if(dbCustom.equals("")){
+                    dbCustom="null";
+                }
 
                 if (Objects.nonNull(privateKey)) {
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, serviceType, dbCustom, fullNodePort);
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort );
                 } else {
-                    bashExecutor.callScript(ip, port, userName, path, "", id, plugin, sshPassword, serviceType, dbCustom, fullNodePort);
+                    bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort);
                 }
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
@@ -293,20 +326,22 @@ public class DeployController {
                 if(status.equals(Common.portIsOccupied)){
                     return new Response(ResultCode.FAILED.code, "port is occupied").toJSONObject();
                 }
-                NodeController nc  = new NodeController();
-                JSONObject nodeOld = Util.getNodeInfo(nodes, id);
-                nodeOld.put(Common.isDeployedFiled, isDeployed);
-                nc.deleteNode(id);
-                json = readJsonFile();
-                JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
-                if (Objects.isNull(newNodes)) {
-                    newNodes = new JSONArray();
-                }
-                newNodes.add(nodeOld);
-                json.put(Common.nodesFiled, newNodes);
-                nc.updateNodesInfo(newNodes, json, ipList);
+                if(isDeployed){
+                    NodeController nc  = new NodeController();
+                    JSONObject nodeOld = Util.getNodeInfo(nodes, id);
+                    nodeOld.put(Common.isDeployedFiled, isDeployed);
+                    nc.deleteNode(id);
+                    json = readJsonFile();
+                    JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+                    if (Objects.isNull(newNodes)) {
+                        newNodes = new JSONArray();
+                    }
+                    newNodes.add(nodeOld);
+                    json.put(Common.nodesFiled, newNodes);
+                    nc.updateNodesInfo(newNodes, json, ipList);
 
-                if(isDeployed) return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+                }
                 else return new Response(ResultCode.FAILED.code, "Deploy fail", isDeployed).toJSONObject();
 
             }
