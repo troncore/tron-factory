@@ -35,6 +35,7 @@ export default {
 
   consensusModule: 'Consensus Module',
   tempNotSupport: 'Not Supported',
+  otherConsensus: 'Other(In development)',
   transactionModule: 'Transaction Module',
   customTransactionModule: 'Custom Transaction Module',
   consensusModuleSaveSuccess: 'Saving Consensus Module Successful',

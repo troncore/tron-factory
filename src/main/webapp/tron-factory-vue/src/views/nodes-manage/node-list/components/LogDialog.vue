@@ -79,20 +79,17 @@
             this.processingLoading = false
             this.processingText = this.$t('nodesManage.emptyLog')
             clearInterval(this.timeID)
-
             return
           }
 
-          if (Array.isArray(res.logInfo)) {
-            this.logInfo = res.logInfo.map(log => {
-              if (log.indexOf('deploy finish') > -1) {
-                this.processingLoading = false
-                this.processingText = this.$t('nodesManage.deployComplete')
-                clearInterval(this.timeID)
-              }
+          if (res.status === -1 || res.status === 1) {
+            this.processingShow = false
+            this.processingLoading = false
+            clearInterval(this.timeID)
+          }
 
-              return log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2')
-            })
+          if (Array.isArray(res.logInfo)) {
+            this.logInfo = res.logInfo.map(log => log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2'))
           } else {
             this.processingLoading = false
             this.processingText = this.$t('nodesManage.emptyLog')

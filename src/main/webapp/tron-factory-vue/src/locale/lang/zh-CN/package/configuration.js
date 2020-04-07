@@ -35,6 +35,7 @@ export default {
 
   consensusModule: '共识模块',
   tempNotSupport: '暂不支持',
+  otherConsensus: '其它(建设中)',
   transactionModule: 'Transaction模块',
   customTransactionModule: '自定义Transaction模块',
   consensusModuleSaveSuccess: '保存共识模块成功',

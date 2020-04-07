@@ -9,12 +9,12 @@
         <div class="im-card__title">{{ $t('nodesManage.nodeType') }}</div>
         <el-form-item prop="isSR">
           <div class="radio-with-suffix">
-            <el-radio v-model="form.isSR" :label="false" :disabled="isView">{{ $t('nodesManage.fullNode') }}</el-radio>
-            <im-tooltip :content="$t('nodesManage.helpTips.fullNode')"/>
-          </div>
-          <div class="radio-with-suffix">
             <el-radio v-model="form.isSR" :label="true" :disabled="isView">{{ $t('nodesManage.superNode') }}</el-radio>
             <im-tooltip :content="$t('nodesManage.helpTips.superNode')"/>
+          </div>
+          <div class="radio-with-suffix">
+            <el-radio v-model="form.isSR" :label="false" :disabled="isView">{{ $t('nodesManage.fullNode') }}</el-radio>
+            <im-tooltip :content="$t('nodesManage.helpTips.fullNode')"/>
           </div>
         </el-form-item>
         <!-- SR -->
@@ -66,8 +66,8 @@
         </el-form-item><br />
         <el-form-item prop="sshConnectType" label-width="140px">
           <span slot="label">{{ $t('nodesManage.sshConnectType') }}</span>
-          <el-radio v-model="form.sshConnectType" :label="2" :disabled="isView">{{ $t('nodesManage.keyConnect') }}</el-radio>
           <el-radio v-model="form.sshConnectType" :label="1" :disabled="isView">{{ $t('nodesManage.passwordConnect') }}</el-radio>
+          <el-radio v-model="form.sshConnectType" :label="2" :disabled="isView">{{ $t('nodesManage.keyConnect') }}</el-radio>
         </el-form-item><br />
         <el-form-item v-if="form.sshConnectType === 1" class="ssh-password" prop="sshPassword" label-width="140px">
           <span slot="label">{{ $t('nodesManage.sshPassword') }}</span>

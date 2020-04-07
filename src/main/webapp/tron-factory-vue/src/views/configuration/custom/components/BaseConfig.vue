@@ -2,7 +2,7 @@
   <div class="box-view base-config">
     <div class="box-body">
       <el-form class="im-form" ref="base-config-form" :rules="baseRules" :model="form">
-        <el-form-item prop="chainId">
+        <!--<el-form-item prop="chainId">
           <span slot="label">chainId <i class="help-tips">({{ $t('configuration.helpTips.chainId') }})</i></span>
           <el-input v-model.trim="form.chainId" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
@@ -10,7 +10,7 @@
         <el-form-item prop="chainName">
           <span slot="label">chainName</span>
           <el-input v-model.trim="form.chainName" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>
+        </el-form-item>-->
 
         <el-form-item prop="block_maintenanceTimeInterval">
           <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('configuration.helpTips.maintenanceTimeInterval') }}: ms)</i></span>

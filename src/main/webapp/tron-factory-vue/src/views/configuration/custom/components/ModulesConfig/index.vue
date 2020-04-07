@@ -6,20 +6,20 @@
       <div class="consensus-list">
         <el-select v-model="consensus" placeholder="请选择">
           <el-option label="DPoS" value="dpos"></el-option>
-          <el-option :label="`PBFT(${$t('configuration.tempNotSupport')})`" value="pbft" disabled></el-option>
+          <el-option :label="`${$t('configuration.otherConsensus')}`" value="pbft" disabled></el-option>
         </el-select>
       </div>
     </div>
 
     <div class="box-card">
-      <div class="card-header">{{ $t('configuration.transactionModule') }}</div>
+      <!--<div class="card-header">{{ $t('configuration.transactionModule') }}</div>-->
       <el-form ref="form-box" :rules="formRules" :model="form" label-position="top">
 
-        <el-form-item class="transaction-list" prop="transaction">
-          <el-checkbox-group v-model="form.transaction">
-            <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
+        <!--<el-form-item class="transaction-list" prop="transaction">-->
+        <!--  <el-checkbox-group v-model="form.transaction">-->
+        <!--    <el-checkbox :label="item.value" :key="ind" v-for="(item, ind) in transactionList">{{ item.label }}</el-checkbox>-->
+        <!--  </el-checkbox-group>-->
+        <!--</el-form-item>-->
 
         <div class="more-setting">
           <el-checkbox v-model="checkCustomTransaction" @change="handleChangeCheckCustom">{{ $t('configuration.customTransactionModule') }}</el-checkbox>
@@ -116,7 +116,7 @@ export default {
       this.$refs['form-box'].validate(valid => {
         if (valid) {
           let params = {
-            transaction: this.form.transaction,
+            // transaction: this.form.transaction,
             customTransaction: this.checkCustomTransaction ? this.form.customTransaction : '',
             configStatus: 0,
           }

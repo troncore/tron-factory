@@ -7,13 +7,13 @@
           <span class="label">fullNodeEnable </span>
           <el-switch v-model="form.node_http_fullNodeEnable"></el-switch>
         </div>
-        <el-form-item prop="node_maxHttpConnectNumber">
-          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') }})</i></span>
-          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" max="200" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>
         <el-form-item prop="node_http_fullNodePort">
           <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configuration.helpTips.httpFullNodePort') }})</i></span>
           <el-input v-model.trim="form.node_http_fullNodePort" type="number" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+        </el-form-item>
+        <el-form-item prop="node_maxHttpConnectNumber">
+          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') }})</i></span>
+          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" max="200" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <div class="switch-item">
