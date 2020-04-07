@@ -323,7 +323,7 @@ public class DeployController {
                     return new Response(ResultCode.UNAUTHORIZED.code, ip+": ssh connect failed").toJSONObject();
                 }
                 if(status.equals(Common.canNotFindZip)){
-                    return new Response(ResultCode.UNAUTHORIZED.code, path+Common.noFile).toJSONObject();
+                    return new Response(ResultCode.UNAUTHORIZED.code, path+": "+Common.canNotFindZip).toJSONObject();
                 }
                 if(status.equals(Common.portIsOccupied)){
                     return new Response(ResultCode.FAILED.code, portOccupied[1]).toJSONObject();
