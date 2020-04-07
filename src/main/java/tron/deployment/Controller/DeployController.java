@@ -104,7 +104,7 @@ public class DeployController {
                         return Common.canNotFindZip;
                     }
                     if(lineTxt.contains(Common.portIsOccupied)){
-                        portOccupied = lineTxt.substring(lineTxt.lastIndexOf(" ")+1, lineTxt.lastIndexOf(":"));
+//                        portOccupied = lineTxt.substring(lineTxt.lastIndexOf(" ")+1, lineTxt.lastIndexOf(":"));
                         return Common.portIsOccupied;
                     }
 
@@ -326,7 +326,7 @@ public class DeployController {
                     return new Response(ResultCode.UNAUTHORIZED.code, path+Common.noFile).toJSONObject();
                 }
                 if(status.equals(Common.portIsOccupied)){
-                    return new Response(ResultCode.FAILED.code, portOccupied+":port is occupied").toJSONObject();
+                    return new Response(ResultCode.FAILED.code, "port is occupied").toJSONObject();
                 }
                 if(isDeployed){
                     NodeController nc  = new NodeController();
