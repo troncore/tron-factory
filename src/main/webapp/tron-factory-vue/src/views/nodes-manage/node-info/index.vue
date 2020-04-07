@@ -85,6 +85,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import { isCorrectIp, isvalidateIntegerNum, isvalidateNum } from "@/utils/validate";
   import ImTooltip from "@/components/ImTooltip"
 
@@ -111,9 +112,16 @@
         safePrivateKey: Array(64).fill('*').join(''),
         nodeInfo: {},
         loading: false,
+
       }
     },
     computed: {
+      ...mapGetters('app', [
+        'currentGitBranch'
+      ]),
+      disabledLocalIP () {
+        return  /(master|release)/.test(this.currentGitBranch)
+      },
       opType () {
         return this.$route.params.type
       },
@@ -149,7 +157,7 @@
           }
         }
         const validLocalRule = (rule, value, callback) => {
-          if ( value === '127.0.0.1') {
+          if (this.disabledLocalIP && value === '127.0.0.1') {
             callback(new Error(this.$t('nodesManage.valid.disabledLocalIP')))
           } else {
             callback()

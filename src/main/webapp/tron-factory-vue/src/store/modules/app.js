@@ -28,6 +28,9 @@ export default {
     menuList (state) {
       return state.menuList
     },
+    currentGitBranch (state) {
+      return state.currentGitBranch
+    }
   },
 
   mutations: {
