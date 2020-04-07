@@ -21,7 +21,8 @@
       :empty-text="$t('base.emptyData')"
       v-loading="tableLoading"
       class="custom-table im-card"
-      header-align="center">
+      header-align="center"
+      @cell-click="handleCellClick">
       <el-table-column prop="ip" :label="$t('nodesManage.nodeIP')" align="center"></el-table-column>
       <!--<el-table-column prop="port" :label="$t('nodesManage.nodePort')" align="center"></el-table-column>-->
       <el-table-column :label="$t('nodesManage.isSR')" align="center">
@@ -37,12 +38,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="javaTronVersion" :label="$t('nodesManage.javaTronVersion')" align="center"></el-table-column>
+      <!--<el-table-column prop="javaTronVersion" :label="$t('nodesManage.javaTronVersion')" align="center"></el-table-column>-->
 
-      <el-table-column prop="status" :label="$t('base.operate')">
+      <el-table-column prop="operate" :label="$t('base.operate')">
         <template slot-scope="scope">
-          <el-button type="text" @click="handleLogs(scope.row)">{{$t('base.logs') }}</el-button>
-          <el-button v-if="scope.row.isDeployed" type="text" @click="handleDetail(scope.row)">{{$t('base.detail') }}</el-button>
+          <el-button type="text" @click="handleLogs(scope.row)">{{$t('nodesManage.deployLog') }}</el-button>
+          <el-button v-if="scope.row.isDeployed" type="text" @click="handleDetail(scope.row)">{{$t('nodesManage.nodeDetails') }}</el-button>
           <el-button v-if="!scope.row.isDeployed" type="text" @click="handleUpdate(scope.row)">{{$t('base.edit') }}</el-button>
           <el-button v-if="!scope.row.isDeployed" type="text" @click="handleDelete(scope.row)">{{$t('base.delete') }}</el-button>
         </template>
@@ -126,11 +127,14 @@ export default {
         path: '/nodes-manage/add'
       })
     },
-
     handleUpdate(row) {
       this.$router.push({
         path: '/nodes-manage/edit/' + row.id
       })
+    },
+
+    handleCellClick (row, column, cell, event) {
+      if (row.isDeployed && column.property !== 'operate') this.handleDetail(row)
     },
 
     handleDetail(row) {

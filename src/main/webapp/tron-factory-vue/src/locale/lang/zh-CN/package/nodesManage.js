@@ -33,6 +33,8 @@ export default {
   loadingLog: '正在查询节点记录，请稍等',
   deployComplete: '部署完成',
   deployFail: '部署失败',
+  deployLog: '部署日志',
+  nodeDetails: '节点详情',
 
   nodeType: '节点类型',
   nodeConfig: '节点配置',
@@ -59,7 +61,7 @@ export default {
 
   helpTips: { // only for help info/comment
     crypto: '添加节点之后，签名算法不可修改',
-    deployFile: '部署前首先需要填写本地文件路径, 例如：/Users/xxx/xxx/java-tron-1.0.0.zip',
+    deployFile: '请上传有效的编译执行文件(默认路径：/build/distributions/java-tron-1.0.0.zip)',
     fullNode: 'FullNode 是拥有完整区块链数据的节点，能够实时更新数据，负责交易的广播和验证，<br/>提供操作区块链的api和查询数据的api。',
     superNode: '又称为超级代表（简称SR），主要用于生成区块，负责对网络上广播出来的交易数据进行验证，<br/>并将交易打包进区块中，打包区块的方式是通过SR之间轮流的方式进行打包。',
     SSH: '节点部署需要通过SSH的方式将部署文件放到服务器上',
@@ -71,7 +73,7 @@ export default {
     ip: 'FullNode IP',
     port: 'FullNode 端口号',
     isSR: '配置节点是否为超级代表节点（即witness节点)，开启时为超级代表节点，关闭时为FullNode',
-    needSyncCheck: '同步检测开启后会定期同步链上各节点信息，新链需要有一个 SR 为 false，其他为 true',
+    needSyncCheck: '同步检测开启后会定期同步链上各节点信息，新链至少有一个 SR 此参数为 false，其他为 true',
     publicKey: 'Base58Check 地址',
     privateKey: '请输入私钥(256位, 16进制编码)',
   },

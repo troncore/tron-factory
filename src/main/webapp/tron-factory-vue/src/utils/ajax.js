@@ -8,27 +8,30 @@ function responseSuccess(response, callback) {
   if (response.data && (response.data.code < 300 || response.data.code === 304)) {
     callback(null, response.data.data)
   } else {
-    let error_msg = response.data.msg
+    let error_msg = response.data.msg  || 'Unknown Error'
 
-    responseFail(error_msg, callback)
+    Notification.error({
+      title: 'ERROR',
+      message: error_msg,
+    })
+    callback(error_msg, response)
   }
 }
 
 // the server responses error or network error
 function responseFail(error, callback) {
   let errorTitle = 'Error'
-  let errorMsg = '' + (error || 'Exception Error')
-  // current use the default error for java
+  let errorMsg = error + ''
   if (error && error.response && error.response.data) {
     let errorData = error.response.data
-    errorTitle = errorData.error
-    errorMsg = errorData.path + ': ' + errorData.message
+    errorTitle = error.response.statusText
+    errorMsg = errorData.message ? (errorData.path + ': ' + errorData.message) : errorData
   }
+
   Notification.error({
     title: errorTitle,
     message: errorMsg,
   })
-
   callback(error)
 }
 

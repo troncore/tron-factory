@@ -31,8 +31,10 @@ export default {
   logDialogTitle: 'Log',
   emptyLog: 'No log',
   loadingLog: 'Checking',
-  deployComplete: 'Succcessfully deployed',
+  deployComplete: 'Successfully deployed',
   deployFail: 'Failed deployed',
+  deployLog: 'Logs',
+  nodeDetails: 'Details',
 
   nodeType: 'Node Type',
   nodeConfig: 'Node Configuration',
@@ -59,7 +61,7 @@ export default {
 
   helpTips: {
     crypto: 'Signature Algorithm can not be changed after nodes added',
-    deployFile: 'Deploy requires local release file path like /Users/xxx/xxx/java-tron-1.0.0.zip',
+    deployFile: 'Please upload a valid compilation execution file (default path: /build/distributions/java-tron-1.0.0.zip)',
     fullNode: 'FullNode has the complete block chain data, can update data in real time. <br/>It can broadcast the transactions and provide api service',
     superNode: 'Super Representative(abbr: SR) is the block producer in the block chain.They verify<br/>the transactions and write the transactions into the blocks in turn',
     SSH: 'The deployment file needs to be uploaded on the server through SSH',
