@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="320" src="https://tronscan.org/static/media/tron-banner-1.e40b3379.png">
+  <img width="320" src="./src/main/webapp/tron-factory-vue/src/assets/logo.png">
 </p>
 
 简体中文 | [English](./README.md)
