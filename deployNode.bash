@@ -159,7 +159,7 @@ pid=`head -1 startPid`
 hostName=`tail -1 startPid`
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start java-tron with pid $pid on $hostName"
-if [ $pid = "" ] ; then
+if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
 fi
