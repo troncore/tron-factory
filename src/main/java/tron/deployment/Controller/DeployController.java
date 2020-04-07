@@ -44,7 +44,7 @@ import tron.deployment.shellExecutor.BashExecutor;
 @Slf4j
 public class DeployController {
     protected static final Logger logger = LoggerFactory.getLogger("DeployController");
-    String portOccupied = "";
+    String[] portOccupied = null;
     private String checkNodeStatus(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -104,7 +104,7 @@ public class DeployController {
                         return Common.canNotFindZip;
                     }
                     if(lineTxt.contains(Common.portIsOccupied)){
-//                        portOccupied = lineTxt.substring(lineTxt.lastIndexOf(" ")+1, lineTxt.lastIndexOf(":"));
+                        portOccupied = lineTxt.split("]");
                         return Common.portIsOccupied;
                     }
 
@@ -326,7 +326,7 @@ public class DeployController {
                     return new Response(ResultCode.UNAUTHORIZED.code, path+Common.noFile).toJSONObject();
                 }
                 if(status.equals(Common.portIsOccupied)){
-                    return new Response(ResultCode.FAILED.code, "port is occupied").toJSONObject();
+                    return new Response(ResultCode.FAILED.code, portOccupied[1]).toJSONObject();
                 }
                 if(isDeployed){
                     NodeController nc  = new NodeController();
