@@ -12,7 +12,7 @@ if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] $dbJar, find jar successfully"
 else
-  echo "[$time] can't find jar: $dbJar, ${finish}"
+  echo "[$time] $dbJar: no such file or directory, ${finish}"
   exit
 fi
 ###################################

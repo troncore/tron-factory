@@ -127,11 +127,11 @@ public class Common {
 
   public static final String expectIsNotInstalled = "expect is not installed";
 
-  public static final String canNotFindZip = "No such file or directory!";
+  public static final String canNotFindZip = "no such file or directory!";
 
-  public static final String canNotFindJar = "can't find jar";
+//  public static final String canNotFindJar = "can't find jar";
 
-  public static final String  noFile = ": No such file or directory!";
+//  public static final String  noFile = ": no such file or directory!";
 
   public static final String portIsOccupied = "port is occupied";
 

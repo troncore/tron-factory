@@ -52,7 +52,7 @@ echo "[$time] check java-tron-1.0.0.zip path"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] No such file or directory!"
+  echo "[$time] no such file or directory!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
   exit
@@ -114,7 +114,7 @@ if [ ${9} != "null" ]; then
   echo "[$time] upload ${dbPath} successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] upload ${dbPath} failed!"
+    echo "[$time] ${dbPath}: no such file or directory!"
     time=$(date "+%Y-%m-%d %H:%M:%S")
     echo "[$time] ${failed}"
     exit

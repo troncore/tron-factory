@@ -218,8 +218,8 @@ public class ConfigControlller {
       BashExecutor bashExecutor = new BashExecutor();
       bashExecutor.callDBJarPathScript(dbCustom);
       String checkDBJarPath = checkDBJarPath(String.format(Common.dbJarPathFormat));
-      if (checkDBJarPath.equals(Common.canNotFindJar)) {
-        return new Response(ResultCode.NOT_FOUND.code, dbCustom+Common.noFile).toJSONObject();
+      if (checkDBJarPath.equals(Common.canNotFindZip)) {
+        return new Response(ResultCode.NOT_FOUND.code, dbCustom+": "+Common.canNotFindZip).toJSONObject();
       }
     }
 
@@ -440,8 +440,8 @@ public class ConfigControlller {
         String lineTxt;
 
         while ((lineTxt = bufferedReader.readLine()) != null) {
-          if (lineTxt.contains(Common.canNotFindJar)) {
-            return Common.canNotFindJar;
+          if (lineTxt.contains(Common.canNotFindZip)) {
+            return Common.canNotFindZip;
           }
           if (lineTxt.contains((Common.findJar))) {
             return Common.findJar;
