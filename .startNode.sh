@@ -20,7 +20,7 @@ stopService() {
        sleep 1
     else
        time=$(date "+%Y-%m-%d %H:%M:%S")
-       echo "[$time] java-tron stop"
+       echo "[$time] stop java-tron"
        return
     fi
     count=$[$count+1]

@@ -162,10 +162,12 @@ ssh -p $2 $3@$1 "echo \$HOSTNAME >> startPid"
 scp -P $2 $3@$1:./startPid .
 pid=`head -1 startPid`
 hostName=`tail -1 startPid`
-if [ -z $hostname ] ; then
+if [ -z $hostName ] ; then
   host=""
+  exit
 else
-  host="on $hostname"
+  host="on $hostName"
+  exit
 fi
 
 time=$(date "+%Y-%m-%d %H:%M:%S")
