@@ -6,8 +6,7 @@
 
 ### 1.准备工作
 
-目前Tron Factory对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)
-部署节点需要 [java-tron-1.0.0.zip 包编译](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
+目前Tron Factory对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)  部署节点需要 [java-tron-1.0.0.zip 包编译](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
 
 ### 2.一键发链首页
 
