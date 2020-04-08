@@ -15,6 +15,14 @@
 后端技术栈基于 [sprint-boot](https://spring.io/projects/spring-boot)、[maven](https://maven.apache.org/guides/mini/index.html) 和 [lightbend](https://github.com/lightbend/config)  
 提前了解和学习这些知识会对使用本项目有很大的帮助。
 
+## 部署环境
+
+基于java-tron部署的应用链需要确保服务器安装恰当的依赖环境。
+- JDK1.8(JDK 1.9+ is not supported yet)
+- On Linux Ubuntu system (e.g. Ubuntu 16.04.4 LTS), ensure that the machine has [Oracle JDK 8](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04), instead of having Open JDK 8 in the system. If you are building the source code by using Open JDK 8, you will get Build Failed result
+- Open UDP ports for connection to the network
+- MINIMUM 2 CPU Cores
+
  <p align="center">
   <!-- <img width="900" src="https://wpimg.wallstcn.com/a5894c1b-f6af-456e-82df-1151da0839bf.png"> -->
 </p>
@@ -76,4 +84,4 @@ cd tron-factory
 
 ## 版权
 
-Copyright (c) 2020 Tron
+Copyright (c) 2020 Tron Factory
