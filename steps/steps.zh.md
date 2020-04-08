@@ -7,7 +7,7 @@
 ### 1.准备工作
 
 目前Tron Factory对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)  
-部署节点需要 [如何编译java-tron产生 java-tron-1.0.0zip 部署包](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
+部署节点需要 [如何编译java-tron](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
 
 ### 2.一键发链首页
 
@@ -26,8 +26,8 @@
 
 |                  必填字段                    |                        解释                         |
 | :-----------------------------------------: | :-------------------------------------------------: |
-|                   节点类型                   |                节点是超级节点还是全节点                |
-|                  needSyncCheck              |   超级节点是否开启同步检测，一条链必须且只能有一个节点此参数关闭（Super Node必填） |
+|                   节点类型                   |                超级节点或全节点                |
+|                  needSyncCheck              |   超级节点是否开启同步检测，此参数一条链必须有且只能有一个超级节点关闭（Super Node必填） |
 |                URL                          |        超级节点的官网（Super Node必填）               |
 | voteCount<sup style="color:blue">[3]</sup>  |          对应投票数量 （Super Node必填）              |
 | address                                     | 根据私钥使用相应签名算法的超级节点地址（Super Node必填）  |
@@ -64,19 +64,18 @@ asset 配置必填字段包括：
 | :---------------------------------------: | :-------------------------------: |
 |                accountName                |              账户名               |
 |                accountType                | 账户类型： AssetIssue 或 Contract |
-|                  address                  | 地址<sup style="color:blue">[11]</sup>             |
-| balance <sup style="color:blue">[7]</sup> |               余额                |
+|                  address                  | 地址<sup style="color:blue">[7]</sup>             |
+| balance <sup style="color:blue">[5]</sup> |               余额                |
 
-必须添加的asset：
+必须添加的asset（该账户为黑洞账户）：
 
 |                必填字段                   |              必填值                |
 | :---------------------------------------: | :-------------------------------: |
-|                accountName                |  Blackhole<sup style="color:blue">[8]</sup>       |
+|                accountName                |  Blackhole<sup style="color:blue">[6]</sup>       |
 |                accountType                |  AssetIssue |
 |                  address                  | (eckey签名算法）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB（sm2签名算法）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
-| balance <sup style="color:blue">[7]</sup> |               -9223372036854775808                |
+| balance <sup style="color:blue">[5]</sup> |               -9223372036854775808                |
 
-该账户为黑洞账户
 创世块信息点击下一步按钮保存当前配置
 
 ##### 4.2.基础配置
@@ -119,6 +118,7 @@ asset 配置必填字段包括：
 | 是否打开 transaction | 是或否 |
 | 是否需要更新 assets  | 是或否 |
 | 自定义chainbase模块  | 上传自定义编译chainbase模块 |
+
 数据库基础配置点击下一步按钮保存当前配置
 
 ##### 4.5.p2p 配置
@@ -182,21 +182,13 @@ Tron Factory只支持全量部署，当节点全部添加完毕后进入节点�
 
 [3] 注：voteCount 支持范围为 0 - 9223372036854775807
 
-[4] 注：每次添加的节点 privateKey 不能重复
+[4] 注：每次添加的超级节点 privateKey 不能重复
 
-[5] 注：点击节点列表下一步按钮重置配置管理菜单权限，只展示配置管理菜单权限 重新修改节点列表内容时 也需要点击下一步按钮重置当前默认设置
+[5] 注：balance 范围为-9223372036854775808 至 9223372036854775807 ，为保证部署成功，请按照取值内范围填写
 
-[6] 注：当节点列表为空时候默认下一步按钮不可以点击，当节点列表都删除除时没有下一步菜单权限，节点列表最多支持 20 个节点
+[6] 注：必须添加名为Blackhole 的asset，不同的签名算法，对应的地址也不相同
 
-[7] 注：balance 范围为-9223372036854775808 至 9223372036854775807 ，为保证部署成功，请按照取值内范围填写
-
-[8] 注：必须添加名为Blackhole 的asset，不同的签名算法，对应的地址也不相同
-
-[9] 注：点击配置管理最后一步骤跨链配置的下一步时，获取导入插件菜单权限，每次点击重置菜单权限
-
-[10] 注：点击导入插件最后一步数据库模块的下一步时点击获取节点部署菜单权限，每次点击重置菜单权限
-
-[11] 注：需填写对应当前签名算法的地址
+[7] 注：需填写对应当前签名算法的地址
 
 
 
