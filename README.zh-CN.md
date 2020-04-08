@@ -76,7 +76,7 @@ cd tron-factory
 
 ## 版本发布日志
 
-详细的版本发布日志放在[release notes](https://github.com/wubinTron/one-click-deployment/releases).
+详细的版本发布日志将稍后添加
 
 ## 浏览器支持
 
