@@ -2,7 +2,9 @@
 APP="java-tron-1.0.0"
 Program="program.FullNode"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] Start ssh deployment"
+echo "[$time] start deployment"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ssh $1"
 #finish="deploy finish"
 success="deploy successfully!"
 failed="deploy failed!"
@@ -116,7 +118,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] rm java-tron done"
+echo "[$time] rm -rf java-tron"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ssh connect failed!"
@@ -144,10 +146,10 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] made the directory: java-tron"
+echo "[$time] created the directory: ~/java-tron"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ssh connect failed!"
+  echo "[$time] create the directory failed!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
 exit
@@ -156,11 +158,11 @@ fi
 ###################################
 #echo "检验压缩包是否存在"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] check java-tron-1.0.0.zip path"
+echo "[$time] check the path: $4"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] no such file or directory!"
+  echo "[$time] $4: no such file or directory!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
   exit
@@ -218,10 +220,10 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] upload config successfully"
+echo "[$time] upload config.conf successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload config failed!"
+  echo "[$time] upload config.conf failed!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
 #exit
@@ -251,7 +253,7 @@ if [ $? = 0 ];then
 echo "[$time] unzip java-tron-1.0.0.zip successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed!"
+  echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
 exit

@@ -2,11 +2,17 @@
 APP="java-tron-1.0.0"
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start deployment"
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ssh $1"
 #finish="deploy finish"
 success="deploy successfully!"
 failed="deploy failed!"
 noCheck="StrictHostKeyChecking no"
 Program="program.FullNode"
+
+time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "[$time] ssh connect successfully"
+
 ############################################################
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -30,16 +36,15 @@ done
 
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] ssh connect success"
-echo "[$time] rm java-tron done"
+echo "[$time] rm -rf java-tron"
 
 result=`ssh -p $2 $3@$1 "mkdir java-tron" 2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] made the directory: java-tron"
+  echo "[$time] created the directory: ~/java-tron"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] ssh connect failed!"
+  echo "[$time] create the directory failed!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
   exit
@@ -48,11 +53,11 @@ fi
 ###################################
 #echo "检验压缩包是否存在"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] check java-tron-1.0.0.zip path"
+echo "[$time] check the path: $4"
 find $4  > /dev/null
 if [ $? != 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] no such file or directory!"
+  echo "[$time] $4: no such file or directory!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
   exit
@@ -78,10 +83,10 @@ echo "[$time] uploading config.conf"
 result=`scp -P $2 $5 $3@$1:./java-tron/config.conf 2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload config successfully"
+  echo "[$time] upload config.conf successfully"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] upload config failed!"
+  echo "[$time] upload config.conf failed!"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
   exit
@@ -90,7 +95,7 @@ fi
 result=`ssh -p $2 $3@$1 "cd java-tron&&unzip -o ./${APP}.zip > /dev/null"`
 if [ "$?" != "0" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-   echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed or java-tron-1.0.0.zip upload failed!"
+   echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed!"
    time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] ${failed}"
    exit
@@ -114,7 +119,7 @@ if [ ${9} != "null" ]; then
   echo "[$time] upload ${dbPath} successfully"
   else
     time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] ${dbPath}: no such file or directory!"
+    echo "[$time] upload ${dbPath} failed"
     time=$(date "+%Y-%m-%d %H:%M:%S")
     echo "[$time] ${failed}"
     exit
