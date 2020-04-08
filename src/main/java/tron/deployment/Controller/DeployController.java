@@ -70,7 +70,7 @@ public class DeployController {
         }
         return Common.deployFailedStatus;
     }
-//查询节点是否部署成功
+    //查询节点是否部署成功
     private String checkIsDeployed(String path) {
         boolean isDeployed = true;
         File file = new File(path);
@@ -121,7 +121,7 @@ public class DeployController {
         }
         return Common.deployFailedStatus;
     }
-//	private boolean isBlockNeedSync(JSONArray nodes, Long id) {
+    //	private boolean isBlockNeedSync(JSONArray nodes, Long id) {
 //		for (int i = 0; i< nodes.size(); i++) {
 //			JSONObject node = (JSONObject) nodes.get(i);
 //			Long nodeID = (Long) node.get(Common.idFiled);
@@ -239,7 +239,17 @@ public class DeployController {
             nodes = new JSONArray();
         }
 
-        ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
+        Util util = new Util();
+        util.parseConfig();
+        Config config = util.config;
+        Args args = new Args();
+        int listenPort_ip = (Integer)args.getListenPort(config);
+        ArrayList<String> ipList = new ArrayList<>();
+        for (int i = 0; i < nodes.size(); i++) {
+            JSONObject node = (JSONObject) nodes.get(i);
+            String nodeIp = (String) node.get(Common.ipFiled);
+            ipList.add(nodeIp + "\":\"" + listenPort_ip);
+        }
 
         //部署所有未部署的节点
         for (int i = 0; i < nodes.size(); i++) {
@@ -334,7 +344,7 @@ public class DeployController {
     }
 
 
-//查看部署日志
+    //查看部署日志
     @GetMapping(value = "/api/getLogInfo")
     public JSONObject deploy(
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id

@@ -79,7 +79,6 @@ public class NodeController {
     }
 
     json.put(Common.nodesFiled, nodes);
-    json.put(Common.ipListFiled, ipList);
 
     if (!writeJsonFile(json)) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
@@ -164,7 +163,7 @@ public class NodeController {
     return Common.connectFailedStatus;
   }
 
-//添加节点
+  //添加节点
   @PostMapping(value = "/api/nodeInfo")
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
     refresh();
@@ -224,8 +223,18 @@ public class NodeController {
     Long idMax = (Long) json.get(Common.idMaxFiled);
     id = idMax + 1;
     json.put(Common.idMaxFiled, id);
+    ArrayList<String> ipList = new ArrayList<>();
 
-    ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+//      Long nodeID = (Long) node.get(Common.idFiled);
+      String nodeIp = (String) node.get(Common.ipFiled);
+      ipList.add(nodeIp+"\":\""+listenPort);
+      /*if(id <= nodeID){
+        id = nodeID;
+      }*/
+    }
+
     ipList.add(ip+"\":\""+listenPort);
 
     if (Objects.isNull(nodes)) {
@@ -270,6 +279,7 @@ public class NodeController {
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
+    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -337,13 +347,16 @@ public class NodeController {
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
-
     String ipOld = (String)node.get(Common.ipFiled);
-    ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
-    if(!ipOld.equals(ip)){
-      ipList.remove(ipOld+"\":\""+listenPort);
-      ipList.add(ip+"\":\""+listenPort);
+    ArrayList<String> ipList = new ArrayList<>();
+
+    for (int i = 0; i < nodes.size(); i++) {
+      String nodeIp = (String) node.get(Common.ipFiled);
+      if(ipOld != nodeIp) {
+        ipList.add(nodeIp + "\":\"" + listenPort);
+      }
     }
+    ipList.add(ip+"\":\""+listenPort);
 
     boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
@@ -403,7 +416,7 @@ public class NodeController {
     return updateNodesInfo(nodes, json, ipList);
   }
 
-//编辑节点，查看节点详情
+  //编辑节点，查看节点详情
   @GetMapping(value ="/api/nodeInfo" )
   public JSONObject getNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
 
@@ -426,7 +439,7 @@ public class NodeController {
     }
     return new Response(ResultCode.OK.code, node).toJSONObject();
   }
-//获取节点列表
+  //获取节点列表
   @GetMapping(value = "/api/allNodeInfo")
   public JSONObject getAllNode(
   ) {
@@ -436,7 +449,7 @@ public class NodeController {
     return new Response(ResultCode.OK.code, nodes).toJSONObject();
   }
 
-//初始化创世块信息
+  //初始化创世块信息
   @PostMapping(value = "/api/initConfig")
   public JSONObject initConfig() {
     ConfigGenerator configGenerator = new ConfigGenerator();
@@ -470,7 +483,7 @@ public class NodeController {
 
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
-//删除节点
+  //删除节点
   @DeleteMapping(value = "/api/nodeInfo")
   public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
 
@@ -485,9 +498,14 @@ public class NodeController {
     }
     String ip = (String) node.get(Common.ipFiled);
 
-    ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
-    ipList.remove(ip+"\":\""+listenPort);
-
+    ArrayList<String> ipList = new ArrayList<>();
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject nodeObj = (JSONObject) nodes.get(i);
+      String nodeIp = (String) nodeObj.get(Common.ipFiled);
+      if(nodeIp != ip){
+        ipList.add(nodeIp+"\":\""+listenPort);
+      }
+    }
     JSONArray newNodes = removeNodeInfo(nodes, id, true);
     if (newNodes.size() == nodes.size()) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
