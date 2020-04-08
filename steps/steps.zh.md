@@ -6,48 +6,57 @@
 
 ### 1.准备工作
 
-需要提前实现[免密登陆](https://www.jianshu.com/p/13919b5ba8a2)
-
-部署节点需要 [java-tron-1.0.0.zip 包编译](https://github.com/tronprotocol/java-tron/blob/develop/build.md)
+目前Tron Factory对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)
+部署节点需要 [java-tron-1.0.0.zip 包编译](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
 
 ### 2.一键发链首页
 
-主要展示一键发链的内容操作步骤及相关文档说明  
-（1）一键发链介绍  
-（2）新手指南（建议 linux 和 mac 系统)  
-（3）帮助文档  
-（4）点击开始按钮，一键部署<sup style="color:blue">[1]</sup>
+（1）查看文档
+（2）一键部署，点击进入到部署管理页面<sup style="color:blue">[1]</sup>
 
-### 3.添加节点
+### 3.节点管理
 
-点击选择左上角的添加节点，给一键发链网络添加 Witness 节点和 FullNode 节点
-服务器可以选择本地部署或远程部署，本地部署将会将节点部署到本地主机上，远程部署会通过SSH将节点部署到远程服务器上
+节点管理是对您所有在Tron Factory添加及部署的节点进行管理
+
+#### 如何添加节点
+首先选择您节点所要使用的签名算法，目前支持ECKey以及SM2两种签名算法<sup style="color:blue">[2]</sup>
+点击左上角添加节点按钮进入到添加节点页面
 
 必填字段包括
 
-|                  必填字段                   |                        解释                         |
+|                  必填字段                    |                        解释                         |
 | :-----------------------------------------: | :-------------------------------------------------: |
-|    ID <sup style="color:blue">[2]</sup>     | 节点唯一编号（数字且为正整数最大支持值 2147483647） |
-|                  用户名称                   |                     ssh 用户名                      |
-|                     IP                      |                       节点 Ip                       |
-|                    PORT                     |    节点 端口 （数字且为正整数最大支持值 65535）     |
-|                     URL                     |               Url （为 Witness 必填）               |
-| voteCount<sup style="color:blue">[3]</sup>  |          对应投票数量 （为 Witness 必填）           |
-| privateKey<sup style="color:blue">[4]</sup> |       保存本地 64 位私钥 （为 Witness 必填）        |
+|                   节点类型                   |                节点是超级节点还是全节点                |
+|                  needSyncCheck              |   超级节点是否开启同步检测，一条链必须且只能有一个节点此参数关闭（Super Node必填） |
+|                URL                          |        超级节点的官网（Super Node必填）               |
+| voteCount<sup style="color:blue">[3]</sup>  |          对应投票数量 （Super Node必填）              |
+| address                                     | 根据私钥使用相应签名算法的超级节点地址（Super Node必填）  |
+| privateKey<sup style="color:blue">[4]</sup> |       保存本地 64 位私钥 （Super Node必填）            |
+|                     IP                      |                       节点服务器IP                   |
+|                   用户名                     |                       SSH链接用户名                  |
+|                    PORT                     |     SSH远程端口（数字且为正整数最大支持值 65535）         |
+|                 安全验证方式                  |     SSH远程登录的安全验证方式，现在只支持密钥和密码2种     |
+|                     密码                     |     SSH密码安全验证                                  |
 
-(1) 点击保存按钮<sup style="color:blue">[5]</sup> 保存当前节点信息  
-(2) 节点列表[如图所示](./steps/img/nodeList.png) <sup style="color:blue">[6]</sup> 展示所有添加的节点  
-(3) 点击下一步将会进入配置页面
+点击完成<sup style="color:blue">[5]</sup> 保存并添加当前节点信息
 
-### 4.配置管理
+### 4.配置
 
-配置管理页面[如图所示](./steps/img/setting.png), 其主要包括: 创世信息配置, 基础配置, 网络链接配置, 数据库基础配置, p2p 配置和跨链配置
+配置是对节点部署开启时的配置文件进行修改，相关参数可以参考java-tron的配置文件[主链部署配置文件](https://github.com/tronprotocol/tron-deployment/blob/master/main_net_config.conf)
 
-#### 创世信息配置
+#### 快速配置
 
-创世信息配置主要包括 asset 配置和 witeness 配置  
+快速配置是只修改部署的文件创世块信息和P2P信息而其他配置使用默认配置的功能，具体功能解释可以看自定义配置
+
+#### 自定义配置
+
+Tron Factory 1.2的自定义配置主要包含6个模块
+
+##### 4.1.创世块信息
+
+创世块信息配置主要包括 asset 配置和 witeness 配置  
 asset 配置 可以新增和修改当前 asset 配置信息  
-witeness 配置 可以查看当前 witeness 配置信息
+witeness 配置 可以查看当前 witeness 配置信息，即当前所有节点中是超级节点的配置信息
 
 asset 配置必填字段包括：
 
@@ -55,32 +64,26 @@ asset 配置必填字段包括：
 | :---------------------------------------: | :-------------------------------: |
 |                accountName                |              账户名               |
 |                accountType                | 账户类型： AssetIssue 或 Contract |
-|                  address                  |               地址<sup style="color:blue">[11]</sup>                |
+|                  address                  | 地址<sup style="color:blue">[11]</sup>             |
 | balance <sup style="color:blue">[7]</sup> |               余额                |
 
 必须添加的asset：
 
-|                必填字段                  |              必填值                |
+|                必填字段                   |              必填值                |
 | :---------------------------------------: | :-------------------------------: |
-|                accountName                |              Blackhole<sup style="color:blue">[8]</sup>               |
+|                accountName                |  Blackhole<sup style="color:blue">[8]</sup>       |
 |                accountType                |  AssetIssue |
-|                  address                  | (eckey签名算法）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB    （sm2签名算法）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
+|                  address                  | (eckey签名算法）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB（sm2签名算法）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
 | balance <sup style="color:blue">[7]</sup> |               -9223372036854775808                |
 
-创世信息配置点击下一步按钮保存当前配置
+该账户为黑洞账户
+创世块信息点击下一步按钮保存当前配置
 
-#### 基础配置
+##### 4.2.基础配置
 
 基础配置必填字段包括：
 
-| 必填字段  |                     解释                      |
-| :-------: | :-------------------------------------------: |
-|  chainId  | 链 ID （数字且为正整数最大支持值 2147483647） |
-| chainName |                    链名称                     |
-
-高级配置字段包括：
-
-|       高级配置字段       |                             解释                             |
+|       必填字段       |                             解释                             |
 | :----------------------: | :----------------------------------------------------------: |
 | MaintenanceTimeInterval  |     维护时间间隔 （数字且为正整数最大支持值 2147483647）     |
 | blockProposalExpireTime  |   区块提案到期时间（数字且为正整数最大支持值 2147483647）    |
@@ -89,35 +92,36 @@ asset 配置必填字段包括：
 
 基础配置点击下一步按钮保存当前配置
 
-#### 网络链接配置(http/rpc)
+##### 4.3.网络链接配置(http/rpc)
 
 网络链接配置必填字段包括：
 
 |       必填字段       |                           解释                           |
 | :------------------: | :------------------------------------------------------: |
-| maxHttpConnectNumber | 最大 http 连接数 （数字且为正整数最大支持值 2147483647） |
 |   httpFullNodePort   |   httpFullNode 端口（数字且为正整数最大支持值 65535）    |
+| maxHttpConnectNumber | 最大 http 连接数 （数字且为正整数最大支持值 2147483647） |
 |   httpSolidityPort   |   httpFullNode 端口 （数字且为正整数最大支持值 65535）   |
 |       rpcPort        |       rpc 端口 （数字且为正整数最大支持值 65535）        |
 |   rpcSolidityPort    |   rpcSolidity 端口 （数字且为正整数最大支持值 65535）    |
+|   fullNodeEnable     |   是否开启fullNode                                   |
+|   solidityEnable     |   是否开启solidityNode                               |
 
 网络链接配置点击下一步按钮保存当前配置
 
-#### 数据库基础配置
+##### 4.4.数据库基础配置
 
 数据库基础配置必填字段包括：
 
 |       必填字段       |  解释  |
 | :------------------: | :----: |
+|     数据库引擎     | LevelDB或RocksDB |
 |     是否同步写入     | 是或否 |
 | 是否打开 transaction | 是或否 |
-|    选择数据库配置    | 是或否 |
-| 是否打开 index 开关  | 是或否 |
 | 是否需要更新 assets  | 是或否 |
-
+| 自定义chainbase模块  | 上传自定义编译chainbase模块 |
 数据库基础配置点击下一步按钮保存当前配置
 
-#### p2p 配置
+##### 4.5.p2p 配置
 
 p2p 配置必填字段包括：
 
@@ -138,89 +142,43 @@ p2p 配置必填字段包括：
 
 p2p 配置点击下一步按钮保存当前配置
 
-#### 跨链配置
 
-跨链配置必填字段包括：
 
-|      必填字段      |                                     解释                                     |
-| :----------------: | :--------------------------------------------------------------------------: |
-|  enableCrossChain  |                          是否允许跨链 （勾选选择）                           |
-| maxValidatorNumber | 最大验证数 （数字且为正整数且大于 minValidatorNumber 最大支持值 2147483647） |
-| minValidatorNumber | 最小验证数 （数字且为正整数且小于 minValidatorNumber 最大支持值 2147483647） |
-|   crossChainFee    |             crossChainFee （数字且为正数最大支持值 2147483647）              |
+##### 4.6.模块定制化
 
-跨链配置点击下一步按钮保存当前跨链配置<sup style="color:blue">[9]</sup>
+其主要包括: 共识模块, 交易模块
 
-### 5.导入插件
-
-导入插件页面[如图所示](./steps/img/plugins.png), 其主要包括: 共识模块, 交易模块和数据库模块
-
-#### 共识模块
+###### 共识模块
 
 目前支持 DPOS
 
-共识模块点击下一步按钮保存当前共识模块设置
+###### 交易模块
 
-#### 交易模块
+可以上传自己修改编译后的交易模块
 
-目前支持的模块如下，也可以自定义模块  
-AccountPermissionUpdate  
-AssetIssue  
-ClearABIContract  
-CreateAccount  
-ExchangeCreate  
-ExchangeInject  
-ExchangeTransaction  
-ExchangeWithdraw  
-FreezeBalance  
-ParticipateAssetIssue  
-ProposalApprove  
-ProposalCreate  
-ProposalDelete  
-SetAccountId  
-ShieldedTransfer  
-Transfer  
-TransferAsset  
-UnfreezeAsset  
-UnfreezeBalance  
-UpdateAccount  
-UpdateAsset  
-UpdateBrokerage  
-UpdateEnergyLimit  
-UpdateSettingContract  
-VoteWitness  
-WithdrawBalance  
-WitnessCreate  
-WitnessUpdate  
-还可以选择自定义上传自定义交易, 上传于项目无关的 jar 包，可能会影响程序正常运行  
-交易模块点击下一步按钮保存当前交易模块设置
+### 5.节点部署
 
-#### 数据库模块
+Tron Factory只支持全量部署，当节点全部添加完毕后进入节点管理页面点击部署会自动部署所有部署状态为未部署的节点   
+点击部署后，选择编译后的java-tron部署包，具体java-tron编译生成部署包请查看[部署文档](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
+部署开始后，所有的节点将会依次进行部署，部署结束后可点击部署日志查看相应的部署结果，成功的节点部署状态将会变成已部署
 
-支持 leveldb 和 rocksdb
-
-数据库模块点击下一步保存当前数据库模块<sup style="color:blue">[10]</sup>
-
-### 6.节点部署
-
-#### 批量部署
-
-节点部署支持单个节点部署和多个节点批量部署  
-点击列表勾选按钮，勾选对应需要部署的节点，此时部署按钮为绿色  
-点击批量部署按钮，[如图所示](./steps/img/deploy.png)输入对应的 zip 包路径，如/home/user/java-tron/build/distributions/java-tron-1.0.0.zip  
-点击保存开始部署，在部署期间批量部署按钮为 loading 状态，此时可以点击查看日志查看部署详情，部署完成后批量部署按钮结束 loading 状态。
-
-#### 查看日志
+#### 5.1查看日志
 
 点击查看日志可以查看当前节点的日志。  
-如果没有则会提示暂无节点日志, 如果部署完成点击查看日志, 日志信息将一直保存直到下次部署后覆盖。  
-日志会自动刷新,直至出现 deploy finish，则为部署完成。
+
+### 5.2 节点详情
+
+点击可查看节点的详细配置
+
+### 5.3 删除节点
+
+未部署的节点可以进行删除
 
 ## 脚注
 
-[1] 注：点击开始一键部署按钮，获取节点列表菜单权限，每次点击会重置菜单权限
+[1] 注：点击一键部署按钮就表明开始部署您的应用链
 
-[2] 注：id 和 ip 地址均不能相同，且 ip 不能为本地 ip
+[2] 注：签名算法一旦添加过节点后就不能更改，只有将节点清空后才可以重新选择签名算法
 
 [3] 注：voteCount 支持范围为 0 - 9223372036854775807
 
@@ -244,4 +202,4 @@ WitnessUpdate
 
 ## License
 
-Copyright (c) 2019 Tron
+Copyright (c) 2020 Tron Factory
