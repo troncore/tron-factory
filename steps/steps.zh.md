@@ -7,11 +7,11 @@
 ### 1.准备工作
 
 目前Tron Factory对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)  
-部署节点需要 [java-tron-1.0.0.zip 包编译](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
+部署节点需要 [如何编译java-tron产生 java-tron-1.0.0zip 部署包](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
 
 ### 2.一键发链首页
 
-（1）查看文档
+（1）查看文档  
 （2）一键部署，点击进入到部署管理页面<sup style="color:blue">[1]</sup>
 
 ### 3.节点管理
