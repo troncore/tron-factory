@@ -65,10 +65,10 @@ cd tron-factory
 # 启动服务：http://localhost:8080
 ./deploy.sh
 
-# 部署完成
-项目被部署到/home/USERNAME/java-tron目录下, 项目运行日志可以在网站中查看
-
 ```
+
+## 部署完成的节点
+通过Tron Factory部署的节点在服务器的默认路径为`～/java-tron`目录下，节点的运行日志可以到相应服务器上查看
 
 ## 使用步骤
 
