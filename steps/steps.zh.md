@@ -6,7 +6,7 @@
 
 ### 1.准备工作
 
-目前Tron Factory对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)  
+目前TRON FACTORY对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)  
 部署节点需要 [如何编译java-tron](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
 
 ### 2.一键发链首页
@@ -16,7 +16,7 @@
 
 ### 3.节点管理
 
-节点管理是对您所有在Tron Factory添加及部署的节点进行管理
+节点管理是对您所有在TRON FACTORY添加及部署的节点进行管理
 
 #### 如何添加节点
 首先选择您节点所要使用的签名算法，目前支持ECKey以及SM2两种签名算法<sup style="color:blue">[2]</sup>
@@ -50,7 +50,7 @@
 
 #### 自定义配置
 
-Tron Factory 1.2的自定义配置主要包含6个模块
+TRON FACTORY 1.2的自定义配置主要包含6个模块
 
 ##### 4.1.创世块信息
 
@@ -158,7 +158,7 @@ p2p 配置点击下一步按钮保存当前配置
 
 ### 5.节点部署
 
-Tron Factory只支持全量部署，当节点全部添加完毕后进入节点管理页面点击部署会自动部署所有部署状态为未部署的节点   
+TRON FACTORY只支持全量部署，当节点全部添加完毕后进入节点管理页面点击部署会自动部署所有部署状态为未部署的节点   
 点击部署后，选择编译后的java-tron部署包，具体java-tron编译生成部署包请查看[部署文档](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
 部署开始后，所有的节点将会依次进行部署，部署结束后可点击部署日志查看相应的部署结果，成功的节点部署状态将会变成已部署
 
