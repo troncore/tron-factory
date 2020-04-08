@@ -5,12 +5,12 @@
 
         <el-form-item prop="node_p2p_version" label="p2pVersion">
           <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
-          <el-input v-model.trim="form.node_p2p_version" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_p2p_version" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="listenPort" prop="node_listen_port">
           <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
-          <el-input v-model.trim="form.node_listen_port" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_listen_port" type="number" max="65535" min="0" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="seedNodeList" prop="seed_node_ip_list" class="seed-node-list">
@@ -32,12 +32,12 @@
           <div v-if="showMore">
             <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
               <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodes" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
+              <el-input v-model.trim="form.node_maxActiveNodes" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
               <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" type="number" :placeholder="$t('base.pleaseInput')"></el-input>
+              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item label="activeConnectFactor" prop="node_activeConnectFactor">
@@ -46,6 +46,7 @@
                 v-model.trim="form.node_activeConnectFactor"
                 controls-position="right"
                 :min="0"
+                :max="2147483647"
                 :step="0.1"
                 :placeholder="$t('base.pleaseInput')">
               </el-input-number>
@@ -56,6 +57,7 @@
               <el-input-number
                 controls-position="right"
                 :min="0"
+                :max="2147483647"
                 :step="0.1"
                 v-model.trim="form.node_connectFactor"
                 :placeholder="$t('base.pleaseInput')">
@@ -74,8 +76,7 @@
   </div>
 </template>
 <script>
-import { isvalidateNum, twoDecimal } from '@/utils/validate.js'
-import { isvalidateIntegerNum } from "@/utils/validate";
+import { formRules } from "@/utils/validate";
 export default {
   name: 'p2p-config',
   props: {
@@ -104,94 +105,54 @@ export default {
   },
   computed: {
     formRules() {
-      const validNum = (rule, value, callback) => {
-        if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('configuration.valid.gteZeroInt')))
-        } else {
-          callback()
-        }
-      }
-      const validMaxNum = (rule, value, callback) => {
-        if (value > 2147483647) {
-          callback(new Error(this.$t('configuration.valid.maxNumberValue')))
-        } else {
-          callback()
-        }
-      }
-      const validMainnet = (rule, value, callback) => {
-        if (value == 11111) {
-          callback(new Error(this.$t('configuration.valid.mainnetPlaceholder')))
-        } else {
-          callback()
-        }
-      }
-      const validTestNet = (rule, value, callback) => {
-        if (value == 20180622) {
-          callback(new Error(this.$t('configuration.valid.testnetPlaceholder')))
-        } else {
-          callback()
-        }
-      }
-      const validSpecialNet = (rule, value, callback) => {
-        if (value == 1) {
-          callback(new Error(this.$t('configuration.valid.specialPlaceholder')))
-        } else {
-          callback()
-        }
-      }
-      const validPortNum = (rule, value, callback) => {
-        if (value > 65535) {
-          callback(new Error(this.$t('configuration.valid.maxPortValue')))
-        } else {
-          callback()
-        }
-      }
-      const validTwoDecimalFun = (rule, value, callback) => {
-        if (!twoDecimal(value)) {
-          callback(new Error(this.$t('configuration.valid.validTwoDecimal')))
-        } else {
-          callback()
-        }
-      }
-      const rules = {
+      let validateNumMinMax = [
+        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
+        { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+      ]
+      let validateP2PVersion = [
+        { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
+        { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
+        { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
+      ]
+      let validatePort = [
+        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
+        { validator: formRules.numMax(65535, this.$t('configuration.valid.maxPortValue')), trigger: 'blur', },
+      ]
+      let validateNumTwoDecimal = [
+        { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647', true, false), trigger: 'blur', },
+        { validator: formRules.numTwoDecimal(this.$t('configuration.valid.validTwoDecimal') + ': 0.01',), trigger: 'blur'},
+      ]
+
+      return {
         node_p2p_version: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validMainnet, trigger: 'blur', },
-          { validator: validTestNet, trigger: 'blur', },
-          { validator: validSpecialNet, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
+          ...validateNumMinMax,
+          ...validateP2PVersion,
         ],
         node_listen_port: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
+          ...validatePort,
         ],
         seed_node_ip_list: [
           { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change', },
         ],
         node_maxActiveNodes: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
+          ...validateNumMinMax,
         ],
         node_maxActiveNodesWithSameIp: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
+          ...validateNumMinMax,
         ],
         node_activeConnectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
-          { validator: validTwoDecimalFun, trigger: 'blur', },
+          ...validateNumTwoDecimal
         ],
         node_connectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
-          { validator: validTwoDecimalFun, trigger: 'blur', },
+          ...validateNumTwoDecimal
         ],
       }
-      return rules
     },
   },
 

@@ -21,9 +21,13 @@
       :empty-text="$t('base.emptyData')"
       v-loading="tableLoading"
       class="custom-table im-card"
-      header-align="center"
-      @cell-click="handleCellClick">
-      <el-table-column prop="ip" :label="$t('nodesManage.nodeIP')" align="center"></el-table-column>
+      header-align="center">
+      <el-table-column prop="ip" :label="$t('nodesManage.nodeIP')" align="center">
+        <template slot-scope="scope">
+          <span v-if="!scope.row.isDeployed">{{ scope.row.ip }}</span>
+          <el-link v-else type="primary" @click="handleDetail(scope.row)">{{ scope.row.ip }}</el-link>
+        </template>
+      </el-table-column>
       <!--<el-table-column prop="port" :label="$t('nodesManage.nodePort')" align="center"></el-table-column>-->
       <el-table-column :label="$t('nodesManage.isSR')" align="center">
         <template slot-scope="scope">
@@ -132,11 +136,6 @@ export default {
         path: '/nodes-manage/edit/' + row.id
       })
     },
-
-    handleCellClick (row, column, cell, event) {
-      if (row.isDeployed && column.property !== 'operate') this.handleDetail(row)
-    },
-
     handleDetail(row) {
       this.$router.push({
         path: '/nodes-manage/detail/' + row.id

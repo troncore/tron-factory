@@ -1,7 +1,7 @@
 <template>
   <div class="box-view  network-config">
     <div class="box-body">
-      <el-form class="im-form" ref="network-config-form" :rules="networkRules" :model="form">
+      <el-form class="im-form" ref="network-config-form" :rules="formRules" :model="form">
 
         <div class="switch-item">
           <span class="label">fullNodeEnable </span>
@@ -9,11 +9,11 @@
         </div>
         <el-form-item prop="node_http_fullNodePort">
           <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configuration.helpTips.httpFullNodePort') }})</i></span>
-          <el-input v-model.trim="form.node_http_fullNodePort" type="number" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_http_fullNodePort" type="number" max="65535" min="0" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="node_maxHttpConnectNumber">
-          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') }})</i></span>
-          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" max="200" :maxlength="50" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') + ': 0 - 200' }})</i></span>
+          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" max="200" min="0" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <div class="switch-item">
@@ -23,19 +23,19 @@
 
         <el-form-item prop="node_http_solidityPort">
           <span slot="label">httpSolidityPort <i class="help-tips">({{ $t('configuration.helpTips.httpSolidityPort') }})</i></span>
-          <el-input v-model.trim="form.node_http_solidityPort" type="number" :disabled="!form.node_http_solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_http_solidityPort" type="number" max="65535" min="0" :disabled="!form.node_http_solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <br>
 
         <el-form-item prop="node_rpc_port">
           <span slot="label">rpcPort <i class="help-tips">({{ $t('configuration.helpTips.rpcPort') }})</i></span>
-          <el-input v-model.trim="form.node_rpc_port" type="number" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_rpc_port" type="number" max="65535" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_rpc_solidityPort">
           <span slot="label">rpcSolidityPort <i class="help-tips">({{ $t('configuration.helpTips.rpcSolidityPort') }})</i></span>
-          <el-input v-model.trim="form.node_rpc_solidityPort" type="number" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_rpc_solidityPort" type="number" max="65535" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -47,8 +47,7 @@
   </div>
 </template>
 <script>
-import { isvalidateNum } from '@/utils/validate.js'
-import { isvalidateIntegerNum } from "@/utils/validate";
+import { formRules } from "@/utils/validate";
 export default {
   name: 'network-config',
   props: {
@@ -74,72 +73,36 @@ export default {
     }
   },
   computed: {
-    networkRules() {
-      const validNum = (rule, value, callback) => {
-        if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('configuration.valid.gteZeroInt')))
-        } else {
-          callback()
-        }
-      }
-      const validMaxNum = (rule, value, callback) => {
-        if (value > 200) {
-          callback(new Error(this.$t('configuration.valid.maxNumberValue')))
-        } else {
-          callback()
-        }
-      }
-      const validPortNum = (rule, value, callback) => {
-        if (value > 65535) {
-          callback(new Error(this.$t('configuration.valid.maxPortValue')))
-        } else {
-          callback()
-        }
-      }
-
-      let node_maxHttpConnectNumber = [
-        { required: !!this.form.node_http_fullNodeEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+    formRules() {
+      let validatePort = [
+        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
+        { validator: formRules.numMax(65535, this.$t('configuration.valid.maxPortValue')), trigger: 'blur', },
       ]
-      let node_http_fullNodePort = [
-        { required: !!this.form.node_http_fullNodeEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+      let validateHttpConnectNumber = [
+        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
+        { validator: formRules.numMax(200, this.$t('configuration.valid.maxNumberValue')), trigger: 'blur', },
       ]
-      if (!!this.form.node_http_fullNodeEnable) {
-        node_maxHttpConnectNumber = node_maxHttpConnectNumber.concat([
-          { validator: validNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', }
-        ])
-        node_http_fullNodePort = node_http_fullNodePort.concat([
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
-        ])
-      }
-
-      let node_http_solidityPort = [
-        { required: !!this.form.node_http_solidityEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-      ]
-      if (!!this.form.node_http_solidityEnable) {
-        node_http_solidityPort = node_http_solidityPort.concat([
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
-        ])
-      }
 
       return {
-        node_maxHttpConnectNumber,
-        node_http_fullNodePort,
-
-        node_http_solidityPort,
-
+        node_http_fullNodePort: [
+          { required: this.form.node_http_fullNodeEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          ...(this.form.node_http_fullNodeEnable ? validatePort : [])
+        ],
+        node_maxHttpConnectNumber: [
+          { required: this.form.node_http_fullNodeEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          ...(this.form.node_http_fullNodeEnable ? validateHttpConnectNumber : [])
+        ],
+        node_http_solidityPort: [
+          { required: this.form.node_http_solidityEnable, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          ...(this.form.node_http_solidityEnable ? validatePort : [])
+        ],
         node_rpc_port: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
+          ...validatePort
         ],
-
         node_rpc_solidityPort: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validPortNum, trigger: 'blur', },
+          ...validatePort
         ],
       }
     },

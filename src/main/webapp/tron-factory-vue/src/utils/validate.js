@@ -1,76 +1,85 @@
-/**
- * @param {string} path
- * @returns {Boolean}
- */
-export function isExternal(path) {
-  return /^(https?:|mailto:|tel:)/.test(path)
-}
-
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
-  return valid_map.indexOf(str.trim()) >= 0
-}
-
-export function isAllNumber(str) {
-  const reg = /^(\-|\+)?\d+(0)?$/
-  return reg.test(str)
-}
-
-/* number Positive integer */
-export function isvalidateNum(str) {
-  const reg = /^[0-9]*[1-9][0-9]*$/
-  return reg.test(str)
-}
-
-/* number 0 and Positive integer */
-export function isvalidateIntegerNum(str) {
-  const reg = /^\d+$/
-  return reg.test(str)
-}
-
-/* twoDecimal */
-export function twoDecimal(str) {
-  const reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
-  return reg.test(str)
-}
-
-/* test ip */
-export function isCorrectIp(str) {
-  const reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
-  return reg.test(str)
-}
-
-/* test url*/
-export function isCorrectUrl(str) {
-  const reg = /^((https|http):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
-  return reg.test(str)
-}
-
 class Validate {
-  regexpNum = /^\d+&/
+  isNumber (value) {
+    return /^\d+(\.\d+)?$/.test(value)
+  }
+  isInteger (value) {
+    return /^\d+$/.test(value)
+  }
+  isTwoDecimal (value) {
+    return /^([1-9]\d*|0)(\.\d{1,2})$/.test(value)
+  }
+  isIP (value) {
+    return /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/.test(value)
+  }
 }
 export const validate = new Validate()
 
 /* form rules validate */
 export class FormRules {
-  static numMin(num, msg, isEqual, isInteger) {
+  validIP (msg) {
     return (rule, value, callback) => {
-      if (isEqual && value >= num && isInteger && validate.regexpNum.test(num)) {
-        callback(new Error(msg))
-      }
-      if (value > num) {
-        callback(new Error(msg))
-      } else {
-        callback()
-      }
+      let invalid = false
+
+      if(!validate.isIP(value)) invalid = true
+
+      if (invalid) callback(new Error(msg))
+      else callback()
     }
   }
-  static numMax(value, msg, isEqual, isInteger) {
 
+  numEqual(num, msg, isEqual = true,) {
+    return (rule, value, callback) => {
+      let invalid = false
+
+      if (!validate.isNumber(value)) invalid = true
+      else if (value == num) invalid = true
+      else if (!isEqual && value != num) invalid = true
+
+      if (invalid) callback(new Error(msg))
+      else callback()
+    }
+  }
+
+
+  numMin(num, msg, isEqual = true, isInteger = true) {
+    return (rule, value, callback) => {
+      let invalid = false
+
+      if (!validate.isNumber(value)) invalid = true
+      else if (isInteger && !validate.isInteger(value)) invalid = true
+      else if (value < num) invalid = true
+      else if (!isEqual && value == num) invalid = true
+
+      if (invalid) callback(new Error(msg))
+      else callback()
+    }
+  }
+
+  numMax(num, msg, isEqual = true, isInteger = true) {
+    return (rule, value, callback) => {
+      let invalid = false
+
+      if (!validate.isNumber(value)) invalid = true
+      else if (isInteger && !validate.isInteger(value)) invalid = true
+      else if (value > num) invalid = true
+      else if (!isEqual && value == num) invalid = true
+
+      if (invalid) callback(new Error(msg))
+      else callback()
+    }
+  }
+
+  numTwoDecimal(msg) {
+    return (rule, value, callback) => {
+      let invalid = false
+
+      if (!validate.isTwoDecimal(value)) invalid = true
+
+      if (invalid) callback(new Error(msg))
+      else callback()
+    }
   }
 }
+
+export const formRules = new FormRules()
 

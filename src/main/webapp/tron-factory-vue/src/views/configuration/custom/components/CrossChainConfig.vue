@@ -38,7 +38,6 @@
   </div>
 </template>
 <script>
-import { isvalidateNum, twoDecimal } from '@/utils/validate.js'
 export default {
   name: 'cross-chain-config',
   props: {
@@ -60,6 +59,18 @@ export default {
 
   computed: {
     crossChainRules() {
+      /* number Positive integer */
+      function isvalidateNum(str) {
+        const reg = /^[0-9]*[1-9][0-9]*$/
+        return reg.test(str)
+      }
+
+      /* twoDecimal */
+      function twoDecimal(str) {
+        const reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
+        return reg.test(str)
+      }
+
       const validNum = (rule, value, callback) => {
         if (!isvalidateNum(value)) {
           callback(new Error(this.$t('tronSettingNumberPlaceholder')))
