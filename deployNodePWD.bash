@@ -485,7 +485,12 @@ lsp
 
 pid=`head -1 startPid`
 hostname=`tail -1 startPid`
-host="on $hostname"
+
+if [ -z $hostname ] ; then
+  host=""
+else
+  host="on $hostname"
+fi
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")

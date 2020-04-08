@@ -162,8 +162,14 @@ ssh -p $2 $3@$1 "echo \$HOSTNAME >> startPid"
 scp -P $2 $3@$1:./startPid .
 pid=`head -1 startPid`
 hostName=`tail -1 startPid`
+if [ -z $hostname ] ; then
+  host=""
+else
+  host="on $hostname"
+fi
+
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] start java-tron with pid $pid on $hostName"
+echo "[$time] start java-tron with pid $pid $host"
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
