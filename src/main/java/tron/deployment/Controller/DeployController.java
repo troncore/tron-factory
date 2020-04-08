@@ -70,7 +70,7 @@ public class DeployController {
         }
         return Common.deployFailedStatus;
     }
-
+//查询节点是否部署成功
     private String checkIsDeployed(String path) {
         boolean isDeployed = true;
         File file = new File(path);
@@ -131,7 +131,7 @@ public class DeployController {
 //		}
 //		return false;
 //	}
-
+//校验zip包路径是否正确
     private String checkZipPath(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -161,21 +161,6 @@ public class DeployController {
         return Common.connectFailedStatus;
     }
 
-   /* public void dbJarPath(String dbJarPath){
-        this.dbJarPath = dbJarPath;
-    }*/
-
-   /* @PostMapping(value = "/api/oneClick")
-    public JSONObject startDeployment() {
-        int currentTime = (int) (System.currentTimeMillis() / 1000);
-        ConfigGenerator configGenerator = new ConfigGenerator();
-        boolean result = configGenerator.updateConfig(new P2PVersion(currentTime), Common.configFiled);
-        if (!result) {
-            return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-        }
-        return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-    }*/
-
     @GetMapping(value = "/api/checkNode")
     public JSONObject checkDeployStatus() {
         boolean isDeployed = true;
@@ -204,6 +189,7 @@ public class DeployController {
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
 
+        //获取配置文件中各端口号，便于校验端口是否冲突
         String fullNodePort = "null";
         String solidityPort = "null";
         String listenPort = "18889";
@@ -239,36 +225,28 @@ public class DeployController {
             rpcsolidityPort =Util.config.getString("node.rpc.solidityPort");
         }
 
+        //执行checkZipPath.bash，判断zip包路径正确性
         BashExecutor bashExecutor = new BashExecutor();
         bashExecutor.callZipPathScript(filePath);
         String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
         if(checkZipPath.equals(Common.canNotFindZip)) {
             return new Response(ResultCode.OK.code, Common.canNotFindZip).toJSONObject();
         }
+
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
 
-        Util util = new Util();
-        util.parseConfig();
-        Config config = util.config;
-        Args args = new Args();
-        int listenPort_ip = (Integer)args.getListenPort(config);
-        ArrayList<String> ipList = new ArrayList<>();
-        for (int i = 0; i < nodes.size(); i++) {
-            JSONObject node = (JSONObject) nodes.get(i);
-            String nodeIp = (String) node.get(Common.ipFiled);
-            ipList.add(nodeIp + "\":\"" + listenPort_ip);
-        }
+        ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
 
+        //部署所有未部署的节点
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject node = (JSONObject) nodes.get(i);
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
             if (!isDeployed) {
                 Long id = (Long) node.get(Common.idFiled);
-//                String path = (String) node.get(Common.pathFiled);
                 String path = filePath;
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
                 String privateKeypath = (String) node.get(Common.privateKeyFiled);
@@ -295,19 +273,21 @@ public class DeployController {
                 Long port = (Long) node.get(Common.portFiled);
                 String userName = (String) node.get(Common.userNameFiled);
                 String sshPassword = (String) node.get(Common.sshPasswordFiled);
-//                String serviceType = (String) node.get(Common.serviceTypeFiled);
-//                BashExecutor bashExecutor = new BashExecutor();
+
+                //用户自定义交易模块
                 String plugin = "null";
                 if (json.containsKey(Common.customTransactionFiled)
                         && ((String) json.get(Common.customTransactionFiled)).length() != 0) {
                     plugin = (String) json.get(Common.customTransactionFiled);
                 }
 
+                //用户自定义数据库模块
                 String dbCustom = (String) json.get(Common.dbCustomFiled);
                 if(dbCustom.equals("")){
                     dbCustom="null";
                 }
 
+                //执行部署脚本
                 if (Objects.nonNull(privateKey)) {
                     bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort );
                 } else {
@@ -328,7 +308,8 @@ public class DeployController {
                 if(status.equals(Common.portIsOccupied)){
                     return new Response(ResultCode.FAILED.code, portOccupied[1]).toJSONObject();
                 }
-                if(isDeployed){
+
+                if(isDeployed){ //如果部署成功，更新节点部署状态
                     NodeController nc  = new NodeController();
                     JSONObject nodeOld = Util.getNodeInfo(nodes, id);
                     nodeOld.put(Common.isDeployedFiled, isDeployed);
@@ -353,7 +334,7 @@ public class DeployController {
     }
 
 
-
+//查看部署日志
     @GetMapping(value = "/api/getLogInfo")
     public JSONObject deploy(
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id

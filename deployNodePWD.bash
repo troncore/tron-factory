@@ -486,11 +486,11 @@ lsp
 pid=`head -1 startPid`
 hostname=`tail -1 startPid`
 
-if [ -z $hostname ] ; then
-  host=""
-else
-  host="on $hostname"
-fi
+#if [ -z $hostname ] ; then
+ # host=""
+#else
+ # host="on $hostname"
+#fi
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -498,7 +498,7 @@ if [ -z $pid ] ; then
   exit
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] start java-tron with pid $pid $host"
+  echo "[$time] start java-tron with pid $pid on $hostname"
   echo  "[$time] ${success}"
   exit
 fi

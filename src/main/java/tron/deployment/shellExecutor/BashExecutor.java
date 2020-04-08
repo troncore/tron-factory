@@ -19,6 +19,7 @@ public class BashExecutor {
 
         try {
             String absolutePath = "";
+            //密码登录：deployNodePWD.bash  密钥登录：deployNode.bash
             if(sshPassword.equals("")){
                 absolutePath = System.getProperty("user.dir").concat("/deployNode.bash");
             }else{

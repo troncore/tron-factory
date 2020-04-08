@@ -229,8 +229,6 @@ public class ConfigControlller {
     }
 
     ConfigGenerator configGenerator = new ConfigGenerator();
-//    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
-//            dbEnine, indexDirectory, needToUpdateAsset), Common.configFiled);
     boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
             dbEnine, needToUpdateAsset), Common.configFiled);
     if (!result) {
@@ -429,6 +427,7 @@ public class ConfigControlller {
     return new Response(ResultCode.OK.code, jsonObject).toJSONObject();
   }
 
+  //校验用户自定义数据库jar包路径正确性
   private String checkDBJarPath(String path) {
     File file = new File(path);
     if (file.isFile() && file.exists()) {

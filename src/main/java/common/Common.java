@@ -129,10 +129,6 @@ public class Common {
 
   public static final String canNotFindZip = "no such file or directory!";
 
-//  public static final String canNotFindJar = "can't find jar";
-
-//  public static final String  noFile = ": no such file or directory!";
-
   public static final String portIsOccupied = "port is occupied";
 
   public static final String findZip = "find java-tron-1.0.0.zip successfully";
