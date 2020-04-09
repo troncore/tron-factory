@@ -74,7 +74,7 @@ The default path of the node deployed through TRON FACTORY is in the `～/java-t
 
 ## Steps for usage
 
-[manual for usage](./steps/steps.md)
+[Manual for usage](./steps/steps.md)
 
 ## Changelog
 
