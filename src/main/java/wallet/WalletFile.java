@@ -9,6 +9,8 @@ import common.crypto.ECKey;
 import common.crypto.sm2.SM2;
 import org.tron.keystore.CipherException;
 
+import static common.Util.parseConfig;
+
 /**
  * Ethereum wallet file.
  */
@@ -25,6 +27,13 @@ public class WalletFile {
     Config config = util.config;
     if (config.hasPath("crypto.engine")) {
       isEckey = config.getString("crypto.engine").equalsIgnoreCase("eckey");
+    }
+  }
+  //获取config.conf中用户选用的加密算法
+  private static void refresh() {
+    parseConfig();
+    if (Util.config.hasPath("crypto.engine")) {
+      isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
 
@@ -72,6 +81,7 @@ public class WalletFile {
 
 
   public static WalletFile createWalletFile(byte[] pass, byte[] priKey) throws CipherException {
+    refresh();
     if (isEckey) {
       ECKey ecKeySm2 = ECKey.fromPrivate(priKey);
       WalletFile walletFile = Wallet.createStandard(pass, ecKeySm2);
