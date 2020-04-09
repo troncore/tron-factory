@@ -64,7 +64,7 @@ asset 配置必填字段包括：
 |                 必填字段                  |               解释                |
 | :---------------------------------------: | :-------------------------------: |
 |                accountName                |              账户名               |
-|                accountType                | 账户类型： AssetIssue 或 Contract |
+|                accountType                | 账户类型： AssetIssue |
 |                  address                  | 地址<sup style="color:blue">[7]</sup>             |
 | balance <sup style="color:blue">[5]</sup> |               余额                |
 

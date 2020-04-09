@@ -66,7 +66,7 @@ The required fields for asset configuration include:
 |              Required field               |              Explanation              |
 | :---------------------------------------: | :-----------------------------------: |
 |                accountName                |             account name              |
-|                accountType                | account type： AssetIssue or Contract |
+|                accountType                | account type： AssetIssue  |
 |                  address                  |                address<sup style="color:blue">[7]</sup>                 |
 | balance <sup style="color:blue">[5]</sup> |                balance                |
 
