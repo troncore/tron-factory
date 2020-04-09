@@ -17,11 +17,11 @@
 
 ## 部署环境
 
-基于java-tron部署的应用链需要确保服务器安装恰当的依赖环境。
+基于java-tron部署的应用链需要确保部署服务器安装恰当的依赖环境（并非TRON FACTORY运行环境）。
 - JDK1.8(暂不支持 JDK 1.9+)
-- 在Linux Ubuntu系统上(例如Ubuntu 16.04.4 LTS), 要确保你的服务器已经安装了[Oracle JDK 8](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04), 而不是Open JDK 8. 如果你使用Open JDK 8去编译代码，编译记过可能会失败。
-- 服务器需要打开UDP端口
-- 服务器需要最少2个CPU
+- 在Linux Ubuntu系统上(例如Ubuntu 16.04.4 LTS), 要确保你的服务器已经安装了[Oracle JDK 8](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04), 而不是Open JDK 8. 如果你使用Open JDK 8去编译代码，编译结果可能会失败。
+- 需要打开UDP端口
+- 需要最少2个CPU
 
  <p align="center">
   <!-- <img width="900" src="https://wpimg.wallstcn.com/a5894c1b-f6af-456e-82df-1151da0839bf.png"> -->
