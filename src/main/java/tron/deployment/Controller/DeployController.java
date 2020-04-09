@@ -3,6 +3,7 @@ package tron.deployment.Controller;
 import static common.LogConfig.LOG;
 import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
+import static wallet.Wallet.hexs2Bytes;
 
 import com.typesafe.config.Config;
 import common.Args;
@@ -187,7 +188,7 @@ public class DeployController {
     }
 
     @GetMapping(value = "/api/deployNode")
-    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) {
+    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) throws CipherException, IOException {
 
         //获取配置文件中各端口号，便于校验端口是否冲突
         String fullNodePort = "null";
@@ -324,6 +325,7 @@ public class DeployController {
                     JSONObject nodeOld = Util.getNodeInfo(nodes, id);
                     nodeOld.put(Common.isDeployedFiled, isDeployed);
                     nc.deleteNode(id);
+                    Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
                     json = readJsonFile();
                     JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
                     if (Objects.isNull(newNodes)) {
@@ -384,4 +386,40 @@ public class DeployController {
         jsonObject.put(Common.deployStatus, status);
         return new Response(ResultCode.OK.code, jsonObject).toJSONObject();
     }
+
+    /*public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
+        NodeController nc  = new NodeController();
+        JSONObject json = readJsonFile();
+        JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+        if (Objects.isNull(nodes)) {
+            nodes = new JSONArray();
+        }
+        JSONObject node = Util.getNodeInfo(nodes, id);
+        if (node == null) {
+            return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+        }
+        String ip = (String) node.get(Common.ipFiled);
+
+        ArrayList<String> ipList = new ArrayList<>();
+        //获取配置文件中listenPort
+        Util util = new Util();
+        util.parseConfig();
+        Config config = util.config;
+        Args args = new Args();
+        int listenPort = (Integer)args.getListenPort(config);
+
+        for (int i = 0; i < nodes.size(); i++) {
+            JSONObject nodeObj = (JSONObject) nodes.get(i);
+            String nodeIp = (String) nodeObj.get(Common.ipFiled);
+            if(nodeIp != ip){
+                ipList.add(nodeIp+"\":\""+listenPort);
+            }
+        }
+        JSONArray newNodes = removeNodeInfo(nodes, id, true);
+        if (newNodes.size() == nodes.size()) {
+            return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+        }
+
+        return nc.updateNodesInfo(newNodes, json, ipList);
+    }*/
 }
