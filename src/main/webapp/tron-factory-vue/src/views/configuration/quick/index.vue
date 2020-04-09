@@ -47,29 +47,19 @@
     },
     computed: {
       formRules() {
-        let validateNumMinMax = [
-          { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
-          { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
-        ]
-        let validateP2PVersion = [
-          { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
-          { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
-          { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
-        ]
-        let validatePort = [
-          { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
-          { validator: formRules.numMax(65535, this.$t('configuration.valid.maxPortValue')), trigger: 'blur', },
-        ]
-
         return {
           node_p2p_version: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            ...validateNumMinMax,
-            ...validateP2PVersion,
+            { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+            { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+            { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
+            { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
+            { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
           ],
           node_listen_port: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            ...validatePort,
+            { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
+            { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
           ],
         }
       },

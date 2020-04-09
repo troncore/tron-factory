@@ -151,11 +151,6 @@
           }
         }
 
-        let validatePort = [
-          { validator: formRules.numMin(0, this.$t('nodesManage.valid.gteZeroInt'), ), trigger: 'blur', },
-          { validator: formRules.numMax(65535, this.$t('nodesManage.valid.maxPortValue')), trigger: 'blur', },
-        ]
-
         return {
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -164,7 +159,8 @@
           ],
           port: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            ...validatePort
+            { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
+            { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
           ],
           userName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -177,7 +173,7 @@
           ],
           voteCount: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { validator: formRules.numMin(0, this.$t('nodesManage.valid.gteZeroInt'), ), trigger: 'blur', },
+            { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt'), ), trigger: 'blur', },
           ],
           publicKey: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
