@@ -30,22 +30,22 @@ Make sure you have the proper dependencies.
 ## Features
 
 ```
-- Add Nodes
+- Nodes Manage
+  - Signature Algorithm
+  - Add Node
+  - Deploy
 
-- Deployment Setting
-  - Creation Information Configuration
-  - Basic configuration
-  - Network link configuration(http/rpc)
-  - Database basic configuration
-  - P2p configuration
+- Configuration
+  - Fast Config
+  - Custom Config
+    - Genesis
+    - Basic Config
+    - HTTP/RPC
+    - Database
+    - P2P
+    - Module
 
-- Plugins Setting
-  - Consensus module setting
-  - Transaction module setting
-  - Database module setting
-
-- Node deployment
-  - Node view log
+- Ecology App(In development)
 
 ```
 
@@ -64,10 +64,13 @@ cd tron-factory
 # deploy start
 ./deploy.sh
 
-# after deployment
-The project is deployed to the /home/USERNAME/java-tron directory, and the deployment log can be viewed on the website.
 
 ```
+
+## Deployed nodes
+
+The default path of the node deployed through TRON FACTORY is in the `～/java-tron` directory,and the running logs of the node can be viewed on the server.
+
 
 ## Steps for usage
 
@@ -75,7 +78,7 @@ The project is deployed to the /home/USERNAME/java-tron directory, and the deplo
 
 ## Changelog
 
-Detailed changes for each release are documented in the [release notes](http://39.106.174.213/wubin1/one-click-deployment/tags).
+Detailed changes for each release are coming soon.
 
 ## Browsers support
 
@@ -83,4 +86,4 @@ Chrome is recommended.
 
 ## License
 
-Copyright (c) 2019 Tron
+Copyright (c) 2019 Tron Factory

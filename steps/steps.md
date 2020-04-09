@@ -6,47 +6,56 @@ English | [简体中文](./steps/steps.zh.md)
 
 ### 1.Ready to work
 
-Need to implement in advance [free login](https://www.jianshu.com/p/13919b5ba8a2)
+Need to implement SSH in advance [key login](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server) or [password login](https://serverpilot.io/docs/how-to-enable-ssh-password-authentication/) 
 
-Deploy node needs [java-tron-1.0.0.zip build](https://github.com/tronprotocol/java-tron/blob/develop/build.md)
+Deploy node needs [java-tron-1.0.0.zip build](https://tronprotocol.github.io/documentation-en/developers/deployment/)
 
 ### 2.Home
+ 
+（1）Documentation  
+（2）Click the start button to deploy nodesk<sup style="color:blue">[1]</sup>
 
-Mainly show the content operation steps of the one-click deployment and related documentation
+### 3.Nodes manage
 
-（1）One-click deployment introduction  
-（2）Guide (Recommended for linux and mac systems)  
-（3）Documentation  
-（4）Click the start button and deploy with one click<sup style="color:blue">[1]</sup>
+Node management is to manage all your nodes added and deployed in TRON FACTORY.
 
-### 3.Add node
+### How to add a node
 
-Click on the Add node in the upper left corner to add a Witness node and a FullNode node to the one-click chain network.
-The server can choose local or remote deployment. Local deployment will deploy the node to the local host, and remote deployment will deploy the node to the remote server via SSH.
+At first select the signature algorithm to be used by your node.TRON FACTORY supports ECKey and SM2 signature algorithms currently.<sup style="color:blue">[2]</sup>
+Click on the `Add Node`; in the upper left corner to add a Witness node or a FullNode node to the one-click chain network.
   
 Required fields include：
 
 |               Required field                |                                    Explanation                                     |
 | :-----------------------------------------: | :--------------------------------------------------------------------------------: |
-|    ID <sup style="color:blue">[2]</sup>     | Node unique number (Number is a positive integer maximum support value 2147483647) |
-|                  user name                  |                                    ssh username                                    |
-|                     IP                      |                                      Node Ip                                       |
-|                    PORT                     |        Node Port (Number is a positive integer maximum support value 65535)        |
+|                 node type                   |                                    Super Node or Full Node                         |
+|                 needSyncCheck               | The infromation of each node on the chain is regularly synchronized if SyncCheck is ON. One chain must have one SR with SyncCheck OFF|
 |                     URL                     |                            Url （Required for Witness）                            |
-|                  voteCount                  |               Number of corresponding votes （Required for Witness）               |
-| privateKey<sup style="color:blue">[3]</sup> |               Save local 64-bit private key （Required for Witness）               |
+|                  voteCount<sup style="color:blue">[3]</sup>                   |               Number of corresponding votes （Required for Witness）               |
+|                    address                  |           Super node address using corresponding signature algorithm based on private key （Required for Witness）               |
+|                  privateKey<sup style="color:blue">[4]</sup>                 |         64-bit key saved locally(Required for Witness)                            |
+|                     IP                      |                                      Node server IP                               |
+|                    username                 |        Username for SSH                                                           |  
+|                    port                     |        Port for SSH   (1~65535)                                                   |
+|            authentication methods           |  Authentication methods for connection of SSH.Password and public key are supported now.        |
+|                   password                  |               The password for connection of SSH                                  |
 
-(1) Click the save button<sup style="color:blue">[4]</sup> to save current node information
+Click the complete button<sup style="color:blue">[5]</sup> to save current node information
 
-(2) [Node list](./steps/img/nodeList.png) <sup style="color:blue">[5]</sup> shows all the added nodes
 
-(3) Click next to enter the configuration page
+### 4.Configuration
 
-### 4.Configuration management
+Configuration is to modify the configuration file of node deployment.You can learn the field details of configuration file by [main_net_config.conf](https://github.com/tronprotocol/tron-deployment/blob/master/main_net_config.conf).
 
-The configuration management page [as shown](./steps/img/setting.png), mainly including: genesis information, basic configuration, network configuration, database configuration, p2p configuration and cross-chain configuration
+#### Fast config
 
-(1)Genesis Information Configuration
+Fast configuration is to modify only the deployed file genesis block information and P2P information while other configurations use the default configuration.For more configuration you can choose custom config.
+
+#### Custom config
+
+Version 1.2 of TRON FACTORY include 6 modules,
+
+##### 4.1.Genesis block
 
 Genesis information configuration mainly includes asset configuration and witeness configuration.  
 Asset configuration can add and modify current asset configuration information.  
@@ -58,70 +67,64 @@ The required fields for asset configuration include:
 | :---------------------------------------: | :-----------------------------------: |
 |                accountName                |             account name              |
 |                accountType                | account type： AssetIssue or Contract |
-|                  address                  |                address<sup style="color:blue">[10]</sup>                 |
-| balance <sup style="color:blue">[6]</sup> |                balance                |
+|                  address                  |                address<sup style="color:blue">[7]</sup>                 |
+| balance <sup style="color:blue">[5]</sup> |                balance                |
 
-The required asset:
+The required asset(The blackhole account):
 
 |                Required field             |              Required value               |
 | :---------------------------------------: | :-------------------------------: |
-|                accountName                |              Blackhole<sup style="color:blue">[8]</sup>               |
+|                accountName                |              Blackhole<sup style="color:blue">[6]</sup>               |
 |                accountType                |  AssetIssue |
 |                  address                  | (eckey signature algorithm:）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB    （sm2 signature algorithm:）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
-| balance <sup style="color:blue">[7]</sup> |               -9223372036854775808                |
+| balance <sup style="color:blue">[5]</sup> |               -9223372036854775808                |
 
 
-Genesis Information Configuration click next button to save the current configuration
+Genesis block configuration click next button to save the current configuration
 
-(2)Basic configuration
+#####  4.2 Basic config
 
 The basic configuration required fields include：
 
 | Required field |                               Explanation                                |
 | :------------: | :----------------------------------------------------------------------: |
-|    chainId     | chain ID (Number is a positive integer maximum support value 2147483647) |
-|   chainName    |                                chain Name                                |
-
-Advanced configuration fields include：
-
-| Advanced configuration field |                                          Explanation                                           |
-| :--------------------------: | :--------------------------------------------------------------------------------------------: |
 |   MaintenanceTimeInterval    |      Maintenance interval (Number is a positive integer maximum support value 2147483647)      |
 |   blockProposalExpireTime    | Block proposal expiration time (Number is a positive integer maximum support value 2147483647) |
-|   nodeBlockProducedTimeOut   |  node Block Produced TimeOut (Number is a positive integer maximum support value 2147483647)   |
-|   nodeMinParticipationRate   |   node MinParticipationRate (Number 0 or positive integer maximum support value 2147483647)    |
+|   nodeBlockProducedTimeOut   |  node Block Produced TimeOut (Number is a positive integer and the value range is [0-100])   |
+|   nodeMinParticipationRate   |   node MinParticipationRate (Number 0 or positive integer and the value range is [0-100])    |
 
 Basic configuration click the next button to save the current configuration
 
-(3)Network link configuration(http/rpc)
+##### 4.3 Network link configuration(http/rpc)
 
 Required fields for network link configuration include:
 
 |    Required field    |                                       Explanation                                       |
 | :------------------: | :-------------------------------------------------------------------------------------: |
-| maxHttpConnectNumber | max http Connect Number (Number is a positive integer maximum support value 2147483647) |
 |   httpFullNodePort   |      httpFullNode Port (Number is a positive integer maximum support value 65535)       |
+| maxHttpConnectNumber | max http Connect Number (Number is a positive integer maximum support value 2147483647) |
 |   httpSolidityPort   |      httpFullNode Port (Number is a positive integer maximum support value 65535)       |
 |       rpcPort        |           rpc Port (Number is a positive integer maximum support value 65535)           |
 |   rpcSolidityPort    |       rpcSolidity Port (Number is a positive integer maximum support value 65535)       |
+|   fullNodeEnable     |   Whether to enable fullNode's http service                                 |
+|   solidityEnable     |   Whether to enable solidityNode's http service                               |
 
 Network link configuration click the next button to save the current configuration
 
-(4)Database configuration
+##### 4.4 Database configuration
 
 Database configuration required fields include：
 
 |          Required field          | Explanation |
 | :------------------------------: | :---------: |
+|  Database engine                 |  LevelDB or RocksDB  |
 |  Whether to write synchronously  |  Yes or no  |
 | Whether to open the transaction  |  Yes or no  |
-|  Select database configuration   |  Yes or no  |
-| Whether to open the index switch |  Yes or no  |
-|      Need to update assets       |  Yes or no  |
+|  Custom chainbase Module   |  Upload custom compiled chainbase module  |
 
 Database configuration click the next button to save the current configuration
 
-(5)P2p configuration
+##### 4.5 P2p configuration
 
 P2p configuration required fields include：
 
@@ -135,115 +138,61 @@ Advanced configuration fields include：
 
 | Advanced configuration field |                                        Explanation                                         |
 | :--------------------------: | :----------------------------------------------------------------------------------------: |
-|        maxActiveNodes        |      Max Active Nodes (Number is a positive integer maximum support value 2147483647)      |
-|   maxActiveNodesWithSameIp   | max Active NodesWithSameIp (Number is a positive integer maximum support value 2147483647) |
-|     activeConnectFactor      |         activeConnectFactor (Number and positive maximum support value 2147483647)         |
-|        connectFactor         |            connectFactor (Number and positive maximum support value 2147483647)            |
+|        maxActiveNodes        |      Max Active Nodes (Number is a positive integer maximum support value 200)      |
+|   maxActiveNodesWithSameIp   | max Active NodesWithSameIp (Number is a positive integer maximum support value 50) |
+|     activeConnectFactor      |         activeConnectFactor (Floating point number greater than 0 and less than or equal to 1)         |
+|        connectFactor         |            connectFactor (Floating point number greater than 0 and less than or equal to 1)            |
 
 P2p configuration click the next button to save the current configuration
 
-(6)Cross-chain configuration
+##### 4.6 Module customization
 
-Required fields for cross-chain configuration include：
+Include two modules:consensus module and transaction module
 
-|   Required field   |                                                                      Explanation                                                                      |
-| :----------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: |
-|  enableCrossChain  |                                                        enable CrossChain (check the selection)                                                        |
-| maxValidatorNumber |               max ValidatorNumber (Number is a positive integer and greater than minValidatorNumber maximum supported value 2147483647)               |
-| minValidatorNumber | min ValidatorNumber Minimum number of validations (numbers are positive integers and less than minValidatorNumber maximum supported value 2147483647) |
-|   crossChainFee    |                                         crossChainFee (Number and positive maximum support value 2147483647)                                          |
-
-Cross-chain configuration click the next button to save the current cross-chain configuration<sup style="color:blue">[7]</sup>
-
-### 5.Import plugin
-
-Import plugin page [as shown](./steps/img/plugins.png), mainly including: consensus module, transaction module and database module
-
-(1)Consensus module
+###### Consensus module
 
 Currently supports DPOS
 
-Consensus module click the next button to save the current consensus module settings
+###### transaction module
 
-(2)Transaction module
+You can upload your own compiled transaction module.
 
-Currently supported modules are as follows, you can also customize the module  
-AccountPermissionUpdate  
-AssetIssue  
-ClearABIContract  
-CreateAccount  
-ExchangeCreate  
-ExchangeInject  
-ExchangeTransaction  
-ExchangeWithdraw  
-FreezeBalance  
-ParticipateAssetIssue  
-ProposalApprove  
-ProposalCreate  
-ProposalDelete  
-SetAccountId  
-ShieldedTransfer  
-Transfer  
-TransferAsset  
-UnfreezeAsset  
-UnfreezeBalance  
-UpdateAccount  
-UpdateAsset  
-UpdateBrokerage  
-UpdateEnergyLimit  
-UpdateSettingContract  
-VoteWitness  
-WithdrawBalance  
-WitnessCreate  
-WitnessUpdate  
-Also could customize uploading transactions.
-Upload jar which not related customize transaction may affect normal running  
-Trading module click the next button to save the current transaction module settings.
+### 5 Node deployment
 
-(3)Database module
+TRON FACTORY only support deploy all nodes at one time.Nodes which deployment status are pending will be deployed when clicking deploy button. 
 
-Support for leveldb and rocksdb
+You will choose deployment files of java-tron after click deploy button.See [depolyment document](https://tronprotocol.github.io/documentation-en/developers/deployment/) to learn how to compile java-tron and generate deployment files.
 
-Database module click next to save the current database module<sup style="color:blue">[9]</sup>
+All the nodes will be deployed in turn after click deploy button.You can check logs after the deployment is complete and the status of nodes will change to complete.
 
-### 6.Node deployment
+#### 5.1 Logs
 
-(1)Bulk deployment
+Click logs to view the log of the node's deployment. 
 
-Node deployment supports single node deployment and multiple node bulk deployment  
-Select the node which needs to be deployed. The deployment button will be green.  
-Click the bulk deployment button, it will show [input box](./steps/img/deploy.png) and enter the corresponding zip package path, such as /home/user/java-tron/build/distributions/java-tron-1.0.0.zip  
-Click save and start to the deployment. During the deployment, the batch deployment button is in the loading state.  
-You can click view log to check the deployment log. After the deployment is complete, the batch deployment button end loading status.
+### 5.2 Details
 
-(2)View log
+Click details to view the details of the node.
 
-Click the log button to check the current node's log. If not, it will response the no-node log.  
-If the deployment is complete, click to view the log.  
-The log will be automatically refreshed until the deploy finish.
+### 5.3 Delte
+
+The node can be deleted which status is pending.
 
 ## Footnote
 
-[1] Note: Click the Start One-Click Deployment button to get the node list menu permissions. Each click will reset the menu permissions.
+[1] Note: Click the `start` button is meant to start dveploying your private-chain. 
 
-[2] Note: id and ip addresses cannot be the same, and ip can't be local ip
+[2] Note: The signature algorithm cannot be changed once the node has been added.And only after the node is emptied the signature algorithm can be reselected.
 
-[3] Note: The node privateKey added each time cannot be repeated
+[3] Note: The range of voteCount is 0 - 9223372036854775807.
 
-[4] Note: Click the node list next button to reset the configuration management menu permissions, only show configuration management menu permissions
+[4] Note: The private key of each super node can't be repeated.
 
-[5] Note: When the node list is empty, the default next button cannot be clicked. When the node list is deleted, there is no next menu permission. The node list supports up to 20 nodes.When you modify the contents of the node list, you also need to click the Next button to reset the current default settings.
+[5] Note: The balance range is between -9223372036854775808 and 9223372036854775807. To ensure successful deployment, please fill in the range of values.
 
-[6] Note: The balance range is between -9223372036854775808 and 9223372036854775807. To ensure successful deployment, please fill in the range of values.
+[6] Note：Blackhole asset is required and different signature algorithm corresponding to different address.
 
-[7] Note: Click the last step of the configuration management cross-chain configuration next step, get the import plug-in menu permissions, each time click reset menu permissions
-
-[8] Note：Blackhole asset is required and different signature algorithm corresponding to different address
- 
-[9] Note: Click the button to get the node deployment menu right when you click the next step of the import plugin. Click the reset menu permission each time
-
-[10] Note: Need to fill in the corresponding address of the current signature algorithm
+[7] Note: Need to fill in the corresponding address of the current signature algorithm.
 
 ## License
 
-Copyright (c) 2019 Tron
+Copyright (c) 2020 Tron Factory
