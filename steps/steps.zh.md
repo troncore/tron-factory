@@ -4,17 +4,18 @@
 
 简体中文 | [English](./steps/steps.md)
 
-### 1.准备工作
+### 1 准备工作
 
-目前TRON FACTORY对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342)  
-部署节点需要 [如何编译java-tron](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
+目前TRON FACTORY对服务器的节点部署是通过SSH方式传输与通信，因此需要对服务器进行部署需要提前实现[免密登录](https://www.jianshu.com/p/13919b5ba8a2)或[密码登录](https://blog.csdn.net/li528405176/article/details/82810342) 
 
-### 2.一键发链首页
+部署节点需要先查看 [如何编译java-tron](https://tronprotocol.github.io/documentation-zh/developers/deployment/)
+
+### 2 一键发链首页
 
 （1）查看文档  
 （2）一键部署，点击进入到部署管理页面<sup style="color:blue">[1]</sup>
 
-### 3.节点管理
+### 3 节点管理
 
 节点管理是对您所有在TRON FACTORY添加及部署的节点进行管理
 
@@ -40,7 +41,7 @@
 
 点击完成<sup style="color:blue">[5]</sup> 保存并添加当前节点信息
 
-### 4.配置
+### 4 配置
 
 配置是对节点部署开启时的配置文件进行修改，相关参数可以参考java-tron的配置文件[主链部署配置文件](https://github.com/tronprotocol/tron-deployment/blob/master/main_net_config.conf)
 
@@ -50,9 +51,9 @@
 
 #### 自定义配置
 
-TRON FACTORY 1.2的自定义配置主要包含6个模块
+TRON FACTORY 1.2的自定义配置主要包含6个模块:
 
-##### 4.1.创世块信息
+##### 4.1 创世块信息
 
 创世块信息配置主要包括 asset 配置和 witeness 配置  
 asset 配置 可以新增和修改当前 asset 配置信息  
@@ -78,7 +79,7 @@ asset 配置必填字段包括：
 
 创世块信息点击下一步按钮保存当前配置
 
-##### 4.2.基础配置
+##### 4.2 基础配置
 
 基础配置必填字段包括：
 
@@ -86,28 +87,28 @@ asset 配置必填字段包括：
 | :----------------------: | :----------------------------------------------------------: |
 | MaintenanceTimeInterval  |     维护时间间隔 （数字且为正整数最大支持值 2147483647）     |
 | blockProposalExpireTime  |   区块提案到期时间（数字且为正整数最大支持值 2147483647）    |
-| nodeBlockProducedTimeOut | 节点区块产生超时比例 （数字0或正整数 取值范围为0-100） |
-| nodeMinParticipationRate |   节点最小参与率 （数字0或正整数 取值范围为0-100）    |
+| nodeBlockProducedTimeOut | 节点区块产生超时比例 （数字0或正整数 取值范围为[0-100]） |
+| nodeMinParticipationRate |   节点最小参与率 （数字0或正整数 取值范围为[0-100]）    |
 
 基础配置点击下一步按钮保存当前配置
 
-##### 4.3.网络链接配置(http/rpc)
+##### 4.3 网络链接配置(http/rpc)
 
 网络链接配置必填字段包括：
 
 |       必填字段       |                           解释                           |
 | :------------------: | :------------------------------------------------------: |
 |   httpFullNodePort   |   httpFullNode 端口（数字且为正整数最大支持值 65535）    |
-| maxHttpConnectNumber | 最大 http 连接数 （数字且为正整数最大支持值 2147483647） |
+| maxHttpConnectNumber | 最大 http 连接数 （数字0或正整数 取值范围[0-200]） |
 |   httpSolidityPort   |   httpFullNode 端口 （数字且为正整数最大支持值 65535）   |
 |       rpcPort        |       rpc 端口 （数字且为正整数最大支持值 65535）        |
 |   rpcSolidityPort    |   rpcSolidity 端口 （数字且为正整数最大支持值 65535）    |
-|   fullNodeEnable     |   是否开启fullNode                                   |
-|   solidityEnable     |   是否开启solidityNode                               |
+|   fullNodeEnable     |   是否开启fullNode的Http服务                                  |
+|   solidityEnable     |   是否开启solidityNode的Http服务                              |
 
 网络链接配置点击下一步按钮保存当前配置
 
-##### 4.4.数据库基础配置
+##### 4.4 数据库基础配置
 
 数据库基础配置必填字段包括：
 
@@ -116,12 +117,11 @@ asset 配置必填字段包括：
 |     数据库引擎     | LevelDB或RocksDB |
 |     是否同步写入     | 是或否 |
 | 是否打开 transaction | 是或否 |
-| 是否需要更新 assets  | 是或否 |
 | 自定义chainbase模块  | 上传自定义编译chainbase模块 |
 
 数据库基础配置点击下一步按钮保存当前配置
 
-##### 4.5.p2p 配置
+##### 4.5 p2p 配置
 
 p2p 配置必填字段包括：
 
@@ -135,16 +135,14 @@ p2p 配置必填字段包括：
 
 |       高级配置字段       |                            解释                            |
 | :----------------------: | :--------------------------------------------------------: |
-|      maxActiveNodes      |     最大链接数 （数字且为正整数最大支持值 2147483647）     |
-| maxActiveNodesWithSameIp | 同一 ip 最大连接数 （数字且为正整数最大支持值 2147483647） |
-|   activeConnectFactor    | activeConnectFactor （数字且为正数最大支持值 2147483647）  |
-|      connectFactor       |    connectFactor （数字且为正数最大支持值 2147483647）     |
+|      maxActiveNodes      |     最大链接数 （数字且为正整数最大支持值 200])     |
+| maxActiveNodesWithSameIp | 同一 ip 最大连接数 （数字且为正整数最大支持值 50) |
+|   activeConnectFactor    | activeConnectFactor （数字为(0-1]之间的浮点数）  |
+|      connectFactor       |    connectFactor （数数字为(0-1]之间的浮点数）     |
 
 p2p 配置点击下一步按钮保存当前配置
 
-
-
-##### 4.6.模块定制化
+##### 4.6 模块定制化
 
 其主要包括: 共识模块, 交易模块
 
@@ -156,7 +154,7 @@ p2p 配置点击下一步按钮保存当前配置
 
 可以上传自己修改编译后的交易模块
 
-### 5.节点部署
+### 5 节点部署
 
 TRON FACTORY只支持全量部署，当节点全部添加完毕后进入节点管理页面点击部署会自动部署所有部署状态为未部署的节点   
 
@@ -164,7 +162,7 @@ TRON FACTORY只支持全量部署，当节点全部添加完毕后进入节点�
 
 部署开始后，所有的节点将会依次进行部署，部署结束后可点击部署日志查看相应的部署结果，成功的节点部署状态将会变成已部署
 
-#### 5.1查看日志
+#### 5.1 查看日志
 
 点击查看日志可以查看当前节点的日志。  
 

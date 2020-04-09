@@ -78,7 +78,7 @@
 
 
     <div class="page-footer">
-      <el-button v-if="opType !== 'detail'" class="im-button large" type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button v-if="opType !== 'detail'" class="im-button large" type="primary" :disabled="submitDisabled" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t(opType !== 'detail' ? 'base.cancel' : 'base.return') }}</el-button>
     </div>
   </div>
@@ -112,6 +112,7 @@
         safePrivateKey: Array(64).fill('*').join(''),
         nodeInfo: {},
         loading: false,
+        submitDisabled: false,
 
       }
     },
@@ -150,11 +151,6 @@
           }
         }
 
-        let validatePort = [
-          { validator: formRules.numMin(0, this.$t('nodesManage.valid.gteZeroInt'), ), trigger: 'blur', },
-          { validator: formRules.numMax(65535, this.$t('nodesManage.valid.maxPortValue')), trigger: 'blur', },
-        ]
-
         return {
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -163,7 +159,8 @@
           ],
           port: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            ...validatePort
+            { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
+            { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
           ],
           userName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -176,7 +173,7 @@
           ],
           voteCount: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { validator: formRules.numMin(0, this.$t('nodesManage.valid.gteZeroInt'), ), trigger: 'blur', },
+            { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt'), ), trigger: 'blur', },
           ],
           publicKey: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -199,8 +196,10 @@
         if (this.opType === 'add' || !this.opNodeId) return
         this.form.isSR = false // for hide  layout when start render
         this.form.sshConnectType = 2 // for hide  layout when start render
+        this.submitDisabled = true
         this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
           if (err) return
+          this.submitDisabled = false
           this.nodeInfo = res
           this.initForm()
         })

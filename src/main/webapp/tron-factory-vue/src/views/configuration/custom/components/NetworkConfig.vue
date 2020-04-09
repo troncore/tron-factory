@@ -9,11 +9,11 @@
         </div>
         <el-form-item prop="node_http_fullNodePort">
           <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('configuration.helpTips.httpFullNodePort') }})</i></span>
-          <el-input v-model.trim="form.node_http_fullNodePort" type="number" max="65535" min="0" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_http_fullNodePort" type="number" min="0" max="65535" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="node_maxHttpConnectNumber">
           <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('configuration.helpTips.maxHttpConnectNumber') + ': 0 - 200' }})</i></span>
-          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" max="200" min="0" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_maxHttpConnectNumber" type="number" min="0" max="200" :disabled="!form.node_http_fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <div class="switch-item">
@@ -23,19 +23,19 @@
 
         <el-form-item prop="node_http_solidityPort">
           <span slot="label">httpSolidityPort <i class="help-tips">({{ $t('configuration.helpTips.httpSolidityPort') }})</i></span>
-          <el-input v-model.trim="form.node_http_solidityPort" type="number" max="65535" min="0" :disabled="!form.node_http_solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_http_solidityPort" type="number" min="0" max="65535" :disabled="!form.node_http_solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <br>
 
         <el-form-item prop="node_rpc_port">
           <span slot="label">rpcPort <i class="help-tips">({{ $t('configuration.helpTips.rpcPort') }})</i></span>
-          <el-input v-model.trim="form.node_rpc_port" type="number" max="65535" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_rpc_port" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_rpc_solidityPort">
           <span slot="label">rpcSolidityPort <i class="help-tips">({{ $t('configuration.helpTips.rpcSolidityPort') }})</i></span>
-          <el-input v-model.trim="form.node_rpc_solidityPort" type="number" max="65535" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_rpc_solidityPort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -75,12 +75,12 @@ export default {
   computed: {
     formRules() {
       let validatePort = [
-        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
-        { validator: formRules.numMax(65535, this.$t('configuration.valid.maxPortValue')), trigger: 'blur', },
+        { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
+        { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
       ]
       let validateHttpConnectNumber = [
-        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
-        { validator: formRules.numMax(200, this.$t('configuration.valid.maxNumberValue')), trigger: 'blur', },
+        { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt'), ), trigger: 'blur', },
+        { validator: formRules.numMax(200, this.$t('base.valid.maxNumberValue') + ': 200'), trigger: 'blur', },
       ]
 
       return {

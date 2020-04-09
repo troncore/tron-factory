@@ -93,8 +93,8 @@
         return new Promise(resolve => {
           this.configLoading = true
           this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
-            this.configLoading = false
             if (err) return resolve({})
+            this.configLoading = false
 
             if (stepConfig === 'genesis') {
               resolve({

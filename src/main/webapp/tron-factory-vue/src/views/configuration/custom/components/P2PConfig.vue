@@ -3,17 +3,17 @@
     <div class="box-body">
       <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
 
-        <el-form-item prop="node_p2p_version" label="p2pVersion">
+        <el-form-item prop="node_p2p_version">
           <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
           <el-input v-model.trim="form.node_p2p_version" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item label="listenPort" prop="node_listen_port">
+        <el-form-item prop="node_listen_port">
           <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
-          <el-input v-model.trim="form.node_listen_port" type="number" max="65535" min="0" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_listen_port" type="number" min="0" max="65535" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item label="seedNodeList" prop="seed_node_ip_list" class="seed-node-list">
+        <el-form-item prop="seed_node_ip_list" class="seed-node-list">
           <span slot="label">seedNodeList <i class="help-tips">({{ $t('configuration.helpTips.seedNodeList') }})</i></span>
           <el-checkbox-group v-model="form.seed_node_ip_list">
             <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
@@ -30,38 +30,24 @@
 
         <el-collapse-transition>
           <div v-if="showMore">
-            <el-form-item label="maxActiveNodes" prop="node_maxActiveNodes">
+            <el-form-item prop="node_maxActiveNodes">
               <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodes" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
+              <el-input v-model.trim="form.node_maxActiveNodes" type="number" min="0" max="200" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
-            <el-form-item label="maxActiveNodesWithSameIp" prop="node_maxActiveNodesWithSameIp">
+            <el-form-item prop="node_maxActiveNodesWithSameIp">
               <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
+              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" type="number" min="0" max="50" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
-            <el-form-item label="activeConnectFactor" prop="node_activeConnectFactor">
+            <el-form-item prop="node_activeConnectFactor">
               <span slot="label">activeConnectFactor</span>
-              <el-input-number
-                v-model.trim="form.node_activeConnectFactor"
-                controls-position="right"
-                :min="0"
-                :max="2147483647"
-                :step="0.1"
-                :placeholder="$t('base.pleaseInput')">
-              </el-input-number>
+              <el-input v-model.trim="form.node_activeConnectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
-            <el-form-item label="connectFactor" prop="node_connectFactor">
+            <el-form-item prop="node_connectFactor">
               <span slot="label">connectFactor</span>
-              <el-input-number
-                controls-position="right"
-                :min="0"
-                :max="2147483647"
-                :step="0.1"
-                v-model.trim="form.node_connectFactor"
-                :placeholder="$t('base.pleaseInput')">
-              </el-input-number>
+              <el-input v-model.trim="form.node_connectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
           </div>
         </el-collapse-transition>
@@ -105,52 +91,42 @@ export default {
   },
   computed: {
     formRules() {
-      let validateNumMinMax = [
-        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
-        { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
-      ]
-      let validateP2PVersion = [
-        { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
-        { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
-        { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
-      ]
-      let validatePort = [
-        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
-        { validator: formRules.numMax(65535, this.$t('configuration.valid.maxPortValue')), trigger: 'blur', },
-      ]
-      let validateNumTwoDecimal = [
-        { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647', true, false), trigger: 'blur', },
-        { validator: formRules.numTwoDecimal(this.$t('configuration.valid.validTwoDecimal') + ': 0.01',), trigger: 'blur'},
-      ]
-
       return {
         node_p2p_version: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumMinMax,
-          ...validateP2PVersion,
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false,), trigger: 'blur', },
+          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+          { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
+          { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
+          { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
         ],
         node_listen_port: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validatePort,
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false,), trigger: 'blur', },
+          { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
         ],
         seed_node_ip_list: [
           { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change', },
         ],
         node_maxActiveNodes: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumMinMax,
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(200, this.$t('base.valid.maxNumberValue') + ': 200'), trigger: 'blur', },
         ],
         node_maxActiveNodesWithSameIp: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumMinMax,
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(50, this.$t('base.valid.maxNumberValue') + ': 50'), trigger: 'blur', },
         ],
         node_activeConnectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumTwoDecimal
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
+          { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
         ],
         node_connectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumTwoDecimal
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
+          { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
         ],
       }
     },

@@ -11,7 +11,7 @@
     </div>
 
     <div class="dialog-content">
-      <el-form ref="dialog-form" :rules="assetRules" :model="form" label-width="150px" label-position="left">
+      <el-form ref="dialog-form" :rules="formRules" :model="form" label-width="150px" label-position="left">
         <el-form-item prop="accountName">
           <span slot="label">
             accountName
@@ -56,7 +56,7 @@
               <i class="fa fa-question-circle-o"></i>
             </el-tooltip>
           </span>
-          <el-input v-model.trim="form.balance" tabindex="28" type="number" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.balance" tabindex="28" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
 
@@ -69,7 +69,8 @@
   </el-dialog>
 </template>
 <script>
-import TronWeb from 'tronweb' // https://developers.tron.network/docs/tron-web-intro
+import TronWeb from 'tronweb'
+import { formRules } from "@/utils/validate"; // https://developers.tron.network/docs/tron-web-intro
 export default {
   name: 'DialogAddGenesisAsset',
   props: [
@@ -111,7 +112,21 @@ export default {
         this.$emit('update:visible', val)
       },
     },
-    assetRules() {
+    formRules() {
+      let longIntMax = String(BigInt(2**63 - 1))
+      let longIntMin = String(-BigInt(2**63 - 1))
+
+      let longIntRange = (rule, value, callback) => {
+        let errorMessage = ''
+
+        if (!/^(-)?\d+$/.test(value)) errorMessage = this.$t('base.valid.integer')
+        else if (value < 0 && value > longIntMin) errorMessage = this.$t('base.valid.minNumberValue') + ': ' + longIntMin
+        else if (value > longIntMax) errorMessage = this.$t('base.valid.maxNumberValue') + ': ' + longIntMax
+
+        if (errorMessage) callback(new Error(errorMessage))
+        else callback()
+      }
+
       return {
         accountName: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -124,6 +139,7 @@ export default {
         ],
         balance: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: longIntRange, trigger: 'blur', },
         ],
       }
     },

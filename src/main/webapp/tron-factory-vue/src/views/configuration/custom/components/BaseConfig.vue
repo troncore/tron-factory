@@ -54,23 +54,23 @@ export default {
       return {
         block_maintenanceTimeInterval: [
           { required: true, message: this.$t('base.pleaseInput',), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('configuration.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         block_proposalExpireTime: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('configuration.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         node_blockProducedTimeOut: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt')), trigger: 'blur', },
-          { validator: formRules.numMax(100, this.$t('configuration.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'blur', },
+          { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
         ],
         node_minParticipationRate: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt')), trigger: 'blur', },
-          { validator: formRules.numMax(100, this.$t('configuration.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'blur', },
+          { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
         ],
       }
     }
