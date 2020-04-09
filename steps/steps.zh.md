@@ -86,8 +86,8 @@ asset 配置必填字段包括：
 | :----------------------: | :----------------------------------------------------------: |
 | MaintenanceTimeInterval  |     维护时间间隔 （数字且为正整数最大支持值 2147483647）     |
 | blockProposalExpireTime  |   区块提案到期时间（数字且为正整数最大支持值 2147483647）    |
-| nodeBlockProducedTimeOut | 节点区块产生超时时间 （数字且为正整数最大支持值 2147483647） |
-| nodeMinParticipationRate |   节点最小参与率 （数字 0 或正整数最大支持值 2147483647）    |
+| nodeBlockProducedTimeOut | 节点区块产生超时比例 （数字0或正整数 取值范围为0-100） |
+| nodeMinParticipationRate |   节点最小参与率 （数字0或正整数 取值范围为0-100）    |
 
 基础配置点击下一步按钮保存当前配置
 
