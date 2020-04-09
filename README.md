@@ -19,6 +19,14 @@ Learning this knowledge in advance will make a greate help in this project.
   <!-- <img width="900" src=""> -->
 </p>
 
+## Environment
+
+Make sure you have the proper dependencies.
+- JDK1.8(JDK 1.9+ is not supported yet)
+- On Linux Ubuntu system (e.g. Ubuntu 16.04.4 LTS), ensure that the machine has [Oracle JDK 8](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04), instead of having Open JDK 8 in the system. If you are building the source code by using Open JDK 8, you will get Build Failed result
+- Open UDP ports for connection to the network
+- MINIMUM 2 CPU Cores
+
 ## Features
 
 ```
