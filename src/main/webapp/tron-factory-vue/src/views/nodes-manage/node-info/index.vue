@@ -78,7 +78,7 @@
 
 
     <div class="page-footer">
-      <el-button v-if="opType !== 'detail'" class="im-button large" type="primary" :disabled="formLoading" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button v-if="opType !== 'detail'" class="im-button large" type="primary" :disabled="submitDisabled" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t(opType !== 'detail' ? 'base.cancel' : 'base.return') }}</el-button>
     </div>
   </div>
@@ -112,7 +112,7 @@
         safePrivateKey: Array(64).fill('*').join(''),
         nodeInfo: {},
         loading: false,
-        formLoading: true,
+        submitDisabled: false,
 
       }
     },
@@ -200,10 +200,10 @@
         if (this.opType === 'add' || !this.opNodeId) return
         this.form.isSR = false // for hide  layout when start render
         this.form.sshConnectType = 2 // for hide  layout when start render
-        this.formLoading = true
+        this.submitDisabled = true
         this.$_api.nodesManage.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
           if (err) return
-          this.formLoading = false
+          this.submitDisabled = false
           this.nodeInfo = res
           this.initForm()
         })
