@@ -58,4 +58,15 @@ export default {
 
   pleaseInput: 'Please enter',
   pleaseSelect: 'Please select',
+
+  valid: {
+    integer: 'Please enter an integer',
+    gteZeroInt: 'Please enter an integer greater than or equal to 0',
+    gteZeroNum: 'Please enter a number greater than or equal to 0',
+    gtZeroInt: 'Please enter an integer greater than 0',
+    gtZeroNum: 'Please enter a number greater than 0',
+    maxNumberValue: 'Greater than maximum',
+    minNumberValue: 'Less than minimum',
+    maxPortValue: 'Port number illegal',
+  }
 }

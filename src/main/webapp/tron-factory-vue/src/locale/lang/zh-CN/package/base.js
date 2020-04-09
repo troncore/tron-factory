@@ -58,4 +58,15 @@ export default {
 
   pleaseInput: '请输入',
   pleaseSelect: '请选择',
+
+  valid: {
+    integer: '请输入整数',
+    gteZeroInt: '请输入大于或等于0的整数',
+    gteZeroNum: '请输入大于或等于0的数',
+    gtZeroInt: '请输入大于0的整数',
+    gtZeroNum: '请输入大于0的数',
+    maxNumberValue: '数值超过最大限制',
+    minNumberValue: '数值低于最小限制',
+    maxPortValue: '端口号不能超过 65535',
+  }
 }

@@ -75,16 +75,11 @@ export default {
   valid: {
     inputRightAddress: 'Please input correct address',
     maxVoteCountValue: 'Vote Count exceeds maximum',
-    gteZeroInt: 'Please input a number greater than or equal to 0',
-    gtZeroInt: 'Please input a number greater than 0',
-    maxNumberValue: 'maximum exceeded',
-    maxPortValue: 'Port number illegal',
     listenPort: 'Please input listen port',
     mainnetPlaceholder: 'mainnet p2pversion is illegal',
     testnetPlaceholder: 'testnet p2pversion is illegal',
     specialPlaceholder: 'specific p2pversion is illegal',
     validTwoDecimal: 'invalid precision',
-
     checkDBCustom: 'Please enable custom chainbase module first',
     inputDBCustom: 'Please input custom chainbase module path (ended with .jar)',
     checkCustomTransaction: 'Please enable custom transaction module first',

@@ -75,10 +75,6 @@ export default {
   valid: {
     inputRightAddress: '请输入正确地址',
     maxVoteCountValue: 'Vote Count 填写额超过最大值',
-    gteZeroInt: '请输入大于或等于0的整数',
-    gtZeroInt: '请输入大于0的整数',
-    maxNumberValue: '数值超过最大范围',
-    maxPortValue: '端口号不能超过 65535',
     listenPort: '请输入listen端口号',
     mainnetPlaceholder: '主网 p2pversion 不可使用',
     testnetPlaceholder: '测试网 p2pversion 不可使用',
