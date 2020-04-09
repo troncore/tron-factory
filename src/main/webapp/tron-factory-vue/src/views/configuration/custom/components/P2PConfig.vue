@@ -10,7 +10,7 @@
 
         <el-form-item label="listenPort" prop="node_listen_port">
           <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
-          <el-input v-model.trim="form.node_listen_port" type="number" max="65535" min="0" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.node_listen_port" type="number" min="0" max="65535" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="seedNodeList" prop="seed_node_ip_list" class="seed-node-list">
@@ -46,7 +46,7 @@
                 v-model.trim="form.node_activeConnectFactor"
                 controls-position="right"
                 :min="0"
-                :max="2147483647"
+                :max="1"
                 :step="0.1"
                 :placeholder="$t('base.pleaseInput')">
               </el-input-number>
@@ -57,7 +57,7 @@
               <el-input-number
                 controls-position="right"
                 :min="0"
-                :max="2147483647"
+                :max="1"
                 :step="0.1"
                 v-model.trim="form.node_connectFactor"
                 :placeholder="$t('base.pleaseInput')">
@@ -118,9 +118,9 @@ export default {
         { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), ), trigger: 'blur', },
         { validator: formRules.numMax(65535, this.$t('configuration.valid.maxPortValue')), trigger: 'blur', },
       ]
-      let validateNumTwoDecimal = [
-        { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647', true, false), trigger: 'blur', },
-        { validator: formRules.numTwoDecimal(this.$t('configuration.valid.validTwoDecimal') + ': 0.01',), trigger: 'blur'},
+      let validateNumMinMax1 = [
+        { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt'), true, false), trigger: 'blur', },
+        { validator: formRules.numMax(1, this.$t('configuration.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
       ]
 
       return {
@@ -146,11 +146,11 @@ export default {
         ],
         node_activeConnectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumTwoDecimal
+          ...validateNumMinMax1
         ],
         node_connectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          ...validateNumTwoDecimal
+          ...validateNumMinMax1
         ],
       }
     },
