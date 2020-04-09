@@ -86,8 +86,8 @@ asset 配置必填字段包括：
 | :----------------------: | :----------------------------------------------------------: |
 | MaintenanceTimeInterval  |     维护时间间隔 （数字且为正整数最大支持值 2147483647）     |
 | blockProposalExpireTime  |   区块提案到期时间（数字且为正整数最大支持值 2147483647）    |
-| nodeBlockProducedTimeOut | 节点区块产生超时比例 （数字0或正整数 取值范围为0-100） |
-| nodeMinParticipationRate |   节点最小参与率 （数字0或正整数 取值范围为0-100）    |
+| nodeBlockProducedTimeOut | 节点区块产生超时比例 （数字0或正整数 取值范围为[0-100]） |
+| nodeMinParticipationRate |   节点最小参与率 （数字0或正整数 取值范围为[0-100]）    |
 
 基础配置点击下一步按钮保存当前配置
 
@@ -98,7 +98,7 @@ asset 配置必填字段包括：
 |       必填字段       |                           解释                           |
 | :------------------: | :------------------------------------------------------: |
 |   httpFullNodePort   |   httpFullNode 端口（数字且为正整数最大支持值 65535）    |
-| maxHttpConnectNumber | 最大 http 连接数 （数字且为正整数最大支持值 2147483647） |
+| maxHttpConnectNumber | 最大 http 连接数 （数字0或正整数 取值范围[0-200]） |
 |   httpSolidityPort   |   httpFullNode 端口 （数字且为正整数最大支持值 65535）   |
 |       rpcPort        |       rpc 端口 （数字且为正整数最大支持值 65535）        |
 |   rpcSolidityPort    |   rpcSolidity 端口 （数字且为正整数最大支持值 65535）    |
@@ -116,7 +116,6 @@ asset 配置必填字段包括：
 |     数据库引擎     | LevelDB或RocksDB |
 |     是否同步写入     | 是或否 |
 | 是否打开 transaction | 是或否 |
-| 是否需要更新 assets  | 是或否 |
 | 自定义chainbase模块  | 上传自定义编译chainbase模块 |
 
 数据库基础配置点击下一步按钮保存当前配置
@@ -135,10 +134,10 @@ p2p 配置必填字段包括：
 
 |       高级配置字段       |                            解释                            |
 | :----------------------: | :--------------------------------------------------------: |
-|      maxActiveNodes      |     最大链接数 （数字且为正整数最大支持值 2147483647）     |
-| maxActiveNodesWithSameIp | 同一 ip 最大连接数 （数字且为正整数最大支持值 2147483647） |
-|   activeConnectFactor    | activeConnectFactor （数字且为正数最大支持值 2147483647）  |
-|      connectFactor       |    connectFactor （数字且为正数最大支持值 2147483647）     |
+|      maxActiveNodes      |     最大链接数 （数字且为正整数最大支持值 200])     |
+| maxActiveNodesWithSameIp | 同一 ip 最大连接数 （数字且为正整数最大支持值 50) |
+|   activeConnectFactor    | activeConnectFactor （数字为(0-1]之间的浮点数）  |
+|      connectFactor       |    connectFactor （数数字为(0-1]之间的浮点数）     |
 
 p2p 配置点击下一步按钮保存当前配置
 
