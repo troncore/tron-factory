@@ -174,7 +174,7 @@ public class NodeController {
     String url = (String) data.getOrDefault("url", "");
     String privateKey = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
-    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", false);
+    boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
     int port =data.getOrDefault("port", "8090") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
             (int)data.getOrDefault("port", 8090);
