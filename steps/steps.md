@@ -33,14 +33,14 @@ Required fields include：
 |                     URL                     |                            Url （Required for Witness）                            |
 |                  voteCount<sup style="color:blue">[3]</sup>                   |               Number of corresponding votes （Required for Witness）               |
 |                    address                  |           Super node address using corresponding signature algorithm based on private key （Required for Witness）               |
-|                  privateKey<sup style="color:blue">[4]</sup>                 |         64-bit key saved locally(Required for Witness)                            |
+|                  privateKey                 |         64-bit key saved locally(Required for Witness)                            |
 |                     IP                      |                                      Node server IP                               |
 |                    username                 |        Username for SSH                                                           |  
 |                    port                     |        Port for SSH   (1~65535)                                                   |
 |            authentication methods           |  Authentication methods for connection of SSH.Password and public key are supported now.        |
 |                   password                  |               The password for connection of SSH                                  |
 
-Click the complete button<sup style="color:blue">[5]</sup> to save current node information
+Click the complete button<sup style="color:blue">[4]</sup> to save current node information
 
 
 ### 4.Configuration
@@ -67,17 +67,17 @@ The required fields for asset configuration include:
 | :---------------------------------------: | :-----------------------------------: |
 |                accountName                |             account name              |
 |                accountType                | account type： AssetIssue  |
-|                  address                  |                address<sup style="color:blue">[7]</sup>                 |
-| balance <sup style="color:blue">[5]</sup> |                balance                |
+|                  address                  |                address<sup style="color:blue">[6]</sup>                 |
+| balance <sup style="color:blue">[4]</sup> |                balance                |
 
 The required asset(The blackhole account):
 
 |                Required field             |              Required value               |
 | :---------------------------------------: | :-------------------------------: |
-|                accountName                |              Blackhole<sup style="color:blue">[6]</sup>               |
+|                accountName                |              Blackhole<sup style="color:blue">[5]</sup>               |
 |                accountType                |  AssetIssue |
 |                  address                  | (eckey signature algorithm:）TSJx5LZUDmRDKwQJHWAzpwDdAVm5F7UftB    （sm2 signature algorithm:）TEJj71X5jJUCdZ4iMcJgqpYb5ECyDvHvDu|
-| balance <sup style="color:blue">[5]</sup> |               -9223372036854775808                |
+| balance <sup style="color:blue">[4]</sup> |               -9223372036854775808                |
 
 
 Genesis block configuration click next button to save the current configuration
@@ -185,13 +185,11 @@ The node can be deleted which status is pending.
 
 [3] Note: The range of voteCount is 0 - 9223372036854775807.
 
-[4] Note: The private key of each super node can't be repeated.
+[4] Note: The balance range is between -9223372036854775808 and 9223372036854775807. To ensure successful deployment, please fill in the range of values.
 
-[5] Note: The balance range is between -9223372036854775808 and 9223372036854775807. To ensure successful deployment, please fill in the range of values.
+[5] Note：Blackhole asset is required and different signature algorithm corresponding to different address.
 
-[6] Note：Blackhole asset is required and different signature algorithm corresponding to different address.
-
-[7] Note: Need to fill in the corresponding address of the current signature algorithm.
+[6] Note: Need to fill in the corresponding address of the current signature algorithm.
 
 ## License
 
