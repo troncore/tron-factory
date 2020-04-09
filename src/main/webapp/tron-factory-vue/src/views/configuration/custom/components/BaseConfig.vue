@@ -1,35 +1,25 @@
 <template>
   <div class="box-view base-config">
     <div class="box-body">
-      <el-form class="im-form" ref="base-config-form" :rules="baseRules" :model="form">
-        <!--<el-form-item prop="chainId">
-          <span slot="label">chainId <i class="help-tips">({{ $t('configuration.helpTips.chainId') }})</i></span>
-          <el-input v-model.trim="form.chainId" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>
-
-        <el-form-item prop="chainName">
-          <span slot="label">chainName</span>
-          <el-input v-model.trim="form.chainName" :maxlength="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
-        </el-form-item>-->
-
+      <el-form class="im-form" ref="base-config-form" :model="form" :rules="formRules">
         <el-form-item prop="block_maintenanceTimeInterval">
           <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('configuration.helpTips.maintenanceTimeInterval') }}: ms)</i></span>
-          <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.block_maintenanceTimeInterval" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="block_proposalExpireTime">
           <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configuration.helpTips.blockProposalExpireTime') }}: ms)</i></span>
-          <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.block_proposalExpireTime" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_blockProducedTimeOut">
-          <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configuration.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100%)</i></span>
+          <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configuration.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i></span>
           <el-input v-model.trim="form.node_blockProducedTimeOut" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="node_minParticipationRate">
-          <span slot="label">participationRate <i class="help-tips">({{ $t('configuration.helpTips.nodeMinParticipationRate') }})</i></span>
-          <el-input v-model.trim="form.node_minParticipationRate" type="number" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <span slot="label">participationRate <i class="help-tips">({{ $t('configuration.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i></span>
+          <el-input v-model.trim="form.node_minParticipationRate" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -41,7 +31,7 @@
   </div>
 </template>
 <script>
-import { isvalidateNum, isvalidateIntegerNum } from '@/utils/validate.js'
+import { formRules } from "@/utils/validate";
 export default {
   name: 'base-config',
   props: {
@@ -58,67 +48,32 @@ export default {
       loading: false,
     }
   },
+
   computed: {
-    baseRules() {
-      const validateNum = (rule, value, callback) => {
-        if (!isvalidateNum(value)) {
-          callback(new Error(this.$t('configuration.valid.gtZeroInt')))
-        } else {
-          callback()
-        }
-      }
-      const validNum = (rule, value, callback) => {
-        if (!isvalidateIntegerNum(value)) {
-          callback(new Error(this.$t('configuration.valid.gteZeroInt')))
-        } else {
-          callback()
-        }
-      }
-      const validMaxNum = (rule, value, callback) => {
-        if (value > 2147483647) {
-          callback(new Error(this.$t('configuration.valid.maxNumberValue')))
-        } else {
-          callback()
-        }
-      }
-      const validMaxNum1 = (rule, value, callback) => {
-        if (value > 100) {
-          callback(new Error(this.$t('configuration.valid.maxNumberValue')))
-        } else {
-          callback()
-        }
-      }
+    formRules () {
       return {
-        chainId: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validateNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
-        ],
-        chainName: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+        block_maintenanceTimeInterval: [
+          { required: true, message: this.$t('base.pleaseInput',), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('configuration.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         block_proposalExpireTime: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validateNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
-        ],
-        block_maintenanceTimeInterval: [
-          { required: true, message: this.$t('base.pleaseInput',), trigger: 'blur', },
-          { validator: validateNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('configuration.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(2147483647, this.$t('configuration.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         node_blockProducedTimeOut: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validateNum, trigger: 'blur', },
-          { validator: validMaxNum1, trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt')), trigger: 'blur', },
+          { validator: formRules.numMax(100, this.$t('configuration.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
         ],
         node_minParticipationRate: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: validNum, trigger: 'blur', },
-          { validator: validMaxNum, trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('configuration.valid.gteZeroInt')), trigger: 'blur', },
+          { validator: formRules.numMax(100, this.$t('configuration.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
         ],
       }
-    },
+    }
   },
 
   created () {
@@ -134,8 +89,6 @@ export default {
       this.$refs['base-config-form'].validate(valid => {
         if (valid) {
           let params = {
-            chainId: this.form.chainId,
-            chainName: this.form.chainName,
             blockProducedTimeOut: this.form.node_blockProducedTimeOut,
             maintenanceTimeInterval: this.form.block_maintenanceTimeInterval,
             proposalExpireTime: this.form.block_proposalExpireTime,

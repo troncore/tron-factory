@@ -29,7 +29,7 @@
           </el-form-item><br />
           <el-form-item prop="voteCount" label-width="140px">
             <span slot="label" class="space-between">voteCount <im-tooltip :content="$t('nodesManage.helpTips.voteCount')" /></span>
-            <el-input v-model.trim="form.voteCount" tabindex="22" type="number" :maxlength="20" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')" />
+            <el-input v-model.trim="form.voteCount" tabindex="22" type="number" min="0" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')" />
           </el-form-item><br />
           <el-form-item class="address" prop="publicKey" label-width="140px">
             <span slot="label" class="space-between">address <im-tooltip :content="$t('nodesManage.helpTips.publicKey')" /></span>
@@ -62,7 +62,7 @@
         </el-form-item>
         <el-form-item class="ssh-port" prop="port" label-width="100px">
           <span slot="label">{{ $t('nodesManage.sshPort') }}</span>
-          <el-input v-model.trim="form.port" type="number" tabindex="27" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')" />
+          <el-input v-model.trim="form.port" type="number" min="0" max="65535" tabindex="27" :disabled="isView" clearable :placeholder="$t('base.pleaseInput')" />
         </el-form-item><br />
         <el-form-item prop="sshConnectType" label-width="140px">
           <span slot="label">{{ $t('nodesManage.sshConnectType') }}</span>
@@ -86,7 +86,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { isCorrectIp, isvalidateIntegerNum, isvalidateNum } from "@/utils/validate";
+  import { formRules } from "@/utils/validate"
   import ImTooltip from "@/components/ImTooltip"
 
   export default {
@@ -97,7 +97,7 @@
         form: {
           ip: '',
           isSR: true,
-          needSyncCheck: false,
+          needSyncCheck: true,
           url: 'http://',
           voteCount: '',
           publicKey: '',
@@ -135,45 +135,9 @@
         return this.$route.params.id
       },
       formRules() {
-        const validNum = (rule, value, callback) => {
-          if (!isvalidateNum(value)) {
-            callback(new Error(this.$t('nodesManage.valid.positiveInteger')))
-          } else {
-            callback()
-          }
-        }
-        const validVoteNum = (rule, value, callback) => {
-          if (!isvalidateIntegerNum(value)) {
-            callback(new Error(this.$t('nodesManage.valid.gteZeroInt')))
-          } else {
-            callback()
-          }
-        }
-        const validIpRule = (rule, value, callback) => {
-          if (!isCorrectIp(value)) {
-            callback(new Error(this.$t('nodesManage.valid.rightIP')))
-          } else {
-            callback()
-          }
-        }
         const validLocalRule = (rule, value, callback) => {
           if (this.disabledLocalIP && value === '127.0.0.1') {
             callback(new Error(this.$t('nodesManage.valid.disabledLocalIP')))
-          } else {
-            callback()
-          }
-        }
-
-        const validMaxNum = (rule, value, callback) => {
-          if (value > 2147483647) {
-            callback(new Error(this.$t('nodesManage.valid.maxNumberValue')))
-          } else {
-            callback()
-          }
-        }
-        const validPortNum = (rule, value, callback) => {
-          if (value > 65535) {
-            callback(new Error(this.$t('nodesManage.valid.maxPortValue')))
           } else {
             callback()
           }
@@ -185,16 +149,21 @@
             callback()
           }
         }
+
+        let validatePort = [
+          { validator: formRules.numMin(0, this.$t('nodesManage.valid.gteZeroInt'), ), trigger: 'blur', },
+          { validator: formRules.numMax(65535, this.$t('nodesManage.valid.maxPortValue')), trigger: 'blur', },
+        ]
+
         return {
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { required: true, validator: validIpRule, trigger: 'blur', },
+            { validator: formRules.validIP(this.$t('nodesManage.valid.rightIP'), ), trigger: 'blur', },
             { required: true, validator: validLocalRule, trigger: 'blur', },
           ],
           port: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { required: true, validator: validNum, trigger: 'blur', },
-            { required: true, validator: validPortNum, trigger: 'blur', },
+            ...validatePort
           ],
           userName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -207,7 +176,7 @@
           ],
           voteCount: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { required: true, validator: validVoteNum, trigger: 'blur', },
+            { validator: formRules.numMin(0, this.$t('nodesManage.valid.gteZeroInt'), ), trigger: 'blur', },
           ],
           publicKey: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },

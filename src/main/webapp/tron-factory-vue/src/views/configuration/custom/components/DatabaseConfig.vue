@@ -17,9 +17,9 @@
           <el-switch v-model="form.isOpenTransaction" active-value="on" inactive-value="off"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('configuration.isNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
+        <!--<el-form-item :label="$t('configuration.isNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
           <el-switch v-model="form.needToUpdateAsset"></el-switch>
-        </el-form-item>
+        </el-form-item>-->
 
         <div class="more-setting">
           <el-checkbox v-model="checkDBCustom" @change="handleChangeCheckCustom"><span class="check-label">{{ $t('configuration.dbCustomModule') }}</span></el-checkbox>
@@ -62,7 +62,7 @@ export default {
         dbEnine: '',
         isDBSync: false,
         isOpenTransaction: '',
-        needToUpdateAsset: false,
+        // needToUpdateAsset: false,
         dbCustom: '',
       },
       checkDBCustom: false,
@@ -98,7 +98,7 @@ export default {
         this.form.dbEnine = res.storage_db_engine
         this.form.isDBSync = res.storage_db_sync
         this.form.isOpenTransaction = res.storage_transHistory_switch
-        this.form.needToUpdateAsset = res.storage_needToUpdateAsset
+        // this.form.needToUpdateAsset = res.storage_needToUpdateAsset
         this.form.dbCustom = res.storage_db_custom || ''
 
         this.checkDBCustom = !!this.form.dbCustom
