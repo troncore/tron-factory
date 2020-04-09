@@ -29,7 +29,7 @@
           </el-form-item><br />
           <el-form-item prop="voteCount" label-width="140px">
             <span slot="label" class="space-between">voteCount <im-tooltip :content="$t('nodesManage.helpTips.voteCount')" /></span>
-            <el-input v-model.trim="form.voteCount" tabindex="22" type="number" min="0" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')" />
+            <el-input v-model.trim="form.voteCount" tabindex="22" :disabled="isView" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')" />
           </el-form-item><br />
           <el-form-item class="address" prop="publicKey" label-width="140px">
             <span slot="label" class="space-between">address <im-tooltip :content="$t('nodesManage.helpTips.publicKey')" /></span>
@@ -88,6 +88,7 @@
   import { mapGetters } from 'vuex'
   import { formRules } from "@/utils/validate"
   import ImTooltip from "@/components/ImTooltip"
+  import { transferBigIntToString } from "@/utils/common";
 
   export default {
     name: "node-edit",
@@ -136,6 +137,19 @@
         return this.$route.params.id
       },
       formRules() {
+        let longIntMax = String(BigInt(2**63) - BigInt(1))
+
+        const longIntRange = (rule, value, callback) => {
+          let errorMessage = ''
+
+          if (!/^(-)?\d+$/.test(value)) errorMessage = this.$t('base.valid.integer')
+          else if (value < 0) errorMessage = this.$t('base.valid.gteZeroInt')
+          else if (value > longIntMax) errorMessage = this.$t('base.valid.maxNumberValue') + ': ' + longIntMax
+
+          if (errorMessage) callback(new Error(errorMessage))
+          else callback()
+        }
+
         const validLocalRule = (rule, value, callback) => {
           if (this.disabledLocalIP && value === '127.0.0.1') {
             callback(new Error(this.$t('nodesManage.valid.disabledLocalIP')))
@@ -173,7 +187,8 @@
           ],
           voteCount: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt'), ), trigger: 'blur', },
+            { validator: longIntRange, trigger: 'blur', },
+
           ],
           publicKey: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
@@ -269,7 +284,7 @@
         let srParams = {
           needSyncCheck: this.form.needSyncCheck,
           url: `"${this.form.url}"`,
-          voteCount: this.form.voteCount,
+          voteCount: transferBigIntToString(this.form.voteCount),
           publicKey: this.form.publicKey,
           privateKey: this.form.privateKey !== this.safePrivateKey ? this.form.privateKey : undefined,
         }

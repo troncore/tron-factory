@@ -70,7 +70,8 @@
 </template>
 <script>
 import TronWeb from 'tronweb'
-import { formRules } from "@/utils/validate"; // https://developers.tron.network/docs/tron-web-intro
+import { formRules } from "@/utils/validate";
+import { transferBigIntToString } from "@/utils/common"; // https://developers.tron.network/docs/tron-web-intro
 export default {
   name: 'DialogAddGenesisAsset',
   props: [
@@ -113,8 +114,8 @@ export default {
       },
     },
     formRules() {
-      let longIntMax = String(BigInt(2**63 - 1))
-      let longIntMin = String(-BigInt(2**63 - 1))
+      let longIntMax = String(BigInt(2**63) - BigInt(1))
+      let longIntMin = String(-BigInt(2**63))
 
       let longIntRange = (rule, value, callback) => {
         let errorMessage = ''
@@ -157,6 +158,7 @@ export default {
             this.loading = false
             return false
           }
+          this.form.balance = transferBigIntToString(this.form.balance)
 
           let assets = [...this.genesisBlockAssets]
           assets.splice(this.assetIndex, 1, this.form)
