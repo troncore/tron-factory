@@ -21,7 +21,7 @@ export default {
     setTransactionModule: '/api/transaction',
 
     // todo api
-    initConfig: '/api/initConfig',
+    initConfig: '/api/initConfig', // init default asset
     crossChainConfig: '/api/crossChainConfig',
     dbEngineApi: '/api/dbEngine',
     consensusApi: '/api/consensus',

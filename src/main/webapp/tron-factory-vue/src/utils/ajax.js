@@ -10,29 +10,34 @@ function responseSuccess(response, callback) {
   } else {
     let error_msg = response.data.msg  || 'Unknown Error'
 
-    Notification.error({
+    Notification({
+      type: "error",
       title: 'ERROR',
-      message: error_msg,
+      message: String(error_msg),
+      dangerouslyUseHTMLString: true,
     })
-    callback(error_msg, response)
+    callback(response || {})
   }
 }
 
 // the server responses error or network error
 function responseFail(error, callback) {
-  let errorTitle = 'Error'
-  let errorMsg = error + ''
+  let errorTitle = 'ERROR'
+  let errorMsg = typeof error === 'object' && error.message || error || 'Unknown Error'
+
   if (error && error.response && error.response.data) {
     let errorData = error.response.data
     errorTitle = error.response.statusText
     errorMsg = errorData.message ? (errorData.path + ': ' + errorData.message) : errorData
   }
 
-  Notification.error({
-    title: errorTitle,
-    message: errorMsg,
+  Notification({
+    type: "error",
+    title: String(errorTitle),
+    message: String(errorMsg),
+    dangerouslyUseHTMLString: true,
   })
-  callback(error)
+  callback(error && error.response || {})
 }
 
 export const proxyMap = {

@@ -20,3 +20,10 @@ export function initActions(actions) {
   }
   return api
 }
+
+/**
+ * @return {string}
+ */
+export function transferBigIntToString (value = '') {
+  return String(BigInt(value))
+}
