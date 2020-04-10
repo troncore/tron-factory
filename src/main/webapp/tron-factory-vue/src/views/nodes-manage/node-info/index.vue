@@ -137,14 +137,14 @@
         return this.$route.params.id
       },
       formRules() {
-        let longIntMax = String(BigInt(2**63) - BigInt(1))
+        let longIntMax = BigInt(2**63) - BigInt(1)
 
         const longIntRange = (rule, value, callback) => {
           let errorMessage = ''
 
           if (!/^(-)?\d+$/.test(value)) errorMessage = this.$t('base.valid.integer')
           else if (value < 0) errorMessage = this.$t('base.valid.gteZeroInt')
-          else if (value > longIntMax) errorMessage = this.$t('base.valid.maxNumberValue') + ': ' + longIntMax
+          else if (BigInt(value) > longIntMax) errorMessage = this.$t('base.valid.maxNumberValue') + ': ' + longIntMax
 
           if (errorMessage) callback(new Error(errorMessage))
           else callback()

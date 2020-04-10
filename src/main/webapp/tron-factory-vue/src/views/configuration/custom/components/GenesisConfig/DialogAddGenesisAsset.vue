@@ -114,15 +114,15 @@ export default {
       },
     },
     formRules() {
-      let longIntMax = String(BigInt(2**63) - BigInt(1))
-      let longIntMin = String(-BigInt(2**63))
+      let longIntMax = BigInt(2**63) - BigInt(1)
+      let longIntMin = -BigInt(2**63)
 
       let longIntRange = (rule, value, callback) => {
         let errorMessage = ''
 
         if (!/^(-)?\d+$/.test(value)) errorMessage = this.$t('base.valid.integer')
-        else if (value < 0 && value > longIntMin) errorMessage = this.$t('base.valid.minNumberValue') + ': ' + longIntMin
-        else if (value > longIntMax) errorMessage = this.$t('base.valid.maxNumberValue') + ': ' + longIntMax
+        else if (BigInt(value) < longIntMin) errorMessage = this.$t('base.valid.minNumberValue') + ': ' + longIntMin
+        else if (BigInt(value) > longIntMax) errorMessage = this.$t('base.valid.maxNumberValue') + ': ' + longIntMax
 
         if (errorMessage) callback(new Error(errorMessage))
         else callback()
