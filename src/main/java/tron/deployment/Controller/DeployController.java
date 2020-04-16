@@ -46,6 +46,7 @@ import tron.deployment.shellExecutor.BashExecutor;
 public class DeployController {
     protected static final Logger logger = LoggerFactory.getLogger("DeployController");
     String[] portOccupied = null;
+    NodeController nc  = new NodeController();
     private String checkNodeStatus(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -319,13 +320,15 @@ public class DeployController {
                 if(status.equals(Common.portIsOccupied)){
                     return new Response(ResultCode.FAILED.code, portOccupied[1]).toJSONObject();
                 }
+                JSONObject array = new JSONObject();
 
                 if(isDeployed){ //如果部署成功，更新节点部署状态
-                    NodeController nc  = new NodeController();
+//
                     JSONObject nodeOld = Util.getNodeInfo(nodes, id);
                     nodeOld.put(Common.isDeployedFiled, isDeployed);
-                    nc.deleteNode(id);
-                    Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
+                    nodeOld.put(Common.ifShowLogField, true);
+                    deleteNode(id);
+//                    Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
                     json = readJsonFile();
                     JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
                     if (Objects.isNull(newNodes)) {
@@ -335,9 +338,17 @@ public class DeployController {
                     json.put(Common.nodesFiled, newNodes);
                     nc.updateNodesInfo(newNodes, json, ipList);
 
-                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+//                    JSONObject array = null;
+                    array.put("isDeployed",true);
+                    array.put("ifShowLog",true);
+
+                    return new Response(ResultCode.OK.code, "Deploy successful", array).toJSONObject();
                 }
-                else return new Response(ResultCode.FAILED.code, "Deploy fail", isDeployed).toJSONObject();
+                else{
+                    array.put("isDeployed",false);
+                    array.put("ifShowLog",true);
+                    return new Response(ResultCode.FAILED.code, "Deploy fail", array).toJSONObject();
+                }
 
             }
 
@@ -387,8 +398,8 @@ public class DeployController {
         return new Response(ResultCode.OK.code, jsonObject).toJSONObject();
     }
 
-    /*public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
-        NodeController nc  = new NodeController();
+    public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
+
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -399,8 +410,7 @@ public class DeployController {
             return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
         }
         String ip = (String) node.get(Common.ipFiled);
-
-        ArrayList<String> ipList = new ArrayList<>();
+        NodeController nc = new NodeController();
         //获取配置文件中listenPort
         Util util = new Util();
         util.parseConfig();
@@ -408,6 +418,7 @@ public class DeployController {
         Args args = new Args();
         int listenPort = (Integer)args.getListenPort(config);
 
+        ArrayList<String> ipList = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             JSONObject nodeObj = (JSONObject) nodes.get(i);
             String nodeIp = (String) nodeObj.get(Common.ipFiled);
@@ -415,11 +426,11 @@ public class DeployController {
                 ipList.add(nodeIp+"\":\""+listenPort);
             }
         }
-        JSONArray newNodes = removeNodeInfo(nodes, id, true);
+        JSONArray newNodes = nc.removeNodeInfo(nodes, id, false);
         if (newNodes.size() == nodes.size()) {
             return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
         }
 
         return nc.updateNodesInfo(newNodes, json, ipList);
-    }*/
+    }
 }

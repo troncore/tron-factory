@@ -87,7 +87,7 @@ public class NodeController {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
   //删除节点信息
-  private JSONArray removeNodeInfo(JSONArray nodes, Long id, boolean flag) {
+  public JSONArray removeNodeInfo(JSONArray nodes, Long id, boolean flag) {
     JSONArray newNodes = new JSONArray();
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
@@ -289,6 +289,7 @@ public class NodeController {
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     newNode.put(Common.sshConnectTypeField, sshConnectType);
+    newNode.put(Common.ifShowLogField, false);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, ipList);
   }

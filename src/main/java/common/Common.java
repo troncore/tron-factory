@@ -104,6 +104,8 @@ public class Common {
 
   public static final String p2pVersionField = "node_p2p_version";
 
+  public static final String ifShowLogField = "ifShowLog";
+
   // Node Status
   public static final String notFoundStatus = "not found";
 
