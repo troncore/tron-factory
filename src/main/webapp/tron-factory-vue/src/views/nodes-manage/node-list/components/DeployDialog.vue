@@ -82,6 +82,7 @@
         this.loading = true
         this.$_api.nodesManage.deployNode(this.form, (err, res) => {
           this.loading = false
+          this.$emit('refreshList')
 
           if (err) return
 
