@@ -46,10 +46,11 @@
 
       <el-table-column prop="operate" :label="$t('base.operate')">
         <template slot-scope="scope">
-          <el-button v-if="!scope.row.isDeployed" type="text" @click="handleUpdate(scope.row)">{{$t('base.edit') }}</el-button>
-          <el-button v-if="!scope.row.isDeployed" type="text" @click="handleDelete(scope.row)">{{$t('base.delete') }}</el-button>
           <el-button v-if="scope.row.ifShowLog" type="text" @click="handleLogs(scope.row)">{{$t('nodesManage.deployLog') }}</el-button>
           <el-button v-if="scope.row.isDeployed" type="text" @click="handleDetail(scope.row)">{{$t('nodesManage.nodeDetails') }}</el-button>
+
+          <el-button v-if="!scope.row.isDeployed" type="text" @click="handleUpdate(scope.row)">{{$t('base.edit') }}</el-button>
+          <el-button v-if="!scope.row.isDeployed" type="text" @click="handleDelete(scope.row)">{{$t('base.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
