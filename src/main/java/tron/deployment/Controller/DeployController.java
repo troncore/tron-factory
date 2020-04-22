@@ -229,11 +229,11 @@ public class DeployController {
 
         //执行checkZipPath.bash，判断zip包路径正确性
         BashExecutor bashExecutor = new BashExecutor();
-        bashExecutor.callZipPathScript(filePath);
+        /*bashExecutor.callZipPathScript(filePath);
         String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
         if(checkZipPath.equals(Common.canNotFindZip)) {
             return new Response(ResultCode.OK.code, Common.canNotFindZip).toJSONObject();
-        }
+        }*/
 
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -253,12 +253,37 @@ public class DeployController {
             ipList.add(nodeIp + "\":\"" + listenPort_ip);
         }
 
+        boolean ifCheckZipPath = false;
         //部署所有未部署的节点
         for (int i = 0; i < nodes.size(); i++) {
+            //执行checkZipPath.bash，判断zip包路径正确性
+            //校验用户上传的jar包路径是否正确，仅第一次循环时校验
+            if(!ifCheckZipPath){
+                ifCheckZipPath = true;
+                bashExecutor.callZipPathScript(filePath);
+                String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
+                if(checkZipPath.equals(Common.canNotFindZip)) {
+                    return new Response(ResultCode.OK.code, Common.canNotFindZip).toJSONObject();
+                }
+            }
+            //更新节点部署日志查看状态
             JSONObject node = (JSONObject) nodes.get(i);
+            Long id = (Long) node.get(Common.idFiled);
+            JSONObject nodeOld = Util.getNodeInfo(nodes, id);
+            nodeOld.put(Common.ifShowLogField, true);
+            deleteNode(id);
+            json = readJsonFile();
+            JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+            if (Objects.isNull(newNodes)) {
+                newNodes = new JSONArray();
+            }
+            newNodes.add(nodeOld);
+            json.put(Common.nodesFiled, newNodes);
+            nc.updateNodesInfo(newNodes, json, ipList);
+
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
             if (!isDeployed) {
-                Long id = (Long) node.get(Common.idFiled);
+//                Long id = (Long) node.get(Common.idFiled);
                 String path = filePath;
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
                 String privateKeypath = (String) node.get(Common.privateKeyFiled);
@@ -324,30 +349,30 @@ public class DeployController {
 
                 if(isDeployed){ //如果部署成功，更新节点部署状态
 //
-                    JSONObject nodeOld = Util.getNodeInfo(nodes, id);
-                    nodeOld.put(Common.isDeployedFiled, isDeployed);
-                    nodeOld.put(Common.ifShowLogField, true);
+                    JSONObject oldNode = Util.getNodeInfo(nodes, id);
+                    oldNode.put(Common.isDeployedFiled, isDeployed);
+//                    nodeOld.put(Common.ifShowLogField, true);
                     deleteNode(id);
 //                    Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));
                     json = readJsonFile();
-                    JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
-                    if (Objects.isNull(newNodes)) {
-                        newNodes = new JSONArray();
+                    JSONArray nowNodes = (JSONArray) json.get(Common.nodesFiled);
+                    if (Objects.isNull(nowNodes)) {
+                        nowNodes = new JSONArray();
                     }
-                    newNodes.add(nodeOld);
-                    json.put(Common.nodesFiled, newNodes);
-                    nc.updateNodesInfo(newNodes, json, ipList);
+                    nowNodes.add(oldNode);
+                    json.put(Common.nodesFiled, nowNodes);
+                    nc.updateNodesInfo(nowNodes, json, ipList);
 
 //                    JSONObject array = null;
-                    array.put("isDeployed",true);
-                    array.put("ifShowLog",true);
+//                    array.put("isDeployed",true);
+//                    array.put("ifShowLog",true);
 
-                    return new Response(ResultCode.OK.code, "Deploy successful", array).toJSONObject();
+                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
                 }
                 else{
-                    array.put("isDeployed",false);
-                    array.put("ifShowLog",true);
-                    return new Response(ResultCode.FAILED.code, "Deploy fail", array).toJSONObject();
+//                    array.put("isDeployed",false);
+//                    array.put("ifShowLog",true);
+                    return new Response(ResultCode.FAILED.code, "Deploy fail", isDeployed).toJSONObject();
                 }
 
             }
