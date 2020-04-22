@@ -1,4 +1,4 @@
-#!/bin/bash -il
+#!/bin/bash
 
 while true; do
   pid=`ps -ef | grep deployment | grep java | grep -v grep | awk '{print $2}'`
