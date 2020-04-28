@@ -38,7 +38,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "netstat -anp|grep $port > ~/java-tron/checkPort.log\r"
+send "netstat -an|grep $port > ~/java-tron/checkPort.log\r"
 expect "]*"
 send "exit\r"
 }
