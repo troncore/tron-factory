@@ -26,6 +26,7 @@ public class Args {
   private static final String RPC_SOLIDITY_PORT = "node.rpc.solidityPort";
   private static final String NODE_HTTP_FULLNODE_PORT = "node.http.fullNodePort";
   private static final String NODE_HTTP_FULLNODE_ENABLE = "node.http.fullNodeEnable";
+  private static final String NODE_ACTIVE = "node.active";
   private static final String NODE_HTTP_SOLIDITY_PORT = "node.http.solidityPort";
   private static final String NODE_HTTP_SOLIDITY_ENABLE = "node.http.solidityEnable";
   private static final String BLOCK_MAINTENANCE_TIME_INTERVAR = "block.maintenanceTimeInterval";
@@ -49,6 +50,15 @@ public class Args {
         .getBoolean(NODE_HTTP_SOLIDITY_ENABLE)
         : true;
   }
+
+  public static List<String> getNodeActive(final Config config) {
+    if (config.hasPath(NODE_ACTIVE)) {
+      return config.getStringList(NODE_ACTIVE).size() == 0
+              ? null : config.getStringList(NODE_ACTIVE);
+    }
+    return null;
+  }
+
   public static boolean needToUpdateAsset(final Config config) {
     return config.hasPath(NEED_TO_UPDATE_ASSET_KEY) ? config
         .getBoolean(NEED_TO_UPDATE_ASSET_KEY)

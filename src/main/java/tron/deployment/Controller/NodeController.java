@@ -10,6 +10,7 @@ import ch.ethz.ssh2.Connection;
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
+import config.ActiveConfig;
 import config.SeedNodeConfig;
 
 import java.io.*;
@@ -69,6 +70,7 @@ public class NodeController {
       }
     }
     configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
+    configGenerator.updateConfig(new ActiveConfig(ipList), Common.configFiled);
 
     GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
     witnessConfig.setGenesisBlockWitnesses(witnessnodes);

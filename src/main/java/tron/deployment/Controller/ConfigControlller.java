@@ -138,7 +138,7 @@ public class ConfigControlller {
     // network
     networkConfig = new NetworkConfig(Args.getMaxHttpConnectNumber(loadConfig), Args.getRPCSolidityNodePort(loadConfig), Args.getRPCFullNodePort(loadConfig),
             Args.getHTTPFullNodePort(loadConfig), Args.getHTTPSolidityNodePort(loadConfig),
-            Args.getNodeHttpFullnodeEnable(loadConfig), Args.getNodeHttpSolidityEnable(loadConfig));
+            Args.getNodeHttpFullnodeEnable(loadConfig), Args.getNodeHttpSolidityEnable(loadConfig), Args.getNodeActive(loadConfig));
 
     // crossChain
     initCrossSetting();
@@ -256,11 +256,11 @@ public class ConfigControlller {
             (int) data.getOrDefault("httpSolidityPort", 8091);
     boolean httpFullNode = (boolean) data.getOrDefault("fullNodeEnable", true);
     boolean httpSolidity = (boolean) data.getOrDefault("solidityEnable", true);
-
+    ArrayList<String> acrive = (ArrayList<String>) data.getOrDefault("active", null);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new NetworkConfig(maxHttpConnectNumber, solidityRPCPort, rpcPort,
-            httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity), Common.configFiled);
+            httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity, acrive), Common.configFiled);
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
