@@ -354,7 +354,9 @@ public class NodeController {
     ArrayList<String> ipList = new ArrayList<>();
 
     for (int i = 0; i < nodes.size(); i++) {
-      String nodeIp = (String) node.get(Common.ipFiled);
+      JSONObject nodeObj = (JSONObject) nodes.get(i);
+      String nodeIp = (String) nodeObj.get(Common.ipFiled);
+//      String nodeIp = (String) node.get(Common.ipFiled);
       if(ipOld != nodeIp) {
         ipList.add(nodeIp + "\":\"" + listenPort);
       }
