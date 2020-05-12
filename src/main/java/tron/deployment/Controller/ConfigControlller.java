@@ -221,11 +221,11 @@ public class ConfigControlller {
       if (checkDBJarPath.equals(Common.canNotFindZip)) {
         return new Response(ResultCode.NOT_FOUND.code, dbCustom+": "+Common.canNotFindZip).toJSONObject();
       }
-      JSONObject json = readJsonFile();
-      json.put(Common.dbCustomFiled, dbCustom);
-      if (!writeJsonFile(json)) {
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
-      }
+    }
+    JSONObject json = readJsonFile();
+    json.put(Common.dbCustomFiled, dbCustom);
+    if (!writeJsonFile(json)) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }
 
     ConfigGenerator configGenerator = new ConfigGenerator();
