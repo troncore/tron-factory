@@ -513,6 +513,7 @@ if [ -z $pid ] ; then
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] start java-tron with pid $pid on $hostname"
+  time=$(date "+%Y-%m-%d %H:%M:%S")
   echo  "[$time] ${success}"
   rm -rf startPid startHostName
   rm -rf $5
