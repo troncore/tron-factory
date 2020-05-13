@@ -49,13 +49,13 @@ lsp
 #检查结果传到本地
 /usr/bin/expect <<lsp
   log_user 0
-  #set timeout 3600
+  set timeout 60
   spawn scp -P $2 $3@$1:~/java-tron/checkPort.log /tmp/
   expect {
   "*assword*" {
   send "$7\r"
-  #expect "]*"
-  #send "exit\r"
+  expect "100%"
+  send "\r"
   }
   timeout { send_error "expect_timeout\n";exit 1 }
   }
@@ -172,16 +172,15 @@ fi
 #echo "传压缩包"
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading java-tron-1.0.0.zip"
-
 /usr/bin/expect <<lsp
 log_user 0
-#set timeout 3600
+set timeout 3600
 spawn scp -P $2  $4 $3@$1:./java-tron/
 expect {
 "*assword*" {
 send "$7\r"
-#expect "]*"
-#send "exit\r"
+expect "100%"
+send "\r"
 }
 timeout { send_error "expect_timeout\n";exit 1 }
 }
@@ -206,13 +205,13 @@ echo "[$time] uploading config.conf"
 
 /usr/bin/expect <<lsp
 log_user 0
-#set timeout 3600
+set timeout 60
 spawn scp -P $2 $5 $3@$1:./java-tron/config.conf
 expect {
 "*assword*" {
 send "$7\r"
-#expect "]*"
-#send "exit\r"
+expect "100%"
+send "\r"
 }
 timeout { send_error "expect_timeout\n";exit 1 }
 }
@@ -282,13 +281,13 @@ lsp
   #将远程dbJarName文件传到本地家目录下
   /usr/bin/expect <<lsp
   log_user 0
-  #set timeout 3600
+  set timeout 3600
   spawn scp -P $2 $3@$1:~/java-tron/dbJarName /tmp/
   expect {
   "*assword*" {
   send "$7\r"
-  #expect "]*"
-  #send "exit\r"
+  expect "100%"
+  send "\r"
   }
   timeout { send_error "expect_timeout\n";exit 1 }
   }
@@ -303,13 +302,13 @@ lsp
 
   /usr/bin/expect <<lsp
   log_user 0
-  #set timeout 3600
+  set timeout 3600
   spawn scp -P $2 ${10} $3@$1:java-tron/java-tron-1.0.0/lib/$chainbasePath
   expect {
   "*assword*" {
   send "$7\r"
-  #expect "]*"
-  #send "exit\r"
+  expect "100%"
+  send "\r"
   }
   timeout { send_error "expect_timeout\n";exit 1 }
   }
@@ -335,13 +334,13 @@ echo "[$time] uploading start.sh"
 #echo "start脚本"
 /usr/bin/expect <<lsp
 log_user 0
-#set timeout 3600
+set timeout 60
 spawn scp -P $2 ./.startNode.sh $3@$1:./java-tron/start.sh
 expect {
 "*assword*" {
 send "$7\r"
-#expect "]*"
-#send "exit\r"
+expect "100%"
+send "\r"
 }
 timeout { send_error "expect_timeout\n";exit 1 }
 }
@@ -367,13 +366,13 @@ if [ $6 != "null" ]; then
 
   /usr/bin/expect <<lsp
   log_user 0
-  #set timeout 3600
+  set timeout 3600
   spawn scp -P $2 $6 $3@$1:./java-tron/$APP/lib/
   expect {
   "*assword*" {
   send "$7\r"
-  #expect "]*"
-  #send "exit\r"
+  expect "100%"
+  send "\r"
   }
   timeout { send_error "expect_timeout\n";exit 1 }
   }
@@ -456,7 +455,7 @@ fi
    expect "]*"
    send "ps ux |grep $Program |grep -v grep |awk '{print \\\$2}' > startPid \r"
    expect "]*"
-   send "echo \\\$HOSTNAME >> startHostName \r"
+   send "echo \\\$HOSTNAME > startHostName \r"
    expect "]*"
    send "exit\r"
    }
@@ -468,10 +467,13 @@ lsp
    ######################复制远端进程pid到本地
 /usr/bin/expect <<lsp
    log_user 0
+   set timeout 60
    spawn scp -P $2 $3@$1:./startPid .
    expect {
    "*assword*" {
    send "$7\r"
+   expect "100%"
+   send "\r"
    }
    timeout { send_error "expect_timeout\n";exit 1 }
    }
@@ -485,10 +487,13 @@ lsp
 ######################复制远端hostname到本地
 /usr/bin/expect <<lsp
    log_user 0
+   set timeout 60
    spawn scp -P $2 $3@$1:./startHostName .
    expect {
    "*assword*" {
    send "$7\r"
+   expect "100%"
+   send "\r"
    }
    timeout { send_error "expect_timeout\n";exit 1 }
    }
