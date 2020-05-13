@@ -456,7 +456,7 @@ fi
    expect "]*"
    send "ps ux |grep $Program |grep -v grep |awk '{print \\\$2}' > startPid \r"
    expect "]*"
-   send "echo \\\$HOSTNAME >> startPid \r"
+   send "echo \\\$HOSTNAME >> startHostName \r"
    expect "]*"
    send "exit\r"
    }
@@ -465,7 +465,7 @@ fi
    expect eof
 lsp
 
-   ######################复制远端进程pid和远端hostname到本地
+   ######################复制远端进程pid到本地
 /usr/bin/expect <<lsp
    log_user 0
    spawn scp -P $2 $3@$1:./startPid .
@@ -482,23 +482,40 @@ lsp
    echo "[$time] error"
    exit
    fi
+######################复制远端hostname到本地
+/usr/bin/expect <<lsp
+   log_user 0
+   spawn scp -P $2 $3@$1:./startHostName .
+   expect {
+   "*assword*" {
+   send "$7\r"
+   }
+   timeout { send_error "expect_timeout\n";exit 1 }
+   }
+   expect eof
+lsp
+   if [ $? != 0 ];then
+   time=$(date "+%Y-%m-%d %H:%M:%S")
+   echo "[$time] error"
+   exit
+   fi
+
 
 pid=`head -1 startPid`
-hostname=`tail -1 startPid`
+hostname=`head -1 startHostName`
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
+  rm -rf startPid startHostName
+  rm -rf $5
   exit
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] start java-tron with pid $pid on $hostname"
   echo  "[$time] ${success}"
+  rm -rf startPid startHostName
+  rm -rf $5
   exit
 fi
 
-rm -rf startPid
-###################################
-rm -rf $5
-time=$(date "+%Y-%m-%d %H:%M:%S")
-echo  "[$time] ${success}"
