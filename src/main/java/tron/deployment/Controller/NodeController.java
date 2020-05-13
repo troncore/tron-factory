@@ -10,6 +10,7 @@ import ch.ethz.ssh2.Connection;
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
+import config.ActiveConfig;
 import config.SeedNodeConfig;
 
 import java.io.*;
@@ -69,6 +70,7 @@ public class NodeController {
       }
     }
     configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
+    configGenerator.updateConfig(new ActiveConfig(ipList), Common.configFiled);
 
     GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
     witnessConfig.setGenesisBlockWitnesses(witnessnodes);
@@ -163,6 +165,35 @@ public class NodeController {
     return Common.connectFailedStatus;
   }
 
+  private String checkSSHPWDStatus(String path) {
+    File file = new File(path);
+    if (file.isFile() && file.exists()) {
+      try {
+        InputStreamReader read = new InputStreamReader(
+                new FileInputStream(file), Common.encoding);
+        BufferedReader bufferedReader = new BufferedReader(read);
+        String lineTxt;
+
+        while ((lineTxt = bufferedReader.readLine()) != null) {
+          if (lineTxt.contains(Common.connectSuccessStatus)) {
+            return Common.connectSuccessStatus;
+          }
+          if (lineTxt.contains(Common.connectFailedStatus)) {
+            return Common.connectFailedStatus;
+          }
+        }
+        bufferedReader.close();
+        read.close();
+
+      } catch (Exception e) {
+        LOG.error(e.toString());
+      }
+    } else {
+      return Common.notFoundStatus;
+    }
+    return Common.connectFailedStatus;
+  }
+
   //添加节点
   @PostMapping(value = "/api/nodeInfo")
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
@@ -190,23 +221,27 @@ public class NodeController {
     String publicKey = (String) data.getOrDefault("publicKey", "");
     JSONObject statusObj = new JSONObject();
     //1 password, 2 key
-    if(sshConnectType == 1){
+    /*if(sshConnectType == 1){
       String sshPwdStatus = SSHconnectPWD(ip, userName, sshPassword);
       if(sshPwdStatus.equals(Common.connectFailedStatus)) {
         status = 1;
         statusObj.put("status",status);
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
       }
+    }*/
+
+    BashExecutor bashExecutor = new BashExecutor();
+    if(sshConnectType == 1 ){
+      bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
     }
     if(sshConnectType == 2){
-      BashExecutor bashExecutor = new BashExecutor();
       bashExecutor.callSSHScript(ip, port, userName);
-      String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
-      if(sshStatus.equals(Common.connectFailedStatus)) {
-        status = 1;
-        statusObj.put("status",status);
-        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-      }
+    }
+    String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+    if(sshStatus.equals(Common.connectFailedStatus)) {
+      status = 1;
+      statusObj.put("status",status);
+      return new Response(ResultCode.OK.code, statusObj).toJSONObject();
     }
 
     //获取配置文件中listenPort
@@ -323,7 +358,7 @@ public class NodeController {
     String publicKey = (String) data.getOrDefault("publicKey", "");
     JSONObject statusObj = new JSONObject();
     //1 password, 2 key
-    if(sshConnectType == 1){
+    /*if(sshConnectType == 1){
       String sshPwdStatus = SSHconnectPWD(ip, userName, sshPassword);
       if(sshPwdStatus.equals(Common.connectFailedStatus)) {
         status = 1;
@@ -340,6 +375,20 @@ public class NodeController {
         statusObj.put("status",status);
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
       }
+    }*/
+
+    BashExecutor bashExecutor = new BashExecutor();
+    if(sshConnectType ==1 ){
+      bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
+    }
+    if(sshConnectType == 2){
+      bashExecutor.callSSHScript(ip, port, userName);
+    }
+    String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+    if(sshStatus.equals(Common.connectFailedStatus)) {
+      status = 1;
+      statusObj.put("status",status);
+      return new Response(ResultCode.OK.code, statusObj).toJSONObject();
     }
 
     JSONObject json = readJsonFile();
@@ -352,7 +401,9 @@ public class NodeController {
     ArrayList<String> ipList = new ArrayList<>();
 
     for (int i = 0; i < nodes.size(); i++) {
-      String nodeIp = (String) node.get(Common.ipFiled);
+      JSONObject nodeObj = (JSONObject) nodes.get(i);
+      String nodeIp = (String) nodeObj.get(Common.ipFiled);
+//      String nodeIp = (String) node.get(Common.ipFiled);
       if(ipOld != nodeIp) {
         ipList.add(nodeIp + "\":\"" + listenPort);
       }
