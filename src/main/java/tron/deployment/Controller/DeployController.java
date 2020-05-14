@@ -188,9 +188,45 @@ public class DeployController {
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
     }
 
+    @GetMapping(value = "/api/getDeployedNode")
+    public JSONObject getDeployedNode(@RequestParam(value = "isDeployedNode", required = true, defaultValue = "true") boolean isDeployedNode) {
+        JSONObject json = readJsonFile();
+        JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+        if (Objects.isNull(nodes)) {
+            nodes = new JSONArray();
+        }
+        //获取配置文件中listenPort
+        Util util = new Util();
+        util.parseConfig();
+        Config config = util.config;
+        Args args = new Args();
+        int listenPort = args.getListenPort(config);
+        ArrayList<String> seedNodeIpList = (ArrayList<String>)args.getSeedNode(config);
+
+        ArrayList<String> deployedIpList = new ArrayList<>();
+        //如果需要列出已成功部署的节点，则需要遍历所有节点，isDeployed=true时，添加到deployedIpList
+        //如果不论是否部署过，是否部署成功，则返回seed_node_ip_list
+        if(isDeployedNode){
+            for (int i = 0; i < nodes.size(); i++) {
+                JSONObject node = (JSONObject) nodes.get(i);
+                boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
+                if(isDeployed){
+                    String nodeIp = (String) node.get(Common.ipFiled);
+                    deployedIpList.add(nodeIp+"\":\""+listenPort);
+                }
+            }
+        }else{
+           deployedIpList = seedNodeIpList;
+        }
+        JSONObject deployedIpObj = new JSONObject();
+        deployedIpObj.put("deployedIpList",deployedIpList);
+        return new Response(ResultCode.OK.code, deployedIpObj).toJSONObject();
+    }
+
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) throws CipherException, IOException {
 
+        boolean isDeployedAll = true;
         //获取配置文件中各端口号，便于校验端口是否冲突
         String fullNodePort = "null";
         String solidityPort = "null";
@@ -269,6 +305,7 @@ public class DeployController {
             //更新节点部署日志查看状态
             JSONObject node = (JSONObject) nodes.get(i);
             Long id = (Long) node.get(Common.idFiled);
+//            String ip = (String) node.get(Common.ipFiled);
             JSONObject nodeOld = Util.getNodeInfo(nodes, id);
             nodeOld.put(Common.ifShowLogField, true);
             deleteNode(id);
@@ -343,7 +380,7 @@ public class DeployController {
                     return new Response(ResultCode.UNAUTHORIZED.code, path+": "+Common.canNotFindZip).toJSONObject();
                 }
                 if(status.equals(Common.portIsOccupied)){
-                    return new Response(ResultCode.FAILED.code, portOccupied[1]).toJSONObject();
+                    return new Response(ResultCode.FAILED.code, portOccupied[1]+"("+ip+")").toJSONObject();
                 }
                 JSONObject array = new JSONObject();
 
@@ -363,21 +400,20 @@ public class DeployController {
                     json.put(Common.nodesFiled, nowNodes);
                     nc.updateNodesInfo(nowNodes, json, ipList);
 
-//                    JSONObject array = null;
-//                    array.put("isDeployed",true);
-//                    array.put("ifShowLog",true);
-
-                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
+//                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
                 }
                 else{
-//                    array.put("isDeployed",false);
-//                    array.put("ifShowLog",true);
-                    return new Response(ResultCode.FAILED.code, "Deploy fail", isDeployed).toJSONObject();
+//                    isDeployedAll = false;
+                    return new Response(ResultCode.FAILED.code, "Deploy fail("+ip+")").toJSONObject();
                 }
 
             }
+            if(i == nodes.size()-1){
+                return new Response(ResultCode.OK.code, "Deploy successful").toJSONObject();
+            }
 
         }
+
         return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
     }
 

@@ -48,12 +48,29 @@ public class BashExecutor {
         }
     }
 
-//添加节点时检查ssh连通性
+//密钥登录：添加节点时检查ssh连通性
     public void callSSHScript(String ip, int port, String userName){
 
         try {
             String absolutePath = System.getProperty("user.dir").concat("/sshConnect.bash");
             String[] cmdArray = {absolutePath, ip, port+"", userName};
+            String logName = String.format("> ".concat(Common.sshLogFormat));
+            cmdArray = ArrayUtils.add(cmdArray, logName);
+            String cmd = StringUtils.join(cmdArray, " ");
+            Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+//密码登录：添加节点时检查ssh连通性
+    public void callSSHPWDScript(String ip, int port, String userName, String sshPassword){
+
+        try {
+            String absolutePath = System.getProperty("user.dir").concat("/sshPWDConnect.bash");
+            String[] cmdArray = {absolutePath, ip, port+"", userName, sshPassword};
             String logName = String.format("> ".concat(Common.sshLogFormat));
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");

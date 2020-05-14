@@ -9,6 +9,7 @@ export default {
     checkNode: '/api/checkNode',
     deployNode: '/api/deployNode',
     getCrypto: '/api/getCrypto',
+    getDeployedNode: '/api/getDeployedNode',
   },
   post: {
     addNoteInfo: '/api/nodeInfo',
