@@ -12,6 +12,7 @@ export default {
     isCollapseAside: localStorage.getItem('isCollapseAside') === 'true',
     menuList: menuList,
     gitHome: 'http://39.106.174.213/kangjiancheng/tron-factory',
+    documents: 'http://47.252.80.127:9000/',
     currentGitBranch: process.env.GIT_BRANCH || 'master',
   },
 
@@ -43,8 +44,8 @@ export default {
     },
     viewDocument (state) {
       let currentLanguage = localStorage.getItem('currentLang')
-      let docLang = currentLanguage === 'zh-CN' ? 'README.zh-CN.md' : 'README.md'
-      let docURL = `${state.gitHome}/blob/${state.currentGitBranch}/${docLang}`
+      let docLang = currentLanguage === 'zh-CN' ? 'zh' : ''
+      let docURL = state.documents + docLang
 
       window.open(docURL, '_blank')
     }
