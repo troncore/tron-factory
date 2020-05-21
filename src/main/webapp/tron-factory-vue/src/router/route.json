@@ -1,5 +1,12 @@
 [
   {
+    "path": "/explorer",
+    "name": "explorer",
+    "meta": {
+      "auth": true
+    }
+  },
+  {
     "path": "/nodes-manage/:type(add|edit|detail)?/:id(\\d+)?",
     "name": "nodes-manage",
     "meta": {

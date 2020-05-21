@@ -14,6 +14,13 @@ Vue.prototype.$_api = api
 
 Vue.prototype.$eventBus = new Vue()
 
+/**
+ * this.$_moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+ * 2018-11-26 11:43:19
+ */
+import * as moment from 'moment';
+Vue.prototype.$_moment = moment;
+
 Vue.config.productionTip = false
 
 new Vue({

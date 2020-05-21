@@ -1,5 +1,12 @@
 [
   {
+    "path": "/explorer",
+    "name": "explorer",
+    "title": "menu.explorer",
+    "icon": "el-icon-s-data",
+    "disabled": false
+  },
+  {
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "title": "menu.nodesManage",
