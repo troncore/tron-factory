@@ -5,7 +5,7 @@ finish="deploy finish"
 noCheck="StrictHostKeyChecking no"
 
 #ssh -p $2 $3@$1 -o "${noCheck}" exit
-result=`ssh -p $2 $3@$1 exit`;echo $result
+result=`ssh -p $2 $3@$1 "exit" 2>&1`;echo $result
 result=$?
 echo $result
 if [ $result = 0 ];then
