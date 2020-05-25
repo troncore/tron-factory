@@ -53,10 +53,18 @@ module.exports = {
     // https://cli.vuejs.org/config/#chainwebpack
     config
       .plugin('define')
-      .tap(args => {
-        args[0]['process.env.GIT_BRANCH'] = JSON.stringify(branch)
-        return args
-      })
+        .tap(args => {
+          args[0]['process.env.GIT_BRANCH'] = JSON.stringify(branch)
+          return args
+        })
+
+    // GraphQL Loader
+    config.module
+      .rule('graphql')
+        .test(/\.gql$/)
+        .use('graphql-tag/loader')
+        .loader('graphql-tag/loader')
+        .end()
   },
   css: {
     loaderOptions: {
