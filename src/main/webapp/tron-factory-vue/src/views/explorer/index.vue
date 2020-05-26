@@ -26,10 +26,6 @@
         canExplorerNode: false,
       }
     },
-    apollo: {
-      // 简单的查询，将更新 'hello' 这个 vue 属性
-      'activeConnectCount': gql `query { activeConnectCount }`,
-    },
     created () {
 
     },

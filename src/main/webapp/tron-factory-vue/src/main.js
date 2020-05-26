@@ -32,7 +32,7 @@ import * as moment from 'moment';
 Vue.prototype.$_moment = moment;
 
 /**
- * GraphQL
+ * TODO: GraphQL 待开发
  */
 import apolloProvider from './graphql'
 
