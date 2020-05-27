@@ -1,5 +1,5 @@
 <template>
-  <div class="block-chain-info">
+  <div class="block-chain-info" v-loading="loading">
     <div class="info-header">
       <div class="line-item">
         <div class="info-item">
@@ -20,23 +20,28 @@
         <i class="el-icon-loading" :loading="true"></i>
         <el-button class="refresh" type="text" @click="handleRefresh">{{ $t('刷新')}}</el-button>
       </div>
+
       <!-- every block-->
-      <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
-        <div class="box-header">
-          <div class="block-high">{{ block.high }}</div>
-          <div class="block-time">{{ block.time }}</div>
-        </div>
-        <div class="box-body">
-          <div class="line-item">
-            <span class="label">{{ $t('哈希值')}}：</span>
-            <span class="value">{{ block.hash }}</span>
+      <template v-if="lastBlockList.length">
+        <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
+          <div class="box-header">
+            <div class="block-high">{{ block.high }}</div>
+            <div class="block-time">{{ block.time }}</div>
           </div>
-          <div class="line-item">
-            <span class="label">{{ $t('状态')}}：</span>
-            <span class="value">{{ block.status }}</span>
+          <div class="box-body">
+            <div class="line-item">
+              <span class="label">{{ $t('哈希值')}}：</span>
+              <span class="value">{{ block.hash }}</span>
+            </div>
+            <div class="line-item">
+              <span class="label">{{ $t('状态')}}：</span>
+              <span class="value">{{ block.status }}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
+
+      <div v-else class="empty-data">{{ $t('base.emptyData')}}</div>
     </div>
   </div>
 </template>
@@ -44,25 +49,49 @@
 <script>
 export default {
   name: "block-chain-info",
+  props: {
+    configForm: Object,
+  },
   data () {
     return {
-      lastBlockList: [{
-        high: '#1001',
-        time: '2020-05-20 12:30:01',
-        hash: '0000000001233e3b151f48f3df7299e912dfba7dea5d0406a923e9abe96892c2',
-        status: '已确认',
-      }, {
-        high: '#1000',
-        time: '2020-05-20 12:30:01',
-        hash: '0000000001233e3b151f48f3df7299e912dfba7dea5d0406a923e9abe96892c2',
-        status: '已确认',
-      }],
+      blockChainInfo: {
+
+      },
+      loading: false,
+      lastBlockList: [],
+    }
+  },
+  watch: {
+    // when the config-node form params change, it will refresh info
+    'configForm.refresh': {
+      handler (val) {
+        if (val) this.getBlockChainInfo()
+      }
     }
   },
   created () {
-    this.getLastBlockList()
+    this.getBlockChainInfo()
+
+    // this.getLastBlockList()
   },
+
   methods: {
+    getBlockChainInfo (params = {}) {
+      this.configForm.refresh = false
+      this.blockChainInfo = {}
+      this.loading = true
+
+      this.$_api.explorer.getBlockChainInfo({
+        type: params.nodeType,
+        url: params.nodeURL,
+      }, (err, res = {}) => {
+        this.loading = false
+        if (err) return
+
+        this.blockChainInfo = res.result || {}
+      })
+    },
+
     getLastBlockList () {
       setInterval(this.pollLastBlock, 3000)
     },

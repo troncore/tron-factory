@@ -2,18 +2,21 @@
   <div class="explorer padding-20">
     <div class="page-title">{{ $t('浏览')}}</div>
 
-    <div class="im-card" v-if="!canExplorerNode">
-      <el-button class="add-node el-icon-plus" type="text" @click="handleAdd">{{ $t('配置节点')}}</el-button>
+    <div class="im-card" v-if="hideExplorer">
+      <el-button class="add-node el-icon-plus" type="text" @click="dialogVisible = true">{{ $t('配置节点')}}</el-button>
     </div>
-    <explorer-node v-else @update="handleUpdate" @delete="handleDelete" />
+    <explorer-node
+      v-else
+      :config-form="configForm"
+      @update="handleUpdate"
+      @delete="handleDelete" />
 
-    <config-node :visible.sync="dialogVisible" @success="handleAddSuccessful" />
+    <!-- dialog -->
+    <config-node :visible.sync="dialogVisible" @initConfig="handleInitConfig" />
   </div>
 </template>
 
 <script>
-  import gql from 'graphql-tag'
-
   import ExplorerNode from "./explorer-node";
   import ConfigNode from "./ConfigNode";
   export default {
@@ -21,21 +24,16 @@
     components: { ConfigNode, ExplorerNode },
     data () {
       return {
-        'activeConnectCount': '',
+        hideExplorer: true,
         dialogVisible: false,
-        canExplorerNode: false,
+        configForm: {},
       }
     },
-    created () {
-
-    },
     methods: {
-      handleAdd () {
-        this.dialogVisible = true
-      },
+      handleInitConfig (configForm) {
+        this.configForm = configForm
 
-      handleAddSuccessful () {
-        this.canExplorerNode = true
+        this.hideExplorer = false
       },
 
       handleUpdate () {
@@ -43,7 +41,7 @@
       },
 
       handleDelete () {
-        this.canExplorerNode = false
+        this.hideExplorer = true
       }
 
     }
