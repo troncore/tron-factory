@@ -10,6 +10,7 @@ import ch.ethz.ssh2.Connection;
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
+import common.utils.HttpUtil;
 import config.ActiveConfig;
 import config.SeedNodeConfig;
 
@@ -566,4 +567,11 @@ public class NodeController {
     return updateNodesInfo(newNodes, json, ipList);
   }
 
+  @GetMapping(value = "/api/getDeployedNodeInfo")
+  public JSONObject getDeployedNodeInfo() throws Exception {
+    HttpUtil httpUtil = new HttpUtil();
+    String nodeInfo = httpUtil.getInfo("https://api.trongrid.io/wallet/getnodeinfo", null);
+//    JSONObject json = JSONObject.fromObject(nodeInfo);
+    return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
+  }
 }
