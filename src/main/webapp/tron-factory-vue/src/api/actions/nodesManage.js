@@ -10,7 +10,8 @@ export default {
     deployNode: '/api/deployNode',
     getCrypto: '/api/getCrypto',
     getDeployedNode: '/api/getDeployedNode',
-    getDeployedNodeInfo: '/api/getDeployedNodeInfo'
+    getDeployedNodeInfo: '/api/getDeployedNodeInfo',
+    getNowBlockInfo: '/api/getNowBlockInfo'
   },
   post: {
     addNoteInfo: '/api/nodeInfo',

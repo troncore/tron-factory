@@ -574,4 +574,12 @@ public class NodeController {
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
     return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
   }
+
+  @GetMapping(value = "/api/getNowBlockInfo")
+  public JSONObject getNowBlockInf() throws Exception {
+    HttpUtil httpUtil = new HttpUtil();
+    String nowBlockInfo = httpUtil.getInfo("https://api.trongrid.io/wallet/getnowblock", null);
+//    JSONObject json = JSONObject.fromObject(nodeInfo);
+    return new Response(ResultCode.OK.code, nowBlockInfo).toJSONObject();
+  }
 }
