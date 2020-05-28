@@ -603,12 +603,18 @@ public class NodeController {
   @GetMapping(value = "/api/getDeployedNodeInfo")
   public JSONObject getDeployedNodeInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
     HttpUtil httpUtil = new HttpUtil();
+    JSONObject jsonObj = new JSONObject();
     try{
       String nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
-      return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
+      jsonObj.put("result",nodeInfo); 
+      jsonObj.put("status",1);
+      return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
+//      return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
+      jsonObj.put("result",e.getMessage());
+      jsonObj.put("status",2);
+      return new Response(ResultCode.NOT_FOUND.code, jsonObj).toJSONObject();
     }
 
   }
@@ -616,12 +622,17 @@ public class NodeController {
   @GetMapping(value = "/api/getNowBlockInfo")
   public JSONObject getNowBlockInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
     HttpUtil httpUtil = new HttpUtil();
+    JSONObject jsonObj = new JSONObject();
     try {
       String nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
-      return new Response(ResultCode.OK.code, nowBlockInfo).toJSONObject();
+      jsonObj.put("result",nowBlockInfo);
+      jsonObj.put("status",1);
+      return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
+      jsonObj.put("result",e.getMessage());
+      jsonObj.put("status",2);
+      return new Response(ResultCode.NOT_FOUND.code, jsonObj).toJSONObject();
     }
   }
 }
