@@ -81,7 +81,7 @@ export default {
       this.blockChainInfo = {}
       this.loading = true
 
-      this.$_api.explorer.getBlockChainInfo({
+      this.$_api.explorer.getNowBlockInfo({
         // type: params.nodeType,
         url: this.configForm.nodeURL,
       }, (err, res = {}) => {
