@@ -3,6 +3,7 @@ export default {
   configNode: '配置节点',
   deployedNode: '已部署节点',
   defineNode: '自定义节点',
+  validHttpStart: '请以"http://"或"http://"开头',
   nodeIP: '节点IP',
   httpPort: 'HTTP端口',
   defineNodeLabel: '自定义节点URL',
