@@ -1,5 +1,5 @@
 <template>
-  <div class="node-info">
+  <div class="node-info" v-loading="loading">
     <div class="box-card node-config">
       <div class="box-header">{{ $t('节点配置') }}</div>
       <div class="box-body">
@@ -47,7 +47,45 @@
 
 <script>
 export default {
-  name: "node-info"
+  name: "node-info",
+  props: {
+    configForm: Object,
+  },
+  data () {
+    return {
+      nodeInfo: {
+
+      },
+      loading: false,
+    }
+  },
+  watch: {
+    'configForm.refresh': {
+      handler (val) {
+        if (val) this.getNodeInfo()
+      }
+    }
+  },
+  created () {
+    this.getNodeInfo()
+  },
+  methods: {
+    getNodeInfo (params = {}) {
+      this.configForm.refresh = false
+      this.nodeInfo = {}
+      this.loading = true
+
+      this.$_api.explorer.getDeployedNodeInfo({
+        type: params.nodeType,
+        url: params.nodeURL,
+      }, (err, res = {}) => {
+        this.loading = false
+        if (err) return
+
+        this.nodeInfo = res.result || {}
+      })
+    }
+  }
 }
 </script>
 

@@ -111,3 +111,34 @@ div, span {
   background-color: transparent;
 }
 
+.validate-tips {
+  display: block;
+  height: 0;
+  line-height: 28px;
+  font-size: 14px;
+  color: #D0021B;
+  overflow: hidden;
+  transition: height ease-in .3s;
+
+  &.show {
+    height: 28px;
+  }
+}
+
+.empty-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  color: font-color(.6);
+  &:before {
+    content: '——';
+    margin-right: 5px;
+    color: font-color(.4);
+  }
+  &:after {
+    content: '——';
+    margin-left: 5px;
+    color: font-color(.4);
+  }
+}

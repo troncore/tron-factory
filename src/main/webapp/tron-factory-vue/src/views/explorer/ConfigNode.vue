@@ -11,23 +11,25 @@
     </div>
 
     <div class="dialog-content">
-      <div class="form-item">
-        <el-radio v-model="nodeType" label="1">{{ $t('已部署节点') }}</el-radio>
-        <el-radio v-model="nodeType" label="2">{{ $t('自定义节点') }}</el-radio>
-      </div>
-      <div v-if="nodeType === '1'" class="form-item">
-        <el-select v-model="deployedNode" style="width: 100%;" :placeholder="$t('请选择')">
-          <el-option
-            v-for="item in deployedNodeList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
-      <div v-if="nodeType === '2'" class="form-item">
-        <el-input type="text" v-model="defineNode" style="width: 100%;" :placeholder="$t('请输入')"/>
-      </div>
+      <el-form ref="form" :model="form" :rules="formRules">
+        <el-form-item class="node-type">
+          <el-radio v-model="form.nodeType" label="1">{{ $t('已部署节点') }}</el-radio>
+          <el-radio v-model="form.nodeType" label="2">{{ $t('自定义节点') }}</el-radio>
+        </el-form-item>
+        <el-form-item v-if="form.nodeType === '1'" prop="deployedURL" key="deployedURL">
+          <el-select v-model="form.deployedURL" style="width: 100%;" clearable filterable :placeholder="$t('请选择')">
+            <el-option
+              v-for="item in deployedNodeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="form.nodeType === '2'" prop="defineURL" key="defineURL">
+          <el-input type="text" v-model="form.defineURL" style="width: 100%;" clearable :placeholder="$t('请输入')"/>
+        </el-form-item>
+      </el-form>
     </div>
 
     <div slot="footer" class="dialog-footer">
@@ -48,20 +50,21 @@
     },
     data () {
       return {
-        nodeType: '1',
-        deployedNode: '',
-        defineNode: '',
+        form: {
+          nodeType: '1',
+          deployedURL: '',
+          defineURL: '',
+        },
+        formRules: {
+          deployedURL: [
+            { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change' }
+          ],
+          defineURL: [
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' }
+          ]
+        },
         nodeInfo: '',
-        deployedNodeList: [{
-          value: '1.1.1.1:1111',
-          label: '1.1.1.1:1111'
-        }, {
-          value: '2.2.2.2:2222',
-          label: '2.2.2.2:2222'
-        }, {
-          value: '3.3.3.3:3333',
-          label: '3.3.3.3:3333'
-        }],
+        deployedNodeList: [],
         loading: false
       }
     },
@@ -73,14 +76,32 @@
         set (val) {
           this.$emit('update:visible', val)
         }
-      },
+      }
+    },
+    created () {
+      this.getDeployedNode()
     },
     methods: {
-      handleSubmit () {
-        this.$emit('success', this.nodeInfo)
-        this.dialogVisible = false
+      getDeployedNode () {
+        this.$_api.explorer.getDeployedNode({}, (err, res = {}) => {
+          if (err) return
+          let deployedIpList = res && res.deployedIpList || []
+          this.deployedNodeList = deployedIpList.map(item => ({ label: item, value: item, }))
+        })
       },
-
+      handleSubmit () {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            let configForm = {
+              refresh: true,
+              nodeType: this.form.nodeType,
+              nodeURL: this.form.nodeType === '1' ? this.form.deployedURL : this.form.defineURL,
+            }
+            this.$emit('initConfig', configForm)
+            this.dialogVisible = false
+          }
+        })
+      },
     },
   }
 </script>
@@ -90,8 +111,8 @@
   .dialog-content {
     margin-bottom: 30px;
   }
-  .form-item {
-    margin-bottom: 15px;
+  .node-type {
+    margin-bottom: 10px;
   }
 }
 </style>

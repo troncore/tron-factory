@@ -1,5 +1,5 @@
 <template>
-  <div class="block-info">
+  <div class="block-info" v-loading="loading">
     <div class="info-item">
       <span class="label">{{ $t('高度') }}：</span>
       <span class="value">{{ $t('12345') }}</span>
@@ -21,7 +21,45 @@
 
 <script>
 export default {
-  name: "block-info"
+  name: "block-info",
+  props: {
+    configForm: Object,
+  },
+  data () {
+    return {
+      blockInfo: {
+
+      },
+      loading: false,
+    }
+  },
+  watch: {
+    'configForm.refresh': {
+      handler (val) {
+        if (val) this.getBlockInfo()
+      }
+    }
+  },
+  created () {
+    this.getBlockInfo()
+  },
+  methods: {
+    getBlockInfo (params = {}) {
+      this.configForm.refresh = false
+      this.blockInfo = {}
+      this.loading = true
+
+      this.$_api.explorer.getBlockInfo({
+        type: params.nodeType,
+        url: params.nodeURL,
+      }, (err, res = {}) => {
+        this.loading = false
+        if (err) return
+
+        this.blockInfo = res.result || {}
+      })
+    }
+  }
 }
 </script>
 
