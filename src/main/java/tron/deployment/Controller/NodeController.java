@@ -536,6 +536,39 @@ public class NodeController {
 
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
+
+  //更新节点信息，不含iplist
+  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
+    ConfigGenerator configGenerator = new ConfigGenerator();
+
+    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      boolean isSR = (Boolean) node.get(Common.isSRFiled);
+
+      if (isSR) {
+        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
+                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
+      }
+    }
+
+    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
+    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
+
+    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
+      LOG.error("update witness config file failed");
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
+    }
+
+    json.put(Common.nodesFiled, nodes);
+
+    if (!writeJsonFile(json)) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+    }
+
+    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+  }
+
   //删除节点
   @DeleteMapping(value = "/api/nodeInfo")
   public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
@@ -568,18 +601,27 @@ public class NodeController {
   }
 
   @GetMapping(value = "/api/getDeployedNodeInfo")
-  public JSONObject getDeployedNodeInfo() throws Exception {
+  public JSONObject getDeployedNodeInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
     HttpUtil httpUtil = new HttpUtil();
-    String nodeInfo = httpUtil.getInfo("https://api.trongrid.io/wallet/getnodeinfo", null);
+    try{
+      String nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo", null);
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
-    return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
+      return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
+    }catch (Exception e){
+      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
+    }
+
   }
 
   @GetMapping(value = "/api/getNowBlockInfo")
-  public JSONObject getNowBlockInf() throws Exception {
+  public JSONObject getNowBlockInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
     HttpUtil httpUtil = new HttpUtil();
-    String nowBlockInfo = httpUtil.getInfo("https://api.trongrid.io/wallet/getnowblock", null);
+    try {
+      String nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock", null);
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
-    return new Response(ResultCode.OK.code, nowBlockInfo).toJSONObject();
+      return new Response(ResultCode.OK.code, nowBlockInfo).toJSONObject();
+    }catch (Exception e){
+      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
+    }
   }
 }

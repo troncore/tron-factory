@@ -40,6 +40,10 @@ public class Common {
 
   public static final String ipListFiled = "ipList";
 
+  public static final String httpPortFiled = "httpPort";
+
+  public static final String httpIpListFiled = "httpIpList";
+
   public static final String isSRFiled = "isSR";
 
   public static final String privateKeyFiled = "privateKey";

@@ -196,12 +196,12 @@ public class DeployController {
             nodes = new JSONArray();
         }
         //获取配置文件中listenPort
-        Util util = new Util();
+        /*Util util = new Util();
         util.parseConfig();
         Config config = util.config;
         Args args = new Args();
         int listenPort = args.getListenPort(config);
-        ArrayList<String> seedNodeIpList = (ArrayList<String>)args.getSeedNode(config);
+        ArrayList<String> seedNodeIpList = (ArrayList<String>)args.getSeedNode(config);*/
 
         ArrayList<String> deployedIpList = new ArrayList<>();
         //如果需要列出已成功部署的节点，则需要遍历所有节点，isDeployed=true时，添加到deployedIpList
@@ -212,11 +212,10 @@ public class DeployController {
                 boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
                 if(isDeployed){
                     String nodeIp = (String) node.get(Common.ipFiled);
-                    deployedIpList.add(nodeIp+"\":\""+listenPort);
+                    String httpPort = (String)node.get(Common.httpPortFiled);
+                    deployedIpList.add(nodeIp+":"+httpPort);
                 }
             }
-        }else{
-           deployedIpList = seedNodeIpList;
         }
         JSONObject deployedIpObj = new JSONObject();
         deployedIpObj.put("deployedIpList",deployedIpList);
@@ -326,6 +325,21 @@ public class DeployController {
                 String privateKeypath = (String) node.get(Common.privateKeyFiled);
                 String privateKey = null;
                 boolean blockNeedSync = true;
+
+                //更新节点http端口
+//            String ip = (String) node.get(Common.ipFiled);
+                JSONObject nodeOldHttp = Util.getNodeInfo(nodes, id);
+                nodeOldHttp.put(Common.httpPortFiled, fullNodePort);
+                deleteNode(id);
+                json = readJsonFile();
+                JSONArray newNodeHttp = (JSONArray) json.get(Common.nodesFiled);
+                if (Objects.isNull(newNodeHttp)) {
+                    newNodeHttp = new JSONArray();
+                }
+                newNodeHttp.add(nodeOldHttp);
+                json.put(Common.nodesFiled, newNodeHttp);
+                nc.updateNodesInfo(newNodeHttp, json);
+
                 if (isSR) {
                     try {
                         privateKey = Wallet.getPrivateString(String.format("%s/%s", Common.walletFiled, privateKeypath));
