@@ -607,14 +607,12 @@ public class NodeController {
     try{
       String nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
-      jsonObj.put("result",nodeInfo); 
+      jsonObj.put("result",nodeInfo);
       jsonObj.put("status",1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
 //      return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
     }catch (Exception e){
-      jsonObj.put("result",e.getMessage());
-      jsonObj.put("status",2);
-      return new Response(ResultCode.NOT_FOUND.code, jsonObj).toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
     }
 
   }
