@@ -29,8 +29,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static String getInfo(String urlStr, Map<String, String> paramMap) throws Exception {
-        urlStr = urlStr + "?" + getParamString(paramMap);
+    public static String getInfo(String urlStr) throws Exception {
+//        urlStr = urlStr + "?" + getParamString(paramMap);
         HttpURLConnection conn = null;
         try {
             //创建URL对象

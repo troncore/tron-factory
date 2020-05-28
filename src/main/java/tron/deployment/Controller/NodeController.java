@@ -604,7 +604,7 @@ public class NodeController {
   public JSONObject getDeployedNodeInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
     HttpUtil httpUtil = new HttpUtil();
     try{
-      String nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo", null);
+      String nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
       return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
     }catch (Exception e){
@@ -617,7 +617,7 @@ public class NodeController {
   public JSONObject getNowBlockInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
     HttpUtil httpUtil = new HttpUtil();
     try {
-      String nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock", null);
+      String nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
       return new Response(ResultCode.OK.code, nowBlockInfo).toJSONObject();
     }catch (Exception e){
