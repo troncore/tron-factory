@@ -132,12 +132,12 @@ div, span {
   height: 100px;
   color: font-color(.6);
   &:before {
-    content: '——';
+    content: '--';
     margin-right: 5px;
     color: font-color(.4);
   }
   &:after {
-    content: '——';
+    content: '--';
     margin-left: 5px;
     color: font-color(.4);
   }

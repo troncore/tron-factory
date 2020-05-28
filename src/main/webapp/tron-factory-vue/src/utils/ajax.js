@@ -5,12 +5,10 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // if the server responses success, just deal with the useless data
 function responseSuccess(response, callback) {
-  console.log('responseSuccess: ')
-  console.dir(response)
   if (response.data && (response.data.code < 300 || response.data.code === 304)) {
     callback(null, response.data.data)
   } else {
-    let error_msg = response.data.msg  || 'Unknown Error'
+    let error_msg = response.data.msg  || 'error'
 
     Notification({
       type: "error",
@@ -24,35 +22,23 @@ function responseSuccess(response, callback) {
 
 // the server responses error or network error
 function responseFail(error, callback) {
-  console.log('responseFail: ')
-  console.dir(error)
-  // if (error.response) {
-  //   // The request was made and the server responded with a status code
-  //   // that falls out of the range of 2xx
-  //   console.log(error.response.data);
-  //   console.log(error.response.status);
-  //   console.log(error.response.headers);
-  // } else if (error.request) {
-  //   // The request was made but no response was received
-  //   // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-  //   // http.ClientRequest in node.js
-  //   console.log(error.request);
-  // } else {
-  //   // Something happened in setting up the request that triggered an Error
-  //   console.log('Error', error.message);
-  // }
-  // console.log(error.config);
+  let errorTitle = ''
+  let errorMsg = ''
 
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    errorTitle = error.response.status + ' - ' + error.response.statusText
 
-  let errorTitle = 'ERROR'
-  let errorMsg = typeof error === 'object' && error.message || error || 'Unknown Error'
-
-  if (error && error.response && error.response.data) {
-    let errorData = error.response.data
-    errorTitle = error.response.statusText || errorTitle
-    errorMsg = errorData.message ? (errorData.path + ': ' + errorData.message) : errorData
+    // 500、 405 e.g
+    if (typeof error.response.data === 'string') {
+      errorMsg = error.response.data
+    } else if (typeof error.response.data === 'object' && error.response.data.message) {
+      let path = error.response.data.path ? ''+ error.response.data.path+': ' : ''
+      errorMsg = path + error.response.data.message
+    }
   }
-
+  errorTitle = errorTitle || 'ERROR'
+  errorMsg = errorMsg || error.message || 'error'
 
   Notification({
     type: "error",
