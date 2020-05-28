@@ -53,7 +53,7 @@
         form: {
           nodeType: '1',
           deployedURL: '',
-          defineURL: 'http://',
+          defineURL: '',
         },
         formRules: {
           deployedURL: [
