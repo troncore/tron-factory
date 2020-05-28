@@ -4,37 +4,37 @@
     <div class="node-summary im-card">
       <template v-if="configForm.nodeType === '1'">
         <div class="node-item node-ip">
-          <span class="label">{{ $t('节点IP')}}：</span>
+          <span class="label">{{ $t('explorer.nodeIP')}}：</span>
           <span class="value">{{ nodeIP }}</span>
         </div>
         <div class="node-item http-port">
-          <span class="label">{{ $t('HTTP端口')}}：</span>
+          <span class="label">{{ $t('explorer.httpPort')}}：</span>
           <span class="value">{{ nodePort }}</span>
         </div>
       </template>
       <template v-else>
         <div class="node-item node-url">
-          <span class="label">{{ $t('自定义节点URL')}}：</span>
+          <span class="label">{{ $t('explorer.defineNodeLabel')}}：</span>
           <span class="value">{{ configForm.nodeURL }}</span>
         </div>
       </template>
       <div class="node-item operator">
-        <el-button type="text" class="update" @click="handleUpdate">{{ $t('修改')}}</el-button>
-        <el-button type="text" class="delete" @click="handleDelete">{{ $t('删除')}}</el-button>
+        <el-button type="text" class="update" @click="handleUpdate">{{ $t('base.modify')}}</el-button>
+        <el-button type="text" class="delete" @click="handleDelete">{{ $t('base.delete')}}</el-button>
       </div>
     </div>
 
     <div class="node-detail im-card">
-      <el-tabs v-model="activeTab" @tab-click="handleClick">
-        <el-tab-pane label="区块链信息" name="1">
+      <el-tabs v-model="activeTab">
+        <el-tab-pane :label="$t('explorer.blockChainInfo')" name="1">
           <block-chain-info v-if="activeTab === '1'" :config-form="configForm"/>
         </el-tab-pane>
 
-        <el-tab-pane label="节点信息" name="2">
+        <el-tab-pane :label="$t('explorer.nodeInfo')" name="2">
           <node-info v-if="activeTab === '2'" :config-form="configForm" />
         </el-tab-pane>
 
-        <el-tab-pane label="块信息" name="3">
+        <el-tab-pane :label="$t('explorer.blockInfo')" name="3">
           <block-info v-if="activeTab === '3'" :config-form="configForm" />
         </el-tab-pane>
       </el-tabs>
@@ -67,9 +67,7 @@
       }
     },
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
+
       handleUpdate () {
         this.$emit('update')
       },

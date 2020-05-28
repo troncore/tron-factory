@@ -6,6 +6,7 @@ import sign from './package/sign'
 
 import nodesManage from './package/nodesManage'
 import configuration from './package/configuration'
+import explorer from './package/explorer'
 import walletCLI from './package/walletCLI'
 import tronLink from './package/tronLink'
 
@@ -16,6 +17,7 @@ export default {
   sign,
   nodesManage,
   configuration,
+  explorer,
   walletCLI,
   tronLink,
 }

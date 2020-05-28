@@ -1,43 +1,43 @@
 <template>
   <div class="node-info" v-loading="loading">
     <div class="box-card node-config">
-      <div class="box-header">{{ $t('节点配置') }}</div>
+      <div class="box-header">{{ $t('explorer.nodeConfig') }}</div>
       <div class="box-body">
         <div class="config-item">
-          <span class="label">{{ $t('节点IP') }}：</span>
+          <span class="label">{{ $t('explorer.nodeIP') }}：</span>
           <span class="value">{{ $t('123.123.123.123') }}</span>
         </div>
         <div class="config-item">
-          <span class="label">{{ $t('节点状态') }}：</span>
-          <span class="value">{{ $t('正常') }}</span>
+          <span class="label">{{ $t('explorer.nodeStatus') }}：</span>
+          <span class="value">{{ $t('explorer.normal') }}</span>
         </div>
         <div class="config-item">
-          <span class="label">{{ $t('已链接的节点数') }}：</span>
+          <span class="label">{{ $t('explorer.linkedNodeNums') }}：</span>
           <span class="value">{{ $t('3') }}</span>
         </div>
         <div class="config-item">
-          <span class="label">{{ $t('代码版本') }}：</span>
+          <span class="label">{{ $t('explorer.codeVersion') }}：</span>
           <span class="value">{{ $t('3.7') }}</span>
         </div>
       </div>
     </div>
     <div class="box-card service-config">
-      <div class="box-header">{{ $t('服务器配置') }}</div>
+      <div class="box-header">{{ $t('explorer.serviceConfig') }}</div>
       <div class="box-body">
         <div class="config-item">
-          <span class="label">{{ $t('cpu数量') }}：</span>
+          <span class="label">{{ $t('explorer.cpuNums') }}：</span>
           <span class="value">{{ $t('123') }}</span>
         </div>
         <div class="config-item">
-          <span class="label">{{ $t('cpu使用率') }}：</span>
+          <span class="label">{{ $t('explorer.cupUseRate') }}：</span>
           <span class="value">{{ $t('9.3%') }}</span>
         </div>
         <div class="config-item">
-          <span class="label">{{ $t('虚拟机内存使用剩余') }}：</span>
+          <span class="label">{{ $t('explorer.vmMemoryRemain') }}：</span>
           <span class="value">{{ $t('46.44G') }}</span>
         </div>
         <div class="config-item">
-          <span class="label">{{ $t('内存使用率') }}：</span>
+          <span class="label">{{ $t('explorer.memoryUseRate') }}：</span>
           <span class="value">{{ $t('12%') }}</span>
         </div>
       </div>
@@ -70,14 +70,14 @@ export default {
     this.getNodeInfo()
   },
   methods: {
-    getNodeInfo (params = {}) {
+    getNodeInfo () {
       this.configForm.refresh = false
       this.nodeInfo = {}
       this.loading = true
 
       this.$_api.explorer.getDeployedNodeInfo({
-        type: params.nodeType,
-        url: params.nodeURL,
+        // type: this.configForm.nodeType,
+        url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
         if (err) return

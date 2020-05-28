@@ -1,19 +1,19 @@
 <template>
   <div class="block-info" v-loading="loading">
     <div class="info-item">
-      <span class="label">{{ $t('高度') }}：</span>
+      <span class="label">{{ $t('explorer.high') }}：</span>
       <span class="value">{{ $t('12345') }}</span>
     </div>
     <div class="info-item">
-      <span class="label">{{ $t('哈希值') }}：</span>
+      <span class="label">{{ $t('explorer.hashValue') }}：</span>
       <span class="value">{{ '0000000001233e3b151f48f3df7299e912dfba7dea5d0406a923e9abe96892c2' }}</span>
     </div>
     <div class="info-item">
-      <span class="label">{{ $t('时间') }}：</span>
+      <span class="label">{{ $t('explorer.time') }}：</span>
       <span class="value"> {{ '2020-05-20 12:30:01' }}</span>
     </div>
     <div class="info-item">
-      <span class="label">{{ $t('交易量') }}：</span>
+      <span class="label">{{ $t('explorer.transactionNums') }}：</span>
       <span class="value">{{ $t('25') }}</span>
     </div>
   </div>
@@ -50,8 +50,8 @@ export default {
       this.loading = true
 
       this.$_api.explorer.getBlockInfo({
-        type: params.nodeType,
-        url: params.nodeURL,
+        // type: params.nodeType,
+        url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
         if (err) return

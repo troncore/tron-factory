@@ -7,17 +7,17 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('配置节点') }}</div>
+      <div class="title">{{ $t('explorer.configNode') }}</div>
     </div>
 
     <div class="dialog-content">
       <el-form ref="form" :model="form" :rules="formRules">
         <el-form-item class="node-type">
-          <el-radio v-model="form.nodeType" label="1">{{ $t('已部署节点') }}</el-radio>
-          <el-radio v-model="form.nodeType" label="2">{{ $t('自定义节点') }}</el-radio>
+          <el-radio v-model="form.nodeType" label="1">{{ $t('explorer.deployedNode') }}</el-radio>
+          <el-radio v-model="form.nodeType" label="2">{{ $t('explorer.defineNode') }}</el-radio>
         </el-form-item>
         <el-form-item v-if="form.nodeType === '1'" prop="deployedURL" key="deployedURL">
-          <el-select v-model="form.deployedURL" style="width: 100%;" clearable filterable :placeholder="$t('请选择')">
+          <el-select v-model="form.deployedURL" style="width: 100%;" clearable filterable :placeholder="$t('base.pleaseSelect')">
             <el-option
               v-for="item in deployedNodeList"
               :key="item.value"
@@ -27,7 +27,7 @@
           </el-select>
         </el-form-item>
         <el-form-item v-if="form.nodeType === '2'" prop="defineURL" key="defineURL">
-          <el-input type="text" v-model="form.defineURL" style="width: 100%;" clearable :placeholder="$t('请输入')"/>
+          <el-input type="text" v-model="form.defineURL" style="width: 100%;" clearable :placeholder="$t('base.pleaseInput')"/>
         </el-form-item>
       </el-form>
     </div>

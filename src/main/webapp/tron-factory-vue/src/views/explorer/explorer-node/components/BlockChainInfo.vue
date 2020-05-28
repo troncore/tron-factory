@@ -3,11 +3,11 @@
     <div class="info-header">
       <div class="line-item">
         <div class="info-item">
-          <span class="label">{{ $t('最新产块时间')}}：</span>
+          <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
           <span class="value">{{ '2.25s ago' }}</span>
         </div>
         <div class="info-item">
-          <span class="label">{{ $t('产块周期')}}：</span>
+          <span class="label">{{ $t('explorer.blockDuring')}}：</span>
           <span class="value">{{ '3s' }}</span>
         </div>
       </div>
@@ -16,9 +16,9 @@
     <!-- last block list-->
     <div class="block-list">
       <div class="block-list__header">
-        {{ $t('最近区块')}}
+        {{ $t('explorer.lastBlock')}}
         <i class="el-icon-loading" :loading="true"></i>
-        <el-button class="refresh" type="text" @click="handleRefresh">{{ $t('刷新')}}</el-button>
+        <el-button class="refresh" type="text" @click="handleRefresh">{{ $t('explorer.refresh')}}</el-button>
       </div>
 
       <!-- every block-->
@@ -30,11 +30,11 @@
           </div>
           <div class="box-body">
             <div class="line-item">
-              <span class="label">{{ $t('哈希值')}}：</span>
+              <span class="label">{{ $t('explorer.hashValue')}}：</span>
               <span class="value">{{ block.hash }}</span>
             </div>
             <div class="line-item">
-              <span class="label">{{ $t('状态')}}：</span>
+              <span class="label">{{ $t('explorer.status')}}：</span>
               <span class="value">{{ block.status }}</span>
             </div>
           </div>
@@ -82,8 +82,8 @@ export default {
       this.loading = true
 
       this.$_api.explorer.getBlockChainInfo({
-        type: params.nodeType,
-        url: params.nodeURL,
+        // type: params.nodeType,
+        url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
         if (err) return
