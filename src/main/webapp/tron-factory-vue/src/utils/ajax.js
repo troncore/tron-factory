@@ -22,12 +22,13 @@ function responseSuccess(response, callback) {
 
 // the server responses error or network error
 function responseFail(error, callback) {
+  console.dir(error)
   let errorTitle = ''
   let errorMsg = ''
 
   if (error.response) {
     // The request was made and the server responded with a status code
-    errorTitle = error.response.status + ' - ' + error.response.statusText
+    errorTitle = error.response.status + (error.response.statusText ? (' - ' + error.response.statusText) : '')
 
     // 500、 405 e.g
     if (typeof error.response.data === 'string') {
