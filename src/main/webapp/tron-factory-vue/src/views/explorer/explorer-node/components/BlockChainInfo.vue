@@ -23,7 +23,7 @@
 
       <!-- every block-->
       <template v-if="lastBlockList.length">
-        <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
+        <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
           <div class="box-header">
             <div class="block-high">{{ block.high }}</div>
             <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
