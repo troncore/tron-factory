@@ -59,6 +59,7 @@ export default {
       lastBlockList: [],
       lastProductBlockTime: 0,
       timeID: null,
+      flag: true,
     }
   },
   computed: {
@@ -87,7 +88,10 @@ export default {
     getBlockChainInfo () {
       this.configForm.refresh = false
       this.lastBlockChainInfo = {}
-      this.loading = true
+      if (this.flag) {
+        this.flag = false
+        this.loading = true
+      }
 
       this.$_api.explorer.getNowBlockInfo({
         // type: params.nodeType,
