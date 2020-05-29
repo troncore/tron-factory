@@ -4,7 +4,7 @@
       <div class="line-item">
         <div class="info-item">
           <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
-          <span class="value">{{ lastProductBlockTimeStr }}</span>
+          <span class="value">{{ lastProductBlockTime + 's ago' }}</span>
         </div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
@@ -66,9 +66,6 @@ export default {
     blockHeaderRawData () {
       return this.lastBlockChainInfo.block_header && this.lastBlockChainInfo.block_header.raw_data || {}
     },
-    lastProductBlockTimeStr () {
-      return this.lastProductBlockTime ? this.lastProductBlockTime + 's ago' : '--'
-    },
   },
   watch: {
     // when the config-node form params change, it will refresh info
@@ -80,8 +77,9 @@ export default {
   },
   created () {
     this.getBlockChainInfo()
-
-    // this.getLastBlockList()
+  },
+  destroyed() {
+    clearInterval(this.timeID)
   },
 
   methods: {
@@ -114,8 +112,8 @@ export default {
             clearInterval(this.timeID)
             this.lastProductBlockTime = 0
             this.timeID = setInterval(() => {
-              this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.01).toFixed(2)
-            }, 10)
+              this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
+            }, 100)
             this.lastBlockList.unshift(block)
           }
         } catch (e) {
@@ -126,25 +124,9 @@ export default {
       })
     },
 
-    getLastBlockList () {
-      setInterval(this.pollLastBlock, 3000)
-    },
-
-    pollLastBlock () {
-      this.lastBlockList.unshift({
-        high: '#' + (1000 + this.lastBlockList.length),
-        time: this.$_moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-        hash: '0000000001233e3b151f48f3df7299e912dfba7dea5d0406a923e9abe96892c2',
-        status: '已确认',
-      })
-    },
-
     handleRefresh() {
       this.lastBlockList.splice(0);
     }
-  },
-  destroyed() {
-    clearInterval(this.timeID)
   }
 }
 </script>
