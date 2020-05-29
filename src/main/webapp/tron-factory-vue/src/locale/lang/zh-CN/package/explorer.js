@@ -17,7 +17,7 @@ export default {
   hashValue: '哈希值',
   status: '状态',
   confirmed: '已确认',
-  unconfirmaed: '未确认',
+  unconfirmed: '待确认',
   nodeConfig: '节点配置',
   nodeStatus: '节点状态',
   normal: '正常',

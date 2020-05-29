@@ -4,7 +4,7 @@
       <div class="line-item">
         <div class="info-item">
           <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
-          <span class="value">{{ '2.25s ago' }}</span>
+          <span class="value">{{ lastProductBlockTimeStr }}</span>
         </div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
@@ -26,7 +26,7 @@
         <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
           <div class="box-header">
             <div class="block-high">{{ block.high }}</div>
-            <div class="block-time">{{ block.time }}</div>
+            <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
           </div>
           <div class="box-body">
             <div class="line-item">
@@ -35,7 +35,7 @@
             </div>
             <div class="line-item">
               <span class="label">{{ $t('explorer.status')}}：</span>
-              <span class="value">{{ block.status }}</span>
+              <span class="value">{{ $t(block.status ? 'explorer.confirmed' : 'explorer.unconfirmed') }}</span>
             </div>
           </div>
         </div>
@@ -54,12 +54,20 @@ export default {
   },
   data () {
     return {
-      blockChainInfo: {
-
-      },
+      lastBlockChainInfo: {},
       loading: false,
       lastBlockList: [],
+      lastProductBlockTime: 0,
+      timeID: null,
     }
+  },
+  computed: {
+    blockHeaderRawData () {
+      return this.lastBlockChainInfo.block_header && this.lastBlockChainInfo.block_header.raw_data || {}
+    },
+    lastProductBlockTimeStr () {
+      return this.lastProductBlockTime ? this.lastProductBlockTime + 's ago' : '--'
+    },
   },
   watch: {
     // when the config-node form params change, it will refresh info
@@ -67,7 +75,7 @@ export default {
       handler (val) {
         if (val) this.getBlockChainInfo()
       }
-    }
+    },
   },
   created () {
     this.getBlockChainInfo()
@@ -76,9 +84,9 @@ export default {
   },
 
   methods: {
-    getBlockChainInfo (params = {}) {
+    getBlockChainInfo () {
       this.configForm.refresh = false
-      this.blockChainInfo = {}
+      this.lastBlockChainInfo = {}
       this.loading = true
 
       this.$_api.explorer.getNowBlockInfo({
@@ -88,7 +96,29 @@ export default {
         this.loading = false
         if (err) return
 
-        this.blockChainInfo = res.result || {}
+        try{
+          this.lastBlockChainInfo = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
+          if (this.lastBlockChainInfo.blockID) {
+            let rawData = this.lastBlockChainInfo.block_header.raw_data
+            let block = {
+              high: '#' + rawData.number,
+              timestamp: rawData.timestamp,
+              hash: this.lastBlockChainInfo.blockID,
+              status: 0
+            }
+
+            clearInterval(this.timeID)
+            this.lastProductBlockTime = 0
+            this.timeID = setInterval(() => {
+              this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.01).toFixed(2)
+            }, 10)
+            this.lastBlockList.unshift(block)
+          }
+        } catch (e) {
+          console.dir(e)
+        }
+
+        setTimeout(this.getBlockChainInfo, 3000)
       })
     },
 
@@ -108,6 +138,9 @@ export default {
     handleRefresh() {
       this.lastBlockList.splice(0);
     }
+  },
+  destroyed() {
+    clearInterval(this.timeID)
   }
 }
 </script>
