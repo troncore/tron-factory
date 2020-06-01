@@ -57,7 +57,7 @@ export default {
       lastBlockChainInfo: {},
       loading: false,
       lastBlockList: [],
-      lastProductBlockTime: 0,
+      lastProductBlockTime: 0.0,
       timeID: null,
       httpTimeID: null,
       flag: true,
@@ -100,10 +100,12 @@ export default {
         this.loading = false
         if (err) return
 
+        let blockTimestamp = 0
         try{
           this.lastBlockChainInfo = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
           if (this.lastBlockChainInfo.blockID) {
             let rawData = this.lastBlockChainInfo.block_header.raw_data
+            blockTimestamp = rawData.timestamp
             let block = {
               high: '#' + rawData.number,
               timestamp: rawData.timestamp,
@@ -112,7 +114,7 @@ export default {
             }
 
             clearInterval(this.timeID)
-            this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000)
+            this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000).toFixed(1)
             this.timeID = setInterval(() => {
               this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
             }, 100)
@@ -122,7 +124,9 @@ export default {
           console.dir(e)
         }
 
-        this.httpTimeID = setTimeout(this.getBlockChainInfo, 3000)
+        let disTime = blockTimestamp + 3000 - Date.now()
+
+        this.httpTimeID = setTimeout(this.getBlockChainInfo, disTime)
       })
     },
 

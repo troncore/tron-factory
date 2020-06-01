@@ -20,14 +20,14 @@
           <span class="label">{{ $t('explorer.cupUseRate') }}：</span>
           <span class="value">{{ nodeInfo.cpuRate }}</span>
         </div>
-        <div class="config-item">
-          <span class="label">{{ $t('explorer.vmMemoryRemain') }}：</span>
-          <span class="value">{{ nodeInfo.jvmFreeMemory }}</span>
-        </div>
-        <div class="config-item">
-          <span class="label">{{ $t('explorer.memoryUseRate') }}：</span>
-          <span class="value">{{ nodeInfo.freeMemory }}</span>
-        </div>
+        <!--<div class="config-item">-->
+        <!--  <span class="label">{{ $t('explorer.vmMemoryRemain') }}：</span>-->
+        <!--  <span class="value">{{ nodeInfo.jvmFreeMemory }}</span>-->
+        <!--</div>-->
+        <!--<div class="config-item">-->
+        <!--  <span class="label">{{ $t('explorer.memoryUseRate') }}：</span>-->
+        <!--  <span class="value">{{ nodeInfo.freeMemory }}</span>-->
+        <!--</div>-->
       </div>
     </div>
   </div>
