@@ -1,10 +1,14 @@
 package common.utils;
 
+import com.google.gson.Gson;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * HTTP工具
@@ -29,7 +33,7 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static String getInfo(String urlStr) throws Exception {
+    public static Map<String, Object> getInfo(String urlStr) throws Exception {
 //        urlStr = urlStr + "?" + getParamString(paramMap);
         HttpURLConnection conn = null;
         try {
@@ -57,7 +61,7 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static String postInfo(String urlStr, Map<String, String> paramMap) throws Exception {
+    public static Map<String, Object> postInfo(String urlStr, Map<String, String> paramMap) throws Exception {
         HttpURLConnection conn = null;
         PrintWriter writer = null;
         try {
@@ -90,7 +94,7 @@ public class HttpUtil {
      * @return
      * @throws IOException
      */
-    private static String readResponseContent(InputStream in) throws IOException {
+    private static Map<String, Object> readResponseContent(InputStream in) throws IOException {
         Reader reader = null;
         StringBuilder content = new StringBuilder();
         try {
@@ -100,7 +104,11 @@ public class HttpUtil {
             while ((head = reader.read(buffer)) > 0) {
                 content.append(new String(buffer, 0, head));
             }
-            return content.toString();
+            Gson gson = new Gson();
+            Map<String, Object> map = new HashMap<String, Object>();
+            map = gson.fromJson(content.toString(), map.getClass());
+//            return content.toString();
+            return map;
         } finally {
             if (null != in) in.close();
             if (null != reader) reader.close();

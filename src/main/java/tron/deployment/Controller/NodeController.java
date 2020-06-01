@@ -24,6 +24,7 @@ import entity.WitnessEntity;
 import config.GenesisWitnessConfig;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -605,10 +606,10 @@ public class NodeController {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     try{
-      String nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
+      Map<String, Object> nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
       jsonObj.put("result",nodeInfo);
-      jsonObj.put("status",1);
+//      jsonObj.put("status",1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
 //      return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
     }catch (Exception e){
@@ -622,15 +623,13 @@ public class NodeController {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     try {
-      String nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
+      Map<String, Object> nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
 //    JSONObject json = JSONObject.fromObject(nodeInfo);
       jsonObj.put("result",nowBlockInfo);
-      jsonObj.put("status",1);
+//      jsonObj.put("status",1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
-      jsonObj.put("result",e.getMessage());
-      jsonObj.put("status",2);
-      return new Response(ResultCode.NOT_FOUND.code, jsonObj).toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
     }
   }
 }
