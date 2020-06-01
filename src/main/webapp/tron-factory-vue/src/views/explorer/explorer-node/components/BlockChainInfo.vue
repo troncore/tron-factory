@@ -4,7 +4,7 @@
       <div class="line-item">
         <div class="info-item">
           <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
-          <span class="value">{{ '2.25s ago' }}</span>
+          <span class="value">{{(lastProductBlockTime || '0.0') + 's ago' }}</span>
         </div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
@@ -17,16 +17,16 @@
     <div class="block-list">
       <div class="block-list__header">
         {{ $t('explorer.lastBlock')}}
-        <i class="el-icon-loading" :loading="true"></i>
+        <!--<i class="el-icon-loading" :loading="true"></i>-->
         <el-button class="refresh" type="text" @click="handleRefresh">{{ $t('explorer.refresh')}}</el-button>
       </div>
 
       <!-- every block-->
       <template v-if="lastBlockList.length">
-        <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
+        <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
           <div class="box-header">
             <div class="block-high">{{ block.high }}</div>
-            <div class="block-time">{{ block.time }}</div>
+            <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
           </div>
           <div class="box-body">
             <div class="line-item">
@@ -35,7 +35,7 @@
             </div>
             <div class="line-item">
               <span class="label">{{ $t('explorer.status')}}：</span>
-              <span class="value">{{ block.status }}</span>
+              <span class="value">{{ $t(block.status ? 'explorer.confirmed' : 'explorer.unconfirmed') }}</span>
             </div>
           </div>
         </div>
@@ -54,12 +54,19 @@ export default {
   },
   data () {
     return {
-      blockChainInfo: {
-
-      },
+      lastBlockChainInfo: {},
       loading: false,
       lastBlockList: [],
+      lastProductBlockTime: 0,
+      timeID: null,
+      httpTimeID: null,
+      reload: true, // when enter this component
     }
+  },
+  computed: {
+    blockHeaderRawData () {
+      return this.lastBlockChainInfo.block_header && this.lastBlockChainInfo.block_header.raw_data || {}
+    },
   },
   watch: {
     // when the config-node form params change, it will refresh info
@@ -67,46 +74,67 @@ export default {
       handler (val) {
         if (val) this.getBlockChainInfo()
       }
-    }
+    },
   },
   created () {
     this.getBlockChainInfo()
-
-    // this.getLastBlockList()
+  },
+  destroyed() {
+    clearInterval(this.timeID)
+    clearTimeout(this.httpTimeID)
   },
 
   methods: {
-    getBlockChainInfo (params = {}) {
+    getBlockChainInfo () {
+      if (this.configForm.refresh || this.reload) {
+        this.reload = false
+        this.loading = true
+      }
       this.configForm.refresh = false
-      this.blockChainInfo = {}
-      this.loading = true
+      this.lastBlockChainInfo = {}
 
-      this.$_api.explorer.getBlockChainInfo({
+      this.$_api.explorer.getNowBlockInfo({
         // type: params.nodeType,
         url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
         if (err) return
 
-        this.blockChainInfo = res.result || {}
-      })
-    },
+        let blockTimestamp = 0
+        try{
+          this.lastBlockChainInfo = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
+          if (this.lastBlockChainInfo.blockID) {
+            let rawData = this.lastBlockChainInfo.block_header.raw_data
+            blockTimestamp = rawData.timestamp
+            let block = {
+              high: '#' + rawData.number,
+              timestamp: rawData.timestamp,
+              hash: this.lastBlockChainInfo.blockID,
+              status: 0
+            }
 
-    getLastBlockList () {
-      setInterval(this.pollLastBlock, 3000)
-    },
+            clearInterval(this.timeID)
+            this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000).toFixed(1)
+            this.timeID = setInterval(() => {
+              this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
+            }, 100)
+            this.lastBlockList.unshift(block)
+          }
+        } catch (e) {
+          console.dir(e)
+        }
 
-    pollLastBlock () {
-      this.lastBlockList.unshift({
-        high: '#' + (1000 + this.lastBlockList.length),
-        time: this.$_moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
-        hash: '0000000001233e3b151f48f3df7299e912dfba7dea5d0406a923e9abe96892c2',
-        status: '已确认',
+        let disTime = blockTimestamp + 3000 - Date.now()
+
+        this.httpTimeID = setTimeout(this.getBlockChainInfo, disTime)
       })
     },
 
     handleRefresh() {
-      this.lastBlockList.splice(0);
+      clearInterval(this.timeID)
+      clearTimeout(this.httpTimeID)
+      this.lastBlockList.splice(0)
+      this.getBlockChainInfo()
     }
   }
 }

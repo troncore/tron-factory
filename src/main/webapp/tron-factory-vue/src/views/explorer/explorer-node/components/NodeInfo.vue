@@ -4,20 +4,8 @@
       <div class="box-header">{{ $t('explorer.nodeConfig') }}</div>
       <div class="box-body">
         <div class="config-item">
-          <span class="label">{{ $t('explorer.nodeIP') }}：</span>
-          <span class="value">{{ $t('123.123.123.123') }}</span>
-        </div>
-        <div class="config-item">
-          <span class="label">{{ $t('explorer.nodeStatus') }}：</span>
-          <span class="value">{{ $t('explorer.normal') }}</span>
-        </div>
-        <div class="config-item">
           <span class="label">{{ $t('explorer.linkedNodeNums') }}：</span>
-          <span class="value">{{ $t('3') }}</span>
-        </div>
-        <div class="config-item">
-          <span class="label">{{ $t('explorer.codeVersion') }}：</span>
-          <span class="value">{{ $t('3.7') }}</span>
+          <span class="value">{{ nodeInfo.currentConnectCount }}</span>
         </div>
       </div>
     </div>
@@ -26,20 +14,20 @@
       <div class="box-body">
         <div class="config-item">
           <span class="label">{{ $t('explorer.cpuNums') }}：</span>
-          <span class="value">{{ $t('123') }}</span>
+          <span class="value">{{ nodeInfo.cpuCount }}</span>
         </div>
         <div class="config-item">
           <span class="label">{{ $t('explorer.cupUseRate') }}：</span>
-          <span class="value">{{ $t('9.3%') }}</span>
+          <span class="value">{{ nodeInfo.cpuRate }}</span>
         </div>
-        <div class="config-item">
-          <span class="label">{{ $t('explorer.vmMemoryRemain') }}：</span>
-          <span class="value">{{ $t('46.44G') }}</span>
-        </div>
-        <div class="config-item">
-          <span class="label">{{ $t('explorer.memoryUseRate') }}：</span>
-          <span class="value">{{ $t('12%') }}</span>
-        </div>
+        <!--<div class="config-item">-->
+        <!--  <span class="label">{{ $t('explorer.vmMemoryRemain') }}：</span>-->
+        <!--  <span class="value">{{ nodeInfo.jvmFreeMemory }}</span>-->
+        <!--</div>-->
+        <!--<div class="config-item">-->
+        <!--  <span class="label">{{ $t('explorer.memoryUseRate') }}：</span>-->
+        <!--  <span class="value">{{ nodeInfo.freeMemory }}</span>-->
+        <!--</div>-->
       </div>
     </div>
   </div>
@@ -53,9 +41,7 @@ export default {
   },
   data () {
     return {
-      nodeInfo: {
-
-      },
+      nodeInfo: {},
       loading: false,
     }
   },
@@ -71,9 +57,16 @@ export default {
   },
   methods: {
     getNodeInfo () {
-      this.configForm.refresh = false
-      this.nodeInfo = {}
       this.loading = true
+      this.configForm.refresh = false
+
+      this.nodeInfo = {
+        currentConnectCount: '--',
+        cpuCount: '--',
+        cpuRate: '--',
+        jvmFreeMemory: '--',
+        freeMemory: '--',
+      }
 
       this.$_api.explorer.getDeployedNodeInfo({
         // type: this.configForm.nodeType,
@@ -82,7 +75,23 @@ export default {
         this.loading = false
         if (err) return
 
-        this.nodeInfo = res.result || {}
+        let result = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
+
+        let machineInfo = result.machineInfo || {}
+        let cpuRate = '--'
+        if (typeof machineInfo.cpuRate !== 'undefined' ) cpuRate = Number((machineInfo.cpuRate) * 100).toFixed(2) + '%'
+        let jvmFreeMemory = '--'
+        if (typeof machineInfo.jvmFreeMemory !== 'undefined' ) jvmFreeMemory = (Number(machineInfo.jvmFreeMemory) / 1024 / 1024).toFixed(2) + 'G'
+        let freeMemory = '--'
+        if (typeof machineInfo.freeMemory !== 'undefined' ) freeMemory = (Number(machineInfo.freeMemory) / 1024 / 1024).toFixed(2) + 'G'
+
+        this.nodeInfo = {
+          currentConnectCount: result.currentConnectCount,
+          cpuCount: machineInfo.cpuCount,
+          cpuRate: cpuRate,
+          jvmFreeMemory: jvmFreeMemory,
+          freeMemory: freeMemory,
+        }
       })
     }
   }

@@ -8,7 +8,7 @@ function responseSuccess(response, callback) {
   if (response.data && (response.data.code < 300 || response.data.code === 304)) {
     callback(null, response.data.data)
   } else {
-    let error_msg = response.data.msg  || 'Unknown Error'
+    let error_msg = response.data.msg  || 'error'
 
     Notification({
       type: "error",
@@ -22,14 +22,24 @@ function responseSuccess(response, callback) {
 
 // the server responses error or network error
 function responseFail(error, callback) {
-  let errorTitle = 'ERROR'
-  let errorMsg = typeof error === 'object' && error.message || error || 'Unknown Error'
+  console.dir(error)
+  let errorTitle = ''
+  let errorMsg = ''
 
-  if (error && error.response && error.response.data) {
-    let errorData = error.response.data
-    errorTitle = error.response.statusText
-    errorMsg = errorData.message ? (errorData.path + ': ' + errorData.message) : errorData
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    errorTitle = error.response.status + (error.response.statusText ? (' - ' + error.response.statusText) : '')
+
+    // 500、 405 e.g
+    if (typeof error.response.data === 'string') {
+      errorMsg = error.response.data
+    } else if (typeof error.response.data === 'object' && error.response.data.message) {
+      let path = error.response.data.path ? ''+ error.response.data.path+': ' : ''
+      errorMsg = path + error.response.data.message
+    }
   }
+  errorTitle = errorTitle || 'ERROR'
+  errorMsg = errorMsg || error.message || 'error'
 
   Notification({
     type: "error",

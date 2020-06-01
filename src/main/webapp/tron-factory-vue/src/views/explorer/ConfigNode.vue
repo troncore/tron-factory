@@ -60,7 +60,16 @@
             { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change' }
           ],
           defineURL: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' }
+            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' },
+            { validator: (rule, value, callback) => {
+                if (!(value.startsWith('http://') || value.startsWith('https://'))) {
+                  callback(new Error(this.$t('explorer.validHttpStart')));
+                } else {
+                  callback();
+                }
+              },
+              trigger: 'blur'
+            }
           ]
         },
         nodeInfo: '',

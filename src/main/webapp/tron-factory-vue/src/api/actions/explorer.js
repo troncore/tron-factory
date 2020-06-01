@@ -1,7 +1,7 @@
 export default {
   get: {
     getDeployedNode: '/api/getDeployedNode',
-    getBlockChainInfo: '/api/getBlockChainInfo',
+    getNowBlockInfo: '/api/getNowBlockInfo',
     getDeployedNodeInfo: '/api/getDeployedNodeInfo',
     getBlockInfo: '/api/getBlockInfo',
   }
