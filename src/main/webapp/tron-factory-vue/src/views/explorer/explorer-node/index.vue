@@ -34,9 +34,9 @@
           <node-info v-if="activeTab === '2'" :config-form="configForm" />
         </el-tab-pane>
 
-        <el-tab-pane :label="$t('explorer.blockInfo')" name="3">
-          <block-info v-if="activeTab === '3'" :config-form="configForm" />
-        </el-tab-pane>
+        <!--<el-tab-pane :label="$t('explorer.blockInfo')" name="3">-->
+        <!--  <block-info v-if="activeTab === '3'" :config-form="configForm" />-->
+        <!--</el-tab-pane>-->
       </el-tabs>
     </div>
   </div>
