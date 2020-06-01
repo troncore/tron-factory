@@ -4,7 +4,7 @@
       <div class="line-item">
         <div class="info-item">
           <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
-          <span class="value">{{ lastProductBlockTime || '0.0' + 's ago' }}</span>
+          <span class="value">{{(lastProductBlockTime || '0.0') + 's ago' }}</span>
         </div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
@@ -81,7 +81,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.timeID)
-    clearInterval(this.httpTimeID)
+    clearTimeout(this.httpTimeID)
   },
 
   methods: {
@@ -131,9 +131,9 @@ export default {
     },
 
     handleRefresh() {
-      this.lastBlockList.splice(0);
       clearInterval(this.timeID)
-      clearInterval(this.httpTimeID)
+      clearTimeout(this.httpTimeID)
+      this.lastBlockList.splice(0)
       this.getBlockChainInfo()
     }
   }
