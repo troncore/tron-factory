@@ -15,7 +15,7 @@ import config.ActiveConfig;
 import config.SeedNodeConfig;
 
 import java.io.*;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
@@ -23,9 +23,6 @@ import common.Util;
 import entity.WitnessEntity;
 import config.GenesisWitnessConfig;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -602,34 +599,47 @@ public class NodeController {
   }
 
   @GetMapping(value = "/api/getDeployedNodeInfo")
-  public JSONObject getDeployedNodeInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
+  public JSONObject getDeployedNodeInfo(@RequestBody LinkedHashMap<String,Object> data) {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
+    Map<String, Object> nodeInfo = new HashMap<>();
+    String url = (String) data.getOrDefault("url", "");
+    int type = data.getOrDefault("type", "1") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("type", "1"))) :
+            (int)data.getOrDefault("type", 1);
     try{
-      Map<String, Object> nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
-//    JSONObject json = JSONObject.fromObject(nodeInfo);
+      if(type == 1){
+        nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
+      }else if(type == 2){
+        nodeInfo = httpUtil.getInfo(url+"/wallet/getnodeinfo");
+      }
       jsonObj.put("result",nodeInfo);
-//      jsonObj.put("status",1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
-//      return new Response(ResultCode.OK.code, nodeInfo).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, "Failed to get node info, please check the url:"+"http://"+url+"/wallet/getnodeinfo").toJSONObject();
     }
 
   }
 
   @GetMapping(value = "/api/getNowBlockInfo")
-  public JSONObject getNowBlockInfo(@RequestParam(value = "url", required = true, defaultValue = "") String url) {
+  public JSONObject getNowBlockInfo(@RequestBody LinkedHashMap<String,Object> data) {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
-    try {
-      Map<String, Object> nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
-//    JSONObject json = JSONObject.fromObject(nodeInfo);
+    Map<String, Object> nowBlockInfo = new HashMap<>();
+    String url = (String) data.getOrDefault("url", "");
+    int type = data.getOrDefault("type", "1") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("type", "1"))) :
+            (int)data.getOrDefault("type", 1);
+    try{
+      if(type == 1){
+        nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
+      }else if(type == 2){
+        nowBlockInfo = httpUtil.getInfo(url+"/wallet/getnowblock");
+      }
       jsonObj.put("result",nowBlockInfo);
-//      jsonObj.put("status",1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, e.getMessage()).toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+"http://"+url+"/wallet/getnodeinfo").toJSONObject();
     }
   }
 }
