@@ -41,13 +41,7 @@ export default {
   },
   data () {
     return {
-      nodeInfo: {
-        currentConnectCount: '--',
-        cpuCount: '--',
-        cpuRate: '--',
-        jvmFreeMemory: '--',
-        freeMemory: '--',
-      },
+      nodeInfo: {},
       loading: false,
     }
   },
@@ -81,16 +75,15 @@ export default {
         this.loading = false
         if (err) return
 
-        let result = res.result || {}
-        let machineInfo = result.machineInfo || {
-          cpuCount: 0,
-          cpuRate: 0,
-          jvmFreeMemory: 0,
-          freeMemory: 0,
-        }
-        let cpuRate = (Number(machineInfo.cpuRate | 0) * 100).toFixed(2) + '%'
-        let jvmFreeMemory = (Number(machineInfo.jvmFreeMemory | 0) / 1024 / 1024).toFixed(2) + 'G'
-        let freeMemory = (Number(machineInfo.freeMemory | 0) / 1024 / 1024).toFixed(2) + 'G'
+        let result = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
+
+        let machineInfo = result.machineInfo || {}
+        let cpuRate = '--'
+        if (typeof machineInfo.cpuRate !== 'undefined' ) cpuRate = Number((machineInfo.cpuRate) * 100).toFixed(2) + '%'
+        let jvmFreeMemory = '--'
+        if (typeof machineInfo.jvmFreeMemory !== 'undefined' ) jvmFreeMemory = (Number(machineInfo.jvmFreeMemory) / 1024 / 1024).toFixed(2) + 'G'
+        let freeMemory = '--'
+        if (typeof machineInfo.freeMemory !== 'undefined' ) freeMemory = (Number(machineInfo.freeMemory) / 1024 / 1024).toFixed(2) + 'G'
 
         this.nodeInfo = {
           currentConnectCount: result.currentConnectCount,

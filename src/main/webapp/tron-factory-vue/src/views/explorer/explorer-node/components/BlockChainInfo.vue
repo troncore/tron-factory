@@ -59,6 +59,7 @@ export default {
       lastBlockList: [],
       lastProductBlockTime: 0,
       timeID: null,
+      httpTimeID: null,
       flag: true,
     }
   },
@@ -80,6 +81,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.timeID)
+    clearInterval(this.httpTimeID)
   },
 
   methods: {
@@ -110,7 +112,7 @@ export default {
             }
 
             clearInterval(this.timeID)
-            this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 100)
+            this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000)
             this.timeID = setInterval(() => {
               this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
             }, 100)
@@ -120,7 +122,7 @@ export default {
           console.dir(e)
         }
 
-        setTimeout(this.getBlockChainInfo, 3000)
+        this.httpTimeID = setTimeout(this.getBlockChainInfo, 3000)
       })
     },
 
