@@ -17,7 +17,7 @@
     <div class="block-list">
       <div class="block-list__header">
         {{ $t('explorer.lastBlock')}}
-        <i class="el-icon-loading" :loading="true"></i>
+        <!--<i class="el-icon-loading" :loading="true"></i>-->
         <el-button class="refresh" type="text" @click="handleRefresh">{{ $t('explorer.refresh')}}</el-button>
       </div>
 
@@ -132,6 +132,9 @@ export default {
 
     handleRefresh() {
       this.lastBlockList.splice(0);
+      clearInterval(this.timeID)
+      clearInterval(this.httpTimeID)
+      this.getBlockChainInfo()
     }
   }
 }
