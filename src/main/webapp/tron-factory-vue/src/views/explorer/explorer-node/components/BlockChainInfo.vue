@@ -60,7 +60,7 @@ export default {
       lastProductBlockTime: 0.0,
       timeID: null,
       httpTimeID: null,
-      flag: true,
+      reload: true, // when enter this component
     }
   },
   computed: {
@@ -86,12 +86,12 @@ export default {
 
   methods: {
     getBlockChainInfo () {
-      this.configForm.refresh = false
-      this.lastBlockChainInfo = {}
-      if (this.flag) {
-        this.flag = false
+      if (this.configForm.refresh || this.reload) {
+        this.reload = false
         this.loading = true
       }
+      this.configForm.refresh = false
+      this.lastBlockChainInfo = {}
 
       this.$_api.explorer.getNowBlockInfo({
         // type: params.nodeType,
