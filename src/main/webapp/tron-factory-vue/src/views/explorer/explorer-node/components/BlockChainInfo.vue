@@ -23,7 +23,7 @@
 
       <!-- every block-->
       <template v-if="lastBlockList.length">
-        <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
+        <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
           <div class="box-header">
             <div class="block-high">{{ block.high }}</div>
             <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
@@ -93,8 +93,9 @@ export default {
       this.configForm.refresh = false
       this.lastBlockChainInfo = {}
 
+
       this.$_api.explorer.getNowBlockInfo({
-        // type: params.nodeType,
+        type: this.configForm.nodeType,
         url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
@@ -102,8 +103,8 @@ export default {
 
         let blockTimestamp = 0
         try{
-          this.lastBlockChainInfo = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
-          if (this.lastBlockChainInfo.blockID) {
+          this.lastBlockChainInfo = res.result || {}
+          if (this.lastBlockChainInfo.blockID && !~this.lastBlockList.findIndex(block => block.hash === this.lastBlockChainInfo.blockID)) {
             let rawData = this.lastBlockChainInfo.block_header.raw_data
             blockTimestamp = rawData.timestamp
             let block = {
@@ -124,8 +125,8 @@ export default {
           console.dir(e)
         }
 
+        clearTimeout(this.httpTimeID)
         let disTime = blockTimestamp + 3000 - Date.now()
-
         this.httpTimeID = setTimeout(this.getBlockChainInfo, disTime)
       })
     },

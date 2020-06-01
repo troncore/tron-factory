@@ -69,13 +69,13 @@ export default {
       }
 
       this.$_api.explorer.getDeployedNodeInfo({
-        // type: this.configForm.nodeType,
+        type: this.configForm.nodeType,
         url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
         if (err) return
 
-        let result = typeof res.result === 'string' && JSON.parse(res.result  || '{}') || {}
+        let result = res.result || {}
 
         let machineInfo = result.machineInfo || {}
         let cpuRate = '--'
