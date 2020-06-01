@@ -4,7 +4,7 @@
       <div class="line-item">
         <div class="info-item">
           <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
-          <span class="value">{{ lastProductBlockTime + 's ago' }}</span>
+          <span class="value">{{ lastProductBlockTime || '0.0' + 's ago' }}</span>
         </div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
@@ -57,7 +57,7 @@ export default {
       lastBlockChainInfo: {},
       loading: false,
       lastBlockList: [],
-      lastProductBlockTime: 0.0,
+      lastProductBlockTime: 0,
       timeID: null,
       httpTimeID: null,
       reload: true, // when enter this component
