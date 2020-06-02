@@ -92,7 +92,10 @@ export default {
       this.configForm.refresh = false
       this.lastBlockChainInfo = {}
 
+      this.getNowBlockInfo()
+    },
 
+    getNowBlockInfo () {
       this.$_api.explorer.getNowBlockInfo({
         type: this.configForm.nodeType,
         url: this.configForm.nodeURL,
@@ -101,32 +104,28 @@ export default {
         if (err) return
 
         let blockTimestamp = 0
-        try{
-          this.lastBlockChainInfo = res.result || {}
-          if (this.lastBlockChainInfo.blockID && !~this.lastBlockList.findIndex(block => block.hash === this.lastBlockChainInfo.blockID)) {
-            let rawData = this.lastBlockChainInfo.block_header.raw_data
-            blockTimestamp = rawData.timestamp
-            let block = {
-              high: '#' + rawData.number,
-              timestamp: rawData.timestamp,
-              hash: this.lastBlockChainInfo.blockID,
-              status: 0
-            }
 
-            this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000).toFixed(1)
-            clearInterval(this.timeID)
-            this.timeID = setInterval(() => {
-              this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
-            }, 100)
-            this.lastBlockList.unshift(block)
+        this.lastBlockChainInfo = res.result || {}
+        if (this.lastBlockChainInfo.blockID && !~this.lastBlockList.findIndex(block => block.hash === this.lastBlockChainInfo.blockID)) {
+          let rawData = this.lastBlockChainInfo.block_header.raw_data
+          blockTimestamp = rawData.timestamp
+          let block = {
+            high: '#' + rawData.number,
+            timestamp: rawData.timestamp,
+            hash: this.lastBlockChainInfo.blockID,
+            status: 0
           }
-        } catch (e) {
-          console.dir(e)
+
+          this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000).toFixed(1)
+          clearInterval(this.timeID)
+          this.timeID = setInterval(() => {
+            this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
+          }, 100)
+          this.lastBlockList.unshift(block)
         }
 
         let disTime = blockTimestamp + 3000 - Date.now()
-        clearTimeout(this.httpTimeID)
-        this.httpTimeID = setTimeout(this.getBlockChainInfo, disTime)
+        this.httpTimeID = setTimeout(this.getNowBlockInfo, disTime)
       })
     },
 
@@ -134,9 +133,17 @@ export default {
       clearInterval(this.timeID)
       clearTimeout(this.httpTimeID)
 
+      this.lastProductBlockTime = 0
       this.lastBlockList.splice(0)
       this.getBlockChainInfo()
+    },
+
+    clearAllTimeout () {
+      for (let i = 0; i < 1000; i++) {
+        clearTimeout(i)
+      }
     }
+
   }
 }
 </script>
