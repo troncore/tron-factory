@@ -599,14 +599,10 @@ public class NodeController {
   }
 
   @GetMapping(value = "/api/getDeployedNodeInfo")
-  public JSONObject getDeployedNodeInfo(@RequestBody LinkedHashMap<String,Object> data) {
+  public JSONObject getDeployedNodeInfo(@RequestParam String url, int type) {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     Map<String, Object> nodeInfo = new HashMap<>();
-    String url = (String) data.getOrDefault("url", "");
-    int type = data.getOrDefault("type", "1") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("type", "1"))) :
-            (int)data.getOrDefault("type", 1);
     try{
       if(type == 1){
         nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
@@ -622,14 +618,10 @@ public class NodeController {
   }
 
   @GetMapping(value = "/api/getNowBlockInfo")
-  public JSONObject getNowBlockInfo(@RequestBody LinkedHashMap<String,Object> data) {
+  public JSONObject getNowBlockInfo(@RequestParam String url, int type) {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     Map<String, Object> nowBlockInfo = new HashMap<>();
-    String url = (String) data.getOrDefault("url", "");
-    int type = data.getOrDefault("type", "1") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("type", "1"))) :
-            (int)data.getOrDefault("type", 1);
     try{
       if(type == 1){
         nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
@@ -639,7 +631,7 @@ public class NodeController {
       jsonObj.put("result",nowBlockInfo);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+"http://"+url+"/wallet/getnodeinfo").toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+"http://"+url+"/wallet/getnowblock").toJSONObject();
     }
   }
 }
