@@ -22,7 +22,7 @@
 
       <!-- every block-->
       <template v-if="lastBlockList.length">
-        <div class="block-box" v-for="(block, index) in lastBlockList" :key="index">
+        <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
           <div class="box-header">
             <div class="block-high">{{ block.high }}</div>
             <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
@@ -60,6 +60,9 @@ export default {
       timeID: null,
       httpTimeID: null,
       reload: true, // when enter this component
+
+
+      stopHttp: false,
     }
   },
   computed: {
@@ -80,7 +83,8 @@ export default {
   },
   destroyed() {
     clearInterval(this.timeID)
-    clearTimeout(this.httpTimeID)
+    this.clearAllTimeout()
+    this.stopHttp = true
   },
 
   methods: {
@@ -92,6 +96,8 @@ export default {
       this.configForm.refresh = false
       this.lastBlockChainInfo = {}
 
+      this.stopHttp = false
+      this.clearAllTimeout()
       this.getNowBlockInfo()
     },
 
@@ -101,7 +107,7 @@ export default {
         url: this.configForm.nodeURL,
       }, (err, res = {}) => {
         this.loading = false
-        if (err) return
+        if (err || this.stopHttp) return
 
         let blockTimestamp = 0
 
@@ -131,11 +137,11 @@ export default {
 
     handleRefresh() {
       clearInterval(this.timeID)
-      clearTimeout(this.httpTimeID)
+      this.clearAllTimeout()
 
       this.lastProductBlockTime = 0
       this.lastBlockList.splice(0)
-      this.getBlockChainInfo()
+      this.getNowBlockInfo()
     },
 
     clearAllTimeout () {
