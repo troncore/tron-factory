@@ -17,8 +17,7 @@
     <div class="block-list">
       <div class="block-list__header">
         {{ $t('explorer.lastBlock')}}
-        <!--<i class="el-icon-loading" :loading="true"></i>-->
-        <el-button class="refresh" type="text" @click="handleRefresh">{{ $t('explorer.refresh')}}</el-button>
+        <el-button class="refresh" type="text" @click="handleRefresh"><i class="el-icon-refresh-right"></i> {{ $t('explorer.refresh')}}</el-button>
       </div>
 
       <!-- every block-->
@@ -114,8 +113,8 @@ export default {
               status: 0
             }
 
-            clearInterval(this.timeID)
             this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000).toFixed(1)
+            clearInterval(this.timeID)
             this.timeID = setInterval(() => {
               this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
             }, 100)
@@ -125,8 +124,8 @@ export default {
           console.dir(e)
         }
 
-        clearTimeout(this.httpTimeID)
         let disTime = blockTimestamp + 3000 - Date.now()
+        clearTimeout(this.httpTimeID)
         this.httpTimeID = setTimeout(this.getBlockChainInfo, disTime)
       })
     },
@@ -134,6 +133,7 @@ export default {
     handleRefresh() {
       clearInterval(this.timeID)
       clearTimeout(this.httpTimeID)
+
       this.lastBlockList.splice(0)
       this.getBlockChainInfo()
     }
@@ -156,20 +156,24 @@ export default {
 
   .block-list {
     .block-list__header {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 10px;
       font-weight: bold;
       .refresh {
         margin-left: 20px;
         padding: 0;
+        font-weight: normal;
       }
     }
 
     .block-box {
-      margin-bottom: 15px;
-      padding: 10px;
-      border: 1px solid rgba(200, 200, 200, .5);
+      margin-bottom: 20px;
+      padding: 10px 15px;
       border-radius: 4px;
-      background-color: rgba(230, 230, 230, .3);
+      border: 1px solid theme-color(.2);
+      background-color: theme-color(.02);
+      /*background-color: #F5F7FE;*/
       &:last-child {
         margin-bottom: 0;
       }
@@ -177,10 +181,26 @@ export default {
     .box-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+
+      .block-high {
+        font-weight: bold;
+        color: #081C56;
+        font-size: 14px;
+      }
     }
     .line-item {
       margin-bottom: 5px;
+
+      .label {
+        display: inline-block;
+        color: black;
+        width: 60px;
+      }
+
+      .value {
+        color: font-color(.8);
+      }
 
       &:last-child {
         margin-bottom: 0;
