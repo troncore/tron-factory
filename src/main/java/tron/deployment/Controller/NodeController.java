@@ -631,7 +631,7 @@ public class NodeController {
       jsonObj.put("result",nowBlockInfo);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+"http://"+url+"/wallet/getnowblock").toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+url+"/wallet/getnowblock").toJSONObject();
     }
   }
 }
