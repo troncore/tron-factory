@@ -32,10 +32,10 @@
               <span class="label">{{ $t('explorer.hashValue')}}：</span>
               <span class="value">{{ block.hash }}</span>
             </div>
-            <div class="line-item">
+            <!--<div class="line-item">
               <span class="label">{{ $t('explorer.status')}}：</span>
               <span class="value">{{ $t(block.status ? 'explorer.confirmed' : 'explorer.unconfirmed') }}</span>
-            </div>
+            </div>-->
           </div>
         </div>
       </template>
