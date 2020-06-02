@@ -94,11 +94,8 @@ export default {
         this.loading = true
       }
       this.configForm.refresh = false
-      this.lastBlockChainInfo = {}
-
-      this.stopHttp = false
-      this.clearAllTimeout()
       this.getNowBlockInfo()
+      this.handleRefresh()
     },
 
     getNowBlockInfo () {
@@ -136,8 +133,10 @@ export default {
     },
 
     handleRefresh() {
+      this.lastBlockChainInfo = {}
+      this.stopHttp = false
+
       clearInterval(this.timeID)
-      this.clearAllTimeout()
 
       this.lastProductBlockTime = 0
       this.lastBlockList.splice(0)

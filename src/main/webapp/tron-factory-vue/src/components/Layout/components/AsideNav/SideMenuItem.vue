@@ -44,5 +44,9 @@ export default {
 <style scoped lang="scss">
 .el-menu-item {
   /*margin-bottom: 15px;*/
+  .menu-icon {
+    margin-right: 5px;
+    /*font-size: 14px;*/
+  }
 }
 </style>

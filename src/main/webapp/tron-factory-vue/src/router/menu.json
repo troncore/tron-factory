@@ -10,7 +10,7 @@
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "title": "menu.nodesManage",
-    "icon": "el-icon-s-operation",
+    "icon": "iconfont iconjiedianguanli",
     "disabled": false
   },
   {
@@ -24,7 +24,7 @@
     "path": "/ecology-app",
     "name": "ecology-app",
     "title": "menu.ecologyApp",
-    "icon": "el-icon-guide",
+    "icon": "iconfont iconshengtaiyingyong",
     "disabled": true,
     "children": [
       {
