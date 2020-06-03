@@ -89,6 +89,7 @@ export default {
 
   methods: {
     getBlockChainInfo () {
+      this.configForm.refresh = false
       this.handleRefresh()
     },
 
@@ -133,6 +134,8 @@ export default {
 
       this.lastProductBlockTime = 0
       this.lastBlockList.splice(0)
+
+      console.log(1)
 
       this.loading = true
       setTimeout(this.getNowBlockInfo, 1000)
