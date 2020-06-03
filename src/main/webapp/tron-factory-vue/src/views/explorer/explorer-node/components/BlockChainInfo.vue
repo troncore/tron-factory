@@ -111,10 +111,10 @@ export default {
             status: 0
           }
 
-          this.lastProductBlockTime = Math.floor((Date.now() - block.timestamp) / 1000).toFixed(1)
+          this.lastProductBlockTime = Math.abs((Date.now() - block.timestamp) / 1000).toFixed(1)
           clearInterval(this.timeID)
           this.timeID = setInterval(() => {
-            this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
+            this.lastProductBlockTime = (this.lastProductBlockTime + 0.1).toFixed(1)
           }, 100)
           this.lastBlockList.unshift(block)
         }
