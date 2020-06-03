@@ -69,45 +69,46 @@ export default {
   request(config) {
     return $axios.request(config)
   },
-  $http(method, url, params, callback) {
-    const config = {
+  $http(method, url, params, config, callback) {
+    const _config = {
       url: url,
       method: method,
-    }
-
-    // if  url like as '/__mock__/api/getTestInfo' which it has proxy prefix, it will ignore the global proxy
-    let isSingleProxy = Object.values(proxyMap).some(value => ~config.url.indexOf(value))
-    if (isDevelopment) {
-      // global proxy
-      if (!isSingleProxy) config.baseURL = proxyMap[globalProxy]
-    } else if (isSingleProxy) {
-      Object.values(proxyMap).forEach(value => {
-        // avoid the url has prefix proxy in production
-        if (~config.url.indexOf(value)) config.url = config.url.replace(value, '')
-      })
+      ...config,
     }
 
     if (['post', 'put', 'patch'].includes(method)) {
-      config.data = params
+      _config.data = params
     } else {
-      config.params = params
+      _config.params = params
     }
 
-    this.request(config).then(
+    // if  url like as '/__mock__/api/getTestInfo' which it has proxy prefix, it will ignore the global proxy
+    let isSingleProxy = Object.values(proxyMap).some(value => ~_config.url.indexOf(value))
+    if (isDevelopment) {
+      // global proxy
+      if (!isSingleProxy && !_config.baseURL) _config.baseURL = proxyMap[globalProxy]
+    } else if (isSingleProxy) {
+      Object.values(proxyMap).forEach(value => {
+        // avoid the url has prefix proxy in production
+        if (~_config.url.indexOf(value)) _config.url = _config.url.replace(value, '')
+      })
+    }
+
+    this.request(_config).then(
       response => responseSuccess(response, callback),
       error => responseFail(error, callback),
     )
   },
-  get(url, params, callback) {
-    this.$http('get', url, params, callback)
+  get(url, params, config, callback) {
+    this.$http('get', url, params, config, callback)
   },
-  post(url, params, callback) {
-    this.$http('post', url, params, callback)
+  post(url, params, config, callback) {
+    this.$http('post', url, params, config, callback)
   },
-  put(url, params, callback) {
-    this.$http('put', url, params, callback)
+  put(url, params, config, callback) {
+    this.$http('put', url, params, config, callback)
   },
   delete(url, params, callback) {
-    this.$http('delete', url, params, callback)
+    this.$http('delete', url, params, config, callback)
   },
 }

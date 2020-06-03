@@ -1,5 +1,5 @@
 <template>
-  <div class="block-chain-info" v-loading="loading">
+  <div class="block-chain-info">
     <div class="info-header">
       <div class="line-item">
         <div class="info-item">
@@ -17,30 +17,32 @@
     <div class="block-list">
       <div class="block-list__header">
         {{ $t('explorer.lastBlock')}}
-        <el-button class="refresh" type="text" @click="handleRefresh"><i class="el-icon-refresh-right"></i> {{ $t('explorer.refresh')}}</el-button>
+        <el-button class="refresh" :disabled="loading" type="text" @click="handleRefresh"><i class="el-icon-refresh-right"></i> {{ $t('explorer.refresh')}}</el-button>
       </div>
 
-      <!-- every block-->
-      <template v-if="lastBlockList.length">
-        <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
-          <div class="box-header">
-            <div class="block-high">{{ block.high }}</div>
-            <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
-          </div>
-          <div class="box-body">
-            <div class="line-item">
-              <span class="label">{{ $t('explorer.hashValue')}}：</span>
-              <span class="value">{{ block.hash }}</span>
+      <div v-loading="loading">
+        <!-- every block-->
+        <template v-if="lastBlockList.length">
+          <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
+            <div class="box-header">
+              <div class="block-high">{{ block.high }}</div>
+              <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
             </div>
-            <!--<div class="line-item">
-              <span class="label">{{ $t('explorer.status')}}：</span>
-              <span class="value">{{ $t(block.status ? 'explorer.confirmed' : 'explorer.unconfirmed') }}</span>
-            </div>-->
+            <div class="box-body">
+              <div class="line-item">
+                <span class="label">{{ $t('explorer.hashValue')}}：</span>
+                <span class="value">{{ block.hash }}</span>
+              </div>
+              <!--<div class="line-item">
+                <span class="label">{{ $t('explorer.status')}}：</span>
+                <span class="value">{{ $t(block.status ? 'explorer.confirmed' : 'explorer.unconfirmed') }}</span>
+              </div>-->
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
 
-      <div v-else class="empty-data">{{ $t('base.emptyData')}}</div>
+        <div v-else class="empty-data">{{ $t('base.emptyData')}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -60,11 +62,6 @@ export default {
       timeID: null,
       httpTimeID: null,
       httpTimeIDs: [],
-      reload: true, // when enter this component
-
-
-      onlyKey: '',
-      blockListMap: {},
       stopHttp: false,
     }
   },
@@ -92,11 +89,6 @@ export default {
 
   methods: {
     getBlockChainInfo () {
-      if (this.configForm.refresh || this.reload) {
-        this.reload = false
-        this.loading = true
-      }
-      this.configForm.refresh = false
       this.handleRefresh()
     },
 
@@ -108,12 +100,9 @@ export default {
         this.loading = false
         if (err || this.stopHttp) return
 
-        let blockTimestamp = 0
-
         this.lastBlockChainInfo = res.result || {}
         if (this.lastBlockChainInfo.blockID && !~this.lastBlockList.findIndex(block => block.hash === this.lastBlockChainInfo.blockID)) {
           let rawData = this.lastBlockChainInfo.block_header.raw_data
-          blockTimestamp = rawData.timestamp
           let block = {
             high: '#' + rawData.number,
             timestamp: rawData.timestamp,
@@ -129,8 +118,7 @@ export default {
           this.lastBlockList.unshift(block)
         }
 
-        let disTime = blockTimestamp + 3000 - Date.now()
-        this.httpTimeID = setTimeout(this.getNowBlockInfo, disTime)
+        this.httpTimeID = setTimeout(this.getNowBlockInfo, 1000)
         this.httpTimeIDs.push(this.httpTimeID)
       })
     },
@@ -142,12 +130,12 @@ export default {
       clearInterval(this.timeID)
       this.clearAllTimeout()
 
-      // this.$eventBus.$_globalID = (this.$eventBus.$_globalID || 0) + 1
-      // this.blockListMap[this.$eventBus.$_globalID] = []
 
       this.lastProductBlockTime = 0
       this.lastBlockList.splice(0)
-      this.getNowBlockInfo()
+
+      this.loading = true
+      setTimeout(this.getNowBlockInfo, 1000)
     },
 
     clearAllTimeout () {

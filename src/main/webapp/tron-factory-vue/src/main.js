@@ -15,8 +15,10 @@ import './assets/styles/index.scss' // global css
 /**
  * axios
  */
+import axios from 'axios'
 import api from './api'
 Vue.prototype.$_api = api
+Vue.prototype.$axios = axios
 
 /**
  * eventBus

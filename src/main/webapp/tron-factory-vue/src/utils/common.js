@@ -7,11 +7,16 @@ export function initActions(actions) {
 
     for (let method in actions[action]) {
       for (let url in actions[action][method]) {
-        api[action][url] = (params, callback) => {
+        api[action][url] = (params, config = {}, callback) => {
           // api url
+          if (typeof config === "function") {
+            callback = config
+            config = {}
+          }
           Ajax[Ajax[method] ? method : 'get'](
             actions[action][method][url],
             params,
+            config,
             callback,
           )
         }
