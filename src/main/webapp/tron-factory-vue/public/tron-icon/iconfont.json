@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "15081502",
+      "name": "生态应用",
+      "font_class": "shengtaiyingyong1",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "15081503",
+      "name": "配置",
+      "font_class": "peizhi",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "15066375",
       "name": "加载中",
       "font_class": "jiazaizhong",

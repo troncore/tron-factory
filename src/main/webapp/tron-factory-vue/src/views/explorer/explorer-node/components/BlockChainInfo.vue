@@ -59,9 +59,12 @@ export default {
       lastProductBlockTime: 0,
       timeID: null,
       httpTimeID: null,
+      httpTimeIDs: [],
       reload: true, // when enter this component
 
 
+      onlyKey: '',
+      blockListMap: {},
       stopHttp: false,
     }
   },
@@ -94,7 +97,6 @@ export default {
         this.loading = true
       }
       this.configForm.refresh = false
-      this.getNowBlockInfo()
       this.handleRefresh()
     },
 
@@ -129,6 +131,7 @@ export default {
 
         let disTime = blockTimestamp + 3000 - Date.now()
         this.httpTimeID = setTimeout(this.getNowBlockInfo, disTime)
+        this.httpTimeIDs.push(this.httpTimeID)
       })
     },
 
@@ -137,6 +140,10 @@ export default {
       this.stopHttp = false
 
       clearInterval(this.timeID)
+      this.clearAllTimeout()
+
+      // this.$eventBus.$_globalID = (this.$eventBus.$_globalID || 0) + 1
+      // this.blockListMap[this.$eventBus.$_globalID] = []
 
       this.lastProductBlockTime = 0
       this.lastBlockList.splice(0)
@@ -144,9 +151,8 @@ export default {
     },
 
     clearAllTimeout () {
-      for (let i = 0; i < 1000; i++) {
-        clearTimeout(i)
-      }
+      this.httpTimeIDs.forEach(clearTimeout)
+      this.httpTimeIDs = []
     }
 
   }
