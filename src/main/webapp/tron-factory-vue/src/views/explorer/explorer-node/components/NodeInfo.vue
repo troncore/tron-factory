@@ -7,6 +7,10 @@
           <span class="label">{{ $t('explorer.linkedNodeNums') }}：</span>
           <span class="value">{{ nodeInfo.currentConnectCount }}</span>
         </div>
+        <div class="config-item">
+          <span class="label">{{ $t('explorer.codeVersion') }}：</span>
+          <span class="value">{{ nodeInfo.codeVersion }}</span>
+        </div>
       </div>
     </div>
     <div class="box-card service-config">
@@ -64,6 +68,7 @@ export default {
         currentConnectCount: '--',
         cpuCount: '--',
         cpuRate: '--',
+        codeVersion: '--',
         jvmFreeMemory: '--',
         freeMemory: '--',
       }
@@ -85,10 +90,14 @@ export default {
         let freeMemory = '--'
         if (typeof machineInfo.freeMemory !== 'undefined' ) freeMemory = (Number(machineInfo.freeMemory) / 1024 / 1024).toFixed(2) + 'G'
 
+        let configNodeInfo = result.configNodeInfo || {}
+
+
         this.nodeInfo = {
           currentConnectCount: result.currentConnectCount,
           cpuCount: machineInfo.cpuCount,
           cpuRate: cpuRate,
+          codeVersion: configNodeInfo.codeVersion,
           jvmFreeMemory: jvmFreeMemory,
           freeMemory: freeMemory,
         }
@@ -104,18 +113,17 @@ export default {
   color: font-color();
 
   .box-card {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-
     .box-header {
       margin-bottom: 10px;
       color: font-color();
       font-weight: bold;
     }
     .box-body {
-      margin-left: 6em;
+      padding: 10px 15px;
+      border-radius: 4px;
+      border: 1px solid theme-color(.2);
+      background-color: theme-color(.02);
+
       .config-item {
         margin-bottom: 5px;
         &:last-child {
@@ -123,10 +131,19 @@ export default {
         }
         .label {
           display: inline-block;
-          width: 180px;
+          /*color: black;*/
+          width: 120px;
+        }
+
+        .value {
+          color: font-color(.8);
         }
       }
     }
+  }
+
+  .box-card + .box-card {
+    margin-top: 20px;
   }
 }
 </style>

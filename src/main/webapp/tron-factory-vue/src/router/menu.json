@@ -1,12 +1,5 @@
 [
   {
-    "path": "/explorer",
-    "name": "explorer",
-    "title": "menu.explorer",
-    "icon": "el-icon-s-data",
-    "disabled": false
-  },
-  {
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "title": "menu.nodesManage",
@@ -18,6 +11,13 @@
     "name": "configuration",
     "title": "menu.configuration",
     "icon": "iconfont iconpeizhi",
+    "disabled": false
+  },
+  {
+    "path": "/explorer",
+    "name": "explorer",
+    "title": "menu.explorer",
+    "icon": "el-icon-s-data",
     "disabled": false
   },
   {

@@ -103,9 +103,16 @@ export default {
       this.$_api.explorer.getNowBlockInfo({
         type: this.configForm.nodeType,
         url: this.configForm.nodeURL,
+      }, {
+        timeout: 10000,
       }, (err, res = {}) => {
         this.loading = false
-        if (err || this.stopHttp) return
+
+        if (err || this.stopHttp) {
+          this.lastProductBlockTime = 0
+          clearInterval(this.timeID)
+          return
+        }
 
         let resData = res.result || {}
         if (resData.blockID && !~this.lastBlockList.findIndex(block => block.hash === resData.blockID)) {
@@ -123,6 +130,7 @@ export default {
             this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
           }, 100)
           this.lastBlockList.unshift(block)
+          if(this.lastBlockList.length > 20) this.lastBlockList.splice(20)
         }
 
         this.httpTimeID = setTimeout(this.getNowBlockInfo, 1000)
@@ -166,14 +174,13 @@ export default {
     }
 
     .block-box {
-      margin-bottom: 20px;
       padding: 10px 15px;
       border-radius: 4px;
       border: 1px solid theme-color(.2);
       background-color: theme-color(.02);
       /*background-color: #F5F7FE;*/
-      &:last-child {
-        margin-bottom: 0;
+      & + .block-box {
+        margin-top: 20px;
       }
     }
     .box-header {
@@ -192,12 +199,12 @@ export default {
 
       .label {
         display: inline-block;
-        color: black;
+        /*color: black;*/
         width: 60px;
       }
 
       .value {
-        color: font-color(.8);
+        color: font-color(.6);
       }
 
       &:last-child {
