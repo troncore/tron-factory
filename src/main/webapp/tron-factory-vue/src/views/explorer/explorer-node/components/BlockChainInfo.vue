@@ -55,7 +55,6 @@ export default {
   },
   data () {
     return {
-      lastBlockChainInfo: {},
       loading: false,
       lastBlockList: [],
       lastProductBlockTime: 0,
@@ -64,11 +63,6 @@ export default {
       httpTimeIDs: [],
       stopHttp: false,
     }
-  },
-  computed: {
-    blockHeaderRawData () {
-      return this.lastBlockChainInfo.block_header && this.lastBlockChainInfo.block_header.raw_data || {}
-    },
   },
   watch: {
     // when the config-node form params change, it will refresh info
@@ -93,6 +87,18 @@ export default {
       this.handleRefresh()
     },
 
+    handleRefresh() {
+      clearInterval(this.timeID)
+      this.clearAllTimeout()
+
+      this.lastProductBlockTime = 0
+      this.lastBlockList.splice(0)
+
+      this.stopHttp = false
+      this.loading = true
+      setTimeout(this.getNowBlockInfo, 1000)
+    },
+
     getNowBlockInfo () {
       this.$_api.explorer.getNowBlockInfo({
         type: this.configForm.nodeType,
@@ -101,20 +107,20 @@ export default {
         this.loading = false
         if (err || this.stopHttp) return
 
-        this.lastBlockChainInfo = res.result || {}
-        if (this.lastBlockChainInfo.blockID && !~this.lastBlockList.findIndex(block => block.hash === this.lastBlockChainInfo.blockID)) {
-          let rawData = this.lastBlockChainInfo.block_header.raw_data
+        let resData = res.result || {}
+        if (resData.blockID && !~this.lastBlockList.findIndex(block => block.hash === resData.blockID)) {
+          let rawData = resData.block_header.raw_data
           let block = {
             high: '#' + rawData.number,
             timestamp: rawData.timestamp,
-            hash: this.lastBlockChainInfo.blockID,
+            hash: resData.blockID,
             status: 0
           }
 
           this.lastProductBlockTime = Math.abs((Date.now() - block.timestamp) / 1000).toFixed(1)
           clearInterval(this.timeID)
           this.timeID = setInterval(() => {
-            this.lastProductBlockTime = (this.lastProductBlockTime + 0.1).toFixed(1)
+            this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
           }, 100)
           this.lastBlockList.unshift(block)
         }
@@ -122,23 +128,6 @@ export default {
         this.httpTimeID = setTimeout(this.getNowBlockInfo, 1000)
         this.httpTimeIDs.push(this.httpTimeID)
       })
-    },
-
-    handleRefresh() {
-      this.lastBlockChainInfo = {}
-      this.stopHttp = false
-
-      clearInterval(this.timeID)
-      this.clearAllTimeout()
-
-
-      this.lastProductBlockTime = 0
-      this.lastBlockList.splice(0)
-
-      console.log(1)
-
-      this.loading = true
-      setTimeout(this.getNowBlockInfo, 1000)
     },
 
     clearAllTimeout () {
