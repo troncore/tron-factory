@@ -87,7 +87,7 @@
         }
       }
     },
-    created () {
+    activated () {
       this.getDeployedNode()
     },
     methods: {
