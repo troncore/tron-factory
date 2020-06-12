@@ -3,8 +3,8 @@
     <div class="info-header">
       <div class="line-item">
         <div class="info-item">
-          <span class="label">{{ $t('explorer.lastBlockTime')}}：</span>
-          <span class="value">{{(lastProductBlockTime || '0.0') + 's ago' }}</span>
+          <!--<span class="label">{{ $t('explorer.lastBlockTime')}}：</span>-->
+          <!--<span class="value">{{(lastProductBlockTime || '0.0') + 's ago' }}</span>-->
         </div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
@@ -124,11 +124,11 @@ export default {
             status: 0
           }
 
-          this.lastProductBlockTime = Math.abs((Date.now() - block.timestamp) / 1000).toFixed(1)
+          /*this.lastProductBlockTime = Math.abs((Date.now() - block.timestamp) / 1000).toFixed(1)
           clearInterval(this.timeID)
           this.timeID = setInterval(() => {
             this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
-          }, 100)
+          }, 100)*/
           this.lastBlockList.unshift(block)
           if(this.lastBlockList.length > 20) this.lastBlockList.splice(20)
         }
