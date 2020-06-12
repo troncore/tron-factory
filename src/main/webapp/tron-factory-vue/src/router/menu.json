@@ -1,5 +1,12 @@
 [
   {
+    "path": "/get-started",
+    "name": "get-started",
+    "title": "menu.getStarted",
+    "icon": "iconfont iconpeizhi",
+    "disabled": false
+  },
+  {
     "path": "/nodes-manage",
     "name": "nodes-manage",
     "title": "menu.nodesManage",

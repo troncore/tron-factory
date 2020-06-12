@@ -43,7 +43,7 @@ export default {
     handleOneDeployment () {
       sessionStorage.setItem('oneClick', 'true')
       this.$_api.configuration.oneClick({}, err => {})
-      this.$router.push('/nodes-manage')
+      this.$router.push('/get-started')
     },
   }
 }
