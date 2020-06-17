@@ -3,6 +3,7 @@ export default {
   submit: '提交',
   reset: '重置',
   clear: '清空',
+  add: '添加',
   delete: '删除',
   tips: '提示',
 

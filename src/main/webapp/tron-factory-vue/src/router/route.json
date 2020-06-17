@@ -1,6 +1,6 @@
 [
   {
-    "path": "/get-started/:status(initial-chain|dashboard)?",
+    "path": "/get-started/:status(create-chain|dashboard)?",
     "name": "get-started",
     "meta": {
       "auth": true
