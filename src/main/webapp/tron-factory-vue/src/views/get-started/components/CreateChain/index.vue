@@ -87,12 +87,11 @@
         genesisAssetDialogVisible: false,
         currentGenesisAsset: {},
         currentGenesisAssetIndex: -1,
-        isAddingGenesisAsset: true,
 
         disabled: false,
         loading: false,
 
-        isEditChain: false,
+        isEditPage: false,
       }
     },
     computed: {
@@ -120,7 +119,7 @@
       getChainInfo () {
         this.$_api.getStarted.getChainInfo({}, (err, res = {}) => {
           if (err) return
-          this.isEditChain && Object.assign(this.form,{
+          this.isEditPage && Object.assign(this.form,{
             chainName: res.chainName,
             crypto: res.crypto, // sm2
             p2pVersion: res.p2pVersion,
@@ -158,7 +157,6 @@
       },
 
       openGenesisAssetDialog (isAdd = true, asset = {}, index) {
-        this.isAddingGenesisAsset = isAdd
         this.currentGenesisAsset = asset
         this.currentGenesisAssetIndex = isAdd ? this.genesisBlockAssets.length : index
         this.genesisAssetDialogVisible = true
@@ -166,6 +164,9 @@
 
       handleSubmitGenesisAsset (asset) {
         this.genesisBlockAssets.splice(this.currentGenesisAssetIndex, 1, asset)
+
+        this.currentGenesisAsset = {}
+        this.currentGenesisAssetIndex = -1
       },
 
       handleDeleteAssets (index) {

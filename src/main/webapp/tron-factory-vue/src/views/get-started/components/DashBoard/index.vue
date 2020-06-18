@@ -21,5 +21,13 @@
   .chain-info {
     margin-bottom: 20px;
   }
+
+  .im-card {
+    margin-bottom: 20px;
+    .card-header {
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+  }
 }
 </style>
