@@ -98,6 +98,8 @@ public class Common {
 
   public static final String sshPortFiled = "sshPort";
 
+  public static final String listenPortField = "listenPort";
+
   public static final String isDeployedFiled = "isDeployed";
 
   public static final String javaTronVersionFiled = "javaTronVersion";
@@ -143,7 +145,11 @@ public class Common {
 
   public static final String writeJsonFileFailed = "write json file failed";
 
-  public static final String updateConfigFileFailed = "upload config failed";
+  public static final String updateConfigFileFailed = "update config failed";
+
+  public static final String deleteConfigFileFailed = "delete config failed";
+
+  public static final String generateConfigFileFailed = "generate config failed";
 
   public static final String invalidBase58CheckAddress = "Invalid Base58Check Address";
 

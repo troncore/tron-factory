@@ -68,4 +68,103 @@ public class ConfigGenerator {
         }
         return true;
     }
+
+    public boolean updateConfig(Serializable configuration, long id, String newFile){
+        // Load the original config file
+        File defaultConfigFile = new File(String.format("%s_%s", Common.configFiled, id+""));
+        Config defaultConfig = ConfigFactory.parseFile(defaultConfigFile);
+        //use string builder to generate Config String
+        StringBuilder configSB = new StringBuilder();
+        Field[] fields = configuration.getClass().getFields();
+        for(Field field : fields ){
+            String fieldName = field.getName();
+            // parse to right format
+            fieldName = fieldName.replace("_",".");
+            Object value = null;
+            try {
+                value = field.get(configuration); // get the value
+            } catch (IllegalAccessException e) {
+                logger.error(e.getMessage());
+//                e.printStackTrace();
+            }
+            // generate the config string in typesafe's format
+            if (value!=null) {
+                configSB.append(fieldName).append("=")
+                        .append(value.toString()).append(",");
+            }
+        }
+        Config modifiedConfig = ConfigFactory.parseString(configSB.toString());
+        Config newConfig = modifiedConfig.withFallback(defaultConfig);
+        String configStr = newConfig.root().render(ConfigRenderOptions.defaults().setOriginComments(false).setComments(false).setJson(false));
+        File tempConfigFile = new File(newFile);
+        FileWriter fileWriter = null;
+        try{
+            tempConfigFile.delete();
+            tempConfigFile.createNewFile();
+            fileWriter = new FileWriter(tempConfigFile);
+            fileWriter.write(configStr);
+            fileWriter.flush();
+//            fileWriter.close();
+        }
+        catch (IOException e){
+            logger.error(e.getMessage());
+//            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        }
+        return true;
+    }
+
+    public boolean generateConfig(String newFile){
+        // Load the original config file
+        File defaultConfigFile = new File(Common.configFiled);
+        Config defaultConfig = ConfigFactory.parseFile(defaultConfigFile);
+        //use string builder to generate Config String
+        StringBuilder configSB = new StringBuilder();
+        Config modifiedConfig = ConfigFactory.parseString(configSB.toString());
+        Config newConfig = modifiedConfig.withFallback(defaultConfig);
+        String configStr = newConfig.root().render(ConfigRenderOptions.defaults().setOriginComments(false).setComments(false).setJson(false));
+        File tempConfigFile = new File(newFile);
+        FileWriter fileWriter = null;
+        try{
+            tempConfigFile.delete();
+            tempConfigFile.createNewFile();
+            fileWriter = new FileWriter(tempConfigFile);
+            fileWriter.write(configStr);
+            fileWriter.flush();
+//            fileWriter.close();
+        }
+        catch (IOException e){
+            logger.error(e.getMessage());
+//            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        }
+        return true;
+    }
+
+    public boolean deleteConfig(long id){
+        File ConfigFile = new File(String.format("%s_%s", Common.configFiled, id+""));
+        if (ConfigFile.exists() && ConfigFile.isFile()) {
+            if (ConfigFile.delete()) {
+                return true;
+            }else{
+                return false;
+            }
+
+        }else{
+            return false;
+        }
+
+    }
 }

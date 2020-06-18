@@ -10,9 +10,9 @@ import ch.ethz.ssh2.Connection;
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
+import common.utils.Hash;
 import common.utils.HttpUtil;
-import config.ActiveConfig;
-import config.SeedNodeConfig;
+import config.*;
 
 import java.io.*;
 import java.util.*;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import common.Util;
 import entity.WitnessEntity;
-import config.GenesisWitnessConfig;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -29,9 +28,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import org.tron.keystore.CipherException;
 import response.Response;
-import config.ConfigGenerator;
 import tron.deployment.shellExecutor.BashExecutor;
-
 
 @CrossOrigin
 @RestController
@@ -42,8 +39,8 @@ public class NodeController {
 
   private static boolean isEckey = true;
 
-  private static int listenPort = 0;
-  private static long id = 0L;
+//  private static int listenPort = 0;
+//  private static long id = 0L;
   static {
     refresh();
   }
@@ -118,20 +115,31 @@ public class NodeController {
     return false;
   }
 
-  //带密码登录，检验连通性
-  public static String SSHconnectPWD(String ip, String username, String sshPassword) {
-    Connection conn = null;
-    try {
-      conn = new Connection(ip);
-      conn.connect();
-      boolean isAuthenticated = conn.authenticateWithPassword(username, sshPassword);
-      if (isAuthenticated == false) {
-        return Common.connectFailedStatus;
+  private boolean isIpListenPortExist(JSONArray nodes, String ip, long listenPort) {
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      String nodeIp = (String) node.get(Common.ipFiled);
+      long nodeListenPort = (Long) node.get(Common.listenPortField);
+      if (nodeIp.equals(ip) && nodeListenPort==listenPort) {
+        return true;
       }
-    } catch (IOException e) {
-      return Common.connectFailedStatus;
     }
-    return Common.connectSuccessStatus;
+    return false;
+  }
+
+  private boolean isIpListenPortExist_update(JSONArray nodes, long id, String ip, long listenPort) {
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      long nodeId = (Long) node.get(Common.idFiled);
+      String nodeIp = (String) node.get(Common.ipFiled);
+      long nodeListenPort = (Long) node.get(Common.listenPortField);
+      if(nodeId!=id){//比较时除去节点自身，避免未更新节点ip和listenport时，点击保存报ip和listenport重复
+        if (nodeIp.equals(ip) && nodeListenPort==listenPort) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   //公钥登录，校验连通性：sshConnetct.bash，读取日志，判断是否ssh成功
@@ -196,8 +204,10 @@ public class NodeController {
   //添加节点
   @PostMapping(value = "/api/nodeInfo")
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
+    //获取链的加密方式
     refresh();
     int status = 0;
+    //获取请求数据 start
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
@@ -218,17 +228,10 @@ public class NodeController {
             (Integer.parseInt((String)data.getOrDefault("sshConnectType", "0"))) :
             (int)data.getOrDefault("sshConnectType", 0);
     String publicKey = (String) data.getOrDefault("publicKey", "");
-    JSONObject statusObj = new JSONObject();
-    //1 password, 2 key
-    /*if(sshConnectType == 1){
-      String sshPwdStatus = SSHconnectPWD(ip, userName, sshPassword);
-      if(sshPwdStatus.equals(Common.connectFailedStatus)) {
-        status = 1;
-        statusObj.put("status",status);
-        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-      }
-    }*/
+    int listenPort = (Integer) data.getOrDefault("listenPort", 18889);
+    //获取请求数据 end
 
+    //根据登录方式的不同，校验连通性 start
     BashExecutor bashExecutor = new BashExecutor();
     if(sshConnectType == 1 ){
       bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
@@ -236,52 +239,41 @@ public class NodeController {
     if(sshConnectType == 2){
       bashExecutor.callSSHScript(ip, port, userName);
     }
+    JSONObject statusObj = new JSONObject();
     String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
     if(sshStatus.equals(Common.connectFailedStatus)) {
       status = 1;
       statusObj.put("status",status);
       return new Response(ResultCode.OK.code, statusObj).toJSONObject();
     }
+    //根据登录方式的不同，校验连通性 end
 
-    //获取配置文件中listenPort
-    Util util = new Util();
-    util.parseConfig();
-    Config config = util.config;
-    Args args = new Args();
-    listenPort = (Integer)args.getListenPort(config);
-
+    //获取数据库节点信息
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
-
-    //保存历史id，采用id自增的方式
-    Long idMax = (Long) json.get(Common.idMaxFiled);
-    id = idMax + 1;
-    json.put(Common.idMaxFiled, id);
-    ArrayList<String> ipList = new ArrayList<>();
-
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-//      Long nodeID = (Long) node.get(Common.idFiled);
-      String nodeIp = (String) node.get(Common.ipFiled);
-      ipList.add(nodeIp+"\":\""+listenPort);
-      /*if(id <= nodeID){
-        id = nodeID;
-      }*/
-    }
-
-    ipList.add(ip+"\":\""+listenPort);
-
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
     }
+
+    //保存历史id，采用id自增的方式，id初始值为0
+    Long idMax = (Long) json.get(Common.idMaxFiled);
+    long id = idMax + 1;
+    json.put(Common.idMaxFiled, id);
+
+    //校验节点是否已存在或ip和listenPort重复
     JSONObject node = Util.getNodeInfo(nodes, id);
     if (node != null) {
       return new Response(ResultCode.FORBIDDEND.code, "node id already exist").toJSONObject();
     }
-
-    if (isIpExist(nodes, ip)) {
-      return new Response(ResultCode.FORBIDDEND.code, "ip should be different").toJSONObject();
+    if (isIpListenPortExist(nodes, ip, listenPort)) {
+      return new Response(ResultCode.FORBIDDEND.code, "ip&listenPort should be different").toJSONObject();
     }
+
+    //更新iplist
+//    ArrayList<ong,String> ipList = (ArrayList<long,String>) json.get(Common.ipListFiled);
+//    ipList.add(ip+":"+listenPort);
+    HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
+    ipList.put(id+"",ip+"\":\""+listenPort);
 
     JSONObject newNode = new JSONObject();
     if (isSR) {
@@ -309,11 +301,19 @@ public class NodeController {
       }
     }
 
+    //为每个节点生成一个配置文件 .config.conf_id start
+    ConfigGenerator configGenerator = new ConfigGenerator();
+    boolean result = configGenerator.generateConfig(String.format("%s_%s", Common.configFiled, id+""));
+    if (!result) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.generateConfigFileFailed).toJSONObject();
+    }
+    //为每个节点生成一个配置文件 .config.conf_id end
+
     newNode.put(Common.idFiled, id);
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
-    newNode.put(Common.ipListFiled, ipList);
+//    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -324,8 +324,9 @@ public class NodeController {
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     newNode.put(Common.sshConnectTypeField, sshConnectType);
     newNode.put(Common.ifShowLogField, false);
+    newNode.put(Common.listenPortField, listenPort);
     nodes.add(newNode);
-    return updateNodesInfo(nodes, json, ipList);
+    return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
   }
 
   //编辑节点信息
@@ -355,27 +356,9 @@ public class NodeController {
             (Integer.parseInt((String)data.getOrDefault("sshConnectType", "0"))) :
             (int)data.getOrDefault("sshConnectType", 0);
     String publicKey = (String) data.getOrDefault("publicKey", "");
-    JSONObject statusObj = new JSONObject();
-    //1 password, 2 key
-    /*if(sshConnectType == 1){
-      String sshPwdStatus = SSHconnectPWD(ip, userName, sshPassword);
-      if(sshPwdStatus.equals(Common.connectFailedStatus)) {
-        status = 1;
-        statusObj.put("status",status);
-        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-      }
-    }
-    if(sshConnectType == 2){
-      BashExecutor bashExecutor = new BashExecutor();
-      bashExecutor.callSSHScript(ip, port, userName);
-      String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
-      if(sshStatus.equals(Common.connectFailedStatus)) {
-        status = 1;
-        statusObj.put("status",status);
-        return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-      }
-    }*/
+    int listenPort = (Integer) data.getOrDefault("listenPort", "18889");
 
+    JSONObject statusObj = new JSONObject();
     BashExecutor bashExecutor = new BashExecutor();
     if(sshConnectType ==1 ){
       bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
@@ -396,23 +379,22 @@ public class NodeController {
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
-    String ipOld = (String)node.get(Common.ipFiled);
-    ArrayList<String> ipList = new ArrayList<>();
-
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject nodeObj = (JSONObject) nodes.get(i);
-      String nodeIp = (String) nodeObj.get(Common.ipFiled);
-//      String nodeIp = (String) node.get(Common.ipFiled);
-      if(ipOld != nodeIp) {
-        ipList.add(nodeIp + "\":\"" + listenPort);
-      }
+    //校验节点修改后是否会ip和listenPort重复
+    if (isIpListenPortExist_update(nodes, id, ip, listenPort)) {
+      return new Response(ResultCode.FORBIDDEND.code, "ip&listenPort should be different").toJSONObject();
     }
-    ipList.add(ip+"\":\""+listenPort);
 
+    //更新iplist
+//    ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
+//    ipList.add(ip+":"+listenPort);
+    HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
+    ipList.put(id+"",ip+"\":\""+listenPort);
+
+    //检验privatekey与address是否匹配
     boolean flag = key.length() != 0;
     nodes = removeNodeInfo(nodes, id, flag);
     if (isSR) {
-      if(key.length() == 0){
+      if(!flag){
         String privateKey = (String)node.get(Common.privateKeyFiled);
         String  privateKeyCheck=privateKey.substring(privateKey.lastIndexOf("-")+1, privateKey.lastIndexOf(".json"));
         if(!publicKey.equals(privateKeyCheck)){
@@ -423,7 +405,7 @@ public class NodeController {
         node.put(Common.privateKeyFiled, privateKey);
         node.put(Common.publicKeyFiled, publicKey);
       }
-      if (key.length() != 0) {
+      if (flag) {
         String path;
         String publicKeyCheck;
 //        refresh();
@@ -461,10 +443,11 @@ public class NodeController {
     node.put(Common.isDeployedFiled, isDeployed);
     node.put(Common.javaTronVersionFiled, javaTronVersion);
     node.put(Common.sshConnectTypeField, sshConnectType);
+    node.put(Common.listenPortField, listenPort);
     nodes.add(node);
     json.put(Common.nodesFiled, nodes);
 
-    return updateNodesInfo(nodes, json, ipList);
+    return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
   }
 
   //编辑节点，查看节点详情
@@ -567,6 +550,67 @@ public class NodeController {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
+  //更新节点信息
+  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, long id , HashMap<String,String> ipList, int listenPort, boolean isDeleteNode) {
+    ConfigGenerator configGenerator = new ConfigGenerator();
+
+    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      boolean isSR = (Boolean) node.get(Common.isSRFiled);
+
+      if (isSR) {
+        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
+                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
+      }
+    }
+
+    ArrayList<String> ipListAll = new ArrayList<>();
+    Collection<String> values = ipList.values() ;// 得到全部的value
+    Iterator<String> iter = values.iterator() ;
+    while(iter.hasNext()) {
+      ipListAll.add(iter.next());
+    }
+    //为每个节点的配置文件更新witness信息
+    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
+    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      long idNode = (Long) node.get(Common.idFiled);
+      if (!configGenerator.updateConfig(witnessConfig, idNode, String.format("%s_%s", Common.configFiled, idNode+""))) {
+        LOG.error("update witness config file failed");
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
+      }
+      if(!configGenerator.updateConfig(new SeedNodeConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
+        LOG.error("update seedNode config file failed");
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update seedNode config file failed").toJSONObject();
+      }
+      if(!configGenerator.updateConfig(new ActiveConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
+        LOG.error("update active config file failed");
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update active config file failed").toJSONObject();
+      }
+    }
+
+    if(!isDeleteNode){
+      //更新listenPort信息
+      boolean result = configGenerator.updateConfig(
+              new ListenPortConfig(listenPort), id, String.format("%s_%s", Common.configFiled, id+""));
+
+      if (!result) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+      }
+    }
+
+    json.put(Common.nodesFiled, nodes);
+    json.put(Common.ipListFiled, ipList);
+
+    if (!writeJsonFile(json)) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+    }
+
+    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+  }
+
   //删除节点
   @DeleteMapping(value = "/api/nodeInfo")
   public JSONObject deleteNode(@RequestParam(value = "id", required = true, defaultValue = "1") Long id) {
@@ -581,21 +625,23 @@ public class NodeController {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
     String ip = (String) node.get(Common.ipFiled);
+    int listenPort = 18889;
 
-    ArrayList<String> ipList = new ArrayList<>();
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject nodeObj = (JSONObject) nodes.get(i);
-      String nodeIp = (String) nodeObj.get(Common.ipFiled);
-      if(nodeIp != ip){
-        ipList.add(nodeIp+"\":\""+listenPort);
-      }
-    }
+    HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
+    ipList.remove(id+"");
+
     JSONArray newNodes = removeNodeInfo(nodes, id, true);
     if (newNodes.size() == nodes.size()) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
+    //删除节点的配置文件 .config.conf_id start
+    ConfigGenerator configGenerator = new ConfigGenerator();
+    boolean result = configGenerator.deleteConfig(id);
+    if (!result) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.deleteConfigFileFailed).toJSONObject();
+    }
 
-    return updateNodesInfo(newNodes, json, ipList);
+    return updateNodesInfo(newNodes, json, id, ipList, listenPort, true);
   }
 
   @GetMapping(value = "/api/getDeployedNodeInfo")
