@@ -8,7 +8,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 // el-table
 .custom-table {
-  color: #999;
+  //color: #999;
   .el-table__header {
     tr {
       th {
@@ -190,6 +190,13 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 .im-button {
+  &.mini {
+    padding: 0;
+    width: 120px;
+    height: 32px;
+    line-height: 30px;
+    font-size: 14px;
+  }
   &.large {
     padding: 0;
     width: 140px;

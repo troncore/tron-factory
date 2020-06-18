@@ -1,77 +1,73 @@
 <template>
-  <div class="get-started" v-loading="loading">
-    <div v-if="!hasBlockChain" class="page-body im-card">
-      <div class="description">
-        {{ $t('一键发链，快速创建你自己的区块链') }}
+  <div class="get-started">
+    <div class="loading-mask" v-if="loading" v-loading="loading"></div>
+    <div class="page-main" v-else>
+      <div v-if="showStart" class="page-body im-card">
+        <div class="description">
+          {{ $t('一键发链，快速创建你自己的区块链') }}
+        </div>
+        <el-button type="primary" class="im-button largest" @click="handleCreate">开始创建</el-button>
       </div>
-      <el-button type="primary" class="im-button largest" @click="handleStart">开始创建</el-button>
-    </div>
 
-    <component v-else :is="currentComponent" />
+      <component v-else :is="currentComponent" />
+    </div>
   </div>
 </template>
 
 <script>
+  const subPages = {
+    'create-chain': () => import('./sub-pages/create-chain') ,
+    'dashboard': () => import('./sub-pages/dashboard') ,
+    'node-add-edit': () => import('./sub-pages/node-add-edit') ,
+  }
   export default {
     name: "get-started",
     components: {
-      CreateChain: () => import('./components/CreateChain') ,
-      Dashboard: () => import('./components/Dashboard') ,
+      ...subPages,
     },
     data () {
       return {
         loading: false,
-        hasBlockChain: false,
-        currentComponent: 'Dashboard',
+        showStart: true,
+        currentComponent: '',
         hasValidStatus: false,
-
-        routeMapComponent: {
-          'create-chain': 'CreateChain',
-          'dashboard': 'Dashboard',
-        }
       }
     },
     watch: {
       '$route': {
-        handler (to, from) {
-          // 对路由变化作出响应...
-          if (to.params && to.params.status) {
-            this.hasValidStatus = true
-            this.currentComponent = this.routeMapComponent[to.params.status]
-            if (this.currentComponent) {
-              this.hasBlockChain = true
-            }
-            if (!this.currentComponent) this.hasValidStatus = false
-          } else {
-            this.init()
-          }
-        },
+        handler: 'handleRoute',
         immediate: true,
       }
     },
     created () {
       this.activeMenuIndex()
-      // this.init()
     },
     methods: {
       activeMenuIndex () {
         this.$eventBus.$emit('menuActiveIndex', '/get-started')
       },
-      init () {
+      handleRoute (to) {
         this.loading = true
+        let noAuthStatus = ['create-chain']
+        let subPagesNames = Object.keys(subPages)
+
         this.$_api.getStarted.hasBlockChain({}, (err, res) => {
           this.loading = false
           if (err) return
 
-          if (typeof res === 'boolean') {
-            this.hasBlockChain = res
+          if (res === true || noAuthStatus.includes(to.params.status)) {
+            this.showStart = false
+            if (subPagesNames.includes(to.params.status)) this.currentComponent = to.params.status
+            else this.$router.push('/get-started/dashboard')
 
-            if (this.hasBlockChain) this.$router.push('/get-started/dashboard')
+          } else {
+            this.showStart = true
+            this.$router.push('/get-started')
           }
         })
       },
-      handleStart () {
-        this.hasBlockChain = true
+
+      handleCreate () {
         this.$router.push('/get-started/create-chain')
       }
     }
@@ -83,6 +79,12 @@
   height: 100%;
   min-height: 100%;
   padding: 20px;
+  .loading-mask {
+    height: 100%;
+  }
+  .page-main {
+    height: 100%;
+  }
   .page-body {
     height: 100%;
     text-align: center;
