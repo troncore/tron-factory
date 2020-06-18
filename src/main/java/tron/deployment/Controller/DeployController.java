@@ -225,7 +225,6 @@ public class DeployController {
     @GetMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) throws CipherException, IOException {
 
-        boolean isDeployedAll = true;
         //获取配置文件中各端口号，便于校验端口是否冲突
         String fullNodePort = "null";
         String solidityPort = "null";
