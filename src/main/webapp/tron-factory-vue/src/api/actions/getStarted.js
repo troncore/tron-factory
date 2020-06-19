@@ -17,4 +17,7 @@ export default {
   put: {
     updateChainInfo: prefix + '/api/chainInfo',
   },
+  delete: {
+    deleteChain: prefix + '/api/deleteChain',
+  },
 }

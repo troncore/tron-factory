@@ -24,15 +24,39 @@
         </div>
         <div class="chain-item">
           <div class="label">
-            <el-button class="im-button mini" size="mini" type="text" v-if="chainStatus === 0" @click="handleUpdate">{{ $t('修改') }}</el-button>
-            <el-button class="im-button mini" size="mini" type="text" v-if="canDeleteChain" @click="handleDelete">{{ $t('删除') }}</el-button>
+            <el-button
+              class="im-button mini"
+              size="mini"
+              type="primary"
+              v-if="chainStatus === 0"
+              @click="handleUpdate">
+              <i class="el-icon-edit"></i> {{ $t('修改') }}
+            </el-button>
+            <el-button
+              class="im-button mini"
+              size="mini"
+              type="primary"
+              v-if="chainStatus === 2"
+              @click="handleExplorer">
+              <i class="el-icon-view"></i> {{ $t('浏览器') }}
+            </el-button>
           </div>
-          <div class="value"><el-button class="im-button mini" size="mini" type="text" @click="handleExplorer">{{ $t('浏览器查看') }}</el-button></div>
+          <div class="value">
+            <el-button
+              class="im-button mini"
+              size="mini"
+              v-if="chainStatus === 2"
+              :disabled="deleteLoading"
+              @click="handleDelete">
+              <i :class="deleteLoading ? 'el-icon-loading' : 'el-icon-delete'"></i>
+              {{ $t('删除') }}
+            </el-button>
+          </div>
         </div>
       </div>
     </div>
 
-    <node-list />
+    <node-list @nodeList="getNodeList"/>
   </div>
 </template>
 
@@ -44,26 +68,71 @@
     components: { ImTooltip, NodeList },
     data () {
       return {
-        chainStatus: 0, // 0 unrun、1 running、2 runned
+        chainStatus: -1, // 0 unrun、1 running、2 runned
+        nodeList: [],
+        deleteLoading: false,
       }
     },
-    computed: {
-      // 有未停止的节点，无法删除
-      canDeleteChain () {
-
-        return false
-      },
-    },
     created () {
-
+      this.checkChainPublish()
     },
     methods: {
+      checkChainPublish () {
+        this.$_api.getStarted.checkChainPublish({}, (err, res) => {
+          if (err) {
+            this.chainStatus = -1
+            return
+          }
+
+          this.chainStatus = res
+        })
+      },
+
       handleUpdate () {
         this.$router.push('/get-started/create-chain')
       },
 
       handleDelete () {
+        if (~this.nodeList.findIndex(node => node.deployStatus !== 0)) {
+          this.$notify.warning({
+            title: this.$t('base.warning'),
+            message: this.$t('有未停止的节点，无法删除')
+          })
+          return
+        }
 
+        this.$confirm(this.$t('这将会删除此区块链，是否继续？'), this.$t('base.tips'), {
+          cancelButtonText: this.$t('base.cancel'),
+          confirmButtonText: this.$t('base.delete'),
+          center: true,
+          customClass: 'im-message-box',
+          cancelButtonClass: 'im-message-cancel-button',
+          confirmButtonClass: 'im-message-confirm-button warning',
+        }).then(this.deleteChain)
+          .catch(() => {
+          this.$notify.info({
+            title: this.$t('base.cancel'),
+            message: this.$t('base.cancelDelete'),
+          })
+        })
+      },
+
+      deleteChain () {
+        this.deleteLoading = true
+        this.$_api.getStarted.deleteChain({}, (err, res) => {
+          this.deleteLoading = false
+          if (err) return
+          this.$notify.success({
+            title: this.$t('base.successful'),
+            message: this.$t('base.success.delete'),
+          })
+
+          res === true && this.$router.push('/get-started')
+        })
+      },
+
+      getNodeList (list) {
+        this.nodeList = list
       },
 
       handleExplorer () {

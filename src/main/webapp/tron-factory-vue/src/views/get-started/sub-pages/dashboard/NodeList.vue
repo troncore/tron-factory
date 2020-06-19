@@ -3,8 +3,8 @@
     <div class="card-header">节点信息</div>
     <div class="card-body">
       <div class="table-header">
-        <el-button class="im-button mini" type="primary">{{ $t('添加节点') }}</el-button>
-        <el-button class="im-button mini" type="success">{{ $t('启动节点') }}</el-button>
+        <el-button class="im-button mini" size="mini" type="primary"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
+        <el-button class="im-button mini" size="mini" type="success"><i class="el-icon-caret-right"></i> {{ $t('启动节点') }}</el-button>
       </div>
       <div class="table-box">
         <el-table
@@ -49,10 +49,10 @@
 
           <el-table-column prop="operate" width="180" :label="$t('操作')">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="handleConfig">{{ $t('配置') }}</el-button>
-              <el-button type="text" size="mini" @click="handleDetail">{{ $t('查看') }}</el-button>
-              <el-button type="text" size="mini" @click="handleStop" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
-              <el-button type="text" size="mini" @click="handleSeeLog" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
+              <el-button type="text" @click="handleConfig">{{ $t('配置') }}</el-button>
+              <el-button type="text" @click="handleDetail">{{ $t('查看') }}</el-button>
+              <el-button type="text" @click="handleStop" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
+              <el-button type="text" @click="handleSeeLog" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -64,10 +64,14 @@
 <script>
   export default {
     name: "node-list",
+    props: {
+      nodeList: Function
+    },
     data () {
       return {
         tableData: [],
         tableLoading: false,
+
       }
     },
     created () {
@@ -75,9 +79,13 @@
     },
     methods: {
       getNodeList () {
+        this.tableLoading = true
         this.$_api.getStarted.getNodeList({}, (err, res) => {
+          this.tableLoading = false
           if (err) return
-          this.tableData = res || []
+          this.tableData = Array.isArray(res) ? res : []
+
+          this.$emit('nodeList', this.tableData)
         })
       },
 
