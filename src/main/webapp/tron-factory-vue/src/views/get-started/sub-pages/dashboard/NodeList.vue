@@ -45,9 +45,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="createTime" :label="$t('创建时间')" align="center"></el-table-column>
+          <el-table-column prop="createTime" width="180" :label="$t('创建时间')" align="center"></el-table-column>
 
-          <el-table-column prop="operate" :label="$t('操作')">
+          <el-table-column prop="operate" width="180" :label="$t('操作')">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click="handleConfig">{{ $t('配置') }}</el-button>
               <el-button type="text" size="mini" @click="handleDetail">{{ $t('查看') }}</el-button>

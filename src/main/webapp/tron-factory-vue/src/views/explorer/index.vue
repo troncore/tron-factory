@@ -29,7 +29,14 @@
         configForm: {},
       }
     },
+    activated () {
+      this.activeMenuIndex()
+    },
     methods: {
+      // for keep-alive reactive the side-nav highlight
+      activeMenuIndex () {
+        this.$eventBus.$emit('menuActiveIndex', '/explorer')
+      },
       handleInitConfig (configForm) {
         this.configForm = configForm
 
