@@ -7,11 +7,17 @@ export default {
     getChainInfo: prefix + '/api/chainInfo',
     checkBalance: prefix + '/api/checkBalance',
     checkAddress: prefix + '/api/checkAddress',
+    checkChainPublish: prefix + '/api/checkChainPublish',
+
+    getNodeList: prefix + '/api/allNodeInfo',
   },
   post: {
     addChainInfo: prefix + '/api/chainInfo',
   },
   put: {
     updateChainInfo: prefix + '/api/chainInfo',
+  },
+  delete: {
+    deleteChain: prefix + '/api/deleteChain',
   },
 }

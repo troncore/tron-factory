@@ -1,12 +1,12 @@
 <template>
-  <div class="node-list im-card">
-    节点信息
+  <div class="node-log">
+    节点详情
   </div>
 </template>
 
 <script>
   export default {
-    name: "NodeList"
+    name: "node-log"
   }
 </script>
 
