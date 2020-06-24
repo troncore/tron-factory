@@ -591,6 +591,11 @@ public class NodeController {
       }
     }
 
+    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
+      LOG.error("update witness config file failed");
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
+    }
+
     if(!isDeleteNode){
       //更新listenPort信息
       boolean result = configGenerator.updateConfig(
@@ -680,4 +685,5 @@ public class NodeController {
       return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+url+"/wallet/getnowblock").toJSONObject();
     }
   }
+
 }

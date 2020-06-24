@@ -32,6 +32,11 @@ public class Util {
     config = ConfigFactory.parseFile(confFile);
   }
 
+  public static void parseConfig(long id) {
+    File confFile = new File(String.format("%s_%s", Common.configFiled, id+""));
+    config = ConfigFactory.parseFile(confFile);
+  }
+
   public static JSONObject readJsonFile() {
     JSONParser parser = new JSONParser();
     JSONObject jsonObject = null;
