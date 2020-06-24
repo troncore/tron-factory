@@ -11,11 +11,14 @@ export default {
     getCrypto: '/api/getCrypto',
     getDeployedNode: '/api/getDeployedNode',
     getDeployedNodeInfo: '/api/getDeployedNodeInfo',
-    getNowBlockInfo: '/api/getNowBlockInfo'
+    getNowBlockInfo: '/api/getNowBlockInfo',
+    getHasBlockChain: '/api/hasBlockChain',
+    getBlockInfo: '/api/chainInfo'
   },
   post: {
     addNoteInfo: '/api/nodeInfo',
     updateCrypto: '/api/crypto',
+    addBlockInfo: '/api/chainInfo'
   },
   put: {
     editNoteInfo: '/api/nodeInfo',

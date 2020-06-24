@@ -72,6 +72,11 @@ public class ConfigControlller {
     util.parseConfig();
     Config config = util.config;
   }
+  private void refresh(long id) {
+    Util util = new Util();
+    util.parseConfig(id);
+    Config config = util.config;
+  }
 
   private void initCrossSetting() {
 
@@ -200,6 +205,82 @@ public class ConfigControlller {
     JSONObject genesisWitnessObject = generateJSONObject(genesisWitnessConfig.getClass().getFields(), genesisWitnessConfig);
     configObject.put("genesisWitnessConfig", genesisWitnessObject);
 
+    return configObject;
+  }
+
+  //获取数据库配置信息
+  private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
+    dbObject.put("storage_db_custom", dbCustomConfig());
+    configObject.put("dbConfig", dbObject);
+
+    return configObject;
+  }
+
+  //获取p2p配置信息
+  private JSONObject getP2PConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject p2pObject = generateJSONObject(p2pConfig.getClass().getFields(), p2pConfig);
+    p2pObject.put(Common.allNodesField, getSeedNode());
+    configObject.put("p2pConfig", p2pObject);
+
+    return configObject;
+  }
+
+  //获取network配置信息
+  private JSONObject getNetworkConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject networkObject = generateJSONObject(networkConfig.getClass().getFields(), networkConfig);
+    configObject.put("networkConfig", networkObject);
+    return configObject;
+  }
+
+  //获取crossChain配置信息
+  private JSONObject getCrossChainConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject crossChainObject = generateJSONObject(crossChainConfig.getClass().getFields(), crossChainConfig);
+    configObject.put("crossChainConfig", crossChainObject);
+    return configObject;
+  }
+
+  //获取BaseSetting配置信息-----------待校验
+  private JSONObject getBaseSettingConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject baseSettingObject = generateJSONObject(baseSettingConfig.getClass().getFields(), baseSettingConfig);
+    baseSettingObject.put(Common.chainIdFiled, chainId);
+    baseSettingObject.put(Common.chainNameFiled, chainName);
+    configObject.put("baseSettingConfig", baseSettingObject);
+    return configObject;
+  }
+
+  //获取genesisAsset配置信息
+  private JSONObject getGenesisAssetConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject genesisAssetObject = generateJSONObject(genesisAssetConfig.getClass().getFields(), genesisAssetConfig);
+    configObject.put("genesisAssetConfig", genesisAssetObject);
+    return configObject;
+  }
+
+  //获取genesisWitness配置信息
+  private JSONObject getGenesisWitnessConfigJsonObject(com.typesafe.config.Config loadConfig) {
+    loadConfig(loadConfig);
+    JSONObject configObject = new JSONObject();
+
+    JSONObject genesisWitnessObject = generateJSONObject(genesisWitnessConfig.getClass().getFields(), genesisWitnessConfig);
+    configObject.put("genesisWitnessConfig", genesisWitnessObject);
     return configObject;
   }
 
@@ -408,6 +489,69 @@ public class ConfigControlller {
     refresh();
     parseConfig();
     JSONObject configObject = getConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/Dbconfig")
+  public JSONObject getDbConfig(long id) {
+    refresh(id);
+    parseConfig(id);
+    JSONObject configObject = getDbConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/P2Pconfig")
+  public JSONObject getP2PConfig(long id) {
+    refresh(id);
+    parseConfig(id);
+    JSONObject configObject = getP2PConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/Networkconfig")
+  public JSONObject getNetworkConfig(long id) {
+    refresh(id);
+    parseConfig(id);
+    JSONObject configObject = getNetworkConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/CrossChainconfig")
+  public JSONObject getCrossChainConfig(long id) {
+    refresh(id);
+    parseConfig(id);
+    JSONObject configObject = getCrossChainConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/BaseSettingconfig")
+  public JSONObject getBaseSettingConfig(long id) {
+    refresh(id);
+    parseConfig(id);
+    JSONObject configObject = getBaseSettingConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/GenesisAssetconfig")
+  public JSONObject getGenesisAssetConfig() {
+    refresh();
+    parseConfig();
+    JSONObject configObject = getGenesisAssetConfigJsonObject(config);
+    return new Response(ResultCode.OK.code, configObject).toJSONObject();
+
+  }
+
+  @GetMapping(value = "/api/GenesisWitnessconfig")
+  public JSONObject getGenesisWitnessConfig() {
+    refresh();
+    parseConfig();
+    JSONObject configObject = getGenesisWitnessConfigJsonObject(config);
     return new Response(ResultCode.OK.code, configObject).toJSONObject();
 
   }
