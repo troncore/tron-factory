@@ -3,7 +3,7 @@
     <div class="card-header">节点信息</div>
     <div class="card-body">
       <div class="table-header">
-        <el-button class="im-button mini" size="mini" type="primary"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
+        <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
         <el-button class="im-button mini" size="mini" type="success"><i class="el-icon-caret-right"></i> {{ $t('启动节点') }}</el-button>
       </div>
       <div class="table-box">
@@ -49,10 +49,10 @@
 
           <el-table-column prop="operate" width="180" :label="$t('操作')">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleConfig">{{ $t('配置') }}</el-button>
-              <el-button type="text" @click="handleDetail">{{ $t('查看') }}</el-button>
-              <el-button type="text" @click="handleStop" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
-              <el-button type="text" @click="handleSeeLog" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
+              <el-button type="text" @click="handleConfig(scope.row)">{{ $t('配置') }}</el-button>
+              <el-button type="text" @click="handleDetail(scope.row)">{{ $t('查看') }}</el-button>
+              <el-button type="text" @click="handleStop(scope.row)" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
+              <el-button type="text" @click="handleSeeLog(scope.row)" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -93,19 +93,22 @@
         return row.deployStatus !== 1
       },
 
-      handleConfig () {
-
+      handleAddNode () {
+        this.$router.push('/get-started/node-add')
       },
 
-      handleDetail () {
+      handleConfig (row) {
+        this.$router.push('/get-started/node-conf?id='+ row.id)
+      },
 
+      handleDetail (row) {
+        this.$router.push('/get-started/node-view?id='+ row.id)
       },
 
       handleSeeLog () {
 
       },
       handleStop () {
-
       },
     }
   }

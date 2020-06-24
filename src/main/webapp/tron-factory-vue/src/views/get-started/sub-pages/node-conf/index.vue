@@ -1,12 +1,12 @@
 <template>
-  <div class="node-log">
-    节点详情
+  <div class="node-conf">
+    节点配置
   </div>
 </template>
 
 <script>
   export default {
-    name: "node-log"
+    name: "node-conf"
   }
 </script>
 

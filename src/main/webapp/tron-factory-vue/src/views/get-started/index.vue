@@ -16,10 +16,14 @@
 
 <script>
   const subPages = {
-    'create-chain': () => import('./sub-pages/create-chain') ,
-    'dashboard': () => import('./sub-pages/dashboard') ,
-    'node-add-edit': () => import('./sub-pages/node-add-edit') ,
+    'create-chain': () => import(/* webpackChunkName: "create-chain" */ './sub-pages/create-chain') ,
+    'dashboard': () => import(/* webpackChunkName: "dashboard" */ './sub-pages/dashboard') ,
+    'node-add': () => import(/* webpackChunkName: "node-add-edit" */ './sub-pages/node-add-edit') ,
+    'node-edit': () => import(/* webpackChunkName: "node-add-edit" */ './sub-pages/node-add-edit') ,
+    'node-view': () => import(/* webpackChunkName: "node-view" */ './sub-pages/node-view') ,
+    'node-conf': () => import(/* webpackChunkName: "node-conf" */ './sub-pages/node-conf') ,
   }
+
   export default {
     name: "get-started",
     components: {
@@ -40,6 +44,7 @@
       }
     },
     created () {
+      console.log(1)
       this.activeMenuIndex()
     },
     methods: {
@@ -48,18 +53,17 @@
       },
       handleRoute (to) {
         this.loading = true
-        let noAuthStatus = ['create-chain']
-        let subPagesNames = Object.keys(subPages)
+        let noAuth = ['create-chain']
+        let subPagesStatus = Object.keys(subPages)
 
         this.$_api.getStarted.hasBlockChain({}, (err, res) => {
           this.loading = false
           if (err) return
 
-          if (res === true || noAuthStatus.includes(to.params.status)) {
+          if (res === true || noAuth.includes(to.params.status)) {
             this.showStart = false
-            if (subPagesNames.includes(to.params.status)) this.currentComponent = to.params.status
+            if (subPagesStatus.includes(to.params.status)) this.currentComponent = to.params.status
             else this.$router.push('/get-started/dashboard')
-
           } else {
             this.showStart = true
             this.$router.push('/get-started')

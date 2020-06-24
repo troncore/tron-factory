@@ -10,14 +10,18 @@ export default {
     checkChainPublish: prefix + '/api/checkChainPublish',
 
     getNodeList: prefix + '/api/allNodeInfo',
+    getNoteInfo: prefix + '/api/nodeInfo',
   },
   post: {
     addChainInfo: prefix + '/api/chainInfo',
+    addNoteInfo: prefix + '/api/nodeInfo',
   },
   put: {
     updateChainInfo: prefix + '/api/chainInfo',
+    editNoteInfo: prefix + '/api/nodeInfo',
   },
   delete: {
     deleteChain: prefix + '/api/deleteChain',
+    deleteNoteInfo: prefix + '/api/nodeInfo',
   },
 }
