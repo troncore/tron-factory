@@ -44,7 +44,6 @@
       }
     },
     created () {
-      console.log(1)
       this.activeMenuIndex()
     },
     methods: {
