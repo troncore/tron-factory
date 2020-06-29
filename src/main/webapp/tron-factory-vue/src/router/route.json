@@ -1,7 +1,14 @@
 [
   {
-    "path": "/get-started/:status(create-chain|dashboard|node-add|node-edit|node-view|node-conf)?/:nodeConfOpType(simple|more)?",
+    "path": "/get-started/:status(create-chain|dashboard|node-add|node-edit|node-view)?",
     "name": "get-started",
+    "meta": {
+      "auth": true
+    }
+  },
+  {
+    "path": "/node-config/:type(quick|custom)/:step(base|network|database|p2p|modules)?",
+    "name": "node-config",
     "meta": {
       "auth": true
     }

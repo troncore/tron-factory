@@ -98,7 +98,7 @@
       },
 
       handleConfig (row) {
-        this.$router.push('/get-started/node-conf?id='+ row.id)
+        this.$router.push('/node-config/quick?id='+ row.id)
       },
 
       handleDetail (row) {

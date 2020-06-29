@@ -21,7 +21,6 @@
     'node-add': () => import(/* webpackChunkName: "node-add-edit" */ './sub-pages/node-add-edit') ,
     'node-edit': () => import(/* webpackChunkName: "node-add-edit" */ './sub-pages/node-add-edit') ,
     'node-view': () => import(/* webpackChunkName: "node-view" */ './sub-pages/node-view') ,
-    'node-conf': () => import(/* webpackChunkName: "node-conf" */ './sub-pages/node-conf') ,
   }
 
   export default {

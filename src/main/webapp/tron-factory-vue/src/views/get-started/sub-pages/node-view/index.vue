@@ -206,7 +206,6 @@
 <style lang="scss" scoped>
 .node-view {
   margin-bottom: 100px;
-
 }
 .page-title {
   margin-bottom: 20px;
