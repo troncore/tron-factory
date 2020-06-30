@@ -26,7 +26,7 @@ export default {
   computed: {
     opNodeId () {
       let id = this.$route.query.id
-      return /\d+/.test(id) ? id : undefined
+      return /\d+/.test(id) ? Number(id) : undefined
     },
     activeName: {
       get () {
@@ -78,7 +78,7 @@ export default {
 }
 
 .el-tabs {
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
 }
 .im-card {
   padding: 10px 20px 20px;

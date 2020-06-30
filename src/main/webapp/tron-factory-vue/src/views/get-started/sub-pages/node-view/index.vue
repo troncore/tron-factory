@@ -80,7 +80,7 @@
     computed: {
       opNodeId () {
         let id = this.$route.query.id
-        return /\d+/.test(id) ? id : undefined
+        return /\d+/.test(id) ? Number(id) : undefined
       },
       urlStr () {
         let res = ''

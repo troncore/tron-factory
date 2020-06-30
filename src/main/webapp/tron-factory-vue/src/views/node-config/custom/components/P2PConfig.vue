@@ -2,61 +2,31 @@
   <div class="box-view p2p-config">
     <div class="box-body">
       <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
-
-        <el-form-item prop="node_p2p_version">
-          <span slot="label">p2pVersion <i class="help-tips">({{ $t('configuration.helpTips.p2pVersion') }})</i></span>
-          <el-input v-model.trim="form.node_p2p_version" type="number" min="0" max="2147483647" :placeholder="$t('base.pleaseInput')"></el-input>
+        <el-form-item prop="maxActiveNodes">
+          <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
+          <el-input v-model.trim="form.maxActiveNodes" type="number" min="0" max="200" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item prop="node_listen_port">
-          <span slot="label">listenPort <i class="help-tips">({{ $t('configuration.helpTips.listenPort') }})</i></span>
-          <el-input v-model.trim="form.node_listen_port" type="number" min="0" max="65535" :placeholder="$t('base.pleaseInput')"></el-input>
+        <el-form-item prop="maxActiveNodesWithSameIp">
+          <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
+          <el-input v-model.trim="form.maxActiveNodesWithSameIp" type="number" min="0" max="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <el-form-item prop="seed_node_ip_list" class="seed-node-list">
-          <span slot="label">seedNodeList <i class="help-tips">({{ $t('configuration.helpTips.seedNodeList') }})</i></span>
-          <el-checkbox-group v-model="form.seed_node_ip_list">
-            <el-checkbox class="checkBox" v-for="(ip, index) in seedNodeIpList" :key="index" :label="ip">
-              <el-input v-model="form.node_listen_port" :placeholder="$t('configuration.valid.listenPort')" disabled>
-                <template slot="prepend" style="width:100px">{{ ip }}</template>
-              </el-input>
-            </el-checkbox>
-          </el-checkbox-group>
+        <el-form-item prop="activeConnectFactor">
+          <span slot="label">activeConnectFactor</span>
+          <el-input v-model.trim="form.activeConnectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
-        <div class="more-form">
-          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i> {{ $t('configuration.moreSetting') }}</el-button>
-        </div>
-
-        <el-collapse-transition>
-          <div v-if="showMore">
-            <el-form-item prop="node_maxActiveNodes">
-              <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodes" type="number" min="0" max="200" :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="node_maxActiveNodesWithSameIp">
-              <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
-              <el-input v-model.trim="form.node_maxActiveNodesWithSameIp" type="number" min="0" max="50" :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="node_activeConnectFactor">
-              <span slot="label">activeConnectFactor</span>
-              <el-input v-model.trim="form.node_activeConnectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="node_connectFactor">
-              <span slot="label">connectFactor</span>
-              <el-input v-model.trim="form.node_connectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
-            </el-form-item>
-          </div>
-        </el-collapse-transition>
+        <el-form-item prop="connectFactor" class="margin-bottom-0">
+          <span slot="label">connectFactor</span>
+          <el-input v-model.trim="form.connectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
+        </el-form-item>
       </el-form>
     </div>
 
-    <div class="box-footer align-right">
+    <div class="box-footer">
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
 
   </div>
@@ -65,65 +35,42 @@
 import { formRules } from "@/utils/validate";
 export default {
   name: 'p2p-config',
-  props: {
-    initConfigInfo: {
-      type: Function,
-      required: true,
-    },
-    configLoading: Boolean,
-  },
   data() {
     return {
-      showMore: false,
-      moreSetting: false,
       form: {
-        seed_node_ip_list: [], // selected seed node
-        node_p2p_version: '',
-        node_listen_port: '',
-        node_maxActiveNodes: '',
-        node_maxActiveNodesWithSameIp: '',
-        node_connectFactor: '',
-        node_activeConnectFactor: '',
+        id: '',
+        maxActiveNodes: '',
+        maxActiveNodesWithSameIp: '',
+        activeConnectFactor: '',
+        connectFactor: '',
       },
-      seedNodeIpList: [],
+      disabled: true,
       loading: false,
     }
   },
   computed: {
+    opNodeId () {
+      let id = this.$route.query.id
+      return /\d+/.test(id) ? Number(id) : undefined
+    },
     formRules() {
       return {
-        node_p2p_version: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false,), trigger: 'blur', },
-          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
-          { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
-          { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
-          { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
-        ],
-        node_listen_port: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false,), trigger: 'blur', },
-          { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
-        ],
-        seed_node_ip_list: [
-          { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change', },
-        ],
-        node_maxActiveNodes: [
+        maxActiveNodes: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
           { validator: formRules.numMax(200, this.$t('base.valid.maxNumberValue') + ': 200'), trigger: 'blur', },
         ],
-        node_maxActiveNodesWithSameIp: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(50, this.$t('base.valid.maxNumberValue') + ': 50'), trigger: 'blur', },
-        ],
-        node_activeConnectFactor: [
+        activeConnectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
           { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
         ],
-        node_connectFactor: [
+        maxActiveNodesWithSameIp: [
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMax(50, this.$t('base.valid.maxNumberValue') + ': 50'), trigger: 'blur', },
+        ],
+        connectFactor: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
           { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
@@ -133,45 +80,48 @@ export default {
   },
 
   created () {
-    this.getConfigInfo()
+    this.getConfig()
   },
-
   methods: {
-    getConfigInfo() {
-      this.initConfigInfo().then((res = {}) => {
-        let ipWithPortList = res.seed_node_ip_list || []
-        let seedNodeIpList = ipWithPortList.map(item => item.split(':')[0])
+    getConfig () {
+      if (!this.validNode()) return
 
-        this.seedNodeIpList = res.allNodes || []
+      this.disabled = true
+      this.$_api.getStarted.getP2PConfig({ id: this.opNodeId }, (err, res = {}) => {
+        if (err) return
+        this.disabled = false
 
-        this.form = {
-          ...this.form,
-          ...res,
-          seed_node_ip_list: seedNodeIpList
-        }
+        this.initForm(res)
       })
+    },
+
+    initForm(data) {
+      this.form = {
+        id: this.opNodeId,
+        maxActiveNodes: data.node_maxActiveNodes,
+        maxActiveNodesWithSameIp: data.node_maxActiveNodesWithSameIp,
+        activeConnectFactor: data.node_activeConnectFactor,
+        connectFactor: data.node_connectFactor,
+      }
     },
 
     handleSubmit() {
       this.$refs['p2p-config-form'].validate(valid => {
         if (valid) {
           let params = {
-            p2pVersion: this.form.node_p2p_version,
-            listenPort: this.form.node_listen_port,
-            seed_node_ip_list: this.form.seed_node_ip_list.map(ip => ip + '":"' + this.form.node_listen_port),
-            maxActiveNodes: this.form.node_maxActiveNodes,
-            nodeActiveConnectFactor: this.form.node_activeConnectFactor,
-            nodeMaxActiveNodesWithSameIp: this.form.node_maxActiveNodesWithSameIp,
-            connectFactor: this.form.node_connectFactor,
+            id: this.opNodeId,
+            maxActiveNodes: Number(this.form.maxActiveNodes),
+            maxActiveNodesWithSameIp: Number(this.form.maxActiveNodesWithSameIp),
+            activeConnectFactor: Number(this.form.activeConnectFactor),
+            connectFactor: Number(this.form.connectFactor),
           }
 
           this.loading = true
-          this.$_api.configuration.p2pConfig(params, err => {
+          this.$_api.getStarted.setP2PConfig(params, err => {
             this.loading = false
             if (err) return
 
-            this.$notify({
-              type: 'success',
+            this.$notify.success({
               title: this.$t('base.successful'),
               message: this.$t('configuration.p2pSaveSuccess')
             })
@@ -179,6 +129,18 @@ export default {
           })
         }
       })
+    },
+
+    validNode () {
+      // edit node
+      if (!/\d+/.test(this.opNodeId)) {
+        this.$notify.warning({
+          title: this.$t('base.warning'),
+          message: this.$t('当前所编辑的节点为无效节点!'),
+        })
+        return false
+      }
+      return true
     },
 
     handleCancel() {

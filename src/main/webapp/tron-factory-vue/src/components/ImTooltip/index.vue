@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip effect="dark" placement="top">
+  <el-tooltip :effect="effect" :placement="placement">
     <div slot="content" v-html="content"></div>
     <i class="icon-question fa fa-question-circle-o" :style="myStyle"></i>
   </el-tooltip>
@@ -9,6 +9,14 @@
   export default {
     name: "im-tooltip",
     props: {
+      effect: {
+        type: String,
+        default: 'dark',
+      },
+      placement: {
+        type: String,
+        default: 'top'
+      },
       content: {},
       marginLeft: String,
       marginRight: String,

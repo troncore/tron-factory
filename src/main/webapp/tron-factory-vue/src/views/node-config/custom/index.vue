@@ -11,51 +11,47 @@
 
     <div class="config-title">{{ activeIndex + '. ' + activeStep.title }}</div>
 
-    <component
-      :is="activeStep.component"
-      :config-loading.sync="configLoading"
-      :init-config-info="initConfigInfo"
-      @prev-step="handlePrevStep"
-      @next-step="handleNextStep"/>
+    <component :is="activeStep.component" @prev-step="handlePrevStep" @next-step="handleNextStep"/>
+
   </div>
 </template>
 
 <script>
-  import DatabaseConfig from './components/DatabaseConfig'
   export default {
     name: "custom-config",
     components: {
       BaseConfig: () => import('./components/BaseConfig'),
       NetworkConfig: () => import('./components/NetworkConfig'),
-      DatabaseConfig,
+      DatabaseConfig: () => import('./components/DatabaseConfig'),
       P2PConfig: () => import('./components/P2PConfig'),
       ModulesConfig: () => import('./components/ModulesConfig'),
     },
     data () {
       return {
         stepsList: [
-          { title: this.$t('configuration.baseConfig'), path: 'base', component: 'BaseConfig',},
-          { title: this.$t('configuration.netWorkConfig'), path: 'network', component: 'NetworkConfig',},
-          { title: this.$t('configuration.databaseConfig'), path: 'database', component: 'DatabaseConfig',},
-          { title: this.$t('configuration.p2pConfig'), path: 'p2p', component: 'P2PConfig',},
-          { title: this.$t('configuration.moduleFunction'), path: 'modules', component: 'ModulesConfig',},
+          { title: this.$t('configuration.baseConfig'), name: 'base', component: 'BaseConfig',},
+          { title: this.$t('configuration.netWorkConfig'), name: 'network', component: 'NetworkConfig',},
+          { title: this.$t('configuration.databaseConfig'), name: 'database', component: 'DatabaseConfig',},
+          { title: this.$t('configuration.p2pConfig'), name: 'p2p', component: 'P2PConfig',},
+          { title: this.$t('configuration.moduleFunction'), name: 'modules', component: 'ModulesConfig',},
         ],
         configLoading: false,
       }
     },
     computed: {
-      // base|network|database|p2p|modules
+      opNodeId () {
+        let id = this.$route.query.id
+        return /\d+/.test(id) ? Number(id) : undefined
+      },
       stepPath () {
         return this.$route.params.step
       },
       activeIndex: {
         get () {
-          return this.stepsList.findIndex(item => item.path === this.stepPath) + 1
+          return this.stepsList.findIndex(item => item.name === this.stepPath) + 1
         },
         set (val) {
-          this.$router.push({
-            path: '/node-config/custom/' + this.stepsList[val - 1].path
-          })
+          this.$router.push('/node-config/custom/' + this.stepsList[val - 1].name + '?id=' + this.opNodeId)
         }
       },
       activeStep () {
@@ -82,34 +78,6 @@
       // skip next step
       handleNextStep () {
         this.activeIndex += 1
-      },
-
-      // get current stepPath configure info
-      initConfigInfo (stepConfig) {
-        stepConfig = stepConfig || this.stepPath // default current stepPath
-
-        return new Promise(resolve => {
-          this.configLoading = true
-          this.$_api.configuration.getConfigInfo({}, (err, res = {}) => {
-            if (err) return resolve({})
-            this.configLoading = false
-
-            if (stepConfig === 'genesis') {
-              resolve({
-                genesisAssetConfig: res.genesisAssetConfig,
-                genesisWitnessConfig: res.genesisWitnessConfig
-              })
-            } else {
-              let stepConfigKeys = {
-                base: 'baseSettingConfig',
-                network: 'networkConfig',
-                database: 'dbConfig',
-                p2p: 'p2pConfig',
-              }
-              resolve(res[stepConfigKeys[stepConfig]])
-            }
-          })
-        })
       },
     }
   }
@@ -183,7 +151,7 @@
     }
 
     .config-title {
-      margin: 25px 0 15px;
+      margin: 25px 0 12px;
       font-size: 18px;
       font-weight: bold;
       color: #081C56;
@@ -197,7 +165,6 @@
       width: 500px;
 
       .more-form {
-        margin-top: 20px;
         .el-button {
           font-size: 18px;
           font-weight: bold;
@@ -207,7 +174,7 @@
 
     .box-footer {
       position: absolute;
-      bottom: -60px;
+      bottom: -40px;
       left: 20px;
       right: 20px;
       padding-bottom: 20px;

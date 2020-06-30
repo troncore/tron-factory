@@ -114,7 +114,7 @@
       },
       opNodeId () {
         let id = this.$route.query.id
-        return /\d+/.test(id) ? id : undefined
+        return /\d+/.test(id) ? Number(id) : undefined
       },
       formRules() {
         // for back-end data limit
@@ -194,7 +194,7 @@
     methods: {
       // when it's editing page
       getNodeInfo () {
-        if (this.isAddPage || !this.validEditNode) return false
+        if (this.isAddPage || !this.validNode) return false
 
         this.form.isSR = false // for hide  layout when start render
         this.form.sshConnectType = 2 // for hide  layout when start render
@@ -257,7 +257,7 @@
       // format submit params
       initParams(params) {
         // invalid edit node
-        if (!this.isAddPage && !this.validEditNode) return false
+        if (!this.isAddPage && !this.validNode) return false
 
         let baseParams = {
           ip: this.form.ip,
@@ -284,7 +284,7 @@
         return true
       },
 
-      validEditNode () {
+      validNode () {
         // edit node
         if (!/\d+/.test(this.opNodeId)) {
           this.$notify.warning({

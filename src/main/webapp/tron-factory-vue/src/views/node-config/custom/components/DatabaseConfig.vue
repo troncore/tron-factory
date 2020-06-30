@@ -3,23 +3,27 @@
     <div class="box-body">
       <el-form ref="database-config-form" :model="form" :rules="formRules" label-position="left" label-width="200px">
 
-        <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="storage_db_engine">
+        <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="dbEnine">
           <el-radio-group v-model="form.dbEnine">
             <el-radio :label="'LEVELDB'">LevelDB</el-radio>
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="$t('configuration.isWriteSync')" prop="storage_db_sync">
+        <el-form-item :label="$t('configuration.isWriteSync')" prop="isDBSync">
           <el-switch v-model="form.isDBSync"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('configuration.isOpenTransaction')" prop="storage_transHistory_switch">
-          <el-switch v-model="form.isOpenTransaction" active-value="on" inactive-value="off"></el-switch>
+        <el-form-item :label="$t('交易回执信息存储')" prop="isOpenTransaction">
+          <el-switch v-model="form.isOpenTransaction"></el-switch>
         </el-form-item>
 
-        <!--<el-form-item :label="$t('configuration.isNeedToUpdateAsset')" prop="storage_needToUpdateAsset">
-          <el-switch v-model="form.needToUpdateAsset"></el-switch>
-        </el-form-item>-->
+        <el-form-item :label="$t('RocksDB备份设置')" prop="backupEnable">
+          <el-switch v-model="form.backupEnable"></el-switch>
+        </el-form-item>
+
+        <el-form-item :label="$t('备份间隔(块)')" prop="backupFrequency">
+          <el-input v-model.trim="form.backupFrequency" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')" style="width: 200px;"></el-input>
+        </el-form-item>
 
         <div class="more-setting">
           <el-checkbox v-model="checkDBCustom" @change="handleChangeCheckCustom"><span class="check-label">{{ $t('configuration.dbCustomModule') }}</span></el-checkbox>
@@ -40,37 +44,37 @@
       </el-form>
     </div>
 
-    <div class="box-footer align-right">
+    <div class="box-footer">
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button large" :loading="loading" :disabled="configLoading" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
 <script>
+import { formRules } from "@/utils/validate";
 export default {
   name: 'database-config',
-  props: {
-    initConfigInfo: {
-      type: Function,
-      required: true,
-    },
-    configLoading: Boolean,
-  },
   data() {
     return {
       form: {
+        id: '',
         dbEnine: '',
         isDBSync: false,
-        isOpenTransaction: '',
-        // needToUpdateAsset: false,
+        isOpenTransaction: true,
+        backupEnable: false,
+        backupFrequency: '',
         dbCustom: '',
       },
       checkDBCustom: false,
-      showContent: true,
+      disabled: true,
       loading: false,
     }
   },
   computed: {
+    opNodeId () {
+      let id = this.$route.query.id
+      return /\d+/.test(id) ? Number(id) : undefined
+    },
     formRules() {
       const pathEndJAR = (rule, value, callback) => {
         if (this.checkDBCustom && !this.form.dbCustom.endsWith('.jar')) {
@@ -80,6 +84,11 @@ export default {
         }
       }
       return {
+        backupFrequency: [
+          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), ), trigger: 'blur', },
+          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+        ],
         dbCustom: [
           { required: this.checkDBCustom, message: this.$t('base.pleaseInput'), trigger: 'blur', },
           { validator: pathEndJAR, trigger: 'blur', },
@@ -89,40 +98,53 @@ export default {
   },
 
   created () {
-    this.getConfigInfo()
+    this.getConfig()
   },
-
   methods: {
-    getConfigInfo() {
-      this.initConfigInfo().then((res ={}) => {
-        this.form.dbEnine = res.storage_db_engine
-        this.form.isDBSync = res.storage_db_sync
-        this.form.isOpenTransaction = res.storage_transHistory_switch
-        // this.form.needToUpdateAsset = res.storage_needToUpdateAsset
-        this.form.dbCustom = res.storage_db_custom || ''
+    getConfig () {
+      if (!this.validNode()) return
 
-        this.checkDBCustom = !!this.form.dbCustom
+      this.disabled = true
+      this.$_api.getStarted.getDBConfig({ id: this.opNodeId }, (err, res = {}) => {
+        if (err) return
+        this.disabled = false
+
+        this.initForm(res)
       })
     },
 
-    handleChangeCheckCustom (val) {
-      if (val) {
-        setTimeout(this.$refs['db-custom'].clearValidate, 0)
+    initForm(data) {
+      this.form = {
+        id: this.opNodeId,
+        dbEnine: data.dbEnine,
+        isDBSync: data.isDBSync,
+        isOpenTransaction: data.isOpenTransaction,
+        backupEnable: data.backupEnable,
+        backupFrequency: data.backupFrequency,
+        dbCustom: data.dbCustom,
       }
+      this.checkDBCustom = !!this.form.dbCustom
     },
+
     handleSubmit() {
       this.$refs['database-config-form'].validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$_api.configuration.dbConfig({
-            ...this.form,
+          let params = {
+            id: this.opNodeId,
+            dbEnine: this.form.dbEnine,
+            isDBSync: this.form.isDBSync,
+            isOpenTransaction: this.form.isOpenTransaction,
+            backupEnable: this.form.backupEnable,
+            backupFrequency: Number(this.form.backupFrequency),
             dbCustom:this.checkDBCustom ? this.form.dbCustom : '',
-          }, err => {
+          }
+
+          this.loading = true
+          this.$_api.getStarted.setDBConfig(params, err => {
             this.loading = false
             if (err) return
 
-            this.$notify({
-              type: 'success',
+            this.$notify.success({
               title: this.$t('base.successful'),
               message: this.$t('configuration.databaseSaveSuccess')
             })
@@ -131,6 +153,25 @@ export default {
         }
       })
     },
+
+    handleChangeCheckCustom (val) {
+      if (val) {
+        setTimeout(this.$refs['db-custom'].clearValidate, 0)
+      }
+    },
+
+    validNode () {
+      // edit node
+      if (!/\d+/.test(this.opNodeId)) {
+        this.$notify.warning({
+          title: this.$t('base.warning'),
+          message: this.$t('当前所编辑的节点为无效节点!'),
+        })
+        return false
+      }
+      return true
+    },
+
 
     handleCancel() {
       this.$emit('prev-step')
