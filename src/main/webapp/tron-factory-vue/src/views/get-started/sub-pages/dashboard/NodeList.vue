@@ -52,7 +52,7 @@
               <el-button type="text" @click="handleConfig(scope.row)">{{ $t('配置') }}</el-button>
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('查看') }}</el-button>
               <el-button type="text" @click="handleStop(scope.row, scope.$index)" :disabled="stopIndexs.includes(scope.$index)" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
-              <el-button type="text" @click="handleSeeLog(scope.row)" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
+              <el-button type="text" @click="handleLog(scope.row)" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -141,7 +141,7 @@
         })
       },
 
-      handleSeeLog () {
+      handleLog (row) {
         this.logDialogVisible = true
         this.currentRow = row
       },
