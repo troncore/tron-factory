@@ -20,10 +20,10 @@
             :selectable="handleSelectable">
           </el-table-column>
           <el-table-column prop="ip" :label="$t('IP')" align="center">
-            <!--<template slot-scope="scope">-->
-            <!--  <span v-if="!scope.row.isDeployed">{{ scope.row.ip }}</span>-->
-            <!--  <el-link v-else type="primary" @click="handleDetail(scope.row)">{{ scope.row.ip }}</el-link>-->
-            <!--</template>-->
+            <template slot-scope="scope">
+              <!--<span v-if="!scope.row.isDeployed">{{ scope.row.ip }}</span>-->
+              <el-link type="primary" @click="handleDetail(scope.row)">{{ scope.row.ip }}</el-link>
+            </template>
           </el-table-column>
           <el-table-column prop="listenPort" :label="$t('监听端口')" align="center"></el-table-column>
           <el-table-column prop="isSR" :label="$t('节点类型')" align="center">
