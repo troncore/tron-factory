@@ -14,6 +14,7 @@ export default {
     canDeleteNode: prefix + '/api/canDeleteNode',
     stopNode: prefix + '/api/stopNode',
     getNodeLog: '/api/getLogInfo',
+    checkNode: prefix + '/api/checkNode',
 
     // node-config
     getQuickConfig: prefix + '/api/quickConfig',
@@ -27,6 +28,7 @@ export default {
   post: {
     addChainInfo: prefix + '/api/chainInfo',
     addNoteInfo: prefix + '/api/nodeInfo',
+    deployNode: prefix + '/api/deployNode',
 
     // node-config
     setQuickConfig: prefix + '/api/quickConfig',

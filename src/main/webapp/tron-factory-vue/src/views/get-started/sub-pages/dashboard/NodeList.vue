@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="table-header">
         <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
-        <el-button class="im-button mini" size="mini" type="success"><i class="el-icon-caret-right"></i> {{ $t('启动节点') }}</el-button>
+        <el-button class="im-button mini" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"><i class="el-icon-caret-right"></i> {{ $t('启动节点') }}</el-button>
       </div>
       <div class="table-box">
         <el-table
@@ -13,7 +13,8 @@
           v-loading="tableLoading"
           class="custom-table"
           border
-          header-align="center">
+          header-align="center"
+          @selection-change="handleSelectionChange">
           <el-table-column
             type="selection" align="center"
             width="60"
@@ -59,6 +60,13 @@
       </div>
     </div>
 
+    <node-deploy
+      v-if="deployDialogVisible"
+      :visible.sync="deployDialogVisible"
+      :ids="deployNodesIds"
+      @refreshList="getNodeList"
+      @checkDeployStatus="checkDeployStatus"/>
+
 
     <!-- view deploy log-->
     <node-log v-if="logDialogVisible" :visible.sync="logDialogVisible" :current-row="currentRow" />
@@ -67,9 +75,10 @@
 
 <script>
   import NodeLog from "./node-log"
+  import NodeDeploy from "./NodeDeploy";
   export default {
     name: "node-list",
-    components: { NodeLog },
+    components: { NodeDeploy, NodeLog },
     props: {
       nodeList: Function
     },
@@ -78,8 +87,11 @@
         tableData: [],
         tableLoading: false,
         currentRow: {},
+        deployNodesIds: [],
         stopIndexs: [],
         logDialogVisible: false,
+        deployDialogVisible: false,
+        deployLoading: false,
       }
     },
     created () {
@@ -97,13 +109,65 @@
         })
       },
 
-      handleSelectable (row, index) {
-        return row.deployStatus !== 1
-      },
 
       handleAddNode () {
         this.$router.push('/get-started/node-add')
       },
+
+      // ready deploy node
+      handleDeploy() {
+        let errorMsg = ''
+        if (!this.tableData.length)
+          errorMsg = this.$t('nodesManage.pleaseAddNode')
+        else if (!this.deployNodesIds.length)
+          errorMsg = this.$t('请选择要部署的节点')
+        else if (this.tableData.every(node => node.isDeployed))
+          errorMsg = this.$t('nodesManage.allNodeDeployed')
+
+        if (errorMsg) {
+          this.$notify.warning({
+            title: this.$t('base.warning'),
+            message: errorMsg,
+          })
+          return
+        }
+
+        this.deployDialogVisible = true
+      },
+
+      // refresh deployed node list
+      checkDeployStatus () {
+        let flag = false
+        this.deployLoading = true
+        this.timeID = setInterval(() => {
+          if (!flag) {
+            flag = true // the network may slow，avoid frequently to call ajax
+            this.$_api.getStarted.checkNode({}, (err, res) => {
+              flag = false
+              if (err) {
+                this.deployLoading = false
+                clearInterval(this.timeID)
+                return
+              }
+              // check all deployed node whether if finish deployed
+              if (res === true) {
+                this.deployLoading = false
+                this.getNodeList()
+                clearInterval(this.timeID)
+              }
+            })
+          }
+        }, 1000 * 3)
+      },
+
+      handleSelectable (row, index) {
+        return row.deployStatus !== 1
+      },
+
+      handleSelectionChange (rows) {
+        this.deployNodesIds = rows.map(item => item.id).join(',')
+      },
+
 
       handleConfig (row) {
         this.$router.push('/node-config/quick?id='+ row.id)
@@ -145,6 +209,7 @@
         this.logDialogVisible = true
         this.currentRow = row
       },
+
     }
   }
 </script>
