@@ -14,7 +14,7 @@
 
           <el-form-item prop="crypto" required>
             <span slot="label" class="space-between">{{ $t('签名算法') }} <im-tooltip :content="$t('同一条链上的所有节点必须一致')" /></span>
-            <el-radio-group v-model="form.crypto">
+            <el-radio-group v-model="form.crypto" :disabled="!canChangeCrypto">
               <el-radio :label="'eckey'">ECKey</el-radio>
               <el-radio :label="'sm2'">SM2</el-radio>
             </el-radio-group>
@@ -87,6 +87,7 @@
           p2pVersion: '',
           consensus: 'dpos',
         },
+        canChangeCrypto: true,
         genesisBlockAssets: [],
         genesisAssetDialogVisible: false,
         currentGenesisAsset: {},
@@ -122,22 +123,20 @@
       this.getChainInfo()
     },
     methods: {
-      // checkChainPublish () {
-      //   this.$_api.getStarted.checkChainPublish({}, (err, res = {}) => {
-      //     if (err) return
-      //     if ([1,2].includes(res)) this.$route.push('/get-started/dashboard')
-      //   })
-      // },
-
       getChainInfo () {
         this.$_api.getStarted.getChainInfo({}, (err, res = {}) => {
           if (err) return
-          this.isEditPage && Object.assign(this.form,{
-            chainName: res.chainName,
-            crypto: res.crypto, // sm2
-            p2pVersion: res.p2pVersion,
-            consensus: res.consensus,
-          })
+
+          if (this.isEditPage) {
+            Object.assign(this.form,{
+              chainName: res.chainName,
+              crypto: res.crypto, // sm2
+              p2pVersion: res.p2pVersion,
+              consensus: res.consensus,
+            })
+
+            this.canChangeCrypto = res.canChangeCrypto
+          }
 
           this.genesisBlockAssets = res.genesisBlockAssets || []
         })

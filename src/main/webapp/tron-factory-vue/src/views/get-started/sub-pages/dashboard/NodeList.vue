@@ -66,7 +66,7 @@
 </template>
 
 <script>
-  import NodeLog from "../node-log"
+  import NodeLog from "./node-log"
   export default {
     name: "node-list",
     components: { NodeLog },
