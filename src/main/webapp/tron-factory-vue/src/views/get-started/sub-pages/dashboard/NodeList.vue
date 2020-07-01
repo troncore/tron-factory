@@ -51,19 +51,25 @@
             <template slot-scope="scope">
               <el-button type="text" @click="handleConfig(scope.row)">{{ $t('配置') }}</el-button>
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('查看') }}</el-button>
-              <el-button type="text" @click="handleStop(scope.row)" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
+              <el-button type="text" @click="handleStop(scope.row, scope.$index)" :disabled="stopIndexs.includes(scope.$index)" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
               <el-button type="text" @click="handleSeeLog(scope.row)" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
+
+
+    <!-- view deploy log-->
+    <node-log v-if="logDialogVisible" :visible.sync="logDialogVisible" :current-row="currentRow" />
   </div>
 </template>
 
 <script>
+  import NodeLog from "../node-log"
   export default {
     name: "node-list",
+    components: { NodeLog },
     props: {
       nodeList: Function
     },
@@ -71,7 +77,9 @@
       return {
         tableData: [],
         tableLoading: false,
-
+        currentRow: {},
+        stopIndexs: [],
+        logDialogVisible: false,
       }
     },
     created () {
@@ -105,10 +113,37 @@
         this.$router.push('/get-started/node-view?id='+ row.id)
       },
 
-      handleSeeLog () {
-
+      handleStop (row, index) {
+        this.$confirm(this.$t('是否要停止该节点'), this.$t('nodesManage.deleteNodeTipsTitle'), {
+          confirmButtonText: this.$t('base.confirm'),
+          cancelButtonText: this.$t('base.cancel'),
+          center: true,
+          customClass: 'im-message-box',
+          cancelButtonClass: 'im-message-cancel-button',
+          confirmButtonClass: 'im-message-confirm-button',
+        })
+          .then(() => this.stopNode(row, index))
+          .catch(() => {
+          this.$notify.info({
+            title: this.$t('base.cancel'),
+            message: this.$t('base.cancelDelete'),
+          });
+        })
       },
-      handleStop () {
+
+      stopNode (row, index) {
+        this.stopIndexs.push(index)
+        this.$_api.getStarted.stopNode({ id: row.id }, err => {
+          let _index = this.stopIndexs.indexOf(index)
+          this.stopIndexs.splice(_index, 1)
+          if (err) return
+          this.getNodeList()
+        })
+      },
+
+      handleSeeLog () {
+        this.logDialogVisible = true
+        this.currentRow = row
       },
     }
   }

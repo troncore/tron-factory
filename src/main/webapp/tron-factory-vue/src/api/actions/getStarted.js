@@ -12,6 +12,8 @@ export default {
     getNodeList: prefix + '/api/allNodeInfo',
     getNodeInfo: prefix + '/api/nodeInfo',
     canDeleteNode: prefix + '/api/canDeleteNode',
+    stopNode: prefix + '/api/stopNode',
+    getNodeLog: '/api/getLogInfo',
 
     // node-config
     getQuickConfig: prefix + '/api/quickConfig',
