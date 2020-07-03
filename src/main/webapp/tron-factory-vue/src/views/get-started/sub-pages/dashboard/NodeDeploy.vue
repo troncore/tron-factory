@@ -83,16 +83,37 @@
         this.$_api.getStarted.deployNode({
           ids: this.ids,
           filePath: this.form.filePath,
-        }, (err, res) => {
+        }, (err, res = {}) => {
           this.loading = false
-          this.$emit('refreshList')
+          // this.$emit('refreshList')
 
           if (err) return
 
-          this.$notify.success({
-            title: this.$t('base.successful'),
-            message: this.$t('nodesManage.deployingTips'),
-          });
+          if (res.hasOwnProperty('status')) {
+            let message = ''
+            switch (res.status) {
+              case 0:
+                message = '节点正在启动中，请稍等......'
+                break
+              case 1:
+                message = '初次运行区块链节点时，其中SR节点数量必须>=1且为奇数'
+                break
+              default:
+                message = '节点未启动成功，请查看日志'
+            }
+
+            if (res.status === 0) {
+              this.$notify.success({
+                title: this.$t('base.successful'),
+                message: this.$t(message),
+              })
+            } else {
+              this.$notify.error({
+                title: this.$t('base.warning'),
+                message: this.$t(message),
+              })
+            }
+          }
 
           this.$emit('checkDeployStatus')
           this.$emit('update:visible', false)

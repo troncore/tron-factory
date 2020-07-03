@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="table-header">
         <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
-        <el-button class="im-button mini" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"><i class="el-icon-caret-right"></i> {{ $t('启动节点') }}</el-button>
+        <el-button class="im-button mini" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"><i class="el-icon-caret-right"></i> {{ $t('运行节点') }}</el-button>
       </div>
       <div class="table-box">
         <el-table
@@ -120,7 +120,7 @@
         if (!this.tableData.length)
           errorMsg = this.$t('nodesManage.pleaseAddNode')
         else if (!this.deployNodesIds.length)
-          errorMsg = this.$t('请选择要部署的节点')
+          errorMsg = this.$t('请勾选要运行的节点')
         else if (this.tableData.every(node => node.isDeployed))
           errorMsg = this.$t('nodesManage.allNodeDeployed')
 
@@ -149,8 +149,34 @@
                 clearInterval(this.timeID)
                 return
               }
+
               // check all deployed node whether if finish deployed
-              if (res === true) {
+              if (res.hasOwnProperty('status')) {
+                let message = ''
+                switch (res.status) {
+                  case 0:
+                    message = '节点已成功启动'
+                    break
+                  case 1:
+                    message = '发布失败，节点未启动成功，请查看日志'
+                    break
+                  case 2:
+                    message = '部分节点未启动成功，请查看日志'
+                    break
+                }
+
+                if (res.status === 0) {
+                  this.$notify.success({
+                    title: this.$t('base.successful'),
+                    message: this.$t(message),
+                  })
+                } else {
+                  this.$notify.error({
+                    title: this.$t('base.warning'),
+                    message: this.$t(message),
+                  })
+                }
+
                 this.deployLoading = false
                 this.getNodeList()
                 clearInterval(this.timeID)
