@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <node-list @nodeList="getNodeList"/>
+    <node-list @nodeList="getNodeList" @checkChainPublish="checkChainPublish()"/>
   </div>
 </template>
 

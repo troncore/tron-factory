@@ -88,6 +88,7 @@
               id: this.opNodeId,
               httpFullNodePort: Number(this.form.httpFullNodePort),
               rpcPort: Number(this.form.rpcPort),
+              configStatus: 1,
             }
 
             this.loading = true

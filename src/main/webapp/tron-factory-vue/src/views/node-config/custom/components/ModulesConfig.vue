@@ -98,6 +98,7 @@
             let params = {
               id: this.opNodeId,
               customTransaction: this.checkCustomTransaction ? this.form.customTransaction : '',
+              configStatus: 1,
             }
 
             this.loading = true

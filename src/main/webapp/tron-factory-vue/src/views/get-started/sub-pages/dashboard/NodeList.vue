@@ -65,7 +65,7 @@
       :visible.sync="deployDialogVisible"
       :ids="deployNodesIds"
       @refreshList="getNodeList"
-      @checkDeployStatus="checkDeployStatus"/>
+      @checkDeployResult="checkDeployResult"/>
 
 
     <!-- view deploy log-->
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import NodeLog from "./node-log"
+  import NodeLog from "./NodeLog"
   import NodeDeploy from "./NodeDeploy";
   export default {
     name: "node-list",
@@ -87,15 +87,20 @@
         tableData: [],
         tableLoading: false,
         currentRow: {},
-        deployNodesIds: [],
+        deployNodes: [],
+        deployNodesIds: '',
         stopIndexs: [],
         logDialogVisible: false,
         deployDialogVisible: false,
         deployLoading: false,
+        timeID: null,
       }
     },
     created () {
       this.getNodeList()
+    },
+    destroyed() {
+      clearInterval(this.timeID)
     },
     methods: {
       getNodeList () {
@@ -121,8 +126,8 @@
           errorMsg = this.$t('nodesManage.pleaseAddNode')
         else if (!this.deployNodesIds.length)
           errorMsg = this.$t('请勾选要运行的节点')
-        else if (this.tableData.every(node => node.isDeployed))
-          errorMsg = this.$t('nodesManage.allNodeDeployed')
+        else if (this.deployNodes.some(node => node.configStatus === 0))
+          errorMsg = this.$t('请完成所勾选节点的配置')
 
         if (errorMsg) {
           this.$notify.warning({
@@ -135,8 +140,8 @@
         this.deployDialogVisible = true
       },
 
-      // refresh deployed node list
-      checkDeployStatus () {
+      // check the deploying nodes result
+      checkDeployResult () {
         let flag = false
         this.deployLoading = true
         this.timeID = setInterval(() => {
@@ -179,6 +184,7 @@
 
                 this.deployLoading = false
                 this.getNodeList()
+                this.$emit('checkChainPublish')
                 clearInterval(this.timeID)
               }
             })
@@ -191,6 +197,7 @@
       },
 
       handleSelectionChange (rows) {
+        this.deployNodes = rows
         this.deployNodesIds = rows.map(item => item.id).join(',')
       },
 

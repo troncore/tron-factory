@@ -115,7 +115,7 @@
             }
           }
 
-          this.$emit('checkDeployStatus')
+          this.$emit('checkDeployResult')
           this.$emit('update:visible', false)
         })
       },
