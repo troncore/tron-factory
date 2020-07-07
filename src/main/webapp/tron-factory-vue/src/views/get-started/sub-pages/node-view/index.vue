@@ -3,7 +3,7 @@
     <div class="page-title">{{ $t('节点详情') }}</div>
     <div class="page-body">
       <div class="im-card">
-        <div class="card-header">{{ $t('服务器信息') }}:</div>
+        <div class="card-header">{{ $t('服务器信息') }}</div>
         <div class="card-body">
           <div class="line-item">
             <span class="label">{{ $t('服务器IP') }}:</span>
