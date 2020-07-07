@@ -10,13 +10,7 @@ VueRouter.prototype.push = function push(location) {
 }
 Vue.use(VueRouter)
 
-const baseRoutes = [
-  {
-    path: "/",
-    name: "home",
-    component: () => import('@/views/home')
-  },
-]
+// const baseRoutes = []
 
 // for layout routes
 const authRoutes = rawRoutes.map(route => Object.assign({
@@ -27,10 +21,11 @@ const authRoutes = rawRoutes.map(route => Object.assign({
 }))
 
 const routes = [
-  ...baseRoutes,
+  // ...baseRoutes,
   {
     path: '/',
     component: Layout,
+    redirect: { name: 'get-started' },
     children: [
       ...authRoutes,
     ],
@@ -46,7 +41,7 @@ const router = new VueRouter({
 })
 
 
-router.beforeEach( async (to, from, next) => {
+/*router.beforeEach( async (to, from, next) => {
   try {
     let isAuth = ~authRoutes.findIndex(route => route.name === to.name) // !== -1
     let oneClick = sessionStorage.getItem('oneClick') === 'true'
@@ -59,6 +54,6 @@ router.beforeEach( async (to, from, next) => {
   } catch (e) {
     next('/')
   }
-})
+})*/
 
 export default router

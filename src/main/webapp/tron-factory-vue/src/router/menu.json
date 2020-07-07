@@ -7,20 +7,6 @@
     "disabled": false
   },
   {
-    "path": "/nodes-manage",
-    "name": "nodes-manage",
-    "title": "menu.nodesManage",
-    "icon": "iconfont iconjiedianguanli",
-    "disabled": false
-  },
-  {
-    "path": "/configuration/quick",
-    "name": "configuration",
-    "title": "menu.configuration",
-    "icon": "iconfont iconpeizhi",
-    "disabled": false
-  },
-  {
     "path": "/explorer",
     "name": "explorer",
     "title": "menu.explorer",

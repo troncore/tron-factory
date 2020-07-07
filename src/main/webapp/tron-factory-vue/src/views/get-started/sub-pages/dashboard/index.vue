@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <div class="page-title">{{ $t('Dashboard')}}</div>
+    <!--<div class="page-title">{{ $t('Dashboard')}}</div>-->
     <div class="chain-info im-card">
       <div class="card-header">区块链信息</div>
       <div class="card-body">
