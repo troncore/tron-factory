@@ -15,6 +15,7 @@ import common.utils.HttpUtil;
 import config.*;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.web.bind.annotation.*;
@@ -275,6 +276,10 @@ public class NodeController {
     HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
     ipList.put(id+"",ip+"\":\""+listenPort);
 
+    /*//初始化configStatus
+    HashMap<Long, Integer> configStatusMap = (HashMap<Long, Integer>) json.get(Common.configStatusMapFiled);
+    configStatusMap.put(id,0);*/
+
     JSONObject newNode = new JSONObject();
     if (isSR) {
       //校验用户输入的address(publicKey)和privateKey是否匹配,匹配失败时，status:2
@@ -309,6 +314,9 @@ public class NodeController {
     }
     //为每个节点生成一个配置文件 .config.conf_id end
 
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+    String createTime = df.format(new Date());// new Date()为获取当前系统时间
+
     newNode.put(Common.idFiled, id);
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
@@ -325,6 +333,8 @@ public class NodeController {
     newNode.put(Common.sshConnectTypeField, sshConnectType);
     newNode.put(Common.ifShowLogField, false);
     newNode.put(Common.listenPortField, listenPort);
+    newNode.put(Common.createTimeField, createTime);
+    newNode.put(Common.configStatusFiled, 0);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
   }

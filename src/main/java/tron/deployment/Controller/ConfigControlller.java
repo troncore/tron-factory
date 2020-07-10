@@ -20,14 +20,12 @@ import common.Args;
 import common.Common;
 
 import java.io.*;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import org.springframework.web.bind.annotation.*;
 //import response.ResultCode;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.simple.JSONArray;
@@ -484,6 +482,24 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
+  @PostMapping(value = "/api/checkAddress")
+  public JSONObject checkAddress(@RequestBody JSONObject jsonObject) {
+    boolean result = true;
+    String address = (String) jsonObject.get(Common.addressFiled);
+    AtomicBoolean base58check = new AtomicBoolean(false);
+    byte[] bytes = Wallet.decode58Check(address);
+    if (bytes == null) {
+      base58check.set(true);
+    }
+    if (base58check.get()) {
+      result = false;
+    }
+    JSONObject jsonObj = new JSONObject();
+    jsonObj.put("result", result);
+    System.out.println(jsonObj);
+    return new Response(ResultCode.OK.code, "", jsonObj).toJSONObject();
+  }
+
   @GetMapping(value = "/api/config")
   public JSONObject getConfig() {
     refresh();
@@ -600,4 +616,60 @@ public class ConfigControlller {
     }
     return Common.connectFailedStatus;
   }
+
+  @PostMapping(value = "/api/quickConfig")
+  public JSONObject quickConfig(@RequestBody JSONObject jsonObject) {
+
+    int id = (int) jsonObject.get(Common.idFiled);
+    int httpFullNodePort = (int) jsonObject.get(Common.httpFullNodePortFiled);
+    int rpcPort = (int) jsonObject.get(Common.rpcPortFiled);
+    int configStatus = (int) jsonObject.get(Common.configStatusFiled);
+
+    ConfigGenerator configGenerator = new ConfigGenerator();
+    boolean result = configGenerator.updateConfig(new HttpRpcPortConfig(rpcPort,httpFullNodePort), String.format("%s_%s", Common.configFiled, id+""));
+
+
+    /*HashMap<Integer, Integer> configStatusMap = (HashMap<Integer, Integer>) json.get(Common.configStatusMapFiled);
+    configStatusMap.put(id,configStatus);*/
+
+    //更新节点配置状态
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    JSONObject nodeOld = Util.getNodeInfo(nodes, (long) id);
+    nodeOld.put(Common.configStatusFiled, configStatus);
+    DeployController deployController = new DeployController();
+    deployController.deleteNode((long)id);
+
+    json = readJsonFile();
+    JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(newNodes)) {
+      newNodes = new JSONArray();
+    }
+    newNodes.add(nodeOld);
+    json.put(Common.nodesFiled, newNodes);
+    NodeController nodeController = new NodeController();
+    nodeController.updateNodesInfo(newNodes, json);
+
+    if(result){
+      return new Response(ResultCode.OK.code, "保存成功").toJSONObject();
+    }
+    return new Response(ResultCode.OK.code, "保存失败").toJSONObject();
+  }
+
+  @GetMapping(value = "/api/quickConfig")
+  public JSONObject quickConfig(@RequestParam long id) {
+    Util util = new Util();
+    util.parseConfig(id);
+    Config config = util.config;
+    Args args = new Args();
+    int httpPort = args.getHTTPFullNodePort(config);
+    int rpcPort = args.getRPCFullNodePort(config);
+
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("node_http_fullNodePort", httpPort);
+    jsonObject.put("node_rpc_port", rpcPort);
+
+    return new Response(ResultCode.OK.code, "",jsonObject).toJSONObject();
+  }
+
 }

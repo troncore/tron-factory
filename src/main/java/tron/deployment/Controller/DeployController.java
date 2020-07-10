@@ -222,103 +222,132 @@ public class DeployController {
         return new Response(ResultCode.OK.code, deployedIpObj).toJSONObject();
     }
 
-    @GetMapping(value = "/api/deployNode")
-    public JSONObject deploy(@RequestParam(value = "filePath", required = true, defaultValue = "") String filePath) throws CipherException, IOException {
-
-        //获取配置文件中各端口号，便于校验端口是否冲突
-        String fullNodePort = "null";
-        String solidityPort = "null";
-        String listenPort = "18889";
-        String rpcPort = "50051";
-        String rpcsolidityPort = "50061";
-
-        boolean isfullNodeEnable = false;
-        boolean issolidityEnable = false;
-        parseConfig();
-        if (Util.config.hasPath("node.http.fullNodeEnable")) {
-            isfullNodeEnable = Util.config.getBoolean("node.http.fullNodeEnable");
-            if(isfullNodeEnable){
-                if (Util.config.hasPath("node.http.fullNodePort")) {
-                    fullNodePort =Util.config.getString("node.http.fullNodePort");
-                }
-            }
-        }
-        if (Util.config.hasPath("node.http.solidityEnable")) {
-            issolidityEnable = Util.config.getBoolean("node.http.solidityEnable");
-            if(issolidityEnable){
-                if (Util.config.hasPath("node.http.solidityPort")) {
-                    solidityPort =Util.config.getString("node.http.solidityPort");
-                }
-            }
-        }
-        if (Util.config.hasPath("node.listen.port")) {
-            listenPort =Util.config.getString("node.listen.port");
-        }
-        if (Util.config.hasPath("node.rpc.port")) {
-            rpcPort =Util.config.getString("node.rpc.port");
-        }
-        if (Util.config.hasPath("node.rpc.solidityPort")) {
-            rpcsolidityPort =Util.config.getString("node.rpc.solidityPort");
-        }
-
-        //执行checkZipPath.bash，判断zip包路径正确性
-        BashExecutor bashExecutor = new BashExecutor();
-        /*bashExecutor.callZipPathScript(filePath);
-        String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
-        if(checkZipPath.equals(Common.canNotFindZip)) {
-            return new Response(ResultCode.OK.code, Common.canNotFindZip).toJSONObject();
-        }*/
-
+    @PostMapping(value = "/api/deployNode")
+    public JSONObject deploy(@RequestBody LinkedHashMap<String,Object> data) throws CipherException, IOException, InterruptedException {
+//0: 节点正在启动中，请稍等......; 1: 初次运行区块链节点时，其中SR节点数量必须>=1且为奇数;
+        String ids = (String) data.get("ids");
+        String filePath = (String) data.get("filePath");
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
-
-        Util util = new Util();
-        util.parseConfig();
-        Config config = util.config;
-        Args args = new Args();
-        int listenPort_ip = (Integer)args.getListenPort(config);
-        ArrayList<String> ipList = new ArrayList<>();
-        for (int i = 0; i < nodes.size(); i++) {
-            JSONObject node = (JSONObject) nodes.get(i);
-            String nodeIp = (String) node.get(Common.ipFiled);
-            ipList.add(nodeIp + "\":\"" + listenPort_ip);
+        //判断区块链是否已发布，未发布时判断SR节点数量是否>=1
+//        String substring = ids.substring(0, ids.length() - 1);
+        String[] split = ids.split(",");//以逗号分割
+        int idSize = split.length;
+        long[] idArr = new long[idSize];
+        for (int i = 0; i < idSize; i++) {
+            long id = Long.parseLong(split[i]);
+            idArr[i] = id;
         }
-
+        ChainController chainController = new ChainController();
+        JSONObject jsonObject = chainController.checkChainPublish();
+        int publishStatus = (int) jsonObject.get("data");
+        int SRNum = 0;
+        JSONObject statusObj = new JSONObject();
+        int deployStatus = 0;
+        if (publishStatus == 0) {
+            for (int i = 0; i < idArr.length; i++) {
+                JSONObject node = Util.getNodeInfo(nodes, idArr[i]);
+                boolean isSR = (boolean) node.get(Common.isSRFiled);
+                if (isSR) {
+                    SRNum += 1;
+                }
+            }
+            if (SRNum < 1) {
+                deployStatus = 1;
+                statusObj.put("status", deployStatus);
+                return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+            }
+        }
         boolean ifCheckZipPath = false;
-        //部署所有未部署的节点
-        for (int i = 0; i < nodes.size(); i++) {
-            //执行checkZipPath.bash，判断zip包路径正确性
-            //校验用户上传的jar包路径是否正确，仅第一次循环时校验
-            if(!ifCheckZipPath){
+        //依次部署节点
+        for (int count = 0; count < idArr.length; count++) {
+            //获取配置文件中各端口号，便于校验端口是否冲突
+            String fullNodePort = "null";
+            String solidityPort = "null";
+            String listenPort = "18889";
+            String rpcPort = "50051";
+            String rpcsolidityPort = "50061";
+
+            boolean isfullNodeEnable = false;
+            boolean issolidityEnable = false;
+            Util util = new Util();
+//            util.parseConfig(idArr[count]);
+            parseConfig(idArr[count]);
+            Config config = util.config;
+
+            if (Util.config.hasPath("node.http.fullNodeEnable")) {
+                isfullNodeEnable = Util.config.getBoolean("node.http.fullNodeEnable");
+                if (isfullNodeEnable) {
+                    if (Util.config.hasPath("node.http.fullNodePort")) {
+                        fullNodePort = Util.config.getString("node.http.fullNodePort");
+                    }
+                }
+            }
+            if (Util.config.hasPath("node.http.solidityEnable")) {
+                issolidityEnable = Util.config.getBoolean("node.http.solidityEnable");
+                if (issolidityEnable) {
+                    if (Util.config.hasPath("node.http.solidityPort")) {
+                        solidityPort = Util.config.getString("node.http.solidityPort");
+                    }
+                }
+            }
+            if (Util.config.hasPath("node.listen.port")) {
+                listenPort = Util.config.getString("node.listen.port");
+            }
+            if (Util.config.hasPath("node.rpc.port")) {
+                rpcPort = Util.config.getString("node.rpc.port");
+            }
+            if (Util.config.hasPath("node.rpc.solidityPort")) {
+                rpcsolidityPort = Util.config.getString("node.rpc.solidityPort");
+            }
+
+            //执行checkZipPath.bash，判断zip包路径正确性，仅第一次循环时校验
+            BashExecutor bashExecutor = new BashExecutor();
+            if (!ifCheckZipPath) {
                 ifCheckZipPath = true;
                 bashExecutor.callZipPathScript(filePath);
                 String checkZipPath = checkZipPath(String.format(Common.ZipPathFormat));
-                if(checkZipPath.equals(Common.canNotFindZip)) {
+                if (checkZipPath.equals(Common.canNotFindZip)) {
                     return new Response(ResultCode.OK.code, Common.canNotFindZip).toJSONObject();
                 }
             }
+
+            /*Util util = new Util();
+            util.parseConfig(idArr[count]);
+            Config config = util.config;*/
+            Args args = new Args();
+            int listenPort_ip = (Integer) args.getListenPort(config);
+            ArrayList<String> ipList = new ArrayList<>();
+
+            for (int i = 0; i < nodes.size(); i++) {
+                JSONObject node = (JSONObject) nodes.get(i);
+                String nodeIp = (String) node.get(Common.ipFiled);
+                ipList.add(nodeIp + "\":\"" + listenPort_ip);
+            }
+
+            JSONObject node = Util.getNodeInfo(nodes, idArr[count]);
+
             //更新节点部署日志查看状态
-            JSONObject node = (JSONObject) nodes.get(i);
-            Long id = (Long) node.get(Common.idFiled);
+            Long id = idArr[count];
 //            String ip = (String) node.get(Common.ipFiled);
-            JSONObject nodeOld = Util.getNodeInfo(nodes, id);
-            nodeOld.put(Common.ifShowLogField, true);
+//            JSONObject nodeOld = Util.getNodeInfo(nodes, id);
+            node.put(Common.ifShowLogField, true);
             deleteNode(id);
             json = readJsonFile();
             JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
             if (Objects.isNull(newNodes)) {
                 newNodes = new JSONArray();
             }
-            newNodes.add(nodeOld);
+            newNodes.add(node);
             json.put(Common.nodesFiled, newNodes);
             nc.updateNodesInfo(newNodes, json, ipList);
 
+            //部署所有未部署的节点
             boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
             if (!isDeployed) {
-//                Long id = (Long) node.get(Common.idFiled);
                 String path = filePath;
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
                 String privateKeypath = (String) node.get(Common.privateKeyFiled);
@@ -348,13 +377,13 @@ public class DeployController {
                         return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "load privateKey info failed").toJSONObject();
                     }
                 }
-                ConfigGenerator configGenerator = new ConfigGenerator();
+                /*ConfigGenerator configGenerator = new ConfigGenerator();
                 boolean result = configGenerator.updateConfig(
-                        new BlockSettingConfig(blockNeedSync), String.format("%s_%s", Common.configFiled, id.toString()));
+                        new BlockSettingConfig(blockNeedSync), config);
 
                 if (!result) {
                     return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-                }
+                }*/
 
                 String ip = (String) node.get(Common.ipFiled);
                 Long port = (Long) node.get(Common.portFiled);
@@ -370,34 +399,34 @@ public class DeployController {
 
                 //用户自定义数据库模块
                 String dbCustom = (String) json.get(Common.dbCustomFiled);
-                if(dbCustom.equals("")){
-                    dbCustom="null";
+                if (dbCustom.equals("")) {
+                    dbCustom = "null";
                 }
 
                 //执行部署脚本
                 if (Objects.nonNull(privateKey)) {
-                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort );
+                    bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort, listenPort, rpcPort, rpcsolidityPort);
                 } else {
-                    bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort,listenPort, rpcPort, rpcsolidityPort);
+                    bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort, solidityPort, listenPort, rpcPort, rpcsolidityPort);
                 }
 
                 String status = checkIsDeployed(String.format(Common.logFormat, id.toString()));
-                if(status.equals(Common.deployFinishStatus)) isDeployed = true;
-                if(status.equals(Common.expectIsNotInstalled)){
+                if (status.equals(Common.deployFinishStatus)) isDeployed = true;
+                if (status.equals(Common.expectIsNotInstalled)) {
                     return new Response(ResultCode.FAILED.code, "expect is not installed").toJSONObject();
                 }
-                if(status.equals(Common.connectFailedStatus)){
-                    return new Response(ResultCode.UNAUTHORIZED.code, ip+": ssh connect failed").toJSONObject();
+                if (status.equals(Common.connectFailedStatus)) {
+                    return new Response(ResultCode.UNAUTHORIZED.code, ip + ": ssh connect failed").toJSONObject();
                 }
-                if(status.equals(Common.canNotFindZip)){
-                    return new Response(ResultCode.UNAUTHORIZED.code, path+": "+Common.canNotFindZip).toJSONObject();
+                if (status.equals(Common.canNotFindZip)) {
+                    return new Response(ResultCode.UNAUTHORIZED.code, path + ": " + Common.canNotFindZip).toJSONObject();
                 }
-                if(status.equals(Common.portIsOccupied)){
-                    return new Response(ResultCode.FAILED.code, portOccupied[1]+"("+ip+")").toJSONObject();
+                if (status.equals(Common.portIsOccupied)) {
+                    return new Response(ResultCode.FAILED.code, portOccupied[1] + "(" + ip + ")").toJSONObject();
                 }
                 JSONObject array = new JSONObject();
 
-                if(isDeployed){ //如果部署成功，更新节点部署状态
+                if (isDeployed) { //如果部署成功，更新节点部署状态
 //
                     JSONObject oldNode = Util.getNodeInfo(nodes, id);
                     oldNode.put(Common.isDeployedFiled, isDeployed);
@@ -414,17 +443,19 @@ public class DeployController {
                     nc.updateNodesInfo(nowNodes, json, ipList);
 
 //                    return new Response(ResultCode.OK.code, "Deploy successful", isDeployed).toJSONObject();
-                }
-                else{
+                } else {
 //                    isDeployedAll = false;
-                    return new Response(ResultCode.FAILED.code, "Deploy fail("+ip+")").toJSONObject();
+                    statusObj.put("status", deployStatus);
+                    return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+//                    return new Response(ResultCode.FAILED.code, "Deploy fail("+ip+")").toJSONObject();
                 }
 
             }
-            if(i == nodes.size()-1){
-                return new Response(ResultCode.OK.code, "Deploy successful").toJSONObject();
+            if (count == nodes.size() - 1) {
+                statusObj.put("status", deployStatus);
+                return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+//                return new Response(ResultCode.OK.code, "Deploy successful").toJSONObject();
             }
-
         }
 
         return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
@@ -487,7 +518,7 @@ public class DeployController {
         NodeController nc = new NodeController();
         //获取配置文件中listenPort
         Util util = new Util();
-        util.parseConfig();
+        util.parseConfig(id);
         Config config = util.config;
         Args args = new Args();
         int listenPort = (Integer)args.getListenPort(config);

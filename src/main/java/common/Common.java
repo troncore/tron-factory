@@ -42,6 +42,10 @@ public class Common {
 
   public static final String httpPortFiled = "httpPort";
 
+  public static final String httpFullNodePortFiled = "httpFullNodePort";
+
+  public static final String rpcPortFiled = "rpcPort";
+
   public static final String httpIpListFiled = "httpIpList";
 
   public static final String isSRFiled = "isSR";
@@ -111,6 +115,10 @@ public class Common {
   public static final String p2pVersionField = "node_p2p_version";
 
   public static final String ifShowLogField = "ifShowLog";
+
+  public static final String createTimeField = "createTime";
+
+//  public static final String configStatusMapFiled = "configStatusMap";
 
   // Node Status
   public static final String notFoundStatus = "not found";

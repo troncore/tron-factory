@@ -1,8 +1,6 @@
 package tron.deployment.Controller;
 
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.JsonAdapter;
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
+import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
 import common.Util;
@@ -15,15 +13,10 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.tron.core.config.args.Account;
-import org.tron.keystore.CipherException;
 import response.Response;
 import response.ResultCode;
-import tron.deployment.shellExecutor.BashExecutor;
-
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static common.LogConfig.LOG;
 import static common.Util.*;
@@ -37,7 +30,7 @@ import static wallet.Wallet.*;
 public class ChainController {
 
   @GetMapping(value = "/api/hasBlockChain")
-  public JSONObject ifHasBlockChain() {
+  public JSONObject HasBlockChain() {
     JSONObject json = readJsonFile();
     String chainName = (String) json.get(Common.chainNameFiled);
     if(!chainName.equals("")){
@@ -270,4 +263,99 @@ public class ChainController {
     }
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
+
+  @GetMapping(value = "/api/canDeleteNode")
+  //status: 0 表示可以直接删除； 1 表示节点正在运行，不可以删除； 2 表示节点可以删除，但是最后一个节点，提示用户是否要删除，同时删除该区块链；
+  public JSONObject canDeleteNode(@RequestParam long id) {
+    JSONObject statusObj = new JSONObject();
+    int status = 0;
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    JSONObject node = Util.getNodeInfo(nodes, id);
+    boolean isDepolyed = (boolean) node.get(Common.isDeployedFiled);
+    if(isDepolyed){
+      status = 1;
+    }else{
+      if(nodes.size() == 1){
+        status = 2;
+      }
+    }
+    statusObj.put("status",status);
+    return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+  }
+
+  @GetMapping(value = "/api/checkChainPublish")
+  public JSONObject checkChainPublish() throws InterruptedException {
+    boolean flag = false;
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    for(int i=0;i<nodes.size();i++) {
+      Map<String, Object> nowBlockInfo = new HashMap<>();
+      JSONObject node = (JSONObject) nodes.get(i);
+      boolean isSR = (boolean) node.get(Common.isSRFiled);
+      long id = (Long) node.get(Common.idFiled);
+      if (isSR) {
+        boolean isDepolyed = (boolean) node.get(Common.isDeployedFiled);
+        boolean ifShowLog = (boolean) node.get(Common.ifShowLogField);
+        if (ifShowLog) {
+          flag = true;
+          if (isDepolyed) {
+            Thread.sleep(30000);
+            String ip = (String) node.get(Common.ipFiled);
+            Util util = new Util();
+            util.parseConfig(id);
+            Config config = util.config;
+            Args args = new Args();
+            int httpPort = args.getHTTPFullNodePort(config);
+            String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
+            HttpUtil httpUtil = new HttpUtil();
+            try {
+              nowBlockInfo = httpUtil.getInfo(url);
+              if (!nowBlockInfo.isEmpty()) {
+                return new Response(ResultCode.OK.code, "", 2).toJSONObject();
+              }
+            } catch (Exception e) {
+              return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
+            }
+            break;
+          }
+        }
+      }
+    }
+    if(flag){
+      return new Response(ResultCode.OK.code, "", 1).toJSONObject();
+    }
+    return new Response(ResultCode.OK.code, "", 0).toJSONObject();
+  }
+
+  @GetMapping(value = "/api/checkNode")
+  public JSONObject checkNode(@RequestBody String ids) {
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nodes)) {
+      nodes = new JSONArray();
+    }
+   // 0: 节点已成功启动； 1: 发布失败，节点未启动成功，请查看日志; 2: 部分节点未启动成功，请查看日志
+    String[] split = ids.split(",");//以逗号分割
+    int idSize = split.length;
+    int successCount = 0;
+    for (int i = 0; i < idSize; i++) {
+      long id = Long.parseLong(split[i]);
+      JSONObject node = Util.getNodeInfo(nodes, id);
+      boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
+      if(isDeployed){
+        successCount+=1;
+      }
+    }
+    JSONObject statusObj = new JSONObject();
+    int status = 0;
+    if(successCount == 0) {
+      status = 1;
+    }else if(successCount < idSize) {
+      status = 2;
+    }
+    statusObj.put("status",status);
+    return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+  }
+
 }
