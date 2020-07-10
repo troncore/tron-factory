@@ -329,7 +329,7 @@ public class ChainController {
   }
 
   @GetMapping(value = "/api/checkNode")
-  public JSONObject checkNode(@RequestBody String ids) {
+  public JSONObject checkNode(@RequestParam String ids) {
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     if (Objects.isNull(nodes)) {

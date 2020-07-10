@@ -163,7 +163,7 @@ public class DeployController {
         return Common.connectFailedStatus;
     }
 
-    @GetMapping(value = "/api/checkNode")
+    @GetMapping(value = "/api/checkDeployStatus")
     public JSONObject checkDeployStatus() {
         boolean isDeployed = true;
         JSONObject json = readJsonFile();
@@ -179,7 +179,7 @@ public class DeployController {
 
     }
 
-    @GetMapping(value = "/api/checkConfig")
+    @GetMapping(value = "/api/checkConfigStatus")
     public JSONObject checkConfigStatus() {
         JSONObject json = readJsonFile();
         Long configStatus = (Long) json.get(Common.configStatusFiled);
@@ -430,6 +430,7 @@ public class DeployController {
 //
                     JSONObject oldNode = Util.getNodeInfo(nodes, id);
                     oldNode.put(Common.isDeployedFiled, isDeployed);
+                    oldNode.put(Common.deployStatusFiled, 1);
 //                    nodeOld.put(Common.ifShowLogField, true);
                     deleteNode(id);
 //                    Util.importPrivateKey(hexs2Bytes(privateKey.getBytes()));

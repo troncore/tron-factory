@@ -335,6 +335,7 @@ public class NodeController {
     newNode.put(Common.listenPortField, listenPort);
     newNode.put(Common.createTimeField, createTime);
     newNode.put(Common.configStatusFiled, 0);
+    newNode.put(Common.deployStatusFiled, 0);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
   }

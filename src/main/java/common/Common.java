@@ -24,6 +24,8 @@ public class Common {
 
   public static final String configStatusFiled = "configStatus";
 
+  public static final String deployStatusFiled = "deployStatus";
+
   public static final String resultField = "result";
 
   public static final String idFiled = "id";
