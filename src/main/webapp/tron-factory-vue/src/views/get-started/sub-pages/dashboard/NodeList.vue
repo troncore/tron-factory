@@ -147,7 +147,7 @@
         this.timeID = setInterval(() => {
           if (!flag) {
             flag = true // the network may slow，avoid frequently to call ajax
-            this.$_api.getStarted.checkNode({}, (err, res) => {
+            this.$_api.getStarted.checkNode({ids: this.deployNodesIds}, (err, res) => {
               flag = false
               if (err) {
                 this.deployLoading = false
