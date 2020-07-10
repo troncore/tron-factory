@@ -261,9 +261,9 @@
 
         let baseParams = {
           ip: this.form.ip,
-          listenPort: this.form.listenPort,
+          listenPort: Number(this.form.listenPort),
           userName: this.form.userName,
-          port: this.form.port,
+          port: Number(this.form.port),
           sshConnectType: this.form.sshConnectType,
           sshPassword: this.form.sshConnectType === 1 ? this.form.sshPassword : undefined,
           isSR: this.form.isSR,
