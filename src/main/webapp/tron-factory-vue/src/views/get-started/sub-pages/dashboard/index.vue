@@ -6,15 +6,15 @@
       <div class="card-body">
         <div class="chain-item">
           <div class="label">{{ $t('名称') }}</div>
-          <div class="value">TRON_Test</div>
+          <div class="value">{{ chainInfo.chainName || '-' }}</div>
         </div>
         <div class="chain-item">
           <div class="label">{{ $t('签名算法') }}</div>
-          <div class="value">ECkey</div>
+          <div class="value">{{ chainInfo.crypto || '-' }}</div>
         </div>
         <div class="chain-item">
           <div class="label">{{ $t('p2pVersion') }}</div>
-          <div class="value">123456</div>
+          <div class="value">{{ chainInfo.p2pVersion || '-' }}</div>
         </div>
         <div class="chain-item">
           <div class="label">
@@ -68,6 +68,11 @@
     components: { ImTooltip, NodeList },
     data () {
       return {
+        chainInfo: {
+          chainName: '',
+          crypto: '',
+          p2pVersion: '',
+        },
         chainStatus: -1, // 0 unrun、1 running、2 runned
         nodeList: [],
         deleteLoading: false,
@@ -75,15 +80,27 @@
       }
     },
     created () {
+      this.getChainInfo()
       this.pollChainStatus()
     },
     destroyed () {
       clearTimeout(this.timeoutID)
     },
     methods: {
+      getChainInfo () {
+        this.$_api.getStarted.getChainInfo({}, (err, res = {}) => {
+          if (err) return
+          this.chainInfo = {
+            chainName: res.chainName,
+            crypto: res.crypto,
+            p2pVersion: res.p2pVersion,
+          }
+        })
+      },
+
       pollChainStatus () {
         clearTimeout(this.timeoutID)
-        this.timeoutID = setTimeout(this.checkChainPublish, 1000)
+        this.timeoutID = setTimeout(this.checkChainPublish, 600)
       },
 
       checkChainPublish () {
