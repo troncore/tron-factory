@@ -16,7 +16,8 @@
 
 <script>
   const subPages = {
-    'create-chain': () => import(/* webpackChunkName: "create-chain" */ './sub-pages/create-chain') ,
+    'chain-add': () => import(/* webpackChunkName: "chain-add-edit" */ './sub-pages/chain-add-edit') ,
+    'chain-edit': () => import(/* webpackChunkName: "chain-add-edit" */ './sub-pages/chain-add-edit') ,
     'dashboard': () => import(/* webpackChunkName: "dashboard" */ './sub-pages/dashboard') ,
     'node-add': () => import(/* webpackChunkName: "node-add-edit" */ './sub-pages/node-add-edit') ,
     'node-edit': () => import(/* webpackChunkName: "node-add-edit" */ './sub-pages/node-add-edit') ,
@@ -51,7 +52,7 @@
       },
       handleRoute (to) {
         this.loading = true
-        let noAuth = ['create-chain']
+        let noAuth = ['chain-add'] // no chain and it can enter these pages
         let subPagesStatus = Object.keys(subPages)
 
         this.$_api.getStarted.hasBlockChain({}, (err, res) => {
@@ -70,7 +71,7 @@
       },
 
       handleCreate () {
-        this.$router.push('/get-started/create-chain')
+        this.$router.push('/get-started/chain-add')
       }
     }
   }

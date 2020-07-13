@@ -1,6 +1,6 @@
 <template>
-  <div class="create-chain">
-    <div class="page-title">{{ $t('开始创建')}}</div>
+  <div class="chain-add-edit">
+    <div class="page-title">{{ $t(isAddPage ? '开始创建' : '修改区块链')}}</div>
 
     <!-- base-info -->
     <div class="base-info im-card padding-20">
@@ -60,12 +60,8 @@
     </div>
 
     <div class="page-footer">
-      <template  v-if="!disableEdit">
-        <el-button class="im-button large" type="primary" :disabled="disabled" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
-        <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
-      </template>
-
-      <el-button v-else class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button large" type="primary" :disabled="!canOperate" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
     </div>
   </div>
 </template>
@@ -77,7 +73,7 @@
   import { formRules } from "@/utils/validate";
 
   export default {
-    name: "create-chain",
+    name: "chain-add-edit",
     components: { GenesisAssetDialog, ImTooltip },
     data () {
       return {
@@ -93,11 +89,8 @@
         currentGenesisAsset: {},
         currentGenesisAssetIndex: -1,
 
-        disabled: false,
+        canOperate: false, // true when no exit chain or exit chain that its status is un-run
         loading: false,
-
-        isEditPage: false,
-        disableEdit: false, // 如果链处于未发布状态，可以编辑
       }
     },
     computed: {
@@ -117,17 +110,63 @@
           ],
         }
       },
+      isAddPage () {
+        return this.$route.params.status !== 'chain-edit'
+      }
     },
     created () {
-      !this.isEditPage && this.hasBlockChain()
-      this.getChainInfo()
+      this.init()
     },
     methods: {
+      async init () {
+        if (this.isAddPage) {
+          // add chain
+          if (await this.hasBlockChain()) {
+            this.$notify({
+              type: 'warning',
+              title: this.$t('base.warning'),
+              message: this.$t('当前已有创建的区块链链，不可继续创建！')
+            })
+          }
+          else this.canOperate = true
+
+        } else {
+          // edit chain
+          if (await this.hasBlockChain()) {
+            this.getChainInfo()
+            this.checkChainPublish() // this.canOperate = true
+          }
+        }
+      },
+
+      async hasBlockChain () {
+        this.loading = true
+        return new Promise(resolve => {
+          this.$_api.getStarted.hasBlockChain({}, (err, res) => {
+            this.loading = false
+            if (err) return resolve(false)
+
+            if (res === true) resolve(true)
+            else resolve(false)
+          })
+        })
+      },
+
+      checkChainPublish () {
+        this.$_api.getStarted.checkChainPublish({}, (err, res) => {
+          if (err) {
+            this.chainStatus = -1
+            return
+          }
+          this.canOperate = res === 0
+        })
+      },
+
       getChainInfo () {
         this.$_api.getStarted.getChainInfo({}, (err, res = {}) => {
           if (err) return
 
-          if (this.isEditPage) {
+          if (!this.isAddPage) {
             Object.assign(this.form,{
               chainName: res.chainName,
               crypto: res.crypto, // sm2
@@ -143,44 +182,24 @@
       },
 
       handleSubmit () {
-        this.$refs['form'].validate(valid => {
+        this.$refs['form'].validate(async valid => {
           if (valid) {
             this.loading = true
-            !this.isEditPage && this.hasBlockChain(this.creatChain)
-          }
-        })
-      },
 
-      hasBlockChain (next) {
-        this.$_api.getStarted.hasBlockChain({}, (err, res) => {
-          if (err) return
-          if (res === true) {
-            this.$notify({
-              type: 'warning',
-              title: this.$t('base.warning'),
-              message: this.$t('当前已有创建的区块链链，不可继续创建！')
+            this.$_api.getStarted.addChainInfo({
+              ...this.form,
+              genesisBlockAssets: this.genesisBlockAssets,
+            }, err => {
+              this.loading = false
+              if (err) return
+              this.$notify({
+                type: 'success',
+                title: this.$t('base.successful'),
+                message: this.$t('base.success.operate')
+              })
+              this.$router.push('/get-started/dashboard')
             })
-            this.loading = false
-            return
           }
-
-          typeof next === 'function' && next()
-        })
-      },
-
-      creatChain () {
-        this.$_api.getStarted.addChainInfo({
-          ...this.form,
-          genesisBlockAssets: this.genesisBlockAssets,
-        }, err => {
-          this.loading = false
-          if (err) return
-          this.$notify({
-            type: 'success',
-            title: this.$t('base.successful'),
-            message: this.$t('base.success.operate')
-          })
-          this.$router.push('/get-started/dashboard')
         })
       },
 
@@ -209,7 +228,7 @@
 </script>
 
 <style lang="scss" scoped>
-.create-chain {
+.chain-add-edit {
   .page-title {
     margin-bottom: 20px;
     font-weight: bold;

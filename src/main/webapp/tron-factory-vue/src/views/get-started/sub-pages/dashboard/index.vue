@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <!--<div class="page-title">{{ $t('Dashboard')}}</div>-->
+    <div class="page-title">{{ $t('Dashboard')}}</div>
     <div class="chain-info im-card">
       <div class="card-header">区块链信息</div>
       <div class="card-body">
@@ -20,7 +20,7 @@
           <div class="label">
             <span class="label-inner">{{ $t('状态') }} <im-tooltip class="im-tooltip" :content="$t('已发布的区块可正常产块')"/></span>
           </div>
-          <div class="value">{{ $t(['未发布', '发布中', '已发布'][chainStatus] || '--') }}</div>
+          <div class="value">{{ $t(['未发布', '发布中', '已发布'][chainStatus] || '-') }}</div>
         </div>
         <div class="chain-item">
           <div class="label">
@@ -71,25 +71,38 @@
         chainStatus: -1, // 0 unrun、1 running、2 runned
         nodeList: [],
         deleteLoading: false,
+        timeoutID: null
       }
     },
     created () {
-      this.checkChainPublish()
+      this.pollChainStatus()
+    },
+    destroyed () {
+      clearTimeout(this.timeoutID)
     },
     methods: {
+      pollChainStatus () {
+        clearTimeout(this.timeoutID)
+        this.timeoutID = setTimeout(this.checkChainPublish, 1000)
+      },
+
       checkChainPublish () {
         this.$_api.getStarted.checkChainPublish({}, (err, res) => {
           if (err) {
             this.chainStatus = -1
+            clearTimeout(this.timeoutID)
             return
           }
-
           this.chainStatus = res
+
+          // when is un-run or runned, stop to request
+          if ([0,2].includes(this.chainStatus)) clearTimeout(this.timeoutID)
+          else this.pollChainStatus()
         })
       },
 
       handleUpdate () {
-        this.$router.push('/get-started/create-chain')
+        this.$router.push('/get-started/chain-edit')
       },
 
       handleDelete () {
