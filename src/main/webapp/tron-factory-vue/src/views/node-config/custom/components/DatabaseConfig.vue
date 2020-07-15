@@ -3,8 +3,8 @@
     <div class="box-body">
       <el-form ref="database-config-form" :model="form" :rules="formRules" label-position="left" label-width="200px">
 
-        <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="dbEnine">
-          <el-radio-group v-model="form.dbEnine">
+        <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="dbEngine">
+          <el-radio-group v-model="form.dbEngine">
             <el-radio :label="'LEVELDB'">LevelDB</el-radio>
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
@@ -17,7 +17,7 @@
           <el-switch v-model="form.isOpenTransaction"></el-switch>
         </el-form-item>
 
-        <template v-if="form.dbEnine === 'ROCKSDB'">
+        <template v-if="form.dbEngine === 'ROCKSDB'">
           <el-form-item :label="$t('RocksDB备份设置')" prop="backupEnable">
             <el-switch v-model="form.backupEnable"></el-switch>
           </el-form-item>
@@ -60,7 +60,7 @@ export default {
     return {
       form: {
         id: '',
-        dbEnine: '',
+        dbEngine: '',
         isDBSync: false,
         isOpenTransaction: true,
         backupEnable: false,
@@ -118,7 +118,7 @@ export default {
     initForm(data) {
       this.form = {
         id: this.opNodeId,
-        dbEnine: data.storage_db_engine,
+        dbEngine: data.storage_db_engine,
         isDBSync: data.storage_db_sync,
         isOpenTransaction: data.storage_transHistory_switch,
         backupEnable: data.storage_backup_enable,
@@ -133,7 +133,7 @@ export default {
         if (valid) {
           let params = {
             id: this.opNodeId,
-            dbEnine: this.form.dbEnine,
+            dbEngine: this.form.dbEngine,
             isDBSync: this.form.isDBSync,
             isOpenTransaction: this.form.isOpenTransaction,
             backupEnable: this.form.backupEnable,
