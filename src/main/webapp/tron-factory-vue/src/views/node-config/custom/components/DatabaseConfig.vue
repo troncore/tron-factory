@@ -17,13 +17,15 @@
           <el-switch v-model="form.isOpenTransaction"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('RocksDB备份设置')" prop="backupEnable">
-          <el-switch v-model="form.backupEnable"></el-switch>
-        </el-form-item>
+        <template v-if="form.dbEnine === 'ROCKSDB'">
+          <el-form-item :label="$t('RocksDB备份设置')" prop="backupEnable">
+            <el-switch v-model="form.backupEnable"></el-switch>
+          </el-form-item>
 
-        <el-form-item :label="$t('备份间隔(块)')" prop="backupFrequency">
-          <el-input v-model.trim="form.backupFrequency" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')" style="width: 200px;"></el-input>
-        </el-form-item>
+          <el-form-item :label="$t('备份间隔(块)')" prop="backupFrequency">
+            <el-input v-model.trim="form.backupFrequency" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')" style="width: 200px;"></el-input>
+          </el-form-item>
+        </template>
 
         <div class="more-setting">
           <el-checkbox v-model="checkDBCustom" @change="handleChangeCheckCustom"><span class="check-label">{{ $t('configuration.dbCustomModule') }}</span></el-checkbox>
@@ -116,12 +118,12 @@ export default {
     initForm(data) {
       this.form = {
         id: this.opNodeId,
-        dbEnine: data.dbEnine,
-        isDBSync: data.isDBSync,
-        isOpenTransaction: data.isOpenTransaction,
-        backupEnable: data.backupEnable,
-        backupFrequency: data.backupFrequency,
-        dbCustom: data.dbCustom,
+        dbEnine: data.storage_db_engine,
+        isDBSync: data.storage_db_sync,
+        isOpenTransaction: data.storage_transHistory_switch,
+        backupEnable: data.storage_backup_enable,
+        backupFrequency: data.storage_backup_frequency,
+        dbCustom: data.storage_db_custom,
       }
       this.checkDBCustom = !!this.form.dbCustom
     },

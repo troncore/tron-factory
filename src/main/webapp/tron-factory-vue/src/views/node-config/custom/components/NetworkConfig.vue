@@ -138,6 +138,7 @@ export default {
       this.$refs['network-config-form'].validate(valid => {
         if (valid) {
           let params = {
+            id: this.opNodeId,
             fullNodeEnable: this.form.fullNodeEnable,
             httpFullNodePort: this.form.fullNodeEnable ? Number(this.form.httpFullNodePort) : undefined,
             maxHttpConnectNumber: this.form.fullNodeEnable ? Number(this.form.maxHttpConnectNumber) : undefined,
