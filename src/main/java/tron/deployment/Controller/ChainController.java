@@ -16,6 +16,9 @@ import org.tron.core.config.args.Account;
 import response.Response;
 import response.ResultCode;
 import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.*;
 
 import static common.LogConfig.LOG;
@@ -131,7 +134,7 @@ public class ChainController {
     //从配置文件中获取加密算法 end
 
     //从配置文件中获取p2pVersion
-    jsonObj.put(Common.p2pVersionField,Args.getP2pVersionFromConfig(Util.config)+"");
+    jsonObj.put(Common.P2PVersionField,Args.getP2pVersionFromConfig(Util.config)+"");
 
     //从配置文件中获取genesisBlockAssets
     List<Account> linkedHashMaps = Args.getAccountsFromConfig(Util.config);
@@ -284,6 +287,25 @@ public class ChainController {
     return new Response(ResultCode.OK.code, statusObj).toJSONObject();
   }
 
+  public static boolean isHostConnection(String ip, int port) {
+    Socket socket = new Socket();
+    try {
+      socket.connect(new InetSocketAddress(ip, port),3000);
+    } catch (SocketTimeoutException s) {
+      return false;
+    } catch (IOException e) {
+//            e.printStackTrace();
+      return false;
+    } finally {
+      try {
+        socket.close();
+      } catch (IOException e) {
+//                e.printStackTrace();
+      }
+    }
+    return true;
+  }
+
   @GetMapping(value = "/api/checkChainPublish")
   public JSONObject checkChainPublish() throws InterruptedException {
     boolean flag = false;
@@ -300,13 +322,16 @@ public class ChainController {
         if (ifShowLog) {
           flag = true;
           if (isDepolyed) {
-            Thread.sleep(30000);
+//            Thread.sleep(30000);
             String ip = (String) node.get(Common.ipFiled);
             Util util = new Util();
             util.parseConfig(id);
             Config config = util.config;
             Args args = new Args();
             int httpPort = args.getHTTPFullNodePort(config);
+            if(!isHostConnection(ip, httpPort)){
+              return new Response(ResultCode.OK.code, "", 1).toJSONObject();
+            }
             String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
             HttpUtil httpUtil = new HttpUtil();
             try {

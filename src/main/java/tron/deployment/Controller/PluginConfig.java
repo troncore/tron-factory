@@ -13,12 +13,15 @@ import config.ActuatorConfig;
 import config.ConfigGenerator;
 import config.CryptoConfig;
 //import config.NetworkConfig;
+import org.json.simple.JSONArray;
 import org.spongycastle.util.Strings;
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
+
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import response.Response;
@@ -126,17 +129,50 @@ public class PluginConfig {
   }
 
   @GetMapping(value = "/api/pluginConfig")
-  public JSONObject pluginConfig() {
+  public JSONObject getPluginConfig(long id) {
     JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nodes)) {
+      nodes = new JSONArray();
+    }
+    JSONObject node = Util.getNodeInfo(nodes, id);
+    if (node == null) {
+      return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+    }
+    String customTransaction = (String) node.get(Common.customTransactionFiled);
     JSONObject result = new JSONObject();
-    result.put(Common.consensusFiled, json.get(Common.consensusFiled));
-    result.put(Common.dbEngineFiled, Strings.toLowerCase(getDbEngineFromConfig(Util.config)));
-    result.put(Common.customTransactionFiled, json.get(Common.customTransactionFiled));
-    Util.parseConfig();
-    result.put(Common.transactionFiled, Args.getActuatorSet(Util.config));
-    result.put(Common.cryptoEngine, Args.getCrypto(Util.config));
+    result.put(Common.customTransactionFiled, customTransaction);
 
     return new Response(ResultCode.OK.code, result).toJSONObject();
+  }
+
+  @PostMapping(value = "/api/pluginConfig")
+  public JSONObject pluginConfig(@RequestBody JSONObject jsonData) {
+    long id =jsonData.getOrDefault("id", "1") instanceof String ?
+            (Long.parseLong((String)jsonData.getOrDefault("id", "1"))) :
+            (int) jsonData.getOrDefault("id", 1);
+    String customTransaction = (String) jsonData.getOrDefault("customTransaction", "");
+
+    //更新节点customTransaction
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    JSONObject nodeOld = Util.getNodeInfo(nodes, id);
+    nodeOld.put(Common.customTransactionFiled, customTransaction);
+
+    DeployController deployController = new DeployController();
+    deployController.deleteNode(id);
+
+    json = readJsonFile();
+    JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(newNodes)) {
+      newNodes = new JSONArray();
+    }
+    newNodes.add(nodeOld);
+    json.put(Common.nodesFiled, newNodes);
+    NodeController nodeController = new NodeController();
+    nodeController.updateNodesInfo(newNodes, json);
+
+    return new Response(ResultCode.OK.code, "").toJSONObject();
   }
 
   @GetMapping(value = "/api/getCrypto")

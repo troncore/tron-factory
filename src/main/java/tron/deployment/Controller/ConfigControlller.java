@@ -208,63 +208,63 @@ public class ConfigControlller {
 
   //获取数据库配置信息
   private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
-    JSONObject configObject = new JSONObject();
-
+//    loadConfig(loadConfig);
+    dbConfig = new DBConfig(getDbVersionSyncFromConfig(loadConfig),
+            getDbEngineFromConfig(loadConfig), Args.getBackupEnable(loadConfig), Args.getBackupFrequency(loadConfig));
     JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
     dbObject.put("storage_db_custom", dbCustomConfig());
-    configObject.put("dbConfig", dbObject);
+    if(getTransactionHistoreSwitchFromConfig(loadConfig).equals("on")){
+      dbObject.put("storage_transHistory_switch", true);
+    }else{
+      dbObject.put("storage_transHistory_switch", false);
+    }
 
-    return configObject;
+    return dbObject;
   }
 
   //获取p2p配置信息
   private JSONObject getP2PConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
-    JSONObject configObject = new JSONObject();
-
+//    loadConfig(loadConfig);
+    p2pConfig = new P2PConfig(Args.getP2pVersionFromConfig(loadConfig), Args.getNodeMaxActiveNodes(loadConfig),
+            Args.getActiveConnectFactor(loadConfig), Args.getNodeMaxActiveNodesWithSameIp(loadConfig),
+            Args.getConnectFactor(loadConfig), Args.getSeedNode(loadConfig), Args.getListenPort(loadConfig));
     JSONObject p2pObject = generateJSONObject(p2pConfig.getClass().getFields(), p2pConfig);
     p2pObject.put(Common.allNodesField, getSeedNode());
-    configObject.put("p2pConfig", p2pObject);
-
-    return configObject;
+    return p2pObject;
   }
 
   //获取network配置信息
   private JSONObject getNetworkConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
-    JSONObject configObject = new JSONObject();
-
+//    loadConfig(loadConfig);
+    networkConfig = new NetworkConfig(Args.getMaxHttpConnectNumber(loadConfig), Args.getRPCSolidityNodePort(loadConfig), Args.getRPCFullNodePort(loadConfig),
+            Args.getHTTPFullNodePort(loadConfig), Args.getHTTPSolidityNodePort(loadConfig),
+            Args.getNodeHttpFullnodeEnable(loadConfig), Args.getNodeHttpSolidityEnable(loadConfig), Args.getNodeActive(loadConfig));
     JSONObject networkObject = generateJSONObject(networkConfig.getClass().getFields(), networkConfig);
-    configObject.put("networkConfig", networkObject);
-    return configObject;
+    return networkObject;
   }
 
   //获取crossChain配置信息
   private JSONObject getCrossChainConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
-    JSONObject configObject = new JSONObject();
-
+//    loadConfig(loadConfig);
+    initCrossSetting();
     JSONObject crossChainObject = generateJSONObject(crossChainConfig.getClass().getFields(), crossChainConfig);
-    configObject.put("crossChainConfig", crossChainObject);
-    return configObject;
+    return crossChainObject;
   }
 
-  //获取BaseSetting配置信息-----------待校验
+  //获取BaseSetting配置信息
   private JSONObject getBaseSettingConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
-    JSONObject configObject = new JSONObject();
-
+//    loadConfig(loadConfig);
+    initBaseSettingConfig();
     JSONObject baseSettingObject = generateJSONObject(baseSettingConfig.getClass().getFields(), baseSettingConfig);
-    baseSettingObject.put(Common.chainIdFiled, chainId);
-    baseSettingObject.put(Common.chainNameFiled, chainName);
-    configObject.put("baseSettingConfig", baseSettingObject);
-    return configObject;
+    return baseSettingObject;
+
+
   }
 
   //获取genesisAsset配置信息
   private JSONObject getGenesisAssetConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
+//    loadConfig(loadConfig);
+    genesisAssetConfig = new GenesisAssetConfig(Args.getAccountsFromConfig(loadConfig));
     JSONObject configObject = new JSONObject();
 
     JSONObject genesisAssetObject = generateJSONObject(genesisAssetConfig.getClass().getFields(), genesisAssetConfig);
@@ -274,7 +274,8 @@ public class ConfigControlller {
 
   //获取genesisWitness配置信息
   private JSONObject getGenesisWitnessConfigJsonObject(com.typesafe.config.Config loadConfig) {
-    loadConfig(loadConfig);
+//    loadConfig(loadConfig);
+    genesisWitnessConfig = new GenesisWitnessConfig(Args.getWitnessesFromConfig(loadConfig));
     JSONObject configObject = new JSONObject();
 
     JSONObject genesisWitnessObject = generateJSONObject(genesisWitnessConfig.getClass().getFields(), genesisWitnessConfig);
@@ -284,12 +285,23 @@ public class ConfigControlller {
 
   @PostMapping(value = "/api/dbconfig")
   public JSONObject dbConfig(@RequestBody LinkedHashMap<String, Object> data) {
+    long id =data.getOrDefault("id", "1") instanceof String ?
+            (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+            (int) data.getOrDefault("id", 1);
     boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
-    String isOpenTransaction = (String) data.getOrDefault("isOpenTransaction", "on");
-    String dbEnine = (String) data.getOrDefault("dbEnine", "LEVELDB");
-//    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");
-    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
+    boolean OpenTransaction = (boolean) data.getOrDefault("isOpenTransaction", true);
+    String dbEngine = (String) data.getOrDefault("dbEngine", "LEVELDB");
+//    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");engine
+//    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
+    boolean backupEnable = (boolean) data.getOrDefault("backupEnable", false);
+    int backupFrequency = (int) data.getOrDefault("backupFrequency", 10000);
 
+    String isOpenTransaction = "";
+    if(OpenTransaction){
+      isOpenTransaction = "on";
+    }else{
+      isOpenTransaction = "off";
+    }
     // 自定义数据库配置
     String dbCustom = (String) data.getOrDefault("dbCustom", "");
     //检查自定义数据库jar包路径是否正确
@@ -308,16 +320,18 @@ public class ConfigControlller {
     }
 
     ConfigGenerator configGenerator = new ConfigGenerator();
-    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, isOpenTransaction,
-            dbEnine, needToUpdateAsset), Common.configFiled);
+    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, dbEngine, isOpenTransaction, backupEnable, backupFrequency), String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+    return new Response(ResultCode.OK.code, "").toJSONObject();
   }
 
   @PostMapping(value = "/api/networkconfig")
   public JSONObject networkConfig(@RequestBody LinkedHashMap<String, Object> data) {
+    long id =data.getOrDefault("id", "1") instanceof String ?
+            (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+            (int) data.getOrDefault("id", 1);
     int maxHttpConnectNumber = data.getOrDefault("maxHttpConnectNumber", "50") instanceof String ?
             (Integer.parseInt((String) data.getOrDefault("maxHttpConnectNumber", "50"))) :
             (int) data.getOrDefault("maxHttpConnectNumber", 50);
@@ -339,7 +353,7 @@ public class ConfigControlller {
 
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new NetworkConfig(maxHttpConnectNumber, solidityRPCPort, rpcPort,
-            httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity, acrive), Common.configFiled);
+            httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity, acrive), String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
@@ -348,9 +362,11 @@ public class ConfigControlller {
   }
 
 
-  @PostMapping("/api/p2pconfig")
+  @PostMapping("/api/p2pConfig")
   public JSONObject p2pConfig(@RequestBody LinkedHashMap<String, Object> data) {
-
+    long id =data.getOrDefault("id", "1") instanceof String ?
+            (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+            (int) data.getOrDefault("id", 1);
     ArrayList<String> ipList = (ArrayList<String>) data.get("seed_node_ip_list");
     int p2pVersion = data.getOrDefault("p2pVersion", "0") instanceof String ?
             (Integer.parseInt((String) data.getOrDefault("p2pVersion", "0"))) :
@@ -382,7 +398,7 @@ public class ConfigControlller {
     }
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new P2PConfig(p2pVersion, node_max_active_nodes,
-            activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), Common.configFiled);
+            activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), String.format("%s_%s", Common.configFiled, id+""));
 
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
@@ -417,7 +433,9 @@ public class ConfigControlller {
 
   @PostMapping(value = "/api/baseSettingConfig")
   public JSONObject baseSettingConfig(@RequestBody JSONObject jsonData) {
-
+    long id =jsonData.getOrDefault("id", "1") instanceof String ?
+            (Long.parseLong((String)jsonData.getOrDefault("id", "1"))) :
+            (int) jsonData.getOrDefault("id", 1);
     String chainId = (String) jsonData.getOrDefault("chainId", "1");
     String chainName = (String) jsonData.getOrDefault("chainName", "Parachain");
     int blockProducedTimeOut = jsonData.getOrDefault("blockProducedTimeOut", "75") instanceof String ?
@@ -442,7 +460,7 @@ public class ConfigControlller {
     }
     ConfigGenerator configGenerator = new ConfigGenerator();
     result = configGenerator.updateConfig(new BaseSettingConfig(blockProducedTimeOut, maintenanceTimeInterval,
-            proposalExpireTime, minParticipationRate), Common.configFiled);
+            proposalExpireTime, minParticipationRate), String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
@@ -509,7 +527,7 @@ public class ConfigControlller {
 
   }
 
-  @GetMapping(value = "/api/Dbconfig")
+  @GetMapping(value = "/api/dbconfig")
   public JSONObject getDbConfig(long id) {
     refresh(id);
     parseConfig(id);
@@ -518,7 +536,7 @@ public class ConfigControlller {
 
   }
 
-  @GetMapping(value = "/api/P2Pconfig")
+  @GetMapping(value = "/api/p2pConfig")
   public JSONObject getP2PConfig(long id) {
     refresh(id);
     parseConfig(id);
@@ -527,7 +545,7 @@ public class ConfigControlller {
 
   }
 
-  @GetMapping(value = "/api/Networkconfig")
+  @GetMapping(value = "/api/networkconfig")
   public JSONObject getNetworkConfig(long id) {
     refresh(id);
     parseConfig(id);
@@ -545,7 +563,7 @@ public class ConfigControlller {
 
   }
 
-  @GetMapping(value = "/api/BaseSettingconfig")
+  @GetMapping(value = "/api/baseSettingConfig")
   public JSONObject getBaseSettingConfig(long id) {
     refresh(id);
     parseConfig(id);

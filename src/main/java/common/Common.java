@@ -116,6 +116,8 @@ public class Common {
 
   public static final String p2pVersionField = "node_p2p_version";
 
+  public static final String P2PVersionField = "p2pVersion";
+
   public static final String ifShowLogField = "ifShowLog";
 
   public static final String createTimeField = "createTime";

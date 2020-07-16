@@ -38,6 +38,8 @@ public class Args {
   private static final String GENESIS_BLOCK_WITNESSES = "genesis.block.witnesses";
   private static final String ACTUATOR_WHITELIST = "actuator.whitelist";
   private static final String CRYPTO_ENGINE = "crypto.engine";
+  private static final String STORAGE_BACKUP_ENABLE = "storage.backup.enable";
+  private static final String STORAGE_BACKUP_FREQUENCY = "storage.backup.frequency";
 
   public static boolean getNodeHttpFullnodeEnable(final Config config) {
     return config.hasPath(NODE_HTTP_FULLNODE_ENABLE) ? config
@@ -187,5 +189,14 @@ public class Args {
   public static String getCrypto(final Config config) {
     return config.hasPath(CRYPTO_ENGINE) ? config
         .getString(CRYPTO_ENGINE) : "eckey";
+  }
+
+  public static boolean getBackupEnable(final Config config) {
+    return config.hasPath(STORAGE_BACKUP_ENABLE) ? config
+            .getBoolean(STORAGE_BACKUP_ENABLE) : false;
+  }
+
+  public static int getBackupFrequency(final Config config) {
+    return config.hasPath(STORAGE_BACKUP_FREQUENCY) ? config.getInt(STORAGE_BACKUP_FREQUENCY) : 10000;
   }
 }
