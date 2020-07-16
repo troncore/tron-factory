@@ -103,12 +103,17 @@
       clearInterval(this.timeID)
     },
     methods: {
-      getNodeList () {
+      getNodeList (isCheckChainStatus) {
         this.tableLoading = true
         this.$_api.getStarted.getNodeList({}, (err, res) => {
           this.tableLoading = false
           if (err) return
           this.tableData = Array.isArray(res) ? res : []
+
+          // when all nodes stopped, it needs to re-check the chain status
+          if (isCheckChainStatus && this.tableData.every(node => node.deployStatus === 0)) {
+            this.$emit('checkChainPublish')
+          }
 
           this.$emit('nodeList', this.tableData)
         })
@@ -234,7 +239,7 @@
           let _index = this.stopIndexs.indexOf(index)
           this.stopIndexs.splice(_index, 1)
           if (err) return
-          this.getNodeList()
+          this.getNodeList(true)
         })
       },
 
