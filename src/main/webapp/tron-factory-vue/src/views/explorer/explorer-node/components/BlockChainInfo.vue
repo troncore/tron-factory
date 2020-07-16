@@ -2,10 +2,7 @@
   <div class="block-chain-info">
     <div class="info-header">
       <div class="line-item">
-        <div class="info-item">
-          <!--<span class="label">{{ $t('explorer.lastBlockTime')}}：</span>-->
-          <!--<span class="value">{{(lastProductBlockTime || '0.0') + 's ago' }}</span>-->
-        </div>
+        <div class="info-item"></div>
         <div class="info-item">
           <span class="label">{{ $t('explorer.blockDuring')}}：</span>
           <span class="value">{{ '3s' }}</span>
@@ -22,8 +19,8 @@
 
       <div v-loading="loading">
         <!-- every block-->
-        <template v-if="lastBlockList.length">
-          <div class="block-box" v-for="(block, index) in lastBlockList" :key="block.high">
+        <template v-if="blockList.length">
+          <div class="block-box" v-for="(block, index) in blockList" :key="block.high">
             <div class="box-header">
               <div class="block-high">{{ block.high }}</div>
               <div class="block-time">{{ $_moment(block.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</div>
@@ -48,6 +45,7 @@
 </template>
 
 <script>
+const TIME_IDs = []
 export default {
   name: "block-chain-info",
   props: {
@@ -56,12 +54,8 @@ export default {
   data () {
     return {
       loading: false,
-      lastBlockList: [],
-      lastProductBlockTime: 0,
+      blockList: [],
       timeID: null,
-      httpTimeID: null,
-      httpTimeIDs: [],
-      stopHttp: false,
     }
   },
   watch: {
@@ -76,9 +70,7 @@ export default {
     this.getBlockChainInfo()
   },
   destroyed() {
-    clearInterval(this.timeID)
     this.clearAllTimeout()
-    this.stopHttp = true
   },
 
   methods: {
@@ -88,18 +80,14 @@ export default {
     },
 
     handleRefresh() {
-      clearInterval(this.timeID)
       this.clearAllTimeout()
 
-      this.lastProductBlockTime = 0
-      this.lastBlockList.splice(0)
-
-      this.stopHttp = false
+      this.blockList.splice(0)
       this.loading = true
-      setTimeout(this.getNowBlockInfo, 1000)
+      setTimeout(this.getNowBlockInfo, 500)
     },
 
-    getNowBlockInfo () {
+    getNowBlockInfo (oldTimeID) {
       this.$_api.explorer.getNowBlockInfo({
         type: this.configForm.nodeType,
         url: this.configForm.nodeURL,
@@ -108,14 +96,13 @@ export default {
       }, (err, res = {}) => {
         this.loading = false
 
-        if (err || this.stopHttp) {
-          this.lastProductBlockTime = 0
-          clearInterval(this.timeID)
+        if (err || oldTimeID && !TIME_IDs.includes(oldTimeID)) {
+          this.clearAllTimeout()
           return
         }
 
         let resData = res.result || {}
-        if (resData.blockID && !~this.lastBlockList.findIndex(block => block.hash === resData.blockID)) {
+        if (resData.blockID && !~this.blockList.findIndex(block => block.hash === resData.blockID)) {
           let rawData = resData.block_header.raw_data
           let block = {
             high: '#' + rawData.number,
@@ -124,23 +111,26 @@ export default {
             status: 0
           }
 
-          /*this.lastProductBlockTime = Math.abs((Date.now() - block.timestamp) / 1000).toFixed(1)
-          clearInterval(this.timeID)
-          this.timeID = setInterval(() => {
-            this.lastProductBlockTime = (Number(this.lastProductBlockTime) + 0.1).toFixed(1)
-          }, 100)*/
-          this.lastBlockList.unshift(block)
-          if(this.lastBlockList.length > 20) this.lastBlockList.splice(20)
+          this.blockList.unshift(block)
+          if(this.blockList.length > 20) this.blockList.splice(20)
         }
 
-        this.httpTimeID = setTimeout(this.getNowBlockInfo, 1000)
-        this.httpTimeIDs.push(this.httpTimeID)
+        // chain can product the block
+        if (res.status === 1) {
+          this.timeID = setTimeout(() => {
+            this.getNowBlockInfo(this.timeID)
+          }, 1500)
+
+          TIME_IDs.push(this.timeID)
+        }
       })
     },
 
     clearAllTimeout () {
-      this.httpTimeIDs.forEach(clearTimeout)
-      this.httpTimeIDs = []
+      TIME_IDs.forEach(clearTimeout)
+      TIME_IDs.splice(0)
+      clearTimeout(this.timeID)
+      this.timeID = null
     }
 
   }
