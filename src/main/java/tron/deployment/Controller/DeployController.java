@@ -93,6 +93,7 @@ public class DeployController {
                             }
                         }
                         if(isDeployed){
+
                             return Common.deployFinishStatus;
                         }
                     }
@@ -392,13 +393,13 @@ public class DeployController {
 
                 //用户自定义交易模块
                 String plugin = "null";
-                if (json.containsKey(Common.customTransactionFiled)
+                if (node.containsKey(Common.customTransactionFiled)
                         && ((String) json.get(Common.customTransactionFiled)).length() != 0) {
                     plugin = (String) json.get(Common.customTransactionFiled);
                 }
 
                 //用户自定义数据库模块
-                String dbCustom = (String) json.get(Common.dbCustomFiled);
+                String dbCustom = (String) node.get(Common.dbCustomFiled);
                 if (dbCustom.equals("")) {
                     dbCustom = "null";
                 }

@@ -1,14 +1,14 @@
 package tron.deployment.Controller;
 
 import static common.LogConfig.LOG;
-import static common.Util.parseConfig;
-import static common.Util.readJsonFile;
-import static common.Util.writeJsonFile;
+import static common.Util.*;
 import static wallet.Wallet.*;
 
 import ch.ethz.ssh2.Connection;
+import com.googlecode.cqengine.query.simple.In;
 import com.typesafe.config.Config;
 import common.Args;
+import common.Util;
 import common.Common;
 import common.utils.Hash;
 import common.utils.HttpUtil;
@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
-import common.Util;
 import entity.WitnessEntity;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +29,7 @@ import org.springframework.stereotype.Component;
 import org.tron.keystore.CipherException;
 import response.Response;
 import tron.deployment.shellExecutor.BashExecutor;
+import wallet.Wallet;
 
 @CrossOrigin
 @RestController
@@ -667,6 +667,12 @@ public class NodeController {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     Map<String, Object> nodeInfo = new HashMap<>();
+    String[] ipPort = url.split(":");
+    if(!isHostConnection(ipPort[0], Integer.parseInt(ipPort[1]))){
+      jsonObj.put("result",nodeInfo);
+      jsonObj.put("status", 0);
+      return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
+    }
     try{
       if(type == 1){
         nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
@@ -674,6 +680,7 @@ public class NodeController {
         nodeInfo = httpUtil.getInfo(url+"/wallet/getnodeinfo");
       }
       jsonObj.put("result",nodeInfo);
+      jsonObj.put("status", 1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
       return new Response(ResultCode.NOT_FOUND.code, "Failed to get node info, please check the url:"+"http://"+url+"/wallet/getnodeinfo").toJSONObject();
@@ -686,6 +693,12 @@ public class NodeController {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     Map<String, Object> nowBlockInfo = new HashMap<>();
+    String[] ipPort = url.split(":");
+    if(!isHostConnection(ipPort[0], Integer.parseInt(ipPort[1]))){
+      jsonObj.put("result",nowBlockInfo);
+      jsonObj.put("status", 0);
+      return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
+    }
     try{
       if(type == 1){
         nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
@@ -693,10 +706,92 @@ public class NodeController {
         nowBlockInfo = httpUtil.getInfo(url+"/wallet/getnowblock");
       }
       jsonObj.put("result",nowBlockInfo);
+      jsonObj.put("status", 1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
       return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:"+url+"/wallet/getnowblock").toJSONObject();
     }
+  }
+
+  @GetMapping(value = "/api/stopNode")
+  public JSONObject stopNode(@RequestParam long id) {
+    BashExecutor bashExecutor = new BashExecutor();
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nodes)) {
+      nodes = new JSONArray();
+    }
+    JSONObject node = Util.getNodeInfo(nodes, id);
+    String ip = (String) node.get(Common.ipFiled);
+    Long port = (Long) node.get(Common.portFiled);
+    String userName = (String) node.get(Common.userNameFiled);
+    boolean isSR = (Boolean) node.get(Common.isSRFiled);
+    String sshPassword = (String) node.get(Common.sshPasswordFiled);
+    String privateKey = "";
+    String privateKeypath = (String) node.get(Common.privateKeyFiled);
+    if (isSR) {
+      try {
+        privateKey = Wallet.getPrivateString(String.format("%s/%s", Common.walletFiled, privateKeypath));
+      } catch (CipherException | IOException e) {
+        LOG.error(e.toString());
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "load privateKey info failed").toJSONObject();
+      }
+    }
+    //执行部署脚本
+    if (Objects.nonNull(privateKey)) {
+      bashExecutor.callStopNodeScript(ip, port, userName,sshPassword,privateKey,id);
+    } else {
+      bashExecutor.callStopNodeScript(ip, port, userName,sshPassword,"null",id);
+    }
+    String status = checkIsStoped(String.format(Common.stopNodeFormat, id+""));
+    DeployController deployController = new DeployController();
+    if (status.equals(Common.stopNodeSuccessStatus)) {
+      JSONObject oldNode = Util.getNodeInfo(nodes, id);
+      oldNode.put(Common.isDeployedFiled, false);
+      oldNode.put(Common.deployStatusFiled, 0);
+      deployController.deleteNode(id);
+      json = readJsonFile();
+      JSONArray nowNodes = (JSONArray) json.get(Common.nodesFiled);
+      if (Objects.isNull(nowNodes)) {
+        nowNodes = new JSONArray();
+      }
+      nowNodes.add(oldNode);
+      json.put(Common.nodesFiled, nowNodes);
+      updateNodesInfo(nowNodes, json);
+    }
+      return new Response(ResultCode.OK.code, "").toJSONObject();
+  }
+
+  //查询节点是否成功停止
+  private String checkIsStoped(String path) {
+    File file = new File(path);
+    if (file.isFile() && file.exists()) {
+      try {
+        InputStreamReader read = new InputStreamReader(
+                new FileInputStream(file), Common.encoding);
+        BufferedReader bufferedReader = new BufferedReader(read);
+        String lineTxt;
+
+        while ((lineTxt = bufferedReader.readLine()) != null) {
+          if(lineTxt.contains("successfully")){
+            return Common.stopNodeSuccessStatus;
+          }
+          if (lineTxt.contains("failed")) {
+            return Common.stopNodeFailStatus;
+          }
+
+        }
+
+        bufferedReader.close();
+        read.close();
+
+      } catch (Exception e) {
+        LOG.error(e.toString());
+      }
+    } else {
+      return Common.notFoundStatus;
+    }
+    return Common.stopNodeFailStatus;
   }
 
 }

@@ -11,6 +11,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 
 import org.json.simple.JSONArray;
@@ -79,6 +82,25 @@ public class Util {
     WalletFile walletFile = createWalletFile(new byte[]{}, priKey);
     String keystoreName = store2Keystore(walletFile);
     return keystoreName;
+  }
+
+  public static boolean isHostConnection(String ip, int port) {
+    Socket socket = new Socket();
+    try {
+      socket.connect(new InetSocketAddress(ip, port),3000);
+    } catch (SocketTimeoutException s) {
+      return false;
+    } catch (IOException e) {
+//            e.printStackTrace();
+      return false;
+    } finally {
+      try {
+        socket.close();
+      } catch (IOException e) {
+//                e.printStackTrace();
+      }
+    }
+    return true;
   }
 
 }

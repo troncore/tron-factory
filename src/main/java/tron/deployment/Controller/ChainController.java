@@ -287,25 +287,6 @@ public class ChainController {
     return new Response(ResultCode.OK.code, statusObj).toJSONObject();
   }
 
-  public static boolean isHostConnection(String ip, int port) {
-    Socket socket = new Socket();
-    try {
-      socket.connect(new InetSocketAddress(ip, port),3000);
-    } catch (SocketTimeoutException s) {
-      return false;
-    } catch (IOException e) {
-//            e.printStackTrace();
-      return false;
-    } finally {
-      try {
-        socket.close();
-      } catch (IOException e) {
-//                e.printStackTrace();
-      }
-    }
-    return true;
-  }
-
   @GetMapping(value = "/api/checkChainPublish")
   public JSONObject checkChainPublish() throws InterruptedException {
     boolean flag = false;
@@ -319,8 +300,7 @@ public class ChainController {
       if (isSR) {
         boolean isDepolyed = (boolean) node.get(Common.isDeployedFiled);
         boolean ifShowLog = (boolean) node.get(Common.ifShowLogField);
-        if (ifShowLog) {
-          flag = true;
+//        if (ifShowLog) {
           if (isDepolyed) {
 //            Thread.sleep(30000);
             String ip = (String) node.get(Common.ipFiled);
@@ -344,12 +324,12 @@ public class ChainController {
             }
             break;
           }
-        }
+//        }
       }
     }
-    if(flag){
+    /*if(flag){
       return new Response(ResultCode.OK.code, "", 1).toJSONObject();
-    }
+    }*/
     return new Response(ResultCode.OK.code, "", 0).toJSONObject();
   }
 

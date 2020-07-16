@@ -96,6 +96,8 @@ public class Common {
 
   public static final String dbJarPathFormat = "logs/dbJarPath.log" ;
 
+  public static final String stopNodeFormat = "logs/stopNode_%s.log" ;
+
   public static final String allNodesField = "allNodes";
 
   public static final String serviceTypeFiled = "serviceType";
@@ -140,6 +142,10 @@ public class Common {
   public static final String connectSuccessStatus ="ssh connect successfully";
 
   public static final String connectFailedStatus = "ssh connect failed";
+
+  public static final String stopNodeSuccessStatus = "stop node successfully";
+
+  public static final String stopNodeFailStatus = "stop node failed";
 
   public static final String pid = "start java-tron with pid";
 
