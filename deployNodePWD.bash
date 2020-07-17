@@ -513,7 +513,7 @@ if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
   rm -rf startPid startHostName
-  rm -rf $5
+  #rm -rf $5
   exit
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -521,7 +521,7 @@ else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo  "[$time] ${success}"
   rm -rf startPid startHostName
-  rm -rf $5
+  #rm -rf $5
   exit
 fi
 

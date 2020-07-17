@@ -3,9 +3,8 @@ time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start stopNode"
 
 ############################################################
-#将pid存到startPid文件中，在执行完start.sh后检查pid是否存在
-pid=`ssh -p $2 $3@$1 "cd .&&cat startPid"`
-result=`ssh -p $2 $3@$1 "kill -9 $pid"`
+#获取远程机器的pid
+result=`ssh -p $2 $3@$1 "cd ~&&head -1 startPid | xargs kill -9"`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] stop $pid successfully"

@@ -124,7 +124,7 @@ public class BashExecutor {
             if(sshPassword.equals("")){
                 absolutePath = System.getProperty("user.dir").concat("/stopNode.bash");
             }else{
-                absolutePath = System.getProperty("user.dir").concat("/deployNodePWD.bash");
+                absolutePath = System.getProperty("user.dir").concat("/stopNodePWD.bash");
             }
 //            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
             String[] cmdArray = {absolutePath, ip, port.toString(), userName, sshPassword, privateKey};
@@ -134,7 +134,7 @@ public class BashExecutor {
             String cmd = StringUtils.join(cmdArray, " ");
             Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
             process.waitFor();
-            LOG.info("deploy cmd: {}", cmd);
+             LOG.info("deploy cmd: {}", cmd);
 
         }
         catch (Exception e){

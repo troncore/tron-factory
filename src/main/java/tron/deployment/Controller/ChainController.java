@@ -136,6 +136,13 @@ public class ChainController {
     //从配置文件中获取p2pVersion
     jsonObj.put(Common.P2PVersionField,Args.getP2pVersionFromConfig(Util.config)+"");
 
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if(nodes.size() == 0){
+      jsonObj.put(Common.canChangeCryptoField,true);
+    }else{
+      jsonObj.put(Common.canChangeCryptoField,false);
+    }
+
     //从配置文件中获取genesisBlockAssets
     List<Account> linkedHashMaps = Args.getAccountsFromConfig(Util.config);
     List<LinkedHashMap<String, Object>> linkedHash = new ArrayList<>();
