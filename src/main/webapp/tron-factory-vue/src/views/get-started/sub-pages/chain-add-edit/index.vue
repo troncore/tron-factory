@@ -133,10 +133,11 @@
         } else {
           // edit chain
           if (await this.hasBlockChain()) {
-            this.getChainInfo()
             this.checkChainPublish() // this.canOperate = true
           }
         }
+
+        this.getChainInfo()
       },
 
       async hasBlockChain () {
@@ -166,16 +167,13 @@
         this.$_api.getStarted.getChainInfo({}, (err, res = {}) => {
           if (err) return
 
-          if (!this.isAddPage) {
-            Object.assign(this.form,{
-              chainName: res.chainName,
-              crypto: res.crypto, // sm2
-              p2pVersion: res.p2pVersion,
-              consensus: res.consensus,
-            })
+          this.form.chainName = res.chainName
 
-            this.canChangeCrypto = res.canChangeCrypto
-          }
+          this.canChangeCrypto = res.canChangeCrypto
+          this.form.crypto = res.crypto
+
+          this.form.p2pVersion = res.p2pVersion
+          this.form.consensus = res.consensus
 
           this.genesisBlockAssets = res.genesisBlockAssets || []
         })
