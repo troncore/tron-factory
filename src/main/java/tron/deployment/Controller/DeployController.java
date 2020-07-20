@@ -213,7 +213,7 @@ public class DeployController {
                 boolean isDeployed = (boolean) node.get(Common.isDeployedFiled);
                 if(isDeployed){
                     String nodeIp = (String) node.get(Common.ipFiled);
-                    String httpPort = (String)node.get(Common.httpPortFiled);
+                    long httpPort = (long)node.get(Common.httpPortFiled);
                     deployedIpList.add(nodeIp+":"+httpPort);
                 }
             }

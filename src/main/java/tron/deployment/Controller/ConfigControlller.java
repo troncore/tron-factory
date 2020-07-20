@@ -262,7 +262,7 @@ public class ConfigControlller {
   }
 
   //获取genesisAsset配置信息
-  private JSONObject getGenesisAssetConfigJsonObject(com.typesafe.config.Config loadConfig) {
+  public JSONObject getGenesisAssetConfigJsonObject(com.typesafe.config.Config loadConfig) {
 //    loadConfig(loadConfig);
     genesisAssetConfig = new GenesisAssetConfig(Args.getAccountsFromConfig(loadConfig));
     JSONObject configObject = new JSONObject();
@@ -500,10 +500,10 @@ public class ConfigControlller {
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
 
-  @PostMapping(value = "/api/checkAddress")
-  public JSONObject checkAddress(@RequestBody JSONObject jsonObject) {
+  @GetMapping(value = "/api/checkAddress")
+  public JSONObject checkAddress(@RequestParam(value = "address", required = true, defaultValue = "") String address) {
     boolean result = true;
-    String address = (String) jsonObject.get(Common.addressFiled);
+//    String address = (String) jsonObject.get(Common.addressFiled);
     AtomicBoolean base58check = new AtomicBoolean(false);
     byte[] bytes = Wallet.decode58Check(address);
     if (bytes == null) {
@@ -514,7 +514,6 @@ public class ConfigControlller {
     }
     JSONObject jsonObj = new JSONObject();
     jsonObj.put("result", result);
-    System.out.println(jsonObj);
     return new Response(ResultCode.OK.code, "", jsonObj).toJSONObject();
   }
 

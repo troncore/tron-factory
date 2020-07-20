@@ -146,8 +146,9 @@ public class ChainController {
     //从配置文件中获取genesisBlockAssets
     List<Account> linkedHashMaps = Args.getAccountsFromConfig(Util.config);
     List<LinkedHashMap<String, Object>> linkedHash = new ArrayList<>();
-    LinkedHashMap<String, Object> stringStringLinkedHashMap = new LinkedHashMap<>();
+
     for(int i = 0;i<linkedHashMaps.size();i++){
+      LinkedHashMap<String, Object> stringStringLinkedHashMap = new LinkedHashMap<>();
       stringStringLinkedHashMap.put("accountName", linkedHashMaps.get(i).getAccountName().toStringUtf8());
       stringStringLinkedHashMap.put("accountType", linkedHashMaps.get(i).getAccountType().toString());
       stringStringLinkedHashMap.put("address", encode58Check(linkedHashMaps.get(i).getAddress()));
@@ -155,6 +156,8 @@ public class ChainController {
       linkedHash.add(stringStringLinkedHashMap);
     }
     jsonObj.put("genesisBlockAssets", linkedHash);
+
+    System.out.println(jsonObj);
 
     return new Response(ResultCode.OK.code, "", jsonObj).toJSONObject();
   }
