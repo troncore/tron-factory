@@ -1,1 +1,1 @@
-{"ipList":{},"chainName":"Parachain","minValidatorNumber":1,"customTransaction":"","crossChainFee":0.01,"configStatus":1,"branch":"master","branchNote":"","consensus":"dpos","nodes":[],"enableCrossChain":false,"chainId":"1","dbEngine":"leveldb","maxValidatorNumber":4,"dbCustom":"","idMax":0}
+{"ipList":{},"chainName":"","minValidatorNumber":1,"customTransaction":"","crossChainFee":0.01,"configStatus":1,"branch":"master","branchNote":"","consensus":"dpos","nodes":[],"enableCrossChain":false,"chainId":"1","dbEngine":"leveldb","maxValidatorNumber":4,"dbCustom":"","idMax":0}
