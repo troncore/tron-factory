@@ -18,7 +18,7 @@
         <div class="card-body">
           <el-form-item prop="port" >
             <span slot="label">{{ $t('端口') }}</span>
-            <el-input v-model.trim="form.port" type="number" min="0" max="65535" class="width-300" tabindex="4" clearable :placeholder="$t('请输入ssh启用的端口')" />
+            <el-input v-model.trim="form.port" type="number" min="0" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('请输入ssh启用的端口')" />
           </el-form-item>
           <el-form-item prop="sshConnectType">
             <span slot="label">{{ $t('安全验证方式') }}</span>
@@ -27,7 +27,7 @@
           </el-form-item>
           <el-form-item prop="userName" :class="{'margin-bottom-0': form.sshConnectType !== 1}">
             <span slot="label">{{ $t('用户名') }}</span>
-            <el-input v-model.trim="form.userName" class="width-300" tabindex="3" clearable :placeholder="$t('请输入连接ssh的用户名')" />
+            <el-input v-model.trim="form.userName" class="width-300" tabindex="4" clearable :placeholder="$t('请输入连接ssh的用户名')" />
           </el-form-item>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
             <span slot="label">{{ $t('密码') }}</span>

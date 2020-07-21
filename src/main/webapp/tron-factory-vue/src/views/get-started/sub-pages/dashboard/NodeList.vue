@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="table-header">
         <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
-        <el-button class="im-button mini el-icon-caret-right" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"> {{ $t('启动节点') }}</el-button>
+        <el-button class="im-button mini el-icon-caret-right" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"> {{ $t(deployLoading ? '启动中' : '启动节点') }}</el-button>
       </div>
       <div class="table-box">
         <el-table
@@ -54,11 +54,17 @@
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('查看') }}</el-button>
 
               <el-button v-if="scope.row.deployStatus !== 1" type="text" @click="handleConfig(scope.row)">{{ $t('配置') }}</el-button>
-              <el-button v-else type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
+              <el-button
+                v-else
+                type="text"
+                :loading="stopIndexs.includes(scope.$index)"
+                @click="handleStop(scope.row, scope.$index)">
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : '停止') }}
               </el-button>
 
-              <el-button v-if="scope.row.ifShowLog" type="text" @click="handleLog(scope.row)">{{ $t('日志') }}</el-button>
+              <el-button v-if="scope.row.ifShowLog" type="text" @click="handleLog(scope.row)">
+                <span :class="{'color-danger': scope.row.isError}">{{ $t('日志') }}</span>
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -68,8 +74,8 @@
     <node-deploy
       :visible.sync="deployDialogVisible"
       :ids="deployNodesIds"
-      @refreshList="getNodeList"
-      @checkDeployResult="checkDeployResult"/>
+      :deploy-loading.sync="deployLoading"
+      @getNodeList="() => getNodeList(true)"/>
 
 
     <!-- view deploy log-->
@@ -116,17 +122,23 @@
           this.tableData = Array.isArray(res) ? res : []
 
           // when all nodes stopped, it needs to re-check the chain status
-          if (isCheckChainStatus && this.tableData.every(node => node.deployStatus === 0)) {
-            this.$emit('checkChainPublish')
-          }
+          if (isCheckChainStatus) this.$emit('checkChainPublish')
 
           this.$emit('nodeList', this.tableData)
         })
       },
 
-
       handleAddNode () {
         this.$router.push('/get-started/node-add')
+      },
+
+      handleSelectable (row, index) {
+        return row.deployStatus !== 1
+      },
+
+      handleSelectionChange (rows) {
+        this.deployNodes = rows
+        this.deployNodesIds = rows.map(item => item.id).join(',')
       },
 
       // ready deploy node
@@ -152,68 +164,6 @@
 
         this.deployDialogVisible = true
       },
-
-      // check the deploying nodes result
-      checkDeployResult () {
-        let flag = false
-        this.deployLoading = true
-        this.timeID = setInterval(() => {
-          if (!flag) {
-            flag = true // the network may slow，avoid frequently to call ajax
-            this.$_api.getStarted.checkNode({ids: this.deployNodesIds}, (err, res) => {
-              flag = false
-              if (err) {
-                this.deployLoading = false
-                clearInterval(this.timeID)
-                return
-              }
-
-              // check all deployed node whether if finish deployed
-              if (res.hasOwnProperty('status')) {
-                let message = ''
-                switch (res.status) {
-                  case 0:
-                    message = '节点已成功启动'
-                    break
-                  case 1:
-                    message = '发布失败，初始节点未启动成功'
-                    break
-                  case 2:
-                    message = '部分节点未启动成功'
-                    break
-                }
-
-                if (res.status === 0) {
-                  this.$notify.success({
-                    title: this.$t('base.successful'),
-                    message: this.$t(message),
-                  })
-                } else {
-                  this.$notify.error({
-                    title: this.$t('base.warning'),
-                    message: this.$t(message),
-                  })
-                }
-
-                this.deployLoading = false
-                this.getNodeList()
-                this.$emit('checkChainPublish')
-                clearInterval(this.timeID)
-              }
-            })
-          }
-        }, 1000 * 3)
-      },
-
-      handleSelectable (row, index) {
-        return row.deployStatus !== 1
-      },
-
-      handleSelectionChange (rows) {
-        this.deployNodes = rows
-        this.deployNodesIds = rows.map(item => item.id).join(',')
-      },
-
 
       handleConfig (row) {
         this.$router.push('/node-config/quick?id='+ row.id)

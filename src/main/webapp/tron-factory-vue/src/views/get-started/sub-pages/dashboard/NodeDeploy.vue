@@ -26,6 +26,10 @@
   export default {
     name: "node-deploy",
     props: {
+      deployLoading: {
+        type: Boolean,
+        required: true,
+      },
       visible: {
         type: Boolean,
         required: true,
@@ -75,6 +79,9 @@
         }
 
         this.startDeploy()
+
+        this.$emit('update:visible', false)
+        this.$emit('update:deployLoading', true)
       },
 
       // deploy node
@@ -84,8 +91,8 @@
           ids: this.ids,
           filePath: this.form.filePath,
         }, (err, res = {}) => {
+          this.$emit('update:deployLoading', false)
           this.loading = false
-          // this.$emit('refreshList')
 
           if (err) return
 
@@ -93,10 +100,16 @@
             let message = ''
             switch (res.status) {
               case 0:
-                message = '节点正在启动中，请稍等......'
+                message = '节点已成功启动'
                 break
               case 1:
-                message = '初次运行区块链节点时，其中SR节点数量必须>=1且为奇数'
+                message = '发布失败，节点未启动成功，请查看相应日志'
+                break
+              case 2:
+                message = '部分节点未启动成功，请查看日志'
+                break
+              case 3:
+                message = '当前存在正在启动中的节点，请稍后再试'
                 break
             }
 
@@ -112,8 +125,8 @@
               })
             }
           }
-          this.$emit('checkDeployResult')
-          this.$emit('update:visible', false)
+
+          this.$emit('getNodeList')
         })
       },
     },

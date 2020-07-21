@@ -45,7 +45,7 @@
             <el-button
               class="im-button mini"
               size="mini"
-              v-if="chainStatus === 2"
+              v-if="chainStatus === 0"
               :disabled="deleteLoading"
               @click="handleDelete">
               <i :class="deleteLoading ? 'el-icon-loading' : 'el-icon-delete'"></i>
