@@ -7,7 +7,7 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('nodesManage.deploy') }}</div>
+      <div class="title">{{ $t('启动节点') }}</div>
     </div>
 
     <div class="dialog-content">
@@ -98,8 +98,6 @@
               case 1:
                 message = '初次运行区块链节点时，其中SR节点数量必须>=1且为奇数'
                 break
-              default:
-                message = '节点未启动成功，请查看日志'
             }
 
             if (res.status === 0) {
@@ -114,7 +112,6 @@
               })
             }
           }
-
           this.$emit('checkDeployResult')
           this.$emit('update:visible', false)
         })

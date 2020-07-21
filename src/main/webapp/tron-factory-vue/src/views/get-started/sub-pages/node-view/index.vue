@@ -60,8 +60,8 @@
       </div>
     </div>
     <div class="page-footer">
-      <el-button class="im-button large" type="primary" :disabled="disabled" @click="handleSubmit">{{ $t('base.modify') }}</el-button>
-      <el-button class="im-button large" type="danger" :disabled="disabled" :loading="loading" @click="handleDelete">{{ $t('base.delete') }}</el-button>
+      <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" type="primary" :disabled="disabled" @click="handleSubmit">{{ $t('base.modify') }}</el-button>
+      <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" type="danger" :disabled="disabled" :loading="loading" @click="handleDelete">{{ $t('base.delete') }}</el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.return') }}</el-button>
     </div>
   </div>

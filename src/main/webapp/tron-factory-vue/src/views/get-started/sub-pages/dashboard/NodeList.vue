@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="table-header">
         <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('添加节点') }}</el-button>
-        <el-button class="im-button mini" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"><i class="el-icon-caret-right"></i> {{ $t('运行节点') }}</el-button>
+        <el-button class="im-button mini el-icon-caret-right" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"> {{ $t('启动节点') }}</el-button>
       </div>
       <div class="table-box">
         <el-table
@@ -41,7 +41,8 @@
           </el-table-column>
           <el-table-column prop="deployStatus" :label="$t('运行状态')" align="center">
             <template slot-scope="scope">
-              <el-tag size="mini" type="success" v-if="scope.row.deployStatus === 1">{{$t('运行中')}}</el-tag>
+              <el-tag size="mini" type="danger" v-if="scope.row.deployStatus === -1">{{$t('失败')}}</el-tag>
+              <el-tag size="mini" type="success" v-else-if="scope.row.deployStatus === 1">{{$t('运行中')}}</el-tag>
               <el-tag size="mini" type="info" v-else>{{$t('停止')}}</el-tag>
             </template>
           </el-table-column>
@@ -50,10 +51,14 @@
 
           <el-table-column prop="operate" width="180" :label="$t('操作')">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleConfig(scope.row)">{{ $t('配置') }}</el-button>
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('查看') }}</el-button>
-              <el-button type="text" @click="handleStop(scope.row, scope.$index)" :disabled="stopIndexs.includes(scope.$index)" v-if="scope.row.deployStatus === 1">{{ $t('停止') }}</el-button>
-              <el-button type="text" @click="handleLog(scope.row)" v-if="scope.row.ifShowLog">{{ $t('日志') }}</el-button>
+
+              <el-button v-if="scope.row.deployStatus !== 1" type="text" @click="handleConfig(scope.row)">{{ $t('配置') }}</el-button>
+              <el-button v-else type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
+                {{ $t(stopIndexs.includes(scope.$index) ? '' : '停止') }}
+              </el-button>
+
+              <el-button v-if="scope.row.ifShowLog" type="text" @click="handleLog(scope.row)">{{ $t('日志') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -61,7 +66,6 @@
     </div>
 
     <node-deploy
-      v-if="deployDialogVisible"
       :visible.sync="deployDialogVisible"
       :ids="deployNodesIds"
       @refreshList="getNodeList"
@@ -80,7 +84,8 @@
     name: "node-list",
     components: { NodeDeploy, NodeLog },
     props: {
-      nodeList: Function
+      nodeList: Function,
+      chainStatus: Number,
     },
     data () {
       return {
@@ -130,9 +135,12 @@
         if (!this.tableData.length)
           errorMsg = this.$t('nodesManage.pleaseAddNode')
         else if (!this.deployNodesIds.length)
-          errorMsg = this.$t('请勾选要运行的节点')
+          errorMsg = this.$t('请选择要运行的节点')
         else if (this.deployNodes.some(node => node.configStatus === 0))
-          errorMsg = this.$t('请完成所勾选节点的配置')
+          errorMsg = this.$t('请完成所有选择节点的配置')
+        else if (this.chainStatus === 0 && this.deployNodes.filter(node => node.isSR).length % 2 !== 1) {
+          errorMsg = this.$t('初次运行区块链节点时，所选择节点列表中SR节点数量必须>=1且为奇数')
+        }
 
         if (errorMsg) {
           this.$notify.warning({
@@ -168,10 +176,10 @@
                     message = '节点已成功启动'
                     break
                   case 1:
-                    message = '发布失败，节点未启动成功，请查看日志'
+                    message = '发布失败，初始节点未启动成功'
                     break
                   case 2:
-                    message = '部分节点未启动成功，请查看日志'
+                    message = '部分节点未启动成功'
                     break
                 }
 
