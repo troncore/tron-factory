@@ -419,6 +419,9 @@ public class DeployController {
                             }
                         }
                         deployStatus = 3;
+                        json = readJsonFile();
+                        nodes = (JSONArray) json.get(Common.nodesFiled);
+                        json.put(Common.nodesFiled, nodes);
                         json.put(Common.deployStatusFiled, deployStatus);
                         if (!writeJsonFile(json)) {
                             return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
@@ -431,6 +434,9 @@ public class DeployController {
                             updateNodeInfo(idArr[count], map);
 
                             deployStatus = 1;
+                            json = readJsonFile();
+                            nodes = (JSONArray) json.get(Common.nodesFiled);
+                            json.put(Common.nodesFiled, nodes);
                             json.put(Common.deployStatusFiled, deployStatus);
                             if (!writeJsonFile(json)) {
                                 return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
@@ -486,6 +492,9 @@ public class DeployController {
                     }
                 }
                 deployStatus = 3;
+                json = readJsonFile();
+                nodes = (JSONArray) json.get(Common.nodesFiled);
+                json.put(Common.nodesFiled, nodes);
                 json.put(Common.deployStatusFiled, deployStatus);
                 if (!writeJsonFile(json)) {
                     return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
@@ -511,6 +520,10 @@ public class DeployController {
                 }
             }
         }
+
+        json = readJsonFile();
+        nodes = (JSONArray) json.get(Common.nodesFiled);
+        json.put(Common.nodesFiled, nodes);
         json.put(Common.deployStatusFiled, deployStatus);
         if (!writeJsonFile(json)) {
             return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
