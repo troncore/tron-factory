@@ -3,7 +3,7 @@
     <div class="box-card">
       <el-form ref="form-box" :rules="formRules" :model="form" label-position="top">
         <div class="more-setting">
-          <el-checkbox v-model="checkCustomTransaction" @change="handleChangeCheckCustom">{{ $t('configuration.customTransactionModule') }}</el-checkbox>
+          <el-checkbox v-model="checkCustomTransaction" @change="handleChangeCheckCustom">{{ $t('nodeConfig.customTransactionModule') }}</el-checkbox>
         </div>
         <el-form-item
           ref="custom-transaction"
@@ -15,7 +15,7 @@
             :autosize="{ minRows: 4, maxRows: 6 }"
             :maxlength="300"
             :disabled="!checkCustomTransaction"
-            :placeholder="$t(checkCustomTransaction ? 'configuration.valid.inputCustomTransaction': 'configuration.valid.checkCustomTransaction')">
+            :placeholder="$t(checkCustomTransaction ? 'nodeConfig.valid.inputCustomTransaction': 'nodeConfig.valid.checkCustomTransaction')">
           </el-input>
         </el-form-item>
       </el-form>
@@ -49,7 +49,7 @@
       formRules() {
         const pathEndJAR = (rule, value, callback) => {
           if (this.checkCustomTransaction && !this.form.customTransaction.endsWith('.jar')) {
-            callback(new Error(this.$t('configuration.valid.pathEndJAR')))
+            callback(new Error(this.$t('nodeConfig.valid.pathEndJAR')))
           } else {
             callback()
           }
@@ -121,7 +121,7 @@
         if (!/\d+/.test(this.opNodeId)) {
           this.$notify.warning({
             title: this.$t('base.warning'),
-            message: this.$t('当前所编辑的节点为无效节点!'),
+            message: this.$t('nodeConfig.opUnValidNode'),
           })
           return false
         }

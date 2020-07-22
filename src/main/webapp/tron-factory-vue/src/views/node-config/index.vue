@@ -1,11 +1,11 @@
 <template>
   <div class="node-conf padding-20">
-    <div class="page-title">{{ $t('节点配置')}}</div>
+    <div class="page-title">{{ $t('nodeConfig.configuration')}}</div>
 
     <div class="im-card">
       <el-tabs v-model="activeName">
-        <el-tab-pane :label="$t('快速配置')" name="quick"></el-tab-pane>
-        <el-tab-pane :label="$t('自定义配置')" name="custom"></el-tab-pane>
+        <el-tab-pane :label="$t('nodeConfig.quickConfig')" name="quick"></el-tab-pane>
+        <el-tab-pane :label="$t('nodeConfig.customConfig')" name="custom"></el-tab-pane>
       </el-tabs>
 
       <component :is="activeComponent" />

@@ -4,12 +4,12 @@
       <div class="box-card">
         <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
           <el-form-item prop="httpFullNodePort">
-            <span slot="label">{{ $t('httpFullNodePort') }} <i class="help-tips">({{ $t('configuration.helpTips.httpFullNodePort') }})</i></span>
+            <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('nodeConfig.helpTips.httpFullNodePort') }})</i></span>
             <el-input v-model.trim="form.httpFullNodePort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
 
           <el-form-item prop="rpcPort" class="margin-bottom-0">
-            <span slot="label">{{ $t('rpcPort') }} <i class="help-tips">({{ $t('configuration.helpTips.rpcPort') }})</i></span>
+            <span slot="label">rpcPort <i class="help-tips">({{ $t('nodeConfig.helpTips.rpcPort') }})</i></span>
             <el-input v-model.trim="form.rpcPort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
           </el-form-item>
         </el-form>

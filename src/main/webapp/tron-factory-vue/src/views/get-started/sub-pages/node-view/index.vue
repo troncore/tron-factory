@@ -1,59 +1,59 @@
 <template>
   <div class="node-view">
-    <div class="page-title">{{ $t('节点详情') }}</div>
+    <div class="page-title">{{ $t('getStarted.nodesManage.nodeDetail') }}</div>
     <div class="page-body">
       <div class="im-card">
-        <div class="card-header">{{ $t('服务器信息') }}</div>
+        <div class="card-header">{{ $t('getStarted.nodesManage.serverInfo') }}</div>
         <div class="card-body">
           <div class="line-item">
-            <span class="label">{{ $t('服务器IP') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.ip') }}:</span>
             <span class="value">{{ nodeInfo.ip || '--' }}</span>
           </div>
           <div class="line-item">
-            <span class="label">{{ $t('监听端口') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.listenPort') }}:</span>
             <span class="value">{{ nodeInfo.listenPort || '--' }}</span>
           </div>
         </div>
-        <div class="card-header">{{ $t('SSH信息') }}</div>
+        <div class="card-header">{{ $t('getStarted.nodesManage.sshInfo') }}</div>
         <div class="card-body">
           <div class="line-item">
-            <span class="label">{{ $t('端口') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.port') }}:</span>
             <span class="value">{{ nodeInfo.port || '--' }}</span>
           </div>
           <div class="line-item">
-            <span class="label">{{ $t('安全验证方式') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.sshConnectType') }}:</span>
             <span class="value">{{ sshConnectTypeStr || '--' }}</span>
           </div><br/>
           <div class="line-item">
-            <span class="label">{{ $t('用户名') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.sshUserName') }}:</span>
             <span class="value">{{ nodeInfo.userName || '--' }}</span>
           </div>
         </div>
       </div>
 
       <div class="im-card">
-        <div class="card-header">{{ $t('节点类型') }}</div>
+        <div class="card-header">{{ $t('getStarted.nodesManage.nodeType') }}</div>
         <div class="card-body">
           <div class="line-item">
-            <span class="label">{{ $t('节点类型') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.nodeType') }}:</span>
             <span class="value">{{ nodeTypeStr|| '--' }}</span>
           </div>
         </div>
-        <div class="card-header" v-if="nodeInfo.isSR">{{ $t('超级代表信息') }}</div>
+        <div class="card-header" v-if="nodeInfo.isSR">{{ $t('getStarted.nodesManage.superNode') }}</div>
         <div class="card-body" v-if="nodeInfo.isSR">
           <div class="line-item">
-            <span class="label">{{ $t('URL') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.URL') }}:</span>
             <span class="value">
               <el-link v-if="urlStr" type="primary" :href="urlStr" target="_blank">{{ urlStr }}</el-link>
               <template v-else>--</template>
             </span>
           </div>
           <div class="line-item">
-            <span class="label">{{ $t('投票数量') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.voteCount') }}:</span>
             <span class="value">{{ nodeInfo.voteCount || '--' }}</span>
           </div><br/>
           <div class="line-item width-auto">
-            <span class="label">{{ $t('Address') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.publicKey') }}:</span>
             <span class="value">{{ nodeInfo.publicKey || '--' }}</span>
           </div>
         </div>
@@ -93,14 +93,14 @@
       nodeTypeStr () {
         let res = ''
         if(this.nodeInfo.hasOwnProperty('isSR')) {
-          res = this.nodeInfo.isSR ? '超级代表' : '普通节点'
+          res = this.nodeInfo.isSR ? 'getStarted.nodesManage.superNode' : 'getStarted.nodesManage.fullNode'
         }
         return this.$t(res)
       },
       sshConnectTypeStr () {
         let res = ''
         if(this.nodeInfo.hasOwnProperty('sshConnectType')) {
-          res = this.nodeInfo.sshConnectType === 1 ? '口令登陆' : '密钥登陆'
+          res = this.nodeInfo.sshConnectType === 1 ? 'getStarted.nodesManage.byPassword' : 'getStarted.nodesManage.byPublicKey'
         }
         return this.$t(res)
       }
@@ -127,7 +127,7 @@
         if (!/\d+/.test(this.opNodeId)) {
           this.$notify.warning({
             title: this.$t('base.warning'),
-            message: this.$t('当前所查看的节点为无效节点!'),
+            message: this.$t('getStarted.nodesManage.viewUnValidNode'),
           })
           return false
         }
@@ -147,29 +147,29 @@
           if(res.hasOwnProperty('status')) {
             switch (res.status) {
               case 0:
-                this.deleteNode('nodesManage.deleteNodeTips')
+                this.deleteNode('getStarted.nodesManage.deleteNodeTips')
                 break
               case 1:
                 this.$notify.warning({
                   title: this.$t('base.warning'),
-                  message: this.$t('当前节点正在运行，不可删除！'),
+                  message: this.$t('getStarted.nodesManage.deleteNodeRunningTips'),
                 })
                 break
               case 2:
-                this.deleteNode('当前节点为最后一个节点，如果删除此节点则同时将删除此节点所在的区块链，是否继续？')
+                this.deleteNode('getStarted.nodesManage.deleteNodeLastTips')
                 break
             }
           } else {
             this.$notify.warning({
               title: this.$t('base.warning'),
-              message: this.$t('服务器出问题，不可进行此操作！'),
+              message: this.$t('getStarted.nodesManage.deleteNodeServerError'),
             })
           }
         })
       },
 
       deleteNode (deleteMsg) {
-        this.$confirm(this.$t(deleteMsg), this.$t('nodesManage.deleteNodeTipsTitle'), {
+        this.$confirm(this.$t(deleteMsg), this.$t('base.tips'), {
           confirmButtonText: this.$t('base.confirm'),
           cancelButtonText: this.$t('base.cancel'),
           center: true,

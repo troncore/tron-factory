@@ -41,19 +41,8 @@ const router = new VueRouter({
 })
 
 
-/*router.beforeEach( async (to, from, next) => {
-  try {
-    let isAuth = ~authRoutes.findIndex(route => route.name === to.name) // !== -1
-    let oneClick = sessionStorage.getItem('oneClick') === 'true'
-    if ( isAuth && !oneClick) {
-      next('/')
-    } else {
-      next()
-    }
-
-  } catch (e) {
-    next('/')
-  }
-})*/
+router.beforeEach( (to, from, next) => {
+  next()
+})
 
 export default router

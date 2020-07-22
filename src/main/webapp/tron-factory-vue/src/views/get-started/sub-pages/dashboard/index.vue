@@ -1,26 +1,31 @@
 <template>
   <div class="dashboard">
-    <div class="page-title">{{ $t('Dashboard')}}</div>
+    <div class="page-title">{{ $t('getStarted.dashboard.dashboard')}}</div>
     <div class="chain-info im-card">
-      <div class="card-header">区块链信息</div>
+      <div class="card-header">{{$t('getStarted.dashboard.chainInfo')}}</div>
       <div class="card-body">
         <div class="chain-item">
-          <div class="label">{{ $t('名称') }}</div>
+          <div class="label">{{ $t('getStarted.dashboard.chainName') }}</div>
           <div class="value">{{ chainInfo.chainName || '-' }}</div>
         </div>
         <div class="chain-item">
-          <div class="label">{{ $t('签名算法') }}</div>
+          <div class="label">{{ $t('getStarted.dashboard.encryption') }}</div>
           <div class="value">{{ chainInfo.crypto || '-' }}</div>
         </div>
         <div class="chain-item">
-          <div class="label">{{ $t('p2pVersion') }}</div>
+          <div class="label">{{ $t('getStarted.dashboard.p2pVersion') }}</div>
           <div class="value">{{ chainInfo.p2pVersion || '-' }}</div>
         </div>
         <div class="chain-item">
           <div class="label">
-            <span class="label-inner">{{ $t('状态') }} <im-tooltip class="im-tooltip" :content="$t('已发布的区块可正常产块')"/></span>
+            <span class="label-inner">
+              {{ $t('getStarted.dashboard.status') }}
+              <im-tooltip class="im-tooltip" :content="$t('getStarted.dashboard.statusTips')"/>
+            </span>
           </div>
-          <div class="value">{{ $t(['未发布', '发布中', '已发布'][chainStatus] || '-') }}</div>
+          <div class="value">
+            {{ $t(['getStarted.dashboard.unPublish', 'getStarted.dashboard.publishing', 'getStarted.dashboard.published'][chainStatus] || '-') }}
+          </div>
         </div>
         <div class="chain-item">
           <div class="label">
@@ -30,7 +35,7 @@
               type="primary"
               v-if="chainStatus === 0"
               @click="handleUpdate">
-              <i class="el-icon-edit"></i> {{ $t('修改') }}
+              <i class="el-icon-edit"></i> {{ $t('base.modify') }}
             </el-button>
             <el-button
               class="im-button mini"
@@ -38,7 +43,7 @@
               type="primary"
               v-if="chainStatus === 2"
               @click="handleExplorer">
-              <i class="el-icon-view"></i> {{ $t('浏览器') }}
+              <i class="el-icon-view"></i> {{ $t('getStarted.dashboard.explorer') }}
             </el-button>
           </div>
           <div class="value">
@@ -49,7 +54,7 @@
               :disabled="deleteLoading"
               @click="handleDelete">
               <i :class="deleteLoading ? 'el-icon-loading' : 'el-icon-delete'"></i>
-              {{ $t('删除') }}
+              {{ $t('base.delete') }}
             </el-button>
           </div>
         </div>
@@ -126,12 +131,12 @@
         if (~this.nodeList.findIndex(node => node.deployStatus !== 0)) {
           this.$notify.warning({
             title: this.$t('base.warning'),
-            message: this.$t('有未停止的节点，无法删除')
+            message: this.$t('getStarted.dashboard.stopDeleteChain')
           })
           return
         }
 
-        this.$confirm(this.$t('这将会删除此区块链，是否继续？'), this.$t('base.tips'), {
+        this.$confirm(this.$t('getStarted.dashboard.deleteChainWarningTips'), this.$t('base.tips'), {
           cancelButtonText: this.$t('base.cancel'),
           confirmButtonText: this.$t('base.delete'),
           center: true,

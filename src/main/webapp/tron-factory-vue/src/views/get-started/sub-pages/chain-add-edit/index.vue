@@ -1,19 +1,25 @@
 <template>
   <div class="chain-add-edit">
-    <div class="page-title">{{ $t(isAddPage ? '开始创建' : '修改区块链')}}</div>
+    <div class="page-title">{{ $t(isAddPage ? $t('getStarted.chainManage.startCreate') : 'getStarted.chainManage.updateChain')}}</div>
 
     <!-- base-info -->
     <div class="base-info im-card padding-20">
-      <div class="card-header">{{ $t('基本信息')}}</div>
+      <div class="card-header">{{ $t('getStarted.chainManage.baseInfo')}}</div>
       <div class="card-body">
         <el-form :model="form" :rules="formRules" ref="form" label-width="220px" label-position="left" size="medium">
           <el-form-item prop="chainName">
-            <span slot="label" class="space-between">{{ $t('区块链名称') }} <im-tooltip :content="$t('命名你的区块链')" /></span>
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.chainManage.chainNameLabel') }}
+              <im-tooltip :content="$t('getStarted.chainManage.chainNameTips')" />
+            </span>
             <el-input v-model.trim="form.chainName" tabindex="1" clearable :placeholder="$t('base.pleaseInput')" />
           </el-form-item>
 
           <el-form-item prop="crypto" required>
-            <span slot="label" class="space-between">{{ $t('签名算法') }} <im-tooltip :content="$t('同一条链上的所有节点必须一致')" /></span>
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.chainManage.encryptionLabel') }}
+              <im-tooltip :content="$t('getStarted.chainManage.encryptionTips')" />
+            </span>
             <el-radio-group v-model="form.crypto" :disabled="!canChangeCrypto">
               <el-radio :label="'eckey'">ECKey</el-radio>
               <el-radio :label="'sm2'">SM2</el-radio>
@@ -21,12 +27,15 @@
           </el-form-item>
 
           <el-form-item prop="p2pVersion">
-            <span slot="label" class="space-between">{{ $t('p2pVersion(p2p节点版本号) ') }} <im-tooltip :content="$t('同一条链上的所有节点必须一致')" /></span>
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.chainManage.p2pVersionLabel') }}
+              <im-tooltip :content="$t('getStarted.chainManage.p2pVersionTips')" />
+            </span>
             <el-input v-model.trim="form.p2pVersion" tabindex="2" clearable :placeholder="$t('base.pleaseInput')" />
           </el-form-item>
 
           <el-form-item prop="consensus" required>
-            <span slot="label" class="space-between">{{ $t('共识模块') }}</span>
+            <span slot="label" class="space-between">{{ $t('getStarted.chainManage.consensusModuleLabel') }}</span>
             <el-radio-group v-model="form.consensus">
               <el-radio :label="'dpos'">DPOS</el-radio>
             </el-radio-group>
@@ -37,7 +46,7 @@
 
     <!-- genesis-info -->
     <div class="genesis-info im-card padding-20">
-      <div class="card-header">{{ $t('创世账户')}}（{{ genesisBlockAssets.length }}）</div>
+      <div class="card-header">{{ $t('getStarted.chainManage.genesisAccount')}}（{{ genesisBlockAssets.length }}）</div>
       <div class="card-body">
         <div class="asset-list">
           <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
@@ -98,15 +107,15 @@
         return {
           chainName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' },
-            // { min: 1, max: 10, message: this.$t('长度在 1 到 10 个字符'), trigger: 'blur' }
+            { min: 1, max: 10, message: this.$t('getStarted.chainManage.chainNameCheckLength'), trigger: 'blur' }
           ],
           p2pVersion: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
             { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
             { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
-            { validator: formRules.numEqual(11111, this.$t('configuration.valid.mainnetPlaceholder') + ': 11111'), trigger: 'blur', },
-            { validator: formRules.numEqual(20180622, this.$t('configuration.valid.testnetPlaceholder') + ': 20180622'), trigger: 'blur', },
-            { validator: formRules.numEqual(1, this.$t('configuration.valid.specialPlaceholder') + ': 1'), trigger: 'blur', },
+            { validator: formRules.numEqual(11111, this.$t('getStarted.chainManage.p2pVersionCheckMainNet')), trigger: 'blur', },
+            { validator: formRules.numEqual(20180622, this.$t('getStarted.chainManage.p2pVersionCheckTestNet')), trigger: 'blur', },
+            { validator: formRules.numEqual(1, this.$t('getStarted.chainManage.p2pVersionCheckSpecialNet')), trigger: 'blur', },
           ],
         }
       },
@@ -125,7 +134,7 @@
             this.$notify({
               type: 'warning',
               title: this.$t('base.warning'),
-              message: this.$t('当前已有创建的区块链链，不可继续创建！')
+              message: this.$t('getStarted.chainManage.existChain')
             })
           }
           else this.canOperate = true

@@ -3,12 +3,12 @@
     <div class="box-body">
       <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
         <el-form-item prop="maxActiveNodes">
-          <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodes') }})</i></span>
+          <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('nodeConfig.helpTips.maxActiveNodes') }})</i></span>
           <el-input v-model.trim="form.maxActiveNodes" type="number" min="0" max="200" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="maxActiveNodesWithSameIp">
-          <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('configuration.helpTips.maxActiveNodesWithSameIp') }})</i></span>
+          <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('nodeConfig.helpTips.maxActiveNodesWithSameIp') }})</i></span>
           <el-input v-model.trim="form.maxActiveNodesWithSameIp" type="number" min="0" max="50" :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
@@ -123,7 +123,7 @@ export default {
 
             this.$notify.success({
               title: this.$t('base.successful'),
-              message: this.$t('configuration.p2pSaveSuccess')
+              message: this.$t('nodeConfig.p2pSaveSuccess')
             })
             this.$emit('next-step')
           })
@@ -136,7 +136,7 @@ export default {
       if (!/\d+/.test(this.opNodeId)) {
         this.$notify.warning({
           title: this.$t('base.warning'),
-          message: this.$t('当前所编辑的节点为无效节点!'),
+          message: this.$t('nodeConfig.opUnValidNode'),
         })
         return false
       }
