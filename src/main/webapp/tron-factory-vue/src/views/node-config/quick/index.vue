@@ -18,6 +18,7 @@
 
     <div class="box-footer">
       <el-button class="im-button large" :loading="loading" :disabled="disable" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
     </div>
   </div>
 </template>
@@ -117,6 +118,9 @@
           return false
         }
         return true
+      },
+      handleCancel() {
+        this.$router.push('/get-started/dashboard')
       },
     }
   }

@@ -34,7 +34,7 @@
 
     <div  class="box-footer">
       <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
     </div>
   </div>
 </template>
@@ -152,7 +152,7 @@ export default {
     },
 
     handleCancel() {
-      this.$emit('prev-step')
+      this.$router.push('/get-started/dashboard')
     },
   },
 }
