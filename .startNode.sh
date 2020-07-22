@@ -46,5 +46,5 @@ startService() {
  #time=$(date "+%Y-%m-%d %H:%M:%S")
  #echo "[$time] start java-tron with pid $pid on $HOSTNAME"
 }
-stopService
+#stopService
 startService

@@ -152,13 +152,13 @@ public class PluginConfig {
             (Long.parseLong((String)jsonData.getOrDefault("id", "1"))) :
             (int) jsonData.getOrDefault("id", 1);
     String customTransaction = (String) jsonData.getOrDefault("customTransaction", "");
-
+    int configStatus = (int) jsonData.get(Common.configStatusFiled);
     //更新节点customTransaction
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     JSONObject nodeOld = Util.getNodeInfo(nodes, id);
     nodeOld.put(Common.customTransactionFiled, customTransaction);
-
+    nodeOld.put(Common.configStatusFiled, configStatus);
     DeployController deployController = new DeployController();
     deployController.deleteNode(id);
 

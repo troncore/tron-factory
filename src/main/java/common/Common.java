@@ -126,6 +126,8 @@ public class Common {
 
   public static final String canChangeCryptoField = "canChangeCrypto";
 
+  public static final String isError = "isError";
+
 //  public static final String configStatusMapFiled = "configStatusMap";
 
   // Node Status

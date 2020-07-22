@@ -40,6 +40,8 @@ public class Args {
   private static final String CRYPTO_ENGINE = "crypto.engine";
   private static final String STORAGE_BACKUP_ENABLE = "storage.backup.enable";
   private static final String STORAGE_BACKUP_FREQUENCY = "storage.backup.frequency";
+  private static final String STORAGE_DB_CUSTOM = "storage.db.custom";
+  private static final String STORAGE_DB_SYNC = "storage.db.sync";
 
   public static boolean getNodeHttpFullnodeEnable(final Config config) {
     return config.hasPath(NODE_HTTP_FULLNODE_ENABLE) ? config
@@ -199,4 +201,9 @@ public class Args {
   public static int getBackupFrequency(final Config config) {
     return config.hasPath(STORAGE_BACKUP_FREQUENCY) ? config.getInt(STORAGE_BACKUP_FREQUENCY) : 10000;
   }
+
+  public static String getDBCustom(final Config config) {
+    return config.hasPath(STORAGE_DB_CUSTOM) ? config.getString(STORAGE_DB_CUSTOM) : "";
+  }
+
 }

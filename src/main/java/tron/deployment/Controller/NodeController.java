@@ -338,6 +338,7 @@ public class NodeController {
     newNode.put(Common.deployStatusFiled, 0);
     newNode.put(Common.customTransactionFiled, "");
     newNode.put(Common.dbCustomFiled, "");
+    newNode.put(Common.isError, false);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
   }

@@ -91,9 +91,14 @@ public class ConfigControlller {
             Args.getProposalExpireTime(config), Args.getMinParticipationRate(config));
   }
 
-  private String dbCustomConfig() {
+  private String dbCustomConfig(long id) {
     JSONObject json = readJsonFile();
-    dbCustom = (String) json.get(Common.dbCustomFiled);
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nodes)) {
+      nodes = new JSONArray();
+    }
+    JSONObject node = Util.getNodeInfo(nodes, id);
+    dbCustom = (String) node.get(Common.dbCustomFiled);
     return dbCustom;
   }
 
@@ -179,7 +184,7 @@ public class ConfigControlller {
     JSONObject configObject = new JSONObject();
 
     JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
-    dbObject.put("storage_db_custom", dbCustomConfig());
+//    dbObject.put("storage_db_custom", dbCustomConfig());
     configObject.put("dbConfig", dbObject);
 
     JSONObject p2pObject = generateJSONObject(p2pConfig.getClass().getFields(), p2pConfig);
@@ -207,12 +212,29 @@ public class ConfigControlller {
   }
 
   //获取数据库配置信息
-  private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig) {
+ /* private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig) {
+//    loadConfig(loadConfig);
+    dbConfig = new DBConfig(getDbVersionSyncFromConfig(loadConfig),
+            getDbEngineFromConfig(loadConfig), Args.getBackupEnable(loadConfig), Args.getBackupFrequency(loadConfig),
+            Args.needToUpdateAsset(loadConfig), Args.getDBCustom(loadConfig));
+
+    JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
+    if(getTransactionHistoreSwitchFromConfig(loadConfig).equals("on")){
+      dbObject.put("storage_transHistory_switch", true);
+    }else{
+      dbObject.put("storage_transHistory_switch", false);
+    }
+
+    return dbObject;
+  }*/
+
+  //获取数据库配置信息
+  private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig, long id) {
 //    loadConfig(loadConfig);
     dbConfig = new DBConfig(getDbVersionSyncFromConfig(loadConfig),
             getDbEngineFromConfig(loadConfig), Args.getBackupEnable(loadConfig), Args.getBackupFrequency(loadConfig));
     JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
-    dbObject.put("storage_db_custom", dbCustomConfig());
+    dbObject.put("storage_db_custom", dbCustomConfig(id));
     if(getTransactionHistoreSwitchFromConfig(loadConfig).equals("on")){
       dbObject.put("storage_transHistory_switch", true);
     }else{
@@ -283,6 +305,47 @@ public class ConfigControlller {
     return configObject;
   }
 
+  /*@PostMapping(value = "/api/dbconfig")
+  public JSONObject dbConfig(@RequestBody LinkedHashMap<String, Object> data) {
+    long id =data.getOrDefault("id", "1") instanceof String ?
+            (Long.parseLong((String)data.getOrDefault("id", "1"))) :
+            (int) data.getOrDefault("id", 1);
+    boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
+    boolean OpenTransaction = (boolean) data.getOrDefault("isOpenTransaction", true);
+    String dbEngine = (String) data.getOrDefault("dbEngine", "LEVELDB");
+//    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");engine
+    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
+    boolean backupEnable = (boolean) data.getOrDefault("backupEnable", false);
+    int backupFrequency = (int) data.getOrDefault("backupFrequency", 10000);
+
+    String isOpenTransaction = "";
+    if(OpenTransaction){
+      isOpenTransaction = "on";
+    }else{
+      isOpenTransaction = "off";
+    }
+    // 自定义数据库配置
+    String dbCustom = (String) data.getOrDefault("dbCustom", " ");
+    //检查自定义数据库jar包路径是否正确
+    if(!" ".equals(dbCustom)){
+      BashExecutor bashExecutor = new BashExecutor();
+      bashExecutor.callDBJarPathScript(dbCustom);
+      String checkDBJarPath = checkDBJarPath(String.format(Common.dbJarPathFormat));
+      if (checkDBJarPath.equals(Common.canNotFindZip)) {
+        return new Response(ResultCode.NOT_FOUND.code, dbCustom+": "+Common.canNotFindZip).toJSONObject();
+      }
+    }
+
+    ConfigGenerator configGenerator = new ConfigGenerator();
+    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, dbEngine, backupEnable,
+            backupFrequency, needToUpdateAsset, dbCustom), id, String.format("%s_%s", Common.configFiled, id));
+
+    if (!result) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+    }
+    return new Response(ResultCode.OK.code, "").toJSONObject();
+  }*/
+
   @PostMapping(value = "/api/dbconfig")
   public JSONObject dbConfig(@RequestBody LinkedHashMap<String, Object> data) {
     long id =data.getOrDefault("id", "1") instanceof String ?
@@ -314,13 +377,27 @@ public class ConfigControlller {
       }
     }
     JSONObject json = readJsonFile();
-    json.put(Common.dbCustomFiled, dbCustom);
-    if (!writeJsonFile(json)) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nodes)) {
+      nodes = new JSONArray();
     }
+    JSONObject oldNode = Util.getNodeInfo(nodes, id);
+    oldNode.put(Common.dbCustomFiled, dbCustom);
+
+    DeployController deployController = new DeployController();
+    deployController.deleteNode(id);
+    json = readJsonFile();
+    JSONArray nowNodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nowNodes)) {
+      nowNodes = new JSONArray();
+    }
+    nowNodes.add(oldNode);
+    json.put(Common.nodesFiled, nowNodes);
+    NodeController nodeController = new NodeController();
+    nodeController.updateNodesInfo(nowNodes, json);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
-    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, dbEngine, isOpenTransaction, backupEnable, backupFrequency), String.format("%s_%s", Common.configFiled, id+""));
+    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, dbEngine, isOpenTransaction, backupEnable, backupFrequency), id, String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
@@ -353,12 +430,12 @@ public class ConfigControlller {
 
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new NetworkConfig(maxHttpConnectNumber, solidityRPCPort, rpcPort,
-            httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity, acrive), String.format("%s_%s", Common.configFiled, id+""));
+            httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity, acrive), id, String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
 
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+    return new Response(ResultCode.OK.code, "").toJSONObject();
   }
 
 
@@ -398,7 +475,7 @@ public class ConfigControlller {
     }
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new P2PConfig(p2pVersion, node_max_active_nodes,
-            activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), String.format("%s_%s", Common.configFiled, id+""));
+            activeConnectFactor, nodeMaxActiveNodesWithSameIp, connectFactor, ipList, listenPort), id, String.format("%s_%s", Common.configFiled, id+""));
 
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
@@ -460,7 +537,7 @@ public class ConfigControlller {
     }
     ConfigGenerator configGenerator = new ConfigGenerator();
     result = configGenerator.updateConfig(new BaseSettingConfig(blockProducedTimeOut, maintenanceTimeInterval,
-            proposalExpireTime, minParticipationRate), String.format("%s_%s", Common.configFiled, id+""));
+            proposalExpireTime, minParticipationRate), id, String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
     }
@@ -530,7 +607,7 @@ public class ConfigControlller {
   public JSONObject getDbConfig(long id) {
     refresh(id);
     parseConfig(id);
-    JSONObject configObject = getDbConfigJsonObject(config);
+    JSONObject configObject = getDbConfigJsonObject(config, id);
     return new Response(ResultCode.OK.code, configObject).toJSONObject();
 
   }
@@ -643,7 +720,7 @@ public class ConfigControlller {
     int configStatus = (int) jsonObject.get(Common.configStatusFiled);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
-    boolean result = configGenerator.updateConfig(new HttpRpcPortConfig(rpcPort,httpFullNodePort), String.format("%s_%s", Common.configFiled, id+""));
+    boolean result = configGenerator.updateConfig(new HttpRpcPortConfig(rpcPort,httpFullNodePort),id, String.format("%s_%s", Common.configFiled, id+""));
 
 
     /*HashMap<Integer, Integer> configStatusMap = (HashMap<Integer, Integer>) json.get(Common.configStatusMapFiled);

@@ -16,7 +16,7 @@ public class DBConfig implements Serializable {
   public String storage_backup_bak1path;
   public String storage_backup_bak2path;
   public int storage_backup_frequency;
-
+  public String storage_db_custom;
 
   public DBConfig(boolean storage_db_sync, String storage_transHistory_switch, String storage_db_engine, String storage_index_directory, boolean storage_needToUpdateAsset) {
     this.storage_db_sync = storage_db_sync;
@@ -45,10 +45,15 @@ public class DBConfig implements Serializable {
     this.storage_backup_enable = storage_backup_enable;
     this.storage_backup_frequency = storage_backup_frequency;
   }
-  /*public DBConfig(boolean storage_db_sync, String storage_db_engine, String storage_transHistory_switch) {
+
+  public DBConfig(boolean storage_db_sync, String storage_db_engine, boolean storage_backup_enable,
+                  int storage_backup_frequency, boolean storage_needToUpdateAsset, String storage_db_custom) {
     this.storage_db_sync = storage_db_sync;
     this.storage_db_engine = storage_db_engine;
-    this.storage_transHistory_switch = storage_transHistory_switch;
-  }*/
+    this.storage_backup_enable = storage_backup_enable;
+    this.storage_backup_frequency = storage_backup_frequency;
+    this.storage_needToUpdateAsset = storage_needToUpdateAsset;
+    this.storage_db_custom = storage_db_custom;
+  }
 
 }
