@@ -311,7 +311,7 @@ public class DeployController {
             nodes = new JSONArray();
         }
         JSONObject node = Util.getNodeInfo(nodes, id);
-        boolean isDeployed = (Boolean)node.get(Common.isDeployedFiled);
+        boolean isDeployed = false;
         String status = checkIsDeployed(String.format(Common.logFormat, id+""));
         if (status.equals(Common.deployFinishStatus)) isDeployed = true;
         /*if (status.equals(Common.expectIsNotInstalled)) {
@@ -529,6 +529,7 @@ public class DeployController {
             return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
         }
         statusObj.put("status", deployStatus);
+
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
     }
 
