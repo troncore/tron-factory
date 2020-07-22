@@ -1,1 +1,1 @@
-{"ipList":{},"chainName":"","minValidatorNumber":1,"crossChainFee":0.01,"configStatus":1,"branch":"master","branchNote":"","consensus":"dpos","nodes":[],"enableCrossChain":false,"chainId":"1","dbEngine":"leveldb","maxValidatorNumber":4,"idMax":0,"deployStatus":3}
+{"ipList":{},"chainName":"","minValidatorNumber":1,"crossChainFee":0.01,"configStatus":1,"branch":"master","branchNote":"","consensus":"dpos","nodes":[],"enableCrossChain":false,"chainId":"1","dbEngine":"leveldb","maxValidatorNumber":4,"idMax":0,"deployStatus":-1}

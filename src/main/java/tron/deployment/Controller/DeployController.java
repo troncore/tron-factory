@@ -368,13 +368,19 @@ public class DeployController {
     @PostMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestBody LinkedHashMap<String,Object> data) throws CipherException, IOException, InterruptedException {
 //0: 节点已成功启动； 1: 发布失败，节点未启动成功，请查看日志; 2: 部分节点未启动成功，请查看日志； 3: 当前存在正在启动中的节点，请稍后再试；
-        String ids = (String) data.get("ids");
-        String filePath = (String) data.get("filePath");
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
+        if((long)json.get(Common.deployStatusFiled) == 3){
+            JSONObject statusObj = new JSONObject();
+            statusObj.put("status", 3);
+            return new Response(ResultCode.OK.code, statusObj).toJSONObject();
+        }
+        String ids = (String) data.get("ids");
+        String filePath = (String) data.get("filePath");
+
         //判断区块链是否已发布，未发布时判断SR节点数量是否>=1
         String[] split = ids.split(",");//以逗号分割
         int idSize = split.length;
@@ -413,6 +419,11 @@ public class DeployController {
                             }
                         }
                         deployStatus = 3;
+                        json.put(Common.deployStatusFiled, deployStatus);
+                        if (!writeJsonFile(json)) {
+                            return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+                        }
+
                         deployNode(idArr[count], filePath);
                         if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                             HashMap<Object, Object> map = new HashMap<>();
@@ -420,6 +431,10 @@ public class DeployController {
                             updateNodeInfo(idArr[count], map);
 
                             deployStatus = 1;
+                            json.put(Common.deployStatusFiled, deployStatus);
+                            if (!writeJsonFile(json)) {
+                                return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+                            }
                             statusObj.put("status", deployStatus);
                             return new Response(ResultCode.OK.code, statusObj).toJSONObject();
                         }else { //启动成功则更新节点状态
@@ -471,6 +486,10 @@ public class DeployController {
                     }
                 }
                 deployStatus = 3;
+                json.put(Common.deployStatusFiled, deployStatus);
+                if (!writeJsonFile(json)) {
+                    return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+                }
 
                 deployNode(idArr[count], filePath);
                 if (!checkIsDeploy(idArr[count])) {//如果未成功启动
