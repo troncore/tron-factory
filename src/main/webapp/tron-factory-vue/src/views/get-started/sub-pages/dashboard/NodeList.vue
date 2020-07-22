@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="table-header">
         <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
-        <el-button class="im-button mini el-icon-caret-right" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"> {{ $t(deployLoading ? 'getStarted.dashboard.runNode' : 'getStarted.dashboard.runningNode') }}</el-button>
+        <el-button class="im-button mini el-icon-caret-right" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}</el-button>
       </div>
       <div class="table-box">
         <el-table
