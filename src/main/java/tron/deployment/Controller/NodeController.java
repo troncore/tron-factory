@@ -719,6 +719,7 @@ public class NodeController {
     BashExecutor bashExecutor = new BashExecutor();
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    long firstId = (long) json.get(Common.firstIdFiled);
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
     }
@@ -758,7 +759,11 @@ public class NodeController {
       }
       nowNodes.add(oldNode);
       json.put(Common.nodesFiled, nowNodes);
+      if(id == firstId){
+        json.put(Common.firstIdFiled, -1);
+      }
       updateNodesInfo(nowNodes, json);
+
     }
       return new Response(ResultCode.OK.code, "").toJSONObject();
   }

@@ -314,20 +314,8 @@ public class DeployController {
         boolean isDeployed = false;
         String status = checkIsDeployed(String.format(Common.logFormat, id+""));
         if (status.equals(Common.deployFinishStatus)) isDeployed = true;
-        /*if (status.equals(Common.expectIsNotInstalled)) {
-            return new Response(ResultCode.FAILED.code, "expect is not installed").toJSONObject();
-        }
-        if (status.equals(Common.connectFailedStatus)) {
-            return new Response(ResultCode.UNAUTHORIZED.code, "ssh connect failed").toJSONObject();
-        }
-        if (status.equals(Common.canNotFindZip)) {
-            return new Response(ResultCode.UNAUTHORIZED.code, Common.canNotFindZip).toJSONObject();
-        }
-        if (status.equals(Common.portIsOccupied)) {
-            return new Response(ResultCode.FAILED.code, portOccupied[1]).toJSONObject();
-        }*/
+
         if (isDeployed) { //如果部署成功，更新节点部署状态
-//
             JSONObject oldNode = Util.getNodeInfo(nodes, id);
             oldNode.put(Common.isDeployedFiled, isDeployed);
             oldNode.put(Common.deployStatusFiled, 1);
@@ -344,7 +332,7 @@ public class DeployController {
         return isDeployed;
     }
 
-    public void updateNodeInfo(long id, HashMap<Object, Object> map){
+    public void updateNodeInfo(long id, HashMap<Object, Object> map, long firstId){
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -362,6 +350,7 @@ public class DeployController {
         }
         nowNodes.add(oldNode);
         json.put(Common.nodesFiled, nowNodes);
+        json.put(Common.firstIdFiled, firstId);
         nc.updateNodesInfo(nowNodes, json);
     }
 
@@ -431,7 +420,7 @@ public class DeployController {
                         if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                             HashMap<Object, Object> map = new HashMap<>();
                             map.put(Common.isError, true);
-                            updateNodeInfo(idArr[count], map);
+                            updateNodeInfo(idArr[count], map, -1);
 
                             deployStatus = 1;
                             json = readJsonFile();
@@ -448,7 +437,7 @@ public class DeployController {
                             map.put(Common.isDeployedFiled, true);
                             map.put(Common.deployStatusFiled, 1);
                             map.put(Common.isError, false);
-                            updateNodeInfo(idArr[count], map);
+                            updateNodeInfo(idArr[count], map, idArr[count]);
                         }
                     }
                     if(count == idArr.length-1){
@@ -461,7 +450,7 @@ public class DeployController {
                     if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                         HashMap<Object, Object> map = new HashMap<>();
                         map.put(Common.isError, true);
-                        updateNodeInfo(idArr[count], map);
+                        updateNodeInfo(idArr[count], map, -1);
 
                         deployStatus = 2;
                         statusObj.put("status", deployStatus);
@@ -470,7 +459,7 @@ public class DeployController {
                         map.put(Common.isDeployedFiled, true);
                         map.put(Common.deployStatusFiled, 1);
                         map.put(Common.isError, false);
-                        updateNodeInfo(idArr[count], map);
+                        updateNodeInfo(idArr[count], map, idArr[count]);
                     }
                     if(count == idArr.length-1 && deployStatus != 2){
                         deployStatus = 0;
@@ -504,7 +493,7 @@ public class DeployController {
                 if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                     HashMap<Object, Object> map = new HashMap<>();
                     map.put(Common.isError, true);
-                    updateNodeInfo(idArr[count], map);
+                    updateNodeInfo(idArr[count], map, -1);
 
                     deployStatus = 2;
                     statusObj.put("status", deployStatus);
@@ -513,7 +502,7 @@ public class DeployController {
                     map.put(Common.isDeployedFiled, true);
                     map.put(Common.deployStatusFiled, 1);
                     map.put(Common.isError, false);
-                    updateNodeInfo(idArr[count], map);
+                    updateNodeInfo(idArr[count], map, idArr[count]);
                 }
                 if(count == idArr.length-1 && deployStatus != 2){
                     deployStatus = 0;

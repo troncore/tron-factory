@@ -260,10 +260,12 @@ public class ChainController {
       ipList.remove(id+"");
     }
     nodes = new JSONArray();
+    json.put(Common.chainNameFiled, "");
+    json.put(Common.firstIdFiled, -1);
     json.put(Common.nodesFiled, nodes);
     json.put(Common.idMaxFiled, 0);
     if (!writeJsonFile(json)) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed, false).toJSONObject();
     }
 
     ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
@@ -272,9 +274,9 @@ public class ChainController {
 
     if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
       LOG.error("update witness config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed", false).toJSONObject();
     }
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+    return new Response(ResultCode.OK.code, "",true).toJSONObject();
   }
 
   @GetMapping(value = "/api/canDeleteNode")
@@ -297,51 +299,84 @@ public class ChainController {
     return new Response(ResultCode.OK.code, statusObj).toJSONObject();
   }
 
+  /*@GetMapping(value = "/api/checkChainPublish")
+  public JSONObject checkChainPublish() throws InterruptedException {
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    long firstId = (long) json.get(Common.firstIdFiled);
+    int status = -1;
+    if(firstId != -1) {
+      Map<String, Object> nowBlockInfo = new HashMap<>();
+      JSONObject node = getNodeInfo(nodes, firstId);
+      String ip = (String) node.get(Common.ipFiled);
+      Util util = new Util();
+      util.parseConfig(firstId);
+      Config config = util.config;
+      Args args = new Args();
+      int httpPort = args.getHTTPFullNodePort(config);
+      if(isHostConnection(ip, httpPort)){
+        String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
+        HttpUtil httpUtil = new HttpUtil();
+        try {
+          nowBlockInfo = httpUtil.getInfo(url);
+          if (!nowBlockInfo.isEmpty()) {
+            status = 2;
+//            return new Response(ResultCode.OK.code, "", 2).toJSONObject();
+          }else{
+            status = 1;
+//            return new Response(ResultCode.OK.code, "", 1).toJSONObject();
+          }
+        } catch (Exception e) {
+          return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
+        }
+      }
+      status = 0;
+    }
+    return new Response(ResultCode.OK.code, "", status).toJSONObject();
+  }*/
+
   @GetMapping(value = "/api/checkChainPublish")
   public JSONObject checkChainPublish() throws InterruptedException {
     boolean flag = false;
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
-    for(int i=0;i<nodes.size();i++) {
+    long firstId = (long) json.get(Common.firstIdFiled);
+    int status = -1;
+    if(firstId != -1) {
       Map<String, Object> nowBlockInfo = new HashMap<>();
-      JSONObject node = (JSONObject) nodes.get(i);
-      boolean isSR = (boolean) node.get(Common.isSRFiled);
+      JSONObject node = getNodeInfo(nodes, firstId);
+      /*boolean isSR = (boolean) node.get(Common.isSRFiled);
       long id = (Long) node.get(Common.idFiled);
-      if (isSR) {
+      if (isSR) {*/
         boolean isDepolyed = (boolean) node.get(Common.isDeployedFiled);
         boolean ifShowLog = (boolean) node.get(Common.ifShowLogField);
 //        if (ifShowLog) {
-          if (isDepolyed) {
+//        if (isDepolyed) {
 //            Thread.sleep(30000);
-            String ip = (String) node.get(Common.ipFiled);
-            Util util = new Util();
-            util.parseConfig(id);
-            Config config = util.config;
-            Args args = new Args();
-            int httpPort = args.getHTTPFullNodePort(config);
-            if(!isHostConnection(ip, httpPort)){
+          String ip = (String) node.get(Common.ipFiled);
+          Util util = new Util();
+          util.parseConfig(firstId);
+          Config config = util.config;
+          Args args = new Args();
+          int httpPort = args.getHTTPFullNodePort(config);
+          if(!isHostConnection(ip, httpPort)){
+            return new Response(ResultCode.OK.code, "", 1).toJSONObject();
+          }
+          String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
+          HttpUtil httpUtil = new HttpUtil();
+          try {
+            nowBlockInfo = httpUtil.getInfo(url);
+            if (!nowBlockInfo.isEmpty()) {
+              return new Response(ResultCode.OK.code, "", 2).toJSONObject();
+            }else {
               return new Response(ResultCode.OK.code, "", 1).toJSONObject();
             }
-            String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
-            HttpUtil httpUtil = new HttpUtil();
-            try {
-              nowBlockInfo = httpUtil.getInfo(url);
-              if (!nowBlockInfo.isEmpty()) {
-                return new Response(ResultCode.OK.code, "", 2).toJSONObject();
-              }
-            } catch (Exception e) {
-              return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
-            }
-            break;
+          } catch (Exception e) {
+            return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
           }
-//        }
-      }
-    }
-    /*if(flag){
-      return new Response(ResultCode.OK.code, "", 1).toJSONObject();
-    }*/
+        }
     return new Response(ResultCode.OK.code, "", 0).toJSONObject();
-  }
+    }
 
   @GetMapping(value = "/api/checkNode")
   public JSONObject checkNode(@RequestParam String ids) {
