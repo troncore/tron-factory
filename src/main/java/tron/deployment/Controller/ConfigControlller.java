@@ -397,6 +397,12 @@ public class ConfigControlller {
     nodeController.updateNodesInfo(nowNodes, json);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
+    if(dbEngine.equals("LEVELDB")){
+      refresh(id);
+      parseConfig(id);
+      backupEnable = Args.getBackupEnable(config);
+      backupFrequency = Args.getBackupFrequency(config);
+    }
     boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, dbEngine, isOpenTransaction, backupEnable, backupFrequency), id, String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
