@@ -29,11 +29,11 @@
     data () {
       return {
         stepsList: [
-          { title: this.$t('configuration.baseConfig'), name: 'base', component: 'BaseConfig',},
-          { title: this.$t('configuration.netWorkConfig'), name: 'network', component: 'NetworkConfig',},
-          { title: this.$t('configuration.databaseConfig'), name: 'database', component: 'DatabaseConfig',},
-          { title: this.$t('configuration.p2pConfig'), name: 'p2p', component: 'P2PConfig',},
-          { title: this.$t('configuration.moduleFunction'), name: 'modules', component: 'ModulesConfig',},
+          { title: this.$t('nodeConfig.baseConfig'), name: 'base', component: 'BaseConfig',},
+          { title: this.$t('nodeConfig.netWorkConfig'), name: 'network', component: 'NetworkConfig',},
+          { title: this.$t('nodeConfig.databaseConfig'), name: 'database', component: 'DatabaseConfig',},
+          { title: this.$t('nodeConfig.p2pConfig'), name: 'p2p', component: 'P2PConfig',},
+          { title: this.$t('nodeConfig.moduleFunction'), name: 'modules', component: 'ModulesConfig',},
         ],
         configLoading: false,
       }

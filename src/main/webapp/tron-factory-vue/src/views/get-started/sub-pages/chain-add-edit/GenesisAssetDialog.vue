@@ -5,18 +5,24 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('configuration.assetDialogTitle') }}</div>
+      <div class="title">{{ $t('getStarted.chainManage.assetDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content">
       <el-form ref="dialog-form" :rules="formRules" :model="form" label-width="150px" label-position="left">
         <el-form-item prop="accountName">
-          <span slot="label" class="space-between">accountName <im-tooltip :content="$t('configuration.helpTips.accountName')" /></span>
+          <span slot="label" class="space-between">
+            {{ $t('getStarted.chainManage.accountNameLabel') }}
+            <im-tooltip :content="$t('getStarted.chainManage.accountNameTips')" />
+          </span>
           <el-input v-model.trim="form.accountName" tabindex="26" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="accountType">
-          <span slot="label" class="space-between">accountType <im-tooltip :content="$t('configuration.helpTips.accountType')" /></span>
+          <span slot="label" class="space-between">
+            {{ $t('getStarted.chainManage.accountTypeLabel') }}
+            <im-tooltip :content="$t('getStarted.chainManage.accountTypeTips')" />
+          </span>
           <el-select v-model="form.accountType" clearable :placeholder="$t('base.pleaseSelect')">
             <el-option
               v-for="item in accountTypeOptions"
@@ -28,12 +34,18 @@
         </el-form-item>
 
         <el-form-item prop="address">
-          <span slot="label" class="space-between">address <im-tooltip :content="$t('configuration.helpTips.address')" /></span>
+          <span slot="label" class="space-between">
+            {{ $t('getStarted.chainManage.addressLabel') }}
+            <im-tooltip :content="$t('getStarted.chainManage.addressTips')" />
+          </span>
           <el-input v-model.trim="form.address" tabindex="27" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item label="balance" prop="balance">
-          <span slot="label" class="space-between">balance <im-tooltip :content="$t('configuration.helpTips.balance')" /></span>
+          <span slot="label" class="space-between">
+            {{ $t('getStarted.chainManage.balanceLabel') }}
+            <im-tooltip :content="$t('getStarted.chainManage.balanceTips')" />
+          </span>
           <el-input v-model.trim="form.balance" tabindex="28" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
@@ -126,9 +138,8 @@ export default {
       this.$refs['dialog-form'].validate(async valid => {
         if (valid) {
           this.loading = true
-          let checkBalance = this.checkBalance(this.form.balance)
           let checkAddress = this.checkAddress(this.form.address)
-          if (!(await checkBalance) || !(await checkAddress)) {
+          if (!await checkAddress) {
             this.loading = false
             return false
           }
@@ -141,24 +152,6 @@ export default {
       })
     },
 
-    checkBalance(balance) {
-      return new Promise(resolve => {
-        this.$_api.getStarted.checkBalance({ balance }, (err, res) => {
-          if (err) return resolve(false)
-
-          if (res.result) {
-            resolve(true)
-          } else {
-            this.$notify({
-              type: 'warning',
-              title: this.$t('base.warning'),
-              message: this.$t('configuration.valid.maxVoteCountValue')
-            })
-            resolve(false)
-          }
-        })
-      })
-    },
     checkAddress(address) {
       return new Promise(resolve => {
         this.$_api.getStarted.checkAddress({ address }, (err, res) => {
@@ -170,7 +163,7 @@ export default {
             this.$notify({
               type: 'warning',
               title: this.$t('base.warning'),
-              message: this.$t('无效的 address 地址')
+              message: this.$t('getStarted.chainManage.addressCheckValid')
             })
             resolve(false)
           }

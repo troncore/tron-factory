@@ -4,9 +4,9 @@
     <div class="page-main" v-else>
       <div v-if="showStart" class="page-body im-card">
         <div class="description">
-          {{ $t('一键发链，快速创建你自己的区块链') }}
+          {{ $t('getStarted.descriptionChain') }}
         </div>
-        <el-button type="primary" class="im-button largest" @click="handleCreate">开始创建</el-button>
+        <el-button type="primary" class="im-button largest" @click="handleCreate">{{ $t('getStarted.startCreate') }}</el-button>
       </div>
 
       <component v-else :is="currentComponent" />

@@ -7,12 +7,12 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('启动节点') }}</div>
+      <div class="title">{{ $t('getStarted.dashboard.runNodeDialogTitle')}}</div>
     </div>
 
     <div class="dialog-content">
       <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" v-model.trim="form.filePath"></el-input>
-      <div class="el-upload__tip">{{ $t('nodesManage.helpTips.deployFile') }}</div>
+      <div class="el-upload__tip">{{ $t('getStarted.dashboard.checkFilePath') }}</div>
     </div>
 
     <div slot="footer" class="dialog-footer">
@@ -62,7 +62,7 @@
         if (!this.form.filePath) {
           this.$notify({
             title: this.$t('base.warning'),
-            message: this.$t('nodesManage.valid.inputFilePath'),
+            message: this.$t('getStarted.dashboard.inputFilePath'),
             type: 'warning'
           });
           return
@@ -72,7 +72,7 @@
         if (!~this.form.filePath.indexOf('java-tron-1.0.0.zip')) {
           this.$notify({
             title: this.$t('base.warning'),
-            message: this.$t('nodesManage.valid.inputRightPath'),
+            message: this.$t('getStarted.dashboard.endRightPath'),
             type: 'warning'
           });
           return
@@ -100,16 +100,16 @@
             let message = ''
             switch (res.status) {
               case 0:
-                message = '节点已成功启动'
+                message = 'getStarted.dashboard.runSuccessTips'
                 break
               case 1:
-                message = '发布失败，节点未启动成功，请查看相应日志'
+                message = 'getStarted.dashboard.runFailTips'
                 break
               case 2:
-                message = '部分节点未启动成功，请查看日志'
+                message = 'getStarted.dashboard.runFailSomeTips'
                 break
               case 3:
-                message = '当前存在正在启动中的节点，请稍后再试'
+                message = 'getStarted.dashboard.runExistTips'
                 break
             }
 

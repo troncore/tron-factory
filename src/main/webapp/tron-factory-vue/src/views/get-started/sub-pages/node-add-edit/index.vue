@@ -1,72 +1,84 @@
 <template>
   <div class="node-add-edit">
-    <div class="page-title">{{ $t(this.isAddPage ? '添加节点': '修改节点') }}</div>
+    <div class="page-title">{{ $t(this.isAddPage ? 'getStarted.nodesManage.addNode': 'getStarted.nodesManage.editNode') }}</div>
     <el-form ref="form" :rules="formRules" :model="form" size="medium" label-width="120px" label-position="left">
       <div class="chain-info im-card">
-        <div class="card-header">{{ $t('服务器信息') }}</div>
+        <div class="card-header">{{ $t('getStarted.nodesManage.serverInfo') }}</div>
         <div class="card-body">
           <el-form-item prop="ip">
-            <span slot="label">{{ $t('服务器IP') }}</span>
-            <el-input v-model.trim="form.ip" class="width-300" tabindex="1" clearable :placeholder="$t('请输入服务器ip地址')" />
+            <span slot="label">{{ $t('getStarted.nodesManage.ip') }}</span>
+            <el-input v-model.trim="form.ip" class="width-300" tabindex="1" clearable :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" />
           </el-form-item>
           <el-form-item prop="listenPort">
-            <span slot="label">{{ $t('监听端口') }}</span>
-            <el-input v-model.trim="form.listenPort" type="number" min="0" max="65535" class="width-300" tabindex="2" clearable :placeholder="$t('请输入监听端口')" />
+            <span slot="label">{{ $t('getStarted.nodesManage.listenPort') }}</span>
+            <el-input v-model.trim="form.listenPort" type="number" min="0" max="65535" class="width-300" tabindex="2" clearable :placeholder="$t('getStarted.nodesManage.listenPortPlaceholder')" />
           </el-form-item>
         </div>
-        <div class="card-header">{{ $t('SSH信息') }}</div>
+        <div class="card-header">{{ $t('getStarted.nodesManage.sshInfo') }}</div>
         <div class="card-body">
           <el-form-item prop="port" >
-            <span slot="label">{{ $t('端口') }}</span>
-            <el-input v-model.trim="form.port" type="number" min="0" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('请输入ssh启用的端口')" />
+            <span slot="label">{{ $t('getStarted.nodesManage.port') }}</span>
+            <el-input v-model.trim="form.port" type="number" min="0" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('portPlaceholder')" />
           </el-form-item>
           <el-form-item prop="sshConnectType">
-            <span slot="label">{{ $t('安全验证方式') }}</span>
-            <el-radio v-model="form.sshConnectType" :label="1">{{ $t('口令登陆') }}</el-radio>
-            <el-radio v-model="form.sshConnectType" :label="2">{{ $t('密钥登陆') }}</el-radio>
+            <span slot="label">{{ $t('getStarted.nodesManage.sshConnectType') }}</span>
+            <el-radio v-model="form.sshConnectType" :label="1">{{ $t('getStarted.nodesManage.byPassword') }}</el-radio>
+            <el-radio v-model="form.sshConnectType" :label="2">{{ $t('getStarted.nodesManage.byPublicKey') }}</el-radio>
           </el-form-item>
           <el-form-item prop="userName" :class="{'margin-bottom-0': form.sshConnectType !== 1}">
-            <span slot="label">{{ $t('用户名') }}</span>
-            <el-input v-model.trim="form.userName" class="width-300" tabindex="4" clearable :placeholder="$t('请输入连接ssh的用户名')" />
+            <span slot="label">{{ $t('getStarted.nodesManage.sshUserName') }}</span>
+            <el-input v-model.trim="form.userName" class="width-300" tabindex="4" clearable :placeholder="$t('getStarted.nodesManage.sshUserNamePlaceholder')" />
           </el-form-item>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
-            <span slot="label">{{ $t('密码') }}</span>
-            <el-input v-model.trim="form.sshPassword" class="width-300" tabindex="5" clearable :placeholder="$t('请输入连接ssh的密码')" />
+            <span slot="label">{{ $t('getStarted.nodesManage.sshPassword') }}</span>
+            <el-input v-model.trim="form.sshPassword" class="width-300" tabindex="5" clearable :placeholder="$t('getStarted.nodesManage.sshPasswordPlaceholder')" />
           </el-form-item>
         </div>
       </div>
 
       <div class="chain-info im-card">
-        <div class="card-header">{{ $t('节点类型') }}</div>
+        <div class="card-header">{{ $t('getStarted.nodesManage.nodeType') }}</div>
         <div class="card-body">
           <el-form-item prop="isSR" label-width="0" :class="{'margin-bottom-0':!form.isSR}">
-            <el-radio v-model="form.isSR" :label="true">{{ $t('超级代表') }} <im-tooltip :content="$t('nodesManage.helpTips.superNode')"/></el-radio>
-            <el-radio v-model="form.isSR" :label="false">{{ $t('普通节点') }} <im-tooltip :content="$t('nodesManage.helpTips.fullNode')"/></el-radio>
+            <el-radio v-model="form.isSR" :label="true">{{ $t('getStarted.nodesManage.superNode') }} <im-tooltip :content="$t('getStarted.nodesManage.superNodeTips')"/></el-radio>
+            <el-radio v-model="form.isSR" :label="false">{{ $t('getStarted.nodesManage.fullNode') }} <im-tooltip :content="$t('getStarted.nodesManage.fullNodeTips')"/></el-radio>
           </el-form-item>
         </div>
-        <div class="card-header" v-if="form.isSR">{{ $t('超级代表信息') }}</div>
+        <div class="card-header" v-if="form.isSR">{{ $t('getStarted.nodesManage.superNodeInfo') }}</div>
         <div class="card-body" v-if="form.isSR">
           <el-form-item prop="url">
-            <span slot="label" class="space-between">URL <im-tooltip :content="$t('nodesManage.helpTips.url')" /></span>
-            <el-input v-model.trim="form.url" class="width-300" tabindex="6" clearable :placeholder="$t('nodesManage.valid.inputURL')" />
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.nodesManage.url') }}
+              <im-tooltip :content="$t('getStarted.nodesManage.urlTips')" />
+            </span>
+            <el-input v-model.trim="form.url" class="width-300" tabindex="6" clearable :placeholder="$t('getStarted.nodesManage.urlPlaceholder')" />
           </el-form-item>
           <el-form-item prop="voteCount">
-            <span slot="label" class="space-between">{{ $t('投票数量') }} <im-tooltip :content="$t('nodesManage.helpTips.voteCount')" /></span>
-            <el-input v-model.trim="form.voteCount" class="width-300" tabindex="7" clearable :placeholder="$t('nodesManage.valid.inputVoteCount')" />
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.nodesManage.voteCount') }}
+              <im-tooltip :content="$t('getStarted.nodesManage.voteCountTips')" />
+            </span>
+            <el-input v-model.trim="form.voteCount" class="width-300" tabindex="7" clearable :placeholder="$t('getStarted.nodesManage.voteCountPlaceholder')" />
           </el-form-item>
           <el-form-item class="address" prop="publicKey">
-            <span slot="label" class="space-between">address <im-tooltip :content="$t('nodesManage.helpTips.publicKey')" /></span>
-            <el-input v-model.trim="form.publicKey" class="width-600" tabindex="8" clearable :placeholder="$t('nodesManage.valid.publicKey')" />
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.nodesManage.publicKey') }}
+              <im-tooltip :content="$t('getStarted.nodesManage.publicKeyTips')" />
+            </span>
+            <el-input v-model.trim="form.publicKey" class="width-600" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
           </el-form-item>
           <el-form-item class="private-key margin-bottom-0" prop="privateKey">
-            <span slot="label" class="space-between">privateKey <im-tooltip :content="$t('nodesManage.helpTips.privateKey')" /></span>
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.nodesManage.privateKey') }}
+              <im-tooltip :content="$t('getStarted.nodesManage.privateKeyTips')" />
+            </span>
             <el-input
               v-model.trim="form.privateKey"
               class="width-600"
               tabindex="9"
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4}"
-              :placeholder="$t('nodesManage.valid.inputPrivateKey')"/>
+              :placeholder="$t('getStarted.nodesManage.privateKeyPlaceholder')"/>
           </el-form-item>
         </div>
       </div>
@@ -106,6 +118,7 @@
         safePrivateKey: Array(64).fill('*').join(''),
         disabled: false,
         loading: false,
+        disableLocalhost: false, // 是否允许使用127.0.0.1
       }
     },
     computed: {
@@ -132,15 +145,15 @@
         }
 
         const validLocalRule = (rule, value, callback) => {
-          if (this.disabledLocalIP && value === '127.0.0.1') {
-            callback(new Error(this.$t('nodesManage.valid.disabledLocalIP')))
+          if (this.disableLocalhost && value === '127.0.0.1') {
+            callback(new Error(this.$t('getStarted.nodesManage.ipCheckLocalhost')))
           } else {
             callback()
           }
         }
         const validPrivateKey = (rule, value, callback) => {
           if (value.length !== 64) {
-            callback(new Error(this.$t('nodesManage.valid.inputPrivateKey')))
+            callback(new Error(this.$t('getStarted.nodesManage.privateKeyCheck')))
           } else {
             callback()
           }
@@ -154,7 +167,7 @@
         return {
           ip: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-            { validator: formRules.validIP(this.$t('nodesManage.valid.rightIP'), ), trigger: 'blur', },
+            { validator: formRules.validIP(this.$t('getStarted.nodesManage.ipCheckRight'), ), trigger: 'blur', },
             { required: true, validator: validLocalRule, trigger: 'blur', },
           ],
           listenPort: [
@@ -235,7 +248,7 @@
 
             if (params.isSR && (params.publicKey !== this.tempPublicKey || params.privateKey)) {
               // for show user to save private key tips
-              this.$confirm(this.$t('nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
+              this.$confirm(this.$t('getStarted.nodesManage.saveAddressPriKey'), this.$t('base.tips'), {
                 cancelButtonText: this.$t('base.cancel'),
                 confirmButtonText: this.$t('base.confirm'),
                 center: true,
@@ -289,7 +302,7 @@
         if (!/\d+/.test(this.opNodeId)) {
           this.$notify.warning({
             title: this.$t('base.warning'),
-            message: this.$t('当前所编辑的节点为无效节点!'),
+            message: this.$t('getStarted.nodesManage.opUnValidNode'),
           })
           return false
         }
@@ -308,10 +321,10 @@
             let errorMsg = ''
             switch (res.status) {
               case 1:
-                errorMsg = 'nodesManage.sshConnectFail'
+                errorMsg = 'getStarted.nodesManage.sshConnectFail'
                 break
               case 2:
-                errorMsg = 'nodesManage.addressNotPrikey'
+                errorMsg = 'getStarted.nodesManage.addressNotPrivateKey'
                 break
               default:
                 errorMsg = 'base.error'
@@ -322,12 +335,12 @@
             })
           } else {
             // default it's success
-            let msg = this.isAddPage ? '添加节点成功' : '修改节点成功'
+            let msg = this.isAddPage ? 'getStarted.nodesManage.addNodeSuccess' : 'getStarted.nodesManage.updateNodeSuccess'
             this.$notify.success({
               title: this.$t('base.successful'),
               message: this.$t(msg),
             })
-            this.$router.push('/get-started/dashboard')
+            this.$router.push('/get-started/nodesManage')
           }
         })
       },

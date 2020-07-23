@@ -8,7 +8,7 @@
     top="200px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('nodesManage.logDialogTitle') }}</div>
+      <div class="title">{{ $t('getStarted.dashboard.logDialogTitle') }}</div>
     </div>
 
     <div class="dialog-content" style="min-height: 200px;" v-loading="initLoading">
@@ -41,7 +41,7 @@
         initLoading: true,
         processingShow: false,
         processingLoading: false,
-        processingText: this.$t('nodesManage.emptyLog'),
+        processingText: this.$t('getStarted.dashboard.emptyLog'),
         timeID: null,
       }
     },
@@ -73,11 +73,11 @@
           this.initLoading = false
           this.processingShow = true
           this.processingLoading = true
-          this.processingText = this.$t('nodesManage.loadingLog')
+          this.processingText = this.$t('getStarted.dashboard.loadingLog')
 
           if (err) {
             this.processingLoading = false
-            this.processingText = this.$t('nodesManage.emptyLog')
+            this.processingText = this.$t('getStarted.dashboard.emptyLog')
             clearInterval(this.timeID)
             return
           }
@@ -92,7 +92,7 @@
             this.logInfo = res.logInfo.map(log => log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2'))
           } else {
             this.processingLoading = false
-            this.processingText = this.$t('nodesManage.emptyLog')
+            this.processingText = this.$t('getStarted.dashboard.emptyLog')
 
             clearInterval(this.timeID)
           }

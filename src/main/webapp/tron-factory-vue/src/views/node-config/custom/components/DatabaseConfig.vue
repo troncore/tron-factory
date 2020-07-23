@@ -3,32 +3,32 @@
     <div class="box-body">
       <el-form ref="database-config-form" :model="form" :rules="formRules" label-position="left" label-width="200px">
 
-        <el-form-item :label="$t('configuration.selectDatabaseConfig')" prop="dbEngine">
+        <el-form-item :label="$t('nodeConfig.selectDatabaseConfig')" prop="dbEngine">
           <el-radio-group v-model="form.dbEngine">
             <el-radio :label="'LEVELDB'">LevelDB</el-radio>
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="$t('configuration.isWriteSync')" prop="isDBSync">
+        <el-form-item :label="$t('nodeConfig.isWriteSync')" prop="isDBSync">
           <el-switch v-model="form.isDBSync"></el-switch>
         </el-form-item>
 
-        <el-form-item :label="$t('交易回执信息存储')" prop="isOpenTransaction">
+        <el-form-item :label="$t('nodeConfig.isOpenTransaction')" prop="isOpenTransaction">
           <el-switch v-model="form.isOpenTransaction"></el-switch>
         </el-form-item>
 
         <template v-if="form.dbEngine === 'ROCKSDB'">
-          <el-form-item :label="$t('RocksDB备份设置')" prop="backupEnable">
+          <el-form-item :label="$t('nodeConfig.backupEnable')" prop="backupEnable">
             <el-switch v-model="form.backupEnable"></el-switch>
           </el-form-item>
 
-          <el-form-item :label="$t('备份间隔(块)')" prop="backupFrequency">
+          <el-form-item :label="$t('nodeConfig.backupFrequency')" prop="backupFrequency">
             <el-input v-model.trim="form.backupFrequency" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')" style="width: 200px;"></el-input>
           </el-form-item>
         </template>
 
         <div class="more-setting">
-          <el-checkbox v-model="checkDBCustom" @change="handleChangeCheckCustom"><span class="check-label">{{ $t('configuration.dbCustomModule') }}</span></el-checkbox>
+          <el-checkbox v-model="checkDBCustom" @change="handleChangeCheckCustom"><span class="check-label">{{ $t('nodeConfig.dbCustomModule') }}</span></el-checkbox>
         </div>
         <el-form-item
           ref="db-custom"
@@ -40,7 +40,7 @@
             :autosize="{ minRows: 4, maxRows: 6 }"
             :maxlength="300"
             :disabled="!checkDBCustom"
-            :placeholder="$t(checkDBCustom ? 'configuration.valid.inputDBCustom': 'configuration.valid.checkDBCustom')">
+            :placeholder="$t(checkDBCustom ? 'nodeConfig.valid.inputDBCustom': 'nodeConfig.valid.checkDBCustom')">
           </el-input>
         </el-form-item>
       </el-form>
@@ -80,7 +80,7 @@ export default {
     formRules() {
       const pathEndJAR = (rule, value, callback) => {
         if (this.checkDBCustom && !this.form.dbCustom.endsWith('.jar')) {
-          callback(new Error(this.$t('configuration.valid.pathEndJAR')))
+          callback(new Error(this.$t('nodeConfig.valid.pathEndJAR')))
         } else {
           callback()
         }
@@ -148,7 +148,7 @@ export default {
 
             this.$notify.success({
               title: this.$t('base.successful'),
-              message: this.$t('configuration.databaseSaveSuccess')
+              message: this.$t('nodeConfig.databaseSaveSuccess')
             })
             this.$emit('next-step')
           })
@@ -167,7 +167,7 @@ export default {
       if (!/\d+/.test(this.opNodeId)) {
         this.$notify.warning({
           title: this.$t('base.warning'),
-          message: this.$t('当前所编辑的节点为无效节点!'),
+          message: this.$t('nodeConfig.opUnValidNode'),
         })
         return false
       }

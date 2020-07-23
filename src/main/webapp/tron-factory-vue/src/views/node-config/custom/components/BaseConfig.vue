@@ -3,28 +3,28 @@
     <div class="box-body">
       <el-form class="im-form" ref="form" :model="form" :rules="formRules">
         <el-form-item prop="maintenanceTimeInterval">
-          <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('configuration.helpTips.maintenanceTimeInterval') }}: ms)</i></span>
+          <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('nodeConfig.helpTips.maintenanceTimeInterval') }}: ms)</i></span>
           <el-input v-model.trim="form.maintenanceTimeInterval" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <div class="more-form">
-          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i>{{ $t('configuration.moreSetting') }}</el-button>
+          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i>{{ $t('nodeConfig.moreSetting') }}</el-button>
         </div>
 
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item prop="proposalExpireTime">
-              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('configuration.helpTips.blockProposalExpireTime') }}: ms)</i></span>
+              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('nodeConfig.helpTips.blockProposalExpireTime') }}: ms)</i></span>
               <el-input v-model.trim="form.proposalExpireTime" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item prop="blockProducedTimeOut">
-              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('configuration.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i></span>
+              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i></span>
               <el-input v-model.trim="form.blockProducedTimeOut" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
 
             <el-form-item prop="minParticipationRate" class="margin-bottom-0">
-              <span slot="label">minParticipationRate <i class="help-tips">({{ $t('configuration.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i></span>
+              <span slot="label">minParticipationRate <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i></span>
               <el-input v-model.trim="form.minParticipationRate" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
             </el-form-item>
           </div>
@@ -34,7 +34,7 @@
 
     <div  class="box-footer">
       <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
     </div>
   </div>
 </template>
@@ -131,7 +131,7 @@ export default {
 
             this.$notify.success({
               title: this.$t('base.successful'),
-              message: this.$t('configuration.baseSaveSuccess')
+              message: this.$t('nodeConfig.baseSaveSuccess')
             })
             this.$emit('next-step')
           })
@@ -144,7 +144,7 @@ export default {
       if (!/\d+/.test(this.opNodeId)) {
         this.$notify.warning({
           title: this.$t('base.warning'),
-          message: this.$t('当前所编辑的节点为无效节点!'),
+          message: this.$t('nodeConfig.opUnValidNode'),
         })
         return false
       }
@@ -152,7 +152,7 @@ export default {
     },
 
     handleCancel() {
-      this.$emit('prev-step')
+      this.$router.push('/get-started/dashboard')
     },
   },
 }

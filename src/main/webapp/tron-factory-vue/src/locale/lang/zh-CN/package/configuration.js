@@ -1,5 +1,5 @@
 export default {
-  configuration: '配置',
+  configuration: '节点配置',
   quickConfig: '快速配置',
   customConfig: '自定义配置',
   importConfig: '导入配置文件',
