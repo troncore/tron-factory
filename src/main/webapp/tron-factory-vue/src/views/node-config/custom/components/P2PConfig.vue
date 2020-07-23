@@ -4,22 +4,22 @@
       <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
         <el-form-item prop="maxActiveNodes">
           <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('nodeConfig.helpTips.maxActiveNodes') }})</i></span>
-          <el-input v-model.trim="form.maxActiveNodes" type="number" min="0" max="200" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.maxActiveNodes" type="number" min="1" max="200" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="maxActiveNodesWithSameIp">
           <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('nodeConfig.helpTips.maxActiveNodesWithSameIp') }})</i></span>
-          <el-input v-model.trim="form.maxActiveNodesWithSameIp" type="number" min="0" max="50" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.maxActiveNodesWithSameIp" type="number" min="1" max="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="activeConnectFactor">
           <span slot="label">activeConnectFactor</span>
-          <el-input v-model.trim="form.activeConnectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.activeConnectFactor" type="number" min="0" max="1" step="0.1" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="connectFactor" class="margin-bottom-0">
           <span slot="label">connectFactor</span>
-          <el-input v-model.trim="form.connectFactor" type="number" min="0" max="1" step="0.1" :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.connectFactor" type="number" min="0" max="1" step="0.1" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -111,8 +111,8 @@ export default {
           let params = {
             id: this.opNodeId,
             maxActiveNodes: Number(this.form.maxActiveNodes),
-            maxActiveNodesWithSameIp: Number(this.form.maxActiveNodesWithSameIp),
-            activeConnectFactor: Number(this.form.activeConnectFactor),
+            nodeMaxActiveNodesWithSameIp: Number(this.form.maxActiveNodesWithSameIp),
+            nodeActiveConnectFactor: Number(this.form.activeConnectFactor),
             connectFactor: Number(this.form.connectFactor),
           }
 

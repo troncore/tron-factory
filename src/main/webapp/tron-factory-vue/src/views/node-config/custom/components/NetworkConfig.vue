@@ -9,7 +9,7 @@
         </div>
         <el-form-item prop="httpFullNodePort">
           <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('nodeConfig.helpTips.httpFullNodePort') }})</i></span>
-          <el-input v-model.trim="form.httpFullNodePort" type="number" min="0" max="65535" :disabled="!form.fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.httpFullNodePort" type="number" min="1" max="65535" :disabled="!form.fullNodeEnable" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item prop="maxHttpConnectNumber">
           <span slot="label">maxHttpConnectNumber <i class="help-tips">({{ $t('nodeConfig.helpTips.maxHttpConnectNumber') + ': 0 - 200' }})</i></span>
@@ -23,18 +23,18 @@
 
         <el-form-item prop="httpSolidityPort">
           <span slot="label">httpSolidityPort <i class="help-tips">({{ $t('nodeConfig.helpTips.httpSolidityPort') }})</i></span>
-          <el-input v-model.trim="form.httpSolidityPort" type="number" min="0" max="65535" :disabled="!form.solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.httpSolidityPort" type="number" min="1" max="65535" :disabled="!form.solidityEnable"  clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
 
         <el-form-item prop="rpcPort">
           <span slot="label">rpcPort <i class="help-tips">({{ $t('nodeConfig.helpTips.rpcPort') }})</i></span>
-          <el-input v-model.trim="form.rpcPort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.rpcPort" type="number" min="1" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
 
         <el-form-item prop="rpcSolidityPort" class="margin-bottom-0">
           <span slot="label">rpcSolidityPort <i class="help-tips">({{ $t('nodeConfig.helpTips.rpcSolidityPort') }})</i></span>
-          <el-input v-model.trim="form.rpcSolidityPort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.rpcSolidityPort" type="number" min="1" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
         </el-form-item>
       </el-form>
     </div>

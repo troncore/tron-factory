@@ -340,7 +340,7 @@
               title: this.$t('base.successful'),
               message: this.$t(msg),
             })
-            this.$router.push('/get-started/nodesManage')
+            this.$router.push('/get-started')
           }
         })
       },

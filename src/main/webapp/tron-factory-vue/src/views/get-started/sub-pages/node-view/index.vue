@@ -42,7 +42,7 @@
         <div class="card-header" v-if="nodeInfo.isSR">{{ $t('getStarted.nodesManage.superNode') }}</div>
         <div class="card-body" v-if="nodeInfo.isSR">
           <div class="line-item">
-            <span class="label">{{ $t('getStarted.nodesManage.URL') }}:</span>
+            <span class="label">{{ $t('getStarted.nodesManage.url') }}:</span>
             <span class="value">
               <el-link v-if="urlStr" type="primary" :href="urlStr" target="_blank">{{ urlStr }}</el-link>
               <template v-else>--</template>

@@ -3,29 +3,71 @@
     <div class="box-body">
       <el-form class="im-form" ref="form" :model="form" :rules="formRules">
         <el-form-item prop="maintenanceTimeInterval">
-          <span slot="label">maintenanceTimeInterval <i class="help-tips">({{ $t('nodeConfig.helpTips.maintenanceTimeInterval') }}: ms)</i></span>
-          <el-input v-model.trim="form.maintenanceTimeInterval" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <span slot="label">
+            maintenanceTimeInterval
+            <i class="help-tips">({{ $t('nodeConfig.helpTips.maintenanceTimeInterval') }}: ms)</i>
+          </span>
+          <el-input
+            v-model.trim="form.maintenanceTimeInterval"
+            tabindex="1"
+            type="number"
+            min="1"
+            max="2147483647"
+            clearable
+            :placeholder="$t('base.pleaseInput')" />
         </el-form-item>
 
         <div class="more-form">
-          <el-button type="text" @click="showMore = !showMore"><i class="el-icon-arrow-right"></i>{{ $t('nodeConfig.moreSetting') }}</el-button>
+          <el-button type="text" @click="showMore = !showMore">
+            <i class="el-icon-arrow-right"></i>{{ $t('nodeConfig.moreSetting') }}
+          </el-button>
         </div>
 
         <el-collapse-transition>
           <div v-if="showMore">
             <el-form-item prop="proposalExpireTime">
-              <span slot="label">proposalExpireTime <i class="help-tips">({{ $t('nodeConfig.helpTips.blockProposalExpireTime') }}: ms)</i></span>
-              <el-input v-model.trim="form.proposalExpireTime" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+              <span slot="label">
+                proposalExpireTime
+                <i class="help-tips">({{ $t('nodeConfig.helpTips.blockProposalExpireTime') }}: ms)</i>
+              </span>
+              <el-input
+                v-model.trim="form.proposalExpireTime"
+                tabindex="1"
+                type="number"
+                min="1"
+                max="2147483647"
+                clearable
+                :placeholder="$t('base.pleaseInput')" />
             </el-form-item>
 
             <el-form-item prop="blockProducedTimeOut">
-              <span slot="label">producedTimeOut <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i></span>
-              <el-input v-model.trim="form.blockProducedTimeOut" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+              <span slot="label">
+                producedTimeOut
+                <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i>
+              </span>
+              <el-input
+                v-model.trim="form.blockProducedTimeOut"
+                tabindex="1"
+                type="number"
+                min="0"
+                max="100"
+                clearable
+                :placeholder="$t('base.pleaseInput')" />
             </el-form-item>
 
             <el-form-item prop="minParticipationRate" class="margin-bottom-0">
-              <span slot="label">minParticipationRate <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i></span>
-              <el-input v-model.trim="form.minParticipationRate" type="number" min="0" max="100" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+              <span slot="label">
+                minParticipationRate
+                <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i>
+              </span>
+              <el-input
+                v-model.trim="form.minParticipationRate"
+                tabindex="1"
+                type="number"
+                min="0"
+                max="100"
+                clearable
+                :placeholder="$t('base.pleaseInput')" />
             </el-form-item>
           </div>
         </el-collapse-transition>
@@ -71,12 +113,12 @@ export default {
         ],
         proposalExpireTime: [
           { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
           { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         blockProducedTimeOut: [
           { required: true, message: this.$t('base.pleaseInput',), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'blur', },
           { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
         ],
         minParticipationRate: [
