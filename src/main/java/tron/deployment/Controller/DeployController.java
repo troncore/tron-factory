@@ -230,6 +230,7 @@ public class DeployController {
         parseConfig(id);
         Config config = util.config;
         Args args = new Args();
+
         int fullNodePort = args.getHTTPFullNodePort(config);
         int solidityPort = args.getHTTPSolidityNodePort(config);
         int listenPort = args.getListenPort(config);
@@ -296,10 +297,19 @@ public class DeployController {
 
         //执行部署脚本
         BashExecutor bashExecutor = new BashExecutor();
+        boolean solidityEnable = args.getNodeHttpSolidityEnable(config);
         if (Objects.nonNull(privateKey)) {
-            bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"");
+            if(!solidityEnable){
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "", listenPort+"", rpcPort+"", "");
+            }else{
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"");
+            }
         } else {
-            bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"");
+            if(!solidityEnable){
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "", listenPort+"", rpcPort+"", "");
+            }else{
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"");
+            }
         }
         return new Response(ResultCode.OK.code, "").toJSONObject();
 
