@@ -665,6 +665,12 @@ public class NodeController {
     JSONObject value = (JSONObject) canDeleteNode.get("data");
     int status  = (int) value.get("status");
     if(status == 2){
+      //初始化配置文件的加密算法
+      JSONObject jsonData = new JSONObject();
+      jsonData.put(Common.cryptoEngine, "eckey");
+      PluginConfig pluginConfig = new PluginConfig();
+      pluginConfig.cryptoEngine(jsonData);
+      //删除链
       json = readJsonFile();
       json.put(Common.chainNameFiled, "");
     }
