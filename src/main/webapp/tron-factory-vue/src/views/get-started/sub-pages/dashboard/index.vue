@@ -162,7 +162,7 @@
             message: this.$t('base.success.delete'),
           })
 
-          res === true && this.$router.push('/get-started')
+          this.$router.push('/get-started')
         })
       },
 

@@ -32,7 +32,7 @@
         </div>
         <el-form-item
           ref="db-custom"
-          class="db-custom"
+          class="db-custom margin-bottom-0"
           prop="dbCustom">
           <el-input
             v-model.trim="form.dbCustom"
