@@ -659,7 +659,15 @@ public class NodeController {
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.deleteConfigFileFailed).toJSONObject();
     }
-
+    //判断是否为最后一个节点，是的话，删除整条链
+    ChainController chainController = new ChainController();
+    JSONObject canDeleteNode = chainController.canDeleteNode(id);
+    JSONObject value = (JSONObject) canDeleteNode.get("data");
+    int status  = (int) value.get("status");
+    if(status == 2){
+      json = readJsonFile();
+      json.put(Common.chainNameFiled, "");
+    }
     return updateNodesInfo(newNodes, json, id, ipList, listenPort, true);
   }
 
