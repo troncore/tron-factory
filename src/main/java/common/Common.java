@@ -32,6 +32,8 @@ public class Common {
 
   public static final String idMaxFiled = "idMax";
 
+  public static final String firstIdFiled = "firstId";
+
   public static final String nodesFiled = "nodes";
 
   public static final String userNameFiled = "userName";
