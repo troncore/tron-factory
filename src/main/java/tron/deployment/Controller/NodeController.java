@@ -741,24 +741,10 @@ public class NodeController {
     String ip = (String) node.get(Common.ipFiled);
     Long port = (Long) node.get(Common.portFiled);
     String userName = (String) node.get(Common.userNameFiled);
-    boolean isSR = (Boolean) node.get(Common.isSRFiled);
     String sshPassword = (String) node.get(Common.sshPasswordFiled);
-    String privateKey = "";
-    String privateKeypath = (String) node.get(Common.privateKeyFiled);
-    if (isSR) {
-      try {
-        privateKey = Wallet.getPrivateString(String.format("%s/%s", Common.walletFiled, privateKeypath));
-      } catch (CipherException | IOException e) {
-        LOG.error(e.toString());
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "load privateKey info failed").toJSONObject();
-      }
-    }
     //执行部署脚本
-    if (Objects.nonNull(privateKey)) {
-      bashExecutor.callStopNodeScript(ip, port, userName,sshPassword,privateKey,id);
-    } else {
-      bashExecutor.callStopNodeScript(ip, port, userName,sshPassword,"null",id);
-    }
+    bashExecutor.callStopNodeScript(ip, port, userName,id,sshPassword);
+
     String status = checkIsStoped(String.format(Common.stopNodeFormat, id+""));
     DeployController deployController = new DeployController();
     if (status.equals(Common.stopNodeSuccessStatus)) {

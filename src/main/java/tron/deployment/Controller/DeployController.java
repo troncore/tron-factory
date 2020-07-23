@@ -397,6 +397,7 @@ public class DeployController {
         boolean ifCheckZipPath = false;
         BashExecutor bashExecutor = new BashExecutor();
         long idSR = -1;
+        boolean success = false;
         if(publishStatus == 0) { //未发布时需随机选取1个SR作为初始节点，配置为不开启同步，启动该节点
             for (int count = 0; count < idArr.length; count++) {
                 int SRCount = 0;
@@ -442,7 +443,8 @@ public class DeployController {
                             }
                             statusObj.put("status", deployStatus);
                             return new Response(ResultCode.OK.code, statusObj).toJSONObject();
-                        }else { //启动成功则更新节点状态
+                        } else { //启动成功则更新节点状态
+                            success = true;
                             HashMap<Object, Object> map = new HashMap<>();
                             map.put(Common.isDeployedFiled, true);
                             map.put(Common.deployStatusFiled, 1);
@@ -450,12 +452,14 @@ public class DeployController {
                             updateNodeInfo(idArr[count], map, idArr[count]);
                         }
                     }
-                    if(count == idArr.length-1){
+                    if (count == idArr.length - 1) {
                         deployStatus = 0;
                     }
                     break;
                 }
-                for (count = 0; count < idArr.length && idArr[count] != idSR; count++) {
+            }
+            if(success){
+                for (int count = 0; count < idArr.length && idArr[count] != idSR ; count++) {
                     deployNode(idArr[count], filePath);
                     if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                         HashMap<Object, Object> map = new HashMap<>();
@@ -466,16 +470,19 @@ public class DeployController {
                         statusObj.put("status", deployStatus);
                     }else { //启动成功则更新节点状态
                         HashMap<Object, Object> map = new HashMap<>();
+                        json = readJsonFile();
+                        long firstId = (long) json.get(Common.firstIdFiled);
                         map.put(Common.isDeployedFiled, true);
                         map.put(Common.deployStatusFiled, 1);
                         map.put(Common.isError, false);
-                        updateNodeInfo(idArr[count], map, idArr[count]);
+                        updateNodeInfo(idArr[count], map, firstId);
                     }
                     if(count == idArr.length-1 && deployStatus != 2){
                         deployStatus = 0;
                     }
                 }
             }
+
         }else{
             int deployNum = 0;
             for (int count = 0; count < idArr.length ; count++) {
@@ -503,7 +510,9 @@ public class DeployController {
                 if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                     HashMap<Object, Object> map = new HashMap<>();
                     map.put(Common.isError, true);
-                    updateNodeInfo(idArr[count], map, -1);
+                    json = readJsonFile();
+                    long firstId = (long) json.get(Common.firstIdFiled);
+                    updateNodeInfo(idArr[count], map, firstId);
 
                     deployStatus = 2;
                     statusObj.put("status", deployStatus);
@@ -512,7 +521,8 @@ public class DeployController {
                     map.put(Common.isDeployedFiled, true);
                     map.put(Common.deployStatusFiled, 1);
                     map.put(Common.isError, false);
-                    updateNodeInfo(idArr[count], map, idArr[count]);
+                    long firstId = (long) json.get(Common.firstIdFiled);
+                    updateNodeInfo(idArr[count], map, firstId);
                 }
                 if(count == idArr.length-1 && deployStatus != 2){
                     deployStatus = 0;

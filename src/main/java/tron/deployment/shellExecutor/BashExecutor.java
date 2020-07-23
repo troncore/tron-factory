@@ -116,7 +116,7 @@ public class BashExecutor {
         }
     }
 
-    public void callStopNodeScript(String ip, Long port, String userName, String sshPassword, String privateKey, Long id){
+    public void callStopNodeScript(String ip, Long port, String userName, Long id, String sshPassword){
 
         try {
             String absolutePath = "";
@@ -127,7 +127,7 @@ public class BashExecutor {
                 absolutePath = System.getProperty("user.dir").concat("/stopNodePWD.bash");
             }
 //            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
-            String[] cmdArray = {absolutePath, ip, port.toString(), userName, sshPassword, privateKey};
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, id.toString(), sshPassword};
 
             String logName = String.format("> ".concat(Common.stopNodeFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
