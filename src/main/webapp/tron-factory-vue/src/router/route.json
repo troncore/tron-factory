@@ -21,20 +21,6 @@
     }
   },
   {
-    "path": "/nodes-manage/:type(add|edit|detail)?/:id(\\d+)?",
-    "name": "nodes-manage",
-    "meta": {
-      "auth": true
-    }
-  },
-  {
-    "path": "/configuration/:type(quick|custom|import)/:step(genesis|base|network|database|p2p|modules)?",
-    "name": "configuration",
-    "meta": {
-      "auth": true
-    }
-  },
-  {
     "path": "/ecology-app",
     "name": "ecology-app",
     "meta": {
