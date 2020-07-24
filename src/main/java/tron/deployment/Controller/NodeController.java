@@ -708,12 +708,6 @@ public class NodeController {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     Map<String, Object> nowBlockInfo = new HashMap<>();
-    String[] ipPort = url.split(":");
-    if(!isHostConnection(ipPort[0], Integer.parseInt(ipPort[1]))){
-      jsonObj.put("result",nowBlockInfo);
-      jsonObj.put("status", 0);
-      return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
-    }
     try{
       if(type == 1){
         nowBlockInfo = httpUtil.getInfo("http://"+url+"/wallet/getnowblock");
