@@ -4,6 +4,7 @@ echo "[$time] start stopNode"
 ############################################################
 #获取远程机器的pid
 pid=`head -1 /tmp/startPid-$4`
+echo $pid
 result=`kill -9 $pid`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
