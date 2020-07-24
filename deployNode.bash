@@ -156,7 +156,6 @@ fi
 
 #将pid存到startPid文件中，在执行完start.sh后检查pid是否存在
 rm -rf ./startPid-$7
-echo $7
 echo ps ux |grep java-tron-$7/ |grep -v grep |awk '{print \$2}'
 ssh -p $2 $3@$1 "ps ux |grep java-tron-$7/ |grep -v grep |awk '{print \$2}' > startPid"
 ssh -p $2 $3@$1 "echo \$HOSTNAME >> startHostName"
