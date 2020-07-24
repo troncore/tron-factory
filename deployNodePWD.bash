@@ -468,7 +468,7 @@ lsp
 /usr/bin/expect <<lsp
    log_user 0
    set timeout 60
-   spawn scp -P $2 $3@$1:./startPid ./tmp/startPid-$7
+   spawn scp -P $2 $3@$1:~/startPid ~/tmp/startPid-$7
    expect {
    "*assword*" {
    send "$7\r"
@@ -488,7 +488,7 @@ lsp
 /usr/bin/expect <<lsp
    log_user 0
    set timeout 60
-   spawn scp -P $2 $3@$1:./startHostName ./tmp/startHostName-$7
+   spawn scp -P $2 $3@$1:~/startHostName ~/tmp/startHostName-$7
    expect {
    "*assword*" {
    send "$7\r"
@@ -506,8 +506,8 @@ lsp
    fi
 
 
-pid=`head -1 ./tmp/startPid-$7`
-hostname=`head -1 ./tmp/startHostName-$7`
+pid=`head -1 ~/tmp/startPid-$7`
+hostname=`head -1 ~/tmp/startHostName-$7`
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
