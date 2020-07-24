@@ -160,10 +160,10 @@ echo $7
 echo ps ux |grep java-tron-$7/ |grep -v grep |awk '{print \$2}'
 ssh -p $2 $3@$1 "ps ux |grep java-tron-$7/ |grep -v grep |awk '{print \$2}' > startPid"
 ssh -p $2 $3@$1 "echo \$HOSTNAME >> startHostName"
-scp -P $2 $3@$1:~/startPid ~/tmp/startPid-$7
-scp -P $2 $3@$1:~/startHostName ~/tmp/startHostName-$7
-pid=`head -1 ~/tmp/startPid-$7`
-hostName=`head -1 ~/tmp/startHostName-$7`
+scp -P $2 $3@$1:~/startPid /tmp/startPid-$7
+scp -P $2 $3@$1:~/startHostName /tmp/startHostName-$7
+pid=`head -1 /tmp/startPid-$7`
+hostName=`head -1 /tmp/startHostName-$7`
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
