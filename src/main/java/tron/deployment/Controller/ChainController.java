@@ -157,8 +157,6 @@ public class ChainController {
     }
     jsonObj.put("genesisBlockAssets", linkedHash);
 
-    System.out.println(jsonObj);
-
     return new Response(ResultCode.OK.code, "", jsonObj).toJSONObject();
   }
 
@@ -267,15 +265,8 @@ public class ChainController {
     if (!writeJsonFile(json)) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed, false).toJSONObject();
     }
-
-    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
-    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
-    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
-
-    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
-      LOG.error("update witness config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed", false).toJSONObject();
-    }
+    NodeController nodeController = new NodeController();
+    nodeController.initConfig();
     return new Response(ResultCode.OK.code, "",true).toJSONObject();
   }
 

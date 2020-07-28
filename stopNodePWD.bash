@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start stopNode"
+pid=`head -1 /tmp/startPid-$4`
 /usr/bin/expect <<lsp
    log_user 0
    set timeout 20
@@ -9,7 +10,7 @@ echo "[$time] start stopNode"
    "*assword*" {
    send "$5\r"
    expect "]*"
-   send "echo `cd ~&&head -1 startPid-$4 | xargs kill -9 2>&1` > /tmp/stopPid-$4 \r"
+   send "echo `kill -9 $pid 2>&1` > /tmp/stopPid-$4 \r"
    expect "]*"
    send "exit\r"
    }
