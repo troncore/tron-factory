@@ -450,6 +450,7 @@ public class DeployController {
                             map.put(Common.deployStatusFiled, 1);
                             map.put(Common.isError, false);
                             updateNodeInfo(idArr[count], map, idArr[count]);
+
                         }
                     }
                     if (count == idArr.length - 1) {
@@ -459,27 +460,30 @@ public class DeployController {
                 }
             }
             if(success){
-                for (int count = 0; count < idArr.length && idArr[count] != idSR ; count++) {
-                    deployNode(idArr[count], filePath);
-                    if (!checkIsDeploy(idArr[count])) {//如果未成功启动
-                        HashMap<Object, Object> map = new HashMap<>();
-                        map.put(Common.isError, true);
-                        updateNodeInfo(idArr[count], map, -1);
+                for (int count = 0; count < idArr.length ; count++) {
+                    if(idArr[count] != idSR){
+                        deployNode(idArr[count], filePath);
+                        if (!checkIsDeploy(idArr[count])) {//如果未成功启动
+                            HashMap<Object, Object> map = new HashMap<>();
+                            map.put(Common.isError, true);
+                            updateNodeInfo(idArr[count], map, -1);
 
-                        deployStatus = 2;
-                        statusObj.put("status", deployStatus);
-                    }else { //启动成功则更新节点状态
-                        HashMap<Object, Object> map = new HashMap<>();
-                        json = readJsonFile();
-                        long firstId = (long) json.get(Common.firstIdFiled);
-                        map.put(Common.isDeployedFiled, true);
-                        map.put(Common.deployStatusFiled, 1);
-                        map.put(Common.isError, false);
-                        updateNodeInfo(idArr[count], map, firstId);
+                            deployStatus = 2;
+                            statusObj.put("status", deployStatus);
+                        }else { //启动成功则更新节点状态
+                            HashMap<Object, Object> map = new HashMap<>();
+                            json = readJsonFile();
+                            long firstId = (long) json.get(Common.firstIdFiled);
+                            map.put(Common.isDeployedFiled, true);
+                            map.put(Common.deployStatusFiled, 1);
+                            map.put(Common.isError, false);
+                            updateNodeInfo(idArr[count], map, firstId);
+                        }
+                        if(count == idArr.length-1 && deployStatus != 2){
+                            deployStatus = 0;
+                        }
                     }
-                    if(count == idArr.length-1 && deployStatus != 2){
-                        deployStatus = 0;
-                    }
+
                 }
             }
 
