@@ -69,6 +69,12 @@ export default {
   created () {
     this.getBlockChainInfo()
   },
+  activated () {
+    this.getBlockChainInfo()
+  },
+  deactivated () {
+    this.clearAllTimeout()
+  },
   destroyed() {
     this.clearAllTimeout()
   },

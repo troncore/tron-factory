@@ -12,7 +12,7 @@
               {{ $t('getStarted.chainManage.chainNameLabel') }}
               <im-tooltip :content="$t('getStarted.chainManage.chainNameTips')" />
             </span>
-            <el-input v-model.trim="form.chainName" tabindex="1" clearable :placeholder="$t('base.pleaseInput')" />
+            <el-input v-model.trim="form.chainName" tabindex="1" clearable maxlength="30" :placeholder="$t('base.pleaseInput')" />
           </el-form-item>
 
           <el-form-item prop="crypto" required>
@@ -104,10 +104,16 @@
     },
     computed: {
       formRules() {
+        const checkName = (rule, value, callback) => {
+          if (!/^[a-zA-z0-9]{1,30}$/.test(value)) callback(this.$t('getStarted.chainManage.chainNameCheckLength'))
+
+          else callback()
+        }
+
         return {
           chainName: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' },
-            { min: 1, max: 10, message: this.$t('getStarted.chainManage.chainNameCheckLength'), trigger: 'blur' }
+            { validator: checkName, trigger: 'blur' }
           ],
           p2pVersion: [
             { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },

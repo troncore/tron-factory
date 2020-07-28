@@ -120,6 +120,8 @@
           if (err) return
           this.tableData = Array.isArray(res) ? res : []
 
+          this.tableData.sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime())
+
           // when all nodes stopped, it needs to re-check the chain status
           if (isCheckChainStatus) this.$emit('checkChainPublish')
 
