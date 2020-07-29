@@ -128,13 +128,18 @@ public class ChainController {
     jsonObj.put(Common.consensusFiled, consensus);
     //从数据库中获取链的名称和共识信息 end
 
+    if(chainName.equals("")){
+      long p2pVersion = Calendar.getInstance().getTimeInMillis() / 1000;
+      jsonObj.put(Common.P2PVersionField,p2pVersion);
+    }else{
+      //从配置文件中获取p2pVersion
+      jsonObj.put(Common.P2PVersionField,Args.getP2pVersionFromConfig(Util.config)+"");
+    }
+
     //从配置文件中获取加密算法 start
     Util.parseConfig();
     jsonObj.put(Common.cryptoEngine, Args.getCrypto(Util.config));
     //从配置文件中获取加密算法 end
-
-    //从配置文件中获取p2pVersion
-    jsonObj.put(Common.P2PVersionField,Args.getP2pVersionFromConfig(Util.config)+"");
 
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     if(nodes.size() == 0){

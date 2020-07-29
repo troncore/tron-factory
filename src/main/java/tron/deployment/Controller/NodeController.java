@@ -561,7 +561,7 @@ public class NodeController {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }
 
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+    return new Response(ResultCode.OK.code, "").toJSONObject();
   }
 
   //更新节点信息
