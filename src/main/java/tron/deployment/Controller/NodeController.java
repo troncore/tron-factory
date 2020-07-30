@@ -689,6 +689,7 @@ public class NodeController {
         nodeInfo = httpUtil.getInfo(url+"/wallet/getnodeinfo");
       }
       jsonObj.put("result",nodeInfo);
+      jsonObj.put("status", 1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
       return new Response(ResultCode.NOT_FOUND.code, "Failed to get node info, please check the url:"+url+"/wallet/getnodeinfo").toJSONObject();

@@ -418,22 +418,35 @@ public class ConfigControlller {
     int maxHttpConnectNumber = data.getOrDefault("maxHttpConnectNumber", "50") instanceof String ?
             (Integer.parseInt((String) data.getOrDefault("maxHttpConnectNumber", "50"))) :
             (int) data.getOrDefault("maxHttpConnectNumber", 50);
-    int rpcPort = data.getOrDefault("rpcPort", "50051") instanceof String ?
-            (Integer.parseInt((String) data.getOrDefault("rpcPort", "50051"))) :
-            (int) data.getOrDefault("rpcPort", 50051);
-    int solidityRPCPort = data.getOrDefault("rpcSolidityPort", "50061") instanceof String ?
-            (Integer.parseInt((String) data.getOrDefault("rpcSolidityPort", "50061"))) :
-            (int) data.getOrDefault("rpcSolidityPort", 50061);
-    int httpFullNodePort = data.getOrDefault("httpFullNodePort", "8090") instanceof String ?
-            (Integer.parseInt((String) data.getOrDefault("httpFullNodePort", "8090"))) :
-            (int) data.getOrDefault("httpFullNodePort", 8090);
-    int httpSolidityPort = data.getOrDefault("httpSolidityPort", "8091") instanceof String ?
-            (Integer.parseInt((String) data.getOrDefault("httpSolidityPort", "8091"))) :
-            (int) data.getOrDefault("httpSolidityPort", 8091);
     boolean httpFullNode = (boolean) data.getOrDefault("fullNodeEnable", true);
     boolean httpSolidity = (boolean) data.getOrDefault("solidityEnable", true);
     ArrayList<String> acrive = (ArrayList<String>) data.getOrDefault("active", null);
+    
+    Util util = new Util();
+    util.parseConfig(id);
+    Config config = util.config;
+    Args args = new Args();
+    int httpFullNodePort = args.getHTTPFullNodePort(config);
+    int rpcPort = args.getRPCFullNodePort(config);
+    int httpSolidityPort = args.getHTTPSolidityNodePort(config);
+    int solidityRPCPort = args.getRPCSolidityNodePort(config);
 
+    if(httpFullNode){
+      httpFullNodePort = data.getOrDefault("httpFullNodePort", "8090") instanceof String ?
+              (Integer.parseInt((String) data.getOrDefault("httpFullNodePort", "8090"))) :
+              (int) data.getOrDefault("httpFullNodePort", 8090);
+      rpcPort = data.getOrDefault("rpcPort", "50051") instanceof String ?
+              (Integer.parseInt((String) data.getOrDefault("rpcPort", "50051"))) :
+              (int) data.getOrDefault("rpcPort", 50051);
+    }
+    if(httpSolidity){
+      httpSolidityPort = data.getOrDefault("httpSolidityPort", "8091") instanceof String ?
+              (Integer.parseInt((String) data.getOrDefault("httpSolidityPort", "8091"))) :
+              (int) data.getOrDefault("httpSolidityPort", 8091);
+      solidityRPCPort = data.getOrDefault("rpcSolidityPort", "50061") instanceof String ?
+              (Integer.parseInt((String) data.getOrDefault("rpcSolidityPort", "50061"))) :
+              (int) data.getOrDefault("rpcSolidityPort", 50061);
+    }
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new NetworkConfig(maxHttpConnectNumber, solidityRPCPort, rpcPort,
             httpFullNodePort, httpSolidityPort, httpFullNode, httpSolidity, acrive), id, String.format("%s_%s", Common.configFiled, id+""));
