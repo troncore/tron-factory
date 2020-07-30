@@ -88,9 +88,9 @@
       return {
         form: {
           chainName: '',
-          crypto: 'eckey', // sm2
+          crypto: '', // eckey、sm2
           p2pVersion: '',
-          consensus: 'dpos',
+          consensus: '', // dpos
         },
         canChangeCrypto: true,
         genesisBlockAssets: [],
@@ -156,10 +156,10 @@
       },
 
       async hasBlockChain () {
-        this.loading = true
+        // this.loading = true
         return new Promise(resolve => {
           this.$_api.getStarted.hasBlockChain({}, (err, res) => {
-            this.loading = false
+            // this.loading = false
             if (err) return resolve(false)
 
             if (res === true) resolve(true)
