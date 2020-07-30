@@ -69,7 +69,7 @@
         }
 
         // error file
-        if (!~this.form.filePath.indexOf('java-tron-1.0.0.zip')) {
+        if (!this.form.filePath.endsWith('java-tron-1.0.0.zip')) {
           this.$notify({
             title: this.$t('base.warning'),
             message: this.$t('getStarted.dashboard.endRightPath'),
