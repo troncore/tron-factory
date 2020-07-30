@@ -682,12 +682,6 @@ public class NodeController {
     HttpUtil httpUtil = new HttpUtil();
     JSONObject jsonObj = new JSONObject();
     Map<String, Object> nodeInfo = new HashMap<>();
-    String[] ipPort = url.split(":");
-    if(!isHostConnection(ipPort[0], Integer.parseInt(ipPort[1]))){
-      jsonObj.put("result",nodeInfo);
-      jsonObj.put("status", 0);
-      return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
-    }
     try{
       if(type == 1){
         nodeInfo = httpUtil.getInfo("http://"+url+"/wallet/getnodeinfo");
@@ -695,10 +689,9 @@ public class NodeController {
         nodeInfo = httpUtil.getInfo(url+"/wallet/getnodeinfo");
       }
       jsonObj.put("result",nodeInfo);
-      jsonObj.put("status", 1);
       return new Response(ResultCode.OK.code, jsonObj).toJSONObject();
     }catch (Exception e){
-      return new Response(ResultCode.NOT_FOUND.code, "Failed to get node info, please check the url:"+"http://"+url+"/wallet/getnodeinfo").toJSONObject();
+      return new Response(ResultCode.NOT_FOUND.code, "Failed to get node info, please check the url:"+url+"/wallet/getnodeinfo").toJSONObject();
     }
 
   }
