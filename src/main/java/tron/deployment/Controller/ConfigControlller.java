@@ -421,7 +421,7 @@ public class ConfigControlller {
     boolean httpFullNode = (boolean) data.getOrDefault("fullNodeEnable", true);
     boolean httpSolidity = (boolean) data.getOrDefault("solidityEnable", true);
     ArrayList<String> acrive = (ArrayList<String>) data.getOrDefault("active", null);
-    
+
     Util util = new Util();
     util.parseConfig(id);
     Config config = util.config;
