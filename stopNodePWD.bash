@@ -2,6 +2,7 @@
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] start stopNode"
 pid=`head -1 /tmp/startPid-$4`
+echo $pid
 /usr/bin/expect <<lsp
    log_user 0
    set timeout 20
@@ -10,7 +11,7 @@ pid=`head -1 /tmp/startPid-$4`
    "*assword*" {
    send "$5\r"
    expect "]*"
-   send "echo `kill -9 $pid 2>&1` > /tmp/stopPid-$4 \r"
+   send "kill -9 $pid >/tmp/stopPid-$4 2>&1 \r"
    expect "]*"
    send "exit\r"
    }
@@ -26,7 +27,7 @@ lsp
   spawn scp -P $2 $3@$1:/tmp/stopPid-$4 /tmp/stopPid-$4
   expect {
   "*assword*" {
-  send "$4\r"
+  send "$5\r"
   expect "100%"
   send "\r"
   }
@@ -34,13 +35,14 @@ lsp
   }
   expect eof
 lsp
-if [ $? = 0 ];then
-    time=$(date "+%Y-%m-%d %H:%M:%S")
-   echo "[$time] stop node successfully"
-  else
-    time=$(date "+%Y-%m-%d %H:%M:%S")
-    echo "[$time] stop node failed"
-    exit
+result=`cat /tmp/stopPid-$4`
+if [ -z "$result" ]; then
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] stop node successfully"
+else
+  time=$(date "+%Y-%m-%d %H:%M:%S")
+  echo "[$time] stop node failed"
+  exit
 fi
 
 
