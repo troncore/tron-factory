@@ -731,12 +731,21 @@ public class NodeController {
     Long port = (Long) node.get(Common.portFiled);
     String userName = (String) node.get(Common.userNameFiled);
     String sshPassword = (String) node.get(Common.sshPasswordFiled);
+    long ListenPort = (Long) node.get(Common.listenPortField);
     //执行部署脚本
     bashExecutor.callStopNodeScript(ip, port, userName,id,chainId+"",sshPassword);
 
     String status = checkIsStoped(String.format(Common.stopNodeFormat, id+""));
     DeployController deployController = new DeployController();
     if (status.equals(Common.stopNodeSuccessStatus)) {
+      boolean flag = false;
+      while(!flag){
+        bashExecutor.callStopPortScript(ip, port, userName,id,ListenPort,sshPassword);
+        status = checkIsStoped(String.format(Common.stopPortFormat, id+""));
+        if(status.equals(Common.stopNodeSuccessStatus)){
+          flag = true;
+        }
+      }
       JSONObject oldNode = Util.getNodeInfo(nodes, id);
       oldNode.put(Common.isDeployedFiled, false);
       oldNode.put(Common.deployStatusFiled, 0);
@@ -754,6 +763,24 @@ public class NodeController {
       updateNodesInfo(nowNodes, json);
 
     }
+    /*if (status.equals(Common.stopNodeSuccessStatus)) {
+      JSONObject oldNode = Util.getNodeInfo(nodes, id);
+      oldNode.put(Common.isDeployedFiled, false);
+      oldNode.put(Common.deployStatusFiled, 0);
+      deployController.deleteNode(id);
+      json = readJsonFile();
+      JSONArray nowNodes = (JSONArray) json.get(Common.nodesFiled);
+      if (Objects.isNull(nowNodes)) {
+        nowNodes = new JSONArray();
+      }
+      nowNodes.add(oldNode);
+      json.put(Common.nodesFiled, nowNodes);
+      if(id == firstId){
+        json.put(Common.firstIdFiled, -1);
+      }
+      updateNodesInfo(nowNodes, json);
+
+    }*/
 
       return new Response(ResultCode.OK.code, "").toJSONObject();
   }

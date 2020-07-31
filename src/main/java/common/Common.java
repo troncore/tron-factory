@@ -100,6 +100,8 @@ public class Common {
 
   public static final String stopNodeFormat = "logs/stopNode_%s.log" ;
 
+  public static final String stopPortFormat = "logs/stopPort_%s.log" ;
+
   public static final String allNodesField = "allNodes";
 
   public static final String serviceTypeFiled = "serviceType";

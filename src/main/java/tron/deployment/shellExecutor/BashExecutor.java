@@ -136,7 +136,33 @@ public class BashExecutor {
             String cmd = StringUtils.join(cmdArray, " ");
             Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
             process.waitFor();
-             LOG.info("deploy cmd: {}", cmd);
+            LOG.info("deploy cmd: {}", cmd);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void callStopPortScript(String ip, Long port, String userName, long id, long listenPort, String sshPassword){
+
+        try {
+            String absolutePath = "";
+            //密码登录：deployNodePWD.bash  密钥登录：deployNode.bash
+            if(sshPassword.equals("")){
+                absolutePath = System.getProperty("user.dir").concat("/stopPort.bash");
+            }else{
+                absolutePath = System.getProperty("user.dir").concat("/stopPortPWD.bash");
+            }
+//            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, listenPort+"", sshPassword};
+
+            String logName = String.format("> ".concat(Common.stopPortFormat), id+"");
+            cmdArray = ArrayUtils.add(cmdArray, logName);
+            String cmd = StringUtils.join(cmdArray, " ");
+            Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
+            LOG.info("deploy cmd: {}", cmd);
 
         }
         catch (Exception e){
