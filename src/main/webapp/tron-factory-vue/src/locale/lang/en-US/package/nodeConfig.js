@@ -2,7 +2,7 @@ export default {
   configuration: 'Configuration',
   quickConfig: 'Fast Config',
   customConfig: 'Custom Config',
-  opUnValidNode: '当前所编辑的节点为无效节点',
+  opUnValidNode: 'Invalid node',
 
   moreSetting: 'Advanced Config',
 
@@ -13,11 +13,11 @@ export default {
   moduleFunction: 'Module',
 
   selectDatabaseConfig: 'Database Engine',
-  isWriteSync: 'Write synchronously',
-  isOpenTransaction: '交易回执信息存储',
-  backupEnable: 'RocksDB备份设置',
-  backupFrequency: '备份间隔(块)',
-  dbCustomModule: 'Custom chainbase Module',
+  isWriteSync: 'Write Synchronously',
+  isOpenTransaction: 'Storage of Transaction Receipt',
+  backupEnable: 'RocksDB Backup Settings',
+  backupFrequency: 'Backup Frequency(Unit:Block)',
+  dbCustomModule: 'Custom Chainbase Module',
 
   customTransactionModule: 'Custom Transaction Module',
 
