@@ -16,7 +16,7 @@ export default {
   isWriteSync: '同步写入',
   isOpenTransaction: '交易回执信息存储',
   backupEnable: 'RocksDB备份设置',
-  backupFrequency: '备份间隔(块)',
+  backupFrequency: '备份间隔(单位:块)',
   dbCustomModule: '自定义chainbase模块',
 
   customTransactionModule: '自定义Transaction模块',
