@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort, String chainId){
 
         try {
             String absolutePath = "";
@@ -29,11 +29,13 @@ public class BashExecutor {
             String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword, id.toString()};
             cmdArray = ArrayUtils.add(cmdArray, privateKey);
             cmdArray = ArrayUtils.add(cmdArray, dbCustom);
+            cmdArray = ArrayUtils.add(cmdArray, chainId);
             cmdArray = ArrayUtils.add(cmdArray, fullNodePort);
             cmdArray = ArrayUtils.add(cmdArray, solidityPort);
             cmdArray = ArrayUtils.add(cmdArray, listenPort);
             cmdArray = ArrayUtils.add(cmdArray, rpcPort);
             cmdArray = ArrayUtils.add(cmdArray, rpcsolidityPort);
+
 
             String logName = String.format("> ".concat(logFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
@@ -116,7 +118,7 @@ public class BashExecutor {
         }
     }
 
-    public void callStopNodeScript(String ip, Long port, String userName, Long id, String sshPassword){
+    public void callStopNodeScript(String ip, Long port, String userName, Long id,  String chainId, String sshPassword){
 
         try {
             String absolutePath = "";
@@ -127,7 +129,7 @@ public class BashExecutor {
                 absolutePath = System.getProperty("user.dir").concat("/stopNodePWD.bash");
             }
 //            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
-            String[] cmdArray = {absolutePath, ip, port.toString(), userName, id.toString(), sshPassword};
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, id.toString(), chainId, sshPassword};
 
             String logName = String.format("> ".concat(Common.stopNodeFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);

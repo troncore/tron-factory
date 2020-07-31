@@ -721,6 +721,7 @@ public class NodeController {
     BashExecutor bashExecutor = new BashExecutor();
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    long chainId = (long) json.get(Common.chainIdFiled);
     long firstId = (long) json.get(Common.firstIdFiled);
     if (Objects.isNull(nodes)) {
       nodes = new JSONArray();
@@ -731,7 +732,7 @@ public class NodeController {
     String userName = (String) node.get(Common.userNameFiled);
     String sshPassword = (String) node.get(Common.sshPasswordFiled);
     //执行部署脚本
-    bashExecutor.callStopNodeScript(ip, port, userName,id,sshPassword);
+    bashExecutor.callStopNodeScript(ip, port, userName,id,chainId+"",sshPassword);
 
     String status = checkIsStoped(String.format(Common.stopNodeFormat, id+""));
     DeployController deployController = new DeployController();
@@ -753,6 +754,7 @@ public class NodeController {
       updateNodesInfo(nowNodes, json);
 
     }
+
       return new Response(ResultCode.OK.code, "").toJSONObject();
   }
 

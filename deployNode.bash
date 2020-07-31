@@ -17,7 +17,7 @@ echo "[$time] ssh connect successfully"
 #校验端口是否被占用
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
-portArray=(${10} ${11} ${12} ${13} ${14})
+portArray=(${11} ${12} ${13} ${14} ${15})
 for port in ${portArray[@]}
 do
 if [ "$port" = "null" ];then
@@ -33,14 +33,14 @@ if [ ! -z "$result" ]; then
 fi
 done
 ############################################################
-ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron-$7"
+ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron-${10}-$7"
 time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] rm -rf java-tron-$7"
+echo "[$time] rm -rf java-tron-${10}-$7"
 
-result=`ssh -p $2 $3@$1 "mkdir java-tron-$7" 2>&1`
+result=`ssh -p $2 $3@$1 "mkdir java-tron-${10}-$7" 2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-  echo "[$time] created the directory: ~/java-tron-$7"
+  echo "[$time] created the directory: ~/java-tron-${10}-$7"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] create the directory failed!"
@@ -65,7 +65,7 @@ fi
 ###################################
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading java-tron-1.0.0.zip"
-result=`scp -P $2  $4 $3@$1:./java-tron-$7/  2>&1`
+result=`scp -P $2  $4 $3@$1:./java-tron-${10}-$7/  2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
  echo "[$time] upload java-tron-1.0.0.zip successfully"
@@ -79,7 +79,7 @@ fi
 
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] uploading config.conf"
-result=`scp -P $2 $5 $3@$1:./java-tron-$7/config.conf 2>&1`
+result=`scp -P $2 $5 $3@$1:./java-tron-${10}-$7/config.conf 2>&1`
 if [ -z $result ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload config.conf successfully"
@@ -91,7 +91,7 @@ else
   exit
 fi
 
-result=`ssh -p $2 $3@$1 "cd java-tron-$7&&unzip -o ./${APP}.zip > /dev/null"`
+result=`ssh -p $2 $3@$1 "cd java-tron-${10}-$7&&unzip -o ./${APP}.zip > /dev/null"`
 if [ "$?" != "0" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] unzip java-tron-1.0.0.zip failed, unzip cmd is not installed!"
@@ -106,13 +106,13 @@ fi
 ############################################################
 if [ ${9} != "null" ]; then
   ##远程chainbase.jar路径
-  chainbasePath=`ssh -p $2 $3@$1 "cd java-tron-$7/java-tron-1.0.0/lib&&find chainbase*"`
+  chainbasePath=`ssh -p $2 $3@$1 "cd java-tron-${10}-$7/java-tron-1.0.0/lib&&find chainbase*"`
   #用户自定义数据库jar包路径
   dbCustom=${9}
   dbPath=${dbCustom##*/}
 
   #上传用户自定义jar包
-  result=`scp -P $2 ${9} $3@$1:java-tron-$7/java-tron-1.0.0/lib/$chainbasePath  2>&1`
+  result=`scp -P $2 ${9} $3@$1:java-tron-${10}-$7/java-tron-1.0.0/lib/$chainbasePath  2>&1`
   if [ -z $result ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] upload ${dbPath} successfully"
@@ -126,12 +126,12 @@ if [ ${9} != "null" ]; then
 fi
 
 
-scp -P $2 ./.startNode.sh $3@$1:./java-tron-$7/start.sh
+scp -P $2 ./.startNode.sh $3@$1:./java-tron-${10}-$7/start.sh
 
 if [ $6 != "null" ]; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] uploading plugin"
-  result=`scp -P $2 $6 $3@$1:./java-tron-$7/$APP/lib/ 2>&1`
+  result=`scp -P $2 $6 $3@$1:./java-tron-${10}-$7/$APP/lib/ 2>&1`
 
   if [ -z $result ];then
     time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -147,22 +147,22 @@ fi
 if [ $8 = "null" ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy FullNode"
-   ssh -p $2 $3@$1 "cd java-tron-$7&& nohup bash start.sh"
+   ssh -p $2 $3@$1 "cd java-tron-${10}-$7&& nohup bash start.sh"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
    echo "[$time] deploy WitnessNode"
-   ssh -p $2 $3@$1 "cd java-tron-$7&& nohup bash start.sh ${8}"
+   ssh -p $2 $3@$1 "cd java-tron-${10}-$7&& nohup bash start.sh ${8}"
 fi
 
 #将pid存到startPid文件中，在执行完start.sh后检查pid是否存在
 rm -rf ./startPid-$7
-echo ps ux |grep java-tron-$7/ |grep -v grep |awk '{print \$2}'
-ssh -p $2 $3@$1 "ps ux |grep java-tron-$7/ |grep -v grep |awk '{print \$2}' > startPid"
+echo ps ux |grep java-tron-${10}-$7/ |grep -v grep |awk '{print \$2}'
+ssh -p $2 $3@$1 "ps ux |grep java-tron-${10}-$7/ |grep -v grep |awk '{print \$2}' > startPid"
 ssh -p $2 $3@$1 "echo \$HOSTNAME >> startHostName"
-scp -P $2 $3@$1:~/startPid /tmp/startPid-$7
-scp -P $2 $3@$1:~/startHostName /tmp/startHostName-$7
-pid=`head -1 /tmp/startPid-$7`
-hostName=`head -1 /tmp/startHostName-$7`
+scp -P $2 $3@$1:~/startPid /tmp/startPid-${10}-$7
+scp -P $2 $3@$1:~/startHostName /tmp/startHostName-${10}-$7
+pid=`head -1 /tmp/startPid-${10}-$7`
+hostName=`head -1 /tmp/startHostName-${10}-$7`
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")

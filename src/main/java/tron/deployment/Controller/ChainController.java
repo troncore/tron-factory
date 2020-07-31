@@ -58,15 +58,20 @@ public class ChainController {
     ArrayList<LinkedHashMap> arrayList = (ArrayList<LinkedHashMap>) o;
 
     //获取请求数据 end
+    long chainId = Calendar.getInstance().getTimeInMillis() / 1000; //创建时根据时间戳生成链的唯一标识chainId
 
-    //把链的名称和共识信息写入数据库 start
+    //把chainId，链的名称和共识信息写入数据库 start
     JSONObject json = readJsonFile();
     json.put(Common.chainNameFiled, chainName);
     json.put(Common.consensusFiled, consensus);
+    json.put(Common.chainIdFiled, chainId);
     if (!writeJsonFile(json)) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }
     //把链的名称和共识信息写入数据库 end
+
+    //把chainId写入数据库
+
 
     //把加密算法写入配置文件 start
     JSONObject jsonData = new JSONObject();

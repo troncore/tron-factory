@@ -23,7 +23,7 @@ fi
 #echo "检测端口"
 time=$(date "+%Y-%m-%d %H:%M:%S")
 echo "[$time] check port"
-portArray=(${11} ${12} ${13} ${14} ${15})
+portArray=(${12} ${13} ${14} ${15} ${16})
 for port in ${portArray[@]}
 do
 if [ "$port" = "null" ];then
@@ -37,7 +37,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "*ogin*"
-send "netstat -an|grep $port > ~/java-tron-$8/checkPort.log\r"
+send "netstat -an|grep $port > ~/java-tron-${11}-$8/checkPort.log\r"
 expect "]*"
 send "exit\r"
 }
@@ -49,7 +49,7 @@ lsp
 /usr/bin/expect <<lsp
   log_user 0
   set timeout 60
-  spawn scp -P $2 $3@$1:~/java-tron-$8/checkPort.log /tmp/
+  spawn scp -P $2 $3@$1:~/java-tron-${11}-$8/checkPort.log /tmp/
   expect {
   "*assword*" {
   send "$7\r"
@@ -107,7 +107,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "rm -rf java-tron-$8\r"
+send "rm -rf java-tron-${11}-$8\r"
 expect "]*"
 send "exit\r"
 }
@@ -117,7 +117,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] rm -rf java-tron-$8"
+echo "[$time] rm -rf java-tron-${11}-$8"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ssh connect failed!"
@@ -135,7 +135,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "mkdir java-tron-$8\r"
+send "mkdir java-tron-${11}-$8\r"
 expect "]*"
 send "exit\r"
 }
@@ -145,7 +145,7 @@ expect eof
 lsp
 if [ $? = 0 ];then
   time=$(date "+%Y-%m-%d %H:%M:%S")
-echo "[$time] created the directory: ~/java-tron-$8"
+echo "[$time] created the directory: ~/java-tron-${11}-$8"
 else
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] create the directory failed!"
@@ -174,7 +174,7 @@ echo "[$time] uploading java-tron-1.0.0.zip"
 /usr/bin/expect <<lsp
 log_user 0
 set timeout 3600
-spawn scp -P $2  $4 $3@$1:./java-tron-$8/
+spawn scp -P $2  $4 $3@$1:./java-tron-${11}-$8/
 expect {
 "*assword*" {
 send "$7\r"
@@ -205,7 +205,7 @@ echo "[$time] uploading config.conf"
 /usr/bin/expect <<lsp
 log_user 0
 set timeout 60
-spawn scp -P $2 $5 $3@$1:./java-tron-$8/config.conf
+spawn scp -P $2 $5 $3@$1:./java-tron-${11}-$8/config.conf
 expect {
 "*assword*" {
 send "$7\r"
@@ -238,7 +238,7 @@ expect {
 "*assword*" {
 send "$7\r"
 expect "]*"
-send "cd java-tron-$8&&unzip -o ./${APP}.zip > /dev/null \r"
+send "cd java-tron-${11}-$8&&unzip -o ./${APP}.zip > /dev/null \r"
 expect "]*"
 send "exit\r"
 }
@@ -268,7 +268,7 @@ if [ ${10} != "null" ]; then
   "*assword*" {
   send "$7\r"
   expect "]*"
-  send "cd java-tron/java-tron-1.0.0/lib&&find chainbase* >~/java-tron-$8/dbJarName\r"
+  send "cd java-tron/java-tron-1.0.0/lib&&find chainbase* >~/java-tron-${11}-$8/dbJarName\r"
   expect "]*"
   send "exit\r"
   }
@@ -281,7 +281,7 @@ lsp
   /usr/bin/expect <<lsp
   log_user 0
   set timeout 3600
-  spawn scp -P $2 $3@$1:~/java-tron-$8/dbJarName /tmp/
+  spawn scp -P $2 $3@$1:~/java-tron-${11}-$8/dbJarName /tmp/
   expect {
   "*assword*" {
   send "$7\r"
@@ -302,7 +302,7 @@ lsp
   /usr/bin/expect <<lsp
   log_user 0
   set timeout 3600
-  spawn scp -P $2 ${10} $3@$1:java-tron-$8/java-tron-1.0.0/lib/$chainbasePath
+  spawn scp -P $2 ${10} $3@$1:java-tron-${11}-$8/java-tron-1.0.0/lib/$chainbasePath
   expect {
   "*assword*" {
   send "$7\r"
@@ -334,7 +334,7 @@ echo "[$time] uploading start.sh"
 /usr/bin/expect <<lsp
 log_user 0
 set timeout 60
-spawn scp -P $2 ./.startNode.sh $3@$1:./java-tron-$8/start.sh
+spawn scp -P $2 ./.startNode.sh $3@$1:./java-tron-${11}-$8/start.sh
 expect {
 "*assword*" {
 send "$7\r"
@@ -366,7 +366,7 @@ if [ $6 != "null" ]; then
   /usr/bin/expect <<lsp
   log_user 0
   set timeout 3600
-  spawn scp -P $2 $6 $3@$1:./java-tron-$8/$APP/lib/
+  spawn scp -P $2 $6 $3@$1:./java-tron-${11}-$8/$APP/lib/
   expect {
   "*assword*" {
   send "$7\r"
@@ -401,7 +401,7 @@ if [ $9 = "null" ]; then
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron-$8&& bash start.sh \r"
+   send "cd java-tron-${11}-$8&& bash start.sh \r"
    expect "]*"
    send "exit\r"
    }
@@ -427,7 +427,7 @@ else
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "cd java-tron-$8&& bash start.sh $9\r"
+   send "cd java-tron-${11}-$8&& bash start.sh $9\r"
    expect "]*"
    send "exit\r"
    }
@@ -452,7 +452,7 @@ fi
    "*assword*" {
    send "$7\r"
    expect "]*"
-   send "ps ux |grep java-tron-$8/ |grep -v grep |awk '{print \\\$2}' > startPid \r"
+   send "ps ux |grep java-tron-${11}-$8/ |grep -v grep |awk '{print \\\$2}' > startPid \r"
    expect "]*"
    send "echo \\\$HOSTNAME > startHostName \r"
    expect "]*"
@@ -467,7 +467,7 @@ lsp
 /usr/bin/expect <<lsp
    log_user 0
    set timeout 60
-   spawn scp -P $2 $3@$1:~/startPid /tmp/startPid-$8
+   spawn scp -P $2 $3@$1:~/startPid /tmp/startPid-${11}-$8
    expect {
    "*assword*" {
    send "$7\r"
@@ -487,7 +487,7 @@ lsp
 /usr/bin/expect <<lsp
    log_user 0
    set timeout 60
-   spawn scp -P $2 $3@$1:~/startHostName /tmp/startHostName-$8
+   spawn scp -P $2 $3@$1:~/startHostName /tmp/startHostName-${11}-$8
    expect {
    "*assword*" {
    send "$7\r"
@@ -505,13 +505,13 @@ lsp
    fi
 
 
-pid=`head -1 /tmp/startPid-$8`
-hostname=`head -1 /tmp/startHostName-$8`
+pid=`head -1 /tmp/startPid-${11}-$8`
+hostname=`head -1 /tmp/startHostName-${11}-$8`
 
 if [ -z $pid ] ; then
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo "[$time] ${failed}"
-  rm -rf startPid-$8 startHostName-$8
+  #rm -rf startPid-${16}-$8 startHostName-${16}-$8
   #rm -rf $5
   exit
 else
@@ -519,7 +519,7 @@ else
   echo "[$time] start java-tron with pid $pid on $hostname"
   time=$(date "+%Y-%m-%d %H:%M:%S")
   echo  "[$time] ${success}"
-  rm -rf startPid-$8 startHostName-$8
+  #rm -rf startPid-${16}-$8 startHostName-${16}-$8
   #rm -rf $5
   exit
 fi

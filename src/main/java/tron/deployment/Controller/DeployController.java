@@ -295,20 +295,23 @@ public class DeployController {
             dbCustom = "null";
         }
 
+        //获取chainId
+        long chainId = (long) json.get(Common.chainIdFiled);
         //执行部署脚本
         BashExecutor bashExecutor = new BashExecutor();
         boolean solidityEnable = args.getNodeHttpSolidityEnable(config);
+
         if (Objects.nonNull(privateKey)) {
             if(!solidityEnable){
-                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "", listenPort+"", rpcPort+"", "");
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"");
             }else{
-                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"");
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"");
             }
         } else {
             if(!solidityEnable){
-                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "", listenPort+"", rpcPort+"", "");
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"");
             }else{
-                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"");
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"");
             }
         }
         return new Response(ResultCode.OK.code, "").toJSONObject();
