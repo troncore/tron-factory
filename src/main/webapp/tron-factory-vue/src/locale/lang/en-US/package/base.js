@@ -5,6 +5,7 @@ export default {
   clear: 'Clear',
   delete: 'Delete',
   tips: 'Tips',
+  add: 'Add',
 
   document: 'Document',
   helpDocument: 'Help Document',

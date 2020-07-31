@@ -1,5 +1,5 @@
 export default {
-  startCreate: 'Get started',
+  startCreate: 'Get Started',
   descriptionChain: 'Build your own Blockchain on TRON',
 
   // 创建/修改区块链
@@ -124,7 +124,7 @@ export default {
     url: 'URL',
     urlTips: 'Office website of SR',
     urlPlaceholder: 'Please input URL for the SR',
-    voteCount: 'Please input vote count',
+    voteCount: 'vote count',
     voteCountTips: 'Determine the initial ordering of SR',
     voteCountPlaceholder: 'Please input vote count',
     voteCountCheckMax: 'Vote Count exceeds maximum',
