@@ -21,10 +21,10 @@ export default {
 
   customTransactionModule: 'Custom Transaction Module',
 
-  baseSaveSuccess: 'Basic Save Successful',
-  networkSaveSuccess: 'Network Configuration Save Successful',
-  databaseSaveSuccess: 'Database Configuration Save Successful',
-  p2pSaveSuccess: 'P2P Configuration Save Successful',
+  baseSaveSuccess: 'Basic save successful',
+  networkSaveSuccess: 'Network sonfiguration save successful',
+  databaseSaveSuccess: 'Database configuration save successful',
+  p2pSaveSuccess: 'P2P configuration aave successful',
 
   helpTips: {
     maintenanceTimeInterval: 'Maintenance Time Interval',

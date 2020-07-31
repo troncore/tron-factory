@@ -37,7 +37,7 @@ export default {
 
   // 区块链信息、节点列表信息
   dashboard: {
-    dashboard: '区块链看板',
+    dashboard: '看板',
     chainInfo: '区块链信息',
     chainName: '名称',
     encryption: '签名算法',
