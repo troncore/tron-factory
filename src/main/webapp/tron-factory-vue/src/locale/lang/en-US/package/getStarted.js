@@ -108,7 +108,7 @@ export default {
     listenPortPlaceholder: 'Please input listen port',
     sshInfo: 'SSH Configuration',
     port: 'SSH Port',
-    portPlaceholder: 'Please input the port enabled by ssh',
+    portPlaceholder: 'Please input ssh port',
     sshConnectType: 'Secure Authentication',
     byPassword: 'Password',
     byPublicKey: 'Public key',

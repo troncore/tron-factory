@@ -11,7 +11,7 @@
           </el-form-item>
           <el-form-item prop="listenPort">
             <span slot="label">{{ $t('getStarted.nodesManage.listenPort') }}</span>
-            <el-input v-model.trim="form.listenPort" type="number" min="0" max="65535" class="width-400" tabindex="2" clearable :placeholder="$t('getStarted.nodesManage.listenPortPlaceholder')" />
+            <el-input v-model.trim="form.listenPort" type="number" min="1" max="65535" class="width-400" tabindex="2" clearable :placeholder="$t('getStarted.nodesManage.listenPortPlaceholder')" />
           </el-form-item>
         </div>
 
@@ -30,7 +30,7 @@
             </el-form-item>
             <el-form-item prop="port" class="inline-block" label-width="100px">
               <span slot="label">{{ $t('getStarted.nodesManage.port') }}</span>
-              <el-input v-model.trim="form.port" type="number" min="0" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('getStarted.nodesManage.portPlaceholder')" />
+              <el-input v-model.trim="form.port" type="number" min="1" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('getStarted.nodesManage.portPlaceholder')" />
             </el-form-item>
           </div>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
