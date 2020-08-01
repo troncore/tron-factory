@@ -12,12 +12,8 @@
 
     <div class="dialog-content">
       <el-form ref="form" :model="form" :rules="formRules">
-        <el-form-item class="node-type">
-          <el-radio v-model="form.nodeType" label="1">{{ $t('explorer.deployedNode') }}</el-radio>
-          <el-radio v-model="form.nodeType" label="2">{{ $t('explorer.defineNode') }}</el-radio>
-        </el-form-item>
-        <el-form-item v-if="form.nodeType === '1'" prop="deployedURL" key="deployedURL">
-          <el-select v-model="form.deployedURL" style="width: 100%;" clearable filterable :placeholder="$t('base.pleaseSelect')">
+        <el-form-item prop="nodeURL">
+          <el-select v-model="form.nodeURL" style="width: 100%;" clearable filterable :placeholder="$t('explorer.selectNodeURLPlaceholder')">
             <el-option
               v-for="item in deployedNodeList"
               :key="item.value"
@@ -25,9 +21,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item v-if="form.nodeType === '2'" prop="defineURL" key="defineURL">
-          <el-input type="text" v-model="form.defineURL" style="width: 100%;" clearable :placeholder="$t('explorer.customNodePlaceholder')"/>
         </el-form-item>
       </el-form>
     </div>
@@ -52,24 +45,11 @@
       return {
         form: {
           nodeType: '1',
-          deployedURL: '',
-          defineURL: '',
+          nodeURL: '',
         },
         formRules: {
-          deployedURL: [
+          nodeURL: [
             { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change' }
-          ],
-          defineURL: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' },
-            { validator: (rule, value, callback) => {
-                if (!(value.startsWith('http://') || value.startsWith('https://'))) {
-                  callback(new Error(this.$t('explorer.validHttpStart')));
-                } else {
-                  callback();
-                }
-              },
-              trigger: 'blur'
-            }
           ]
         },
         nodeInfo: '',
@@ -104,7 +84,7 @@
             let configForm = {
               refresh: true,
               nodeType: this.form.nodeType,
-              nodeURL: this.form.nodeType === '1' ? this.form.deployedURL : this.form.defineURL,
+              nodeURL: this.form.nodeURL,
             }
             this.$emit('initConfig', configForm)
             this.dialogVisible = false

@@ -17,16 +17,16 @@
         <div class="card-header">{{ $t('getStarted.nodesManage.sshInfo') }}</div>
         <div class="card-body">
           <div class="line-item">
-            <span class="label">{{ $t('getStarted.nodesManage.port') }}:</span>
-            <span class="value">{{ nodeInfo.port || '--' }}</span>
-          </div>
-          <div class="line-item">
             <span class="label">{{ $t('getStarted.nodesManage.sshConnectType') }}:</span>
             <span class="value">{{ sshConnectTypeStr || '--' }}</span>
           </div><br/>
           <div class="line-item">
             <span class="label">{{ $t('getStarted.nodesManage.sshUserName') }}:</span>
             <span class="value">{{ nodeInfo.userName || '--' }}</span>
+          </div>
+          <div class="line-item">
+            <span class="label">{{ $t('getStarted.nodesManage.port') }}:</span>
+            <span class="value">{{ nodeInfo.port || '--' }}</span>
           </div>
         </div>
       </div>
@@ -60,9 +60,13 @@
       </div>
     </div>
     <div class="page-footer">
-      <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" type="primary" :disabled="disabled" @click="handleSubmit">{{ $t('base.modify') }}</el-button>
-      <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" type="danger" :disabled="disabled" :loading="loading" @click="handleDelete">{{ $t('base.delete') }}</el-button>
+      <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" type="primary" :disabled="disabled" @click="handleSubmit">
+        <i class="el-icon-edit"></i> {{ $t('base.modify') }}
+      </el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.return') }}</el-button>
+      <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large delete-btn" type="danger" :disabled="disabled" :loading="loading" @click="handleDelete">
+        <i class="el-icon-delete"></i> {{ $t('base.delete') }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -212,6 +216,11 @@
   font-weight: bold;
   font-size: 18px;
   color: $black-light;
+}
+.page-footer {
+  .delete-btn {
+    float: right;
+  }
 }
 .im-card {
   padding: 20px 20px 0;

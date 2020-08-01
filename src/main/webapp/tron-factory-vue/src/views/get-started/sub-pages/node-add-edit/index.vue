@@ -26,11 +26,11 @@
           <div class="line-item" :class="{'margin-bottom-0': form.sshConnectType === 2}">
             <el-form-item prop="userName" class="inline-block">
               <span slot="label">{{ $t('getStarted.nodesManage.sshUserName') }}</span>
-              <el-input v-model.trim="form.userName" class="width-400" tabindex="4" clearable :placeholder="$t('getStarted.nodesManage.sshUserNamePlaceholder')" />
+              <el-input v-model.trim="form.userName" class="width-400" tabindex="3" clearable :placeholder="$t('getStarted.nodesManage.sshUserNamePlaceholder')" />
             </el-form-item>
             <el-form-item prop="port" class="inline-block" label-width="100px">
               <span slot="label">{{ $t('getStarted.nodesManage.port') }}</span>
-              <el-input v-model.trim="form.port" type="number" min="1" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('getStarted.nodesManage.portPlaceholder')" />
+              <el-input v-model.trim="form.port" type="number" min="1" max="65535" class="width-300" tabindex="4" clearable :placeholder="$t('getStarted.nodesManage.portPlaceholder')" />
             </el-form-item>
           </div>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">

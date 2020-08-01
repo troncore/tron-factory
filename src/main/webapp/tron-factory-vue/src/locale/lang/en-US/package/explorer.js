@@ -1,10 +1,7 @@
 export default {
   explorer: 'Explorer',
   configNode: 'Settings',
-  deployedNode: 'Running Nodes',
-  defineNode: 'Custom Settings',
-  validHttpStart: 'Please start with "http://" or "https://"',
-  customNodePlaceholder: 'Please input http address of a node.(e.g. https://api.trongird.io/)',
+  selectNodeURLPlaceholder: 'Please select the running node',
   nodeIP: 'Node IP',
   httpPort: 'HTTP port',
   defineNodeLabel: 'Custom node URL',

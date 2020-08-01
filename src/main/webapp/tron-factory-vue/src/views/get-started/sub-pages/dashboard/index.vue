@@ -50,6 +50,7 @@
             <el-button
               class="im-button mini"
               size="mini"
+              type="danger"
               v-if="chainStatus === 0"
               :disabled="deleteLoading"
               @click="handleDelete">
