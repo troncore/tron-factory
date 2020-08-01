@@ -1,10 +1,11 @@
 export default {
-  startCreate: '开始创建',
-  descriptionChain: '一键发链，快速创建你自己的区块链',
+  startCreate: '开始',
+  summaryChain: 'TRON Factory，基于TRON Framework定制化区块链',
+  descriptionChain: '基于TRON Framework快速部署定制化区块链，为企业用户提供专业的区块链相关服务',
 
   // 创建/修改区块链
   chainManage: {
-    startCreate: '开始创建',
+    startCreate: '创建区块链',
     updateChain: '修改区块链',
     baseInfo: '基本信息',
     chainNameLabel: '区块链名称',

@@ -1,6 +1,7 @@
 export default {
   startCreate: 'Get Started',
-  descriptionChain: 'Build your own Blockchain with TRON Framwork',
+  summaryChain: 'TRON Factory，基于TRON Framework定制化区块链',
+  descriptionChain: '基于TRON Framework快速部署定制化区块链，为企业用户提供专业的区块链相关服务',
 
   // 创建/修改区块链
   chainManage: {
@@ -61,8 +62,8 @@ export default {
     superNode: 'SR',
     fullNode: 'Full Node',
     configStatus: 'Config Status',
-    statusOK: 'Settled',
-    statusNO: 'Unsettled',
+    statusOK: 'configured',
+    statusNO: 'not configured',
     deployStatus: 'Node Status',
     deploySuccess: 'Running',
     deployStop: 'Stopped',
@@ -70,7 +71,7 @@ export default {
     nodeConfig: 'Config',
     stopRunNode: 'Stop',
 
-    runNode: 'Start',
+    runNode: 'Launch',
     pleaseAddNode: 'Node list is empty.',
     pleaseSelectNodes: 'No node selected',
     pleaseConfigNodes: 'All nodes must be configured',

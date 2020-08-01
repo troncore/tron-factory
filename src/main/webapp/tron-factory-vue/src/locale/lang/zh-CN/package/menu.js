@@ -1,5 +1,5 @@
 export default {
-  getStarted: '开始',
+  getStarted: '区块链',
   explorer: '浏览',
   nodesManage: '节点管理',
   configuration: '配置',

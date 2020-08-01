@@ -3,6 +3,9 @@
     <div class="loading-mask" v-if="loading" v-loading="loading"></div>
     <div class="page-main" v-else>
       <div v-if="showStart" class="page-body im-card">
+        <div class="summary">
+          {{ $t('getStarted.summaryChain') }}
+        </div>
         <div class="description">
           {{ $t('getStarted.descriptionChain') }}
         </div>
@@ -91,10 +94,17 @@
   .page-body {
     height: 100%;
     text-align: center;
-    padding-top: 15%;
-    .description {
+    padding-top: 10%;
+
+    .summary {
       margin-bottom: 50px;
-      font-size: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: font-color();
+    }
+    .description {
+      margin-bottom: 100px;
+      font-size: 16px;
       color: font-color();
     }
   }
