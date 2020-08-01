@@ -5,7 +5,7 @@
     width="680px"
     center>
     <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('getStarted.chainManage.assetDialogTitle') }}</div>
+      <div class="title">{{ $t('getStarted.chainManage.'+ (isAdd ? 'assetDialogAddTitle' : 'assetDialogEditTitle')) }}</div>
     </div>
 
     <div class="dialog-content">
@@ -64,7 +64,7 @@ import ImTooltip from "@/components/ImTooltip";
 export default {
   name: 'genesis-asset-dialog',
   components: { ImTooltip },
-  props: [ 'visible', 'asset' ],
+  props: [ 'visible', 'asset', 'isAdd'],
   data() {
     return {
       form: {

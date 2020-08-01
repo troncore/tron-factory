@@ -21,7 +21,8 @@ export default {
 
     // 创世账户
     genesisAccount: '创世账户',
-    assetDialogTitle: '添加账号',
+    assetDialogAddTitle: '添加账户',
+    assetDialogEditTitle: '编辑账户',
     accountNameLabel: 'accountName',
     accountNameTips: '账户名',
     accountTypeLabel: 'accountType',

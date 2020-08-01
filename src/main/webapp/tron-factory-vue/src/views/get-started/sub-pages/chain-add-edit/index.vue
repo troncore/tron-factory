@@ -34,12 +34,13 @@
             <el-input v-model.trim="form.p2pVersion" tabindex="2" clearable :placeholder="$t('base.pleaseInput')" />
           </el-form-item>
 
-          <el-form-item prop="consensus" required>
+          <!-- todo -->
+          <!--<el-form-item prop="consensus" required>
             <span slot="label" class="space-between">{{ $t('getStarted.chainManage.consensusModuleLabel') }}</span>
             <el-radio-group v-model="form.consensus">
               <el-radio :label="'dpos'">DPOS</el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
       </div>
     </div>
@@ -62,6 +63,7 @@
         <genesis-asset-dialog
           v-if="genesisAssetDialogVisible"
           :visible.sync="genesisAssetDialogVisible"
+          :is-add="isAddGenesisAsset"
           :asset="currentGenesisAsset"
           @submit="handleSubmitGenesisAsset" />
 
@@ -95,6 +97,7 @@
         canChangeCrypto: true,
         genesisBlockAssets: [],
         genesisAssetDialogVisible: false,
+        isAddGenesisAsset: true,
         currentGenesisAsset: {},
         currentGenesisAssetIndex: -1,
 
@@ -221,8 +224,9 @@
       },
 
       openGenesisAssetDialog (isAdd = true, asset = {}, index) {
+        this.isAddGenesisAsset = isAdd
         this.currentGenesisAsset = asset
-        this.currentGenesisAssetIndex = isAdd ? this.genesisBlockAssets.length : index
+        this.currentGenesisAssetIndex = this.isAddGenesisAsset ? this.genesisBlockAssets.length : index
         this.genesisAssetDialogVisible = true
       },
 
