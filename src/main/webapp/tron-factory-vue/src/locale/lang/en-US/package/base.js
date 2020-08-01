@@ -5,6 +5,7 @@ export default {
   clear: 'Clear',
   delete: 'Delete',
   tips: 'Tips',
+  add: 'Add',
 
   document: 'Document',
   helpDocument: 'Help Document',
@@ -56,7 +57,7 @@ export default {
   cancelUpdate: 'Cancel update',
   cancelDelete: 'Cancel delete',
 
-  pleaseInput: 'Please input http address of a node.(e.g. https://api.trongird.io/)',
+  pleaseInput: 'Please input',
   pleaseSelect: 'Please select',
 
   valid: {

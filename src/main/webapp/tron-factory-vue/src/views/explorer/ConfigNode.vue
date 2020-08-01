@@ -27,7 +27,7 @@
           </el-select>
         </el-form-item>
         <el-form-item v-if="form.nodeType === '2'" prop="defineURL" key="defineURL">
-          <el-input type="text" v-model="form.defineURL" style="width: 100%;" clearable :placeholder="$t('base.pleaseInput')"/>
+          <el-input type="text" v-model="form.defineURL" style="width: 100%;" clearable :placeholder="$t('base.customNodePlaceholder')"/>
         </el-form-item>
       </el-form>
     </div>
