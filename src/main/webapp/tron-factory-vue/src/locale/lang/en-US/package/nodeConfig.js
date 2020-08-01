@@ -21,10 +21,10 @@ export default {
 
   customTransactionModule: 'Custom Transaction Module',
 
-  baseSaveSuccess: 'Basic save successful',
-  networkSaveSuccess: 'Network sonfiguration save successful',
-  databaseSaveSuccess: 'Database configuration save successful',
-  p2pSaveSuccess: 'P2P configuration aave successful',
+  baseSaveSuccess: 'Basic configuration saved successfully',
+  networkSaveSuccess: 'Network configuration saved successfully',
+  databaseSaveSuccess: 'Database configuration saved successfully',
+  p2pSaveSuccess: 'P2P configuration saved successfully',
 
   helpTips: {
     maintenanceTimeInterval: 'Maintenance Time Interval',
@@ -47,6 +47,6 @@ export default {
     inputDBCustom: 'Please input custom chainbase module path (ended with .jar)',
     checkCustomTransaction: 'Please enable custom transaction module first',
     inputCustomTransaction: 'Please input custom transaction module path (ended with .jar)',
-    pathEndJAR: 'Please input a path ended with .jar',
+    pathEndJAR: 'Please input a path ends with .jar',
   },
 }
