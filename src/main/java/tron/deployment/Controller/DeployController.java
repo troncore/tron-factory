@@ -375,7 +375,7 @@ public class DeployController {
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
-        if((int)json.get(Common.deployStatusFiled) == 3){
+        if((long)json.get(Common.deployStatusFiled) == 3){
             JSONObject statusObj = new JSONObject();
             statusObj.put("status", 3);
             return new Response(ResultCode.OK.code, statusObj).toJSONObject();

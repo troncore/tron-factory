@@ -30,7 +30,7 @@ export default {
   prevStep: 'Previous step',
   nextStep: 'Next Step',
   continue: 'Continue',
-  operate: 'Action',
+  operate: 'operation',
   emptyData: 'No Data',
 
   successful: 'Successful',

@@ -66,7 +66,7 @@ export default {
     deployStatus: 'Node Status',
     deploySuccess: 'Running',
     deployStop: 'Stopped',
-    createNodeTime: 'CreateTime',
+    createNodeTime: 'Create Time',
     nodeConfig: 'Config',
     stopRunNode: 'Stop',
 
