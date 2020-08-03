@@ -1,11 +1,13 @@
 <template>
   <div class="node-list im-card">
-    <div class="card-header">{{ $t('getStarted.dashboard.nodeInfo')}}</div>
-    <div class="card-body">
-      <div class="table-header">
-        <el-button class="im-button mini" size="mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
-        <el-button class="im-button mini el-icon-caret-right" size="mini" type="success" :loading="deployLoading" @click="handleDeploy()"> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}</el-button>
+    <div class="card-header">
+      <div class="card-title">{{ $t('getStarted.dashboard.nodeInfo')}}</div>
+      <div class="op-list">
+        <el-button class="im-button mini el-icon-plus" type="primary" @click="handleAddNode()"> {{ $t('getStarted.dashboard.addNode') }}</el-button>
+        <el-button class="im-button mini el-icon-caret-right" size="small" :disabled="!deployNodesIds" :loading="deployLoading" @click="handleDeploy()"> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}</el-button>
       </div>
+    </div>
+    <div class="card-body">
       <div class="table-box">
         <el-table
           :data="tableData"
@@ -33,12 +35,6 @@
               <span class="color-info" v-else>{{ $t('getStarted.dashboard.fullNode') }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="configStatus" :label="$t('getStarted.dashboard.configStatus')" align="center">
-            <template slot-scope="scope">
-              <el-tag size="mini" type="primary" v-if="scope.row.configStatus === 1">{{$t('getStarted.dashboard.statusOK')}}</el-tag>
-              <el-tag size="mini" type="info" v-else>{{$t('getStarted.dashboard.statusNO')}}</el-tag>
-            </template>
-          </el-table-column>
           <el-table-column prop="deployStatus" :label="$t('getStarted.dashboard.deployStatus')" align="center">
             <template slot-scope="scope">
               <el-tag size="mini" type="success" v-if="scope.row.deployStatus === 1">{{$t('getStarted.dashboard.deploySuccess')}}</el-tag>
@@ -46,9 +42,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="createTime" width="180" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
+          <el-table-column prop="createTime" width="240" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
 
-          <el-table-column prop="operate" width="180" :label="$t('base.operate')">
+          <el-table-column prop="operate" width="240" :label="$t('base.operate')">
             <template slot-scope="scope">
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('base.view') }}</el-button>
 
@@ -149,8 +145,6 @@
           errorMsg = this.$t('getStarted.dashboard.pleaseAddNode')
         else if (!this.deployNodesIds.length)
           errorMsg = this.$t('getStarted.dashboard.pleaseSelectNodes')
-        else if (this.deployNodes.some(node => node.configStatus === 0))
-          errorMsg = this.$t('getStarted.dashboard.pleaseConfigNodes')
         else if (this.chainStatus === 0 && this.deployNodes.filter(node => node.isSR).length % 2 !== 1) {
           errorMsg = this.$t('getStarted.dashboard.initRunSRCheck')
         }
@@ -182,14 +176,8 @@
           customClass: 'im-message-box',
           cancelButtonClass: 'im-message-cancel-button',
           confirmButtonClass: 'im-message-confirm-button',
-        })
-          .then(() => this.stopNode(row, index))
-          .catch(() => {
-          this.$notify.info({
-            title: this.$t('base.cancel'),
-            message: this.$t('base.cancelDelete'),
-          });
-        })
+        }).then(() => this.stopNode(row, index))
+          .catch(err => console.log('err: ', err))
       },
 
       stopNode (row, index) {
@@ -217,13 +205,27 @@
     margin-bottom: 20px;
   }
 }
+
 .im-card {
   padding: 20px;
   margin-bottom: 20px;
   .card-header {
+    overflow: hidden;
     margin-bottom: 20px;
-    font-weight: bold;
-    color: $black-light;
+    .card-title {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: bold;
+      color: $black-light;
+    }
+    .op-list {
+      float: right;
+      display: inline-block;
+
+      .el-button + .el-button {
+        margin-left: 20px;
+      }
+    }
   }
 }
 </style>

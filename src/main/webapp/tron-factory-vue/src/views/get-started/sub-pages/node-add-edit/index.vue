@@ -10,7 +10,10 @@
             <el-input v-model.trim="form.ip" class="width-400" tabindex="1" clearable :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" />
           </el-form-item>
           <el-form-item prop="listenPort">
-            <span slot="label">{{ $t('getStarted.nodesManage.listenPort') }}</span>
+            <span slot="label" class="space-between">
+              {{ $t('getStarted.nodesManage.listenPort') }}
+              <im-tooltip :content="$t('getStarted.nodesManage.listenPortTips')" />
+            </span>
             <el-input v-model.trim="form.listenPort" type="number" min="1" max="65535" class="width-400" tabindex="2" clearable :placeholder="$t('getStarted.nodesManage.listenPortPlaceholder')" />
           </el-form-item>
         </div>
@@ -89,9 +92,9 @@
       </div>
     </el-form>
 
-    <div class="page-footer">
-      <el-button class="im-button large" type="primary" :disabled="disabled" :loading="loading" @click="handleSubmit">{{ $t(isAddPage ? 'base.add' : 'base.modify') }}</el-button>
+    <div class="page-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button large" type="primary" :disabled="disabled" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
   </div>
 </template>
@@ -107,16 +110,18 @@
       return {
         form: {
           ip: '',
-          listenPort: '',
+          listenPort: '18888',
           port: 22,
           sshConnectType: 2, // 1 password, 2 key
           userName: '',
           sshPassword: '',
           isSR: true,
-          url: 'http://',
-          voteCount: '',
-          publicKey: '',
-          privateKey: '',
+
+          // TODO：删除以下测试数据
+          url: 'http://baidu.com',
+          voteCount: '1',
+          publicKey: 'TRD77TEoSW1Uo2Y4ukqdAtQP9WPgYTHshm',
+          privateKey: '8452D502EC250C89704FCB2CA9CA5D0F1667A0194133553227D35BD6691B62A7',
         },
         nodeInfo: {}, // assign when edit
         tempPublicKey: '', // to compare whether it change origin publicKey
@@ -261,12 +266,7 @@
                 cancelButtonClass: 'im-message-cancel-button primary',
                 confirmButtonClass: 'im-message-confirm-button primary',
               }).then(() => this.addNode(params))
-                .catch(() => {
-                this.$notify.info({
-                  title: this.$t('base.cancel'),
-                  message: this.$t('base.cancel'),
-                })
-              })
+                .catch(err => console.log('err: ', err))
             } else this.addNode(params)
           }
         })

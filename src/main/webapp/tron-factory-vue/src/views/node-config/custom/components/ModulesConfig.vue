@@ -22,7 +22,7 @@
     </div>
 
     <div class="box-footer">
-      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.save') }}</el-button>
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
     </div>
   </div>

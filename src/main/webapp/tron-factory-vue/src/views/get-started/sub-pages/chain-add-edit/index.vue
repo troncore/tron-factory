@@ -70,9 +70,9 @@
       </div>
     </div>
 
-    <div class="page-footer">
-      <el-button class="im-button large" type="primary" :disabled="!canOperate" :loading="loading" @click="handleSubmit">{{ $t('base.complete') }}</el-button>
+    <div class="page-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button large" type="primary" :disabled="!canOperate" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
   </div>
 </template>

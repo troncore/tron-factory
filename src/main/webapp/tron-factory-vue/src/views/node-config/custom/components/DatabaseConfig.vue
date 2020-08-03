@@ -9,6 +9,11 @@
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <el-form-item :label="$t('nodeConfig.backupEnable')" prop="backupEnable">
+          <el-switch :disabled="form.dbEngine !== 'ROCKSDB'" v-model="form.backupEnable"></el-switch>
+        </el-form-item>
+
         <el-form-item :label="$t('nodeConfig.isWriteSync')" prop="isDBSync">
           <el-switch v-model="form.isDBSync"></el-switch>
         </el-form-item>
@@ -16,16 +21,6 @@
         <el-form-item :label="$t('nodeConfig.isOpenTransaction')" prop="isOpenTransaction">
           <el-switch v-model="form.isOpenTransaction"></el-switch>
         </el-form-item>
-
-        <template v-if="form.dbEngine === 'ROCKSDB'">
-          <el-form-item :label="$t('nodeConfig.backupEnable')" prop="backupEnable">
-            <el-switch v-model="form.backupEnable"></el-switch>
-          </el-form-item>
-
-          <el-form-item :label="$t('nodeConfig.backupFrequency')" prop="backupFrequency">
-            <el-input v-model.trim="form.backupFrequency" type="number" min="0" max="2147483647" clearable :placeholder="$t('base.pleaseInput')" style="width: 200px;"></el-input>
-          </el-form-item>
-        </template>
 
         <div class="more-setting">
           <el-checkbox v-model="checkDBCustom" @change="handleChangeCheckCustom"><span class="check-label">{{ $t('nodeConfig.dbCustomModule') }}</span></el-checkbox>

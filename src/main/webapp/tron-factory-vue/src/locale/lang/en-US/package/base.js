@@ -12,13 +12,13 @@ export default {
   viewDocument: 'View Document',
 
   open: 'Open',
-  confirm: 'Confirm',
+  confirm: 'OK',
   save: 'Save',
   close: 'Close',
   edit: 'Edit',
   update: 'Update',
   modify: 'Edit',
-  complete: 'Finish',
+  complete: 'complete',
 
   detail: 'Detail',
   view: 'View',

@@ -12,28 +12,5 @@
     "title": "menu.explorer",
     "icon": "el-icon-s-data",
     "disabled": false
-  },
-  {
-    "path": "/ecology-app",
-    "name": "ecology-app",
-    "title": "menu.ecologyApp",
-    "icon": "iconfont iconshengtaiyingyong",
-    "disabled": true,
-    "children": [
-      {
-        "path": "/wallet-cli",
-        "name": "wallet-cli",
-        "title": "menu.walletCLI",
-        "icon": "el-icon-upload",
-        "disabled": true
-      },
-      {
-        "path": "/tron-link",
-        "name": "tron-link",
-        "title": "menu.tronLink",
-        "icon": "el-icon-share",
-        "disabled": true
-      }
-    ]
   }
 ]

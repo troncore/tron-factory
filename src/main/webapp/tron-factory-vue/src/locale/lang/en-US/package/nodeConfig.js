@@ -9,7 +9,7 @@ export default {
   netWorkConfig: 'HTTP/RPC',
   databaseConfig: 'Database',
   p2pConfig: 'P2P',
-  moduleFunction: 'Module',
+  moduleFunction: 'Modularization',
 
   selectDatabaseConfig: 'dbEngine',
   isWriteSync: 'storageDBSync',

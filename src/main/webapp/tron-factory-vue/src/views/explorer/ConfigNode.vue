@@ -27,7 +27,7 @@
 
     <div slot="footer" class="dialog-footer">
       <el-button class="im-button" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button" type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.confirm') }}</el-button>
+      <el-button class="im-button" type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
     </div>
   </el-dialog>
 </template>

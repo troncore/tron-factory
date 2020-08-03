@@ -2,7 +2,14 @@
   <div class="dashboard">
     <div class="page-title">{{ $t('getStarted.dashboard.dashboard')}}</div>
     <div class="chain-info im-card">
-      <div class="card-header">{{$t('getStarted.dashboard.chainInfo')}}</div>
+      <div class="card-header">
+        <div class="card-title">{{$t('getStarted.dashboard.chainInfo')}}</div>
+        <div class="op-list">
+          <el-button class="im-button mini el-icon-edit" type="primary" :disabled="chainStatus !== 0 || deleteLoading" @click="handleUpdate"> {{ $t('base.edit') }}</el-button>
+          <el-button class="im-button mini el-icon-delete" :disabled="chainStatus !== 0 || deleteLoading" @click="handleDelete"> {{ $t('base.delete') }}</el-button>
+          <el-button class="im-button mini el-icon-view" :disabled="chainStatus !== 2" @click="handleExplorer"> {{ $t('getStarted.dashboard.explorer') }}</el-button>
+        </div>
+      </div>
       <div class="card-body">
         <div class="chain-item">
           <div class="label">{{ $t('getStarted.dashboard.chainName') }}</div>
@@ -25,38 +32,6 @@
           </div>
           <div class="value">
             {{ $t(['getStarted.dashboard.unPublish', 'getStarted.dashboard.publishing', 'getStarted.dashboard.published'][chainStatus] || '-') }}
-          </div>
-        </div>
-        <div class="chain-item">
-          <div class="label">
-            <el-button
-              class="im-button mini"
-              size="mini"
-              type="primary"
-              v-if="chainStatus === 0"
-              @click="handleUpdate">
-              <i class="el-icon-edit"></i> {{ $t('base.modify') }}
-            </el-button>
-            <el-button
-              class="im-button mini"
-              size="mini"
-              type="primary"
-              v-if="chainStatus === 2"
-              @click="handleExplorer">
-              <i class="el-icon-view"></i> {{ $t('getStarted.dashboard.explorer') }}
-            </el-button>
-          </div>
-          <div class="value">
-            <el-button
-              class="im-button mini"
-              size="mini"
-              type="danger"
-              v-if="chainStatus === 0"
-              :disabled="deleteLoading"
-              @click="handleDelete">
-              <i :class="deleteLoading ? 'el-icon-loading' : 'el-icon-delete'"></i>
-              {{ $t('base.delete') }}
-            </el-button>
           </div>
         </div>
       </div>
@@ -145,12 +120,7 @@
           cancelButtonClass: 'im-message-cancel-button',
           confirmButtonClass: 'im-message-confirm-button warning',
         }).then(this.deleteChain)
-          .catch(() => {
-          this.$notify.info({
-            title: this.$t('base.cancel'),
-            message: this.$t('base.cancelDelete'),
-          })
-        })
+          .catch(err => console.log('err: ', err))
       },
 
       deleteChain () {
@@ -181,12 +151,18 @@
 
 <style lang="scss" scoped>
 .dashboard {
+  .page-title {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: $black-light;
+  }
+
   .chain-info {
     margin-bottom: 20px;
-
     .card-body {
       display: flex;
-      max-width: 1000px;
+      max-width: 800px;
 
       .chain-item {
         flex: 1;
@@ -195,8 +171,7 @@
           height: 40px;
           line-height: 40px;
           text-align: center;
-          color: #081C56;
-          font-weight: bold;
+          color: $black-light;
           font-size: 14px;
 
           .label-inner {
@@ -219,19 +194,25 @@
     }
   }
 }
-.page-title {
-  margin-bottom: 20px;
-  font-weight: bold;
-  font-size: 18px;
-  color: $black-light;
-}
 .im-card {
   padding: 20px;
   margin-bottom: 20px;
   .card-header {
     margin-bottom: 20px;
-    font-weight: bold;
-    color: $black-light;
+    .card-title {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: bold;
+      color: $black-light;
+    }
+    .op-list {
+      float: right;
+      display: inline-block;
+
+      .el-button + .el-button {
+        margin-left: 20px;
+      }
+    }
   }
 }
 </style>

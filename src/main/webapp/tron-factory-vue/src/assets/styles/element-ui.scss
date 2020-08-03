@@ -17,8 +17,8 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       th {
         padding: 0;
         height: 40px;
-        font-weight: bold;
-        color: #081C56;
+        font-weight: normal;
+        color: $black-light;
         background-color: theme-color(0.05);
         &.el-table-column--selection {
           padding: 0;
@@ -140,10 +140,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .im-message-box {
   width: 600px;
   .el-message-box__title {
-    font-size: 24px;
-    @media screen and (max-width: $media1680){
-      font-size: 20px;
-    }
+    display: none;
   }
   .el-message-box__content {
     margin-bottom: 30px;
