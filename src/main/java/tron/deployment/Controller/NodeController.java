@@ -740,7 +740,7 @@ public class NodeController {
     Config config = util.config;
     Args args = new Args();
     int httpPort = args.getHTTPFullNodePort(config);
-    long ListenPort = args.getListenPort(config);
+    int ListenPort = args.getListenPort(config);
     int httpSolidityPort = args.getHTTPSolidityNodePort(config);
     int rpcPort = args.getRPCFullNodePort(config);
     int rpcSolidityPort = args.getRPCSolidityNodePort(config);
