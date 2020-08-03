@@ -396,7 +396,7 @@ public class DeployController {
         int publishStatus = (int) jsonObject.get("data");
         int SRNum = 0;
         JSONObject statusObj = new JSONObject();
-        int deployStatus = 0;
+        int deployStatus = -1;
         boolean ifCheckZipPath = false;
         BashExecutor bashExecutor = new BashExecutor();
         long idSR = -1;
