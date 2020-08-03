@@ -717,7 +717,7 @@ public class NodeController {
   }
 
   @GetMapping(value = "/api/stopNode")
-  public JSONObject stopNode(@RequestParam long id) {
+  public JSONObject stopNode(@RequestParam long id) throws InterruptedException {
     BashExecutor bashExecutor = new BashExecutor();
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -731,16 +731,34 @@ public class NodeController {
     Long port = (Long) node.get(Common.portFiled);
     String userName = (String) node.get(Common.userNameFiled);
     String sshPassword = (String) node.get(Common.sshPasswordFiled);
-    long ListenPort = (Long) node.get(Common.listenPortField);
+
     //执行部署脚本
     bashExecutor.callStopNodeScript(ip, port, userName,id,chainId+"",sshPassword);
+
+    Util util = new Util();
+    util.parseConfig(id);
+    Config config = util.config;
+    Args args = new Args();
+    int httpPort = args.getHTTPFullNodePort(config);
+    long ListenPort = args.getListenPort(config);
+    int httpSolidityPort = args.getHTTPSolidityNodePort(config);
+    int rpcPort = args.getRPCFullNodePort(config);
+    int rpcSolidityPort = args.getRPCSolidityNodePort(config);
+    boolean httpSolidityEnable = args.getNodeHttpSolidityEnable(config);
+    boolean rpcSolidityEnable = args.getNodeHttpSolidityEnable(config);
 
     String status = checkIsStoped(String.format(Common.stopNodeFormat, id+""));
     DeployController deployController = new DeployController();
     if (status.equals(Common.stopNodeSuccessStatus)) {
       boolean flag = false;
       while(!flag){
-        bashExecutor.callStopPortScript(ip, port, userName,id,ListenPort,sshPassword);
+//        Thread.sleep(20000);
+        if(!httpSolidityEnable){
+          bashExecutor.callStopPortScript(ip, port, userName,id,httpPort+"","null",rpcPort+"","null",ListenPort+"",sshPassword);
+        }else{
+          bashExecutor.callStopPortScript(ip, port, userName,id,httpPort+"",httpSolidityPort+"",rpcPort+"",rpcSolidityPort+"",ListenPort+"",sshPassword);
+        }
+
         status = checkIsStoped(String.format(Common.stopPortFormat, id+""));
         if(status.equals(Common.stopNodeSuccessStatus)){
           flag = true;

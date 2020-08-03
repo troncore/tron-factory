@@ -144,7 +144,7 @@ public class BashExecutor {
         }
     }
 
-    public void callStopPortScript(String ip, Long port, String userName, long id, long listenPort, String sshPassword){
+    public void callStopPortScript(String ip, Long port, String userName, long id, String httpPort, String httpSolidityPort, String rpcPort, String rpcSolidityport, String listenPort, String sshPassword){
 
         try {
             String absolutePath = "";
@@ -155,7 +155,7 @@ public class BashExecutor {
                 absolutePath = System.getProperty("user.dir").concat("/stopPortPWD.bash");
             }
 //            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
-            String[] cmdArray = {absolutePath, ip, port.toString(), userName, listenPort+"", sshPassword};
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, httpPort,httpSolidityPort,rpcPort,rpcSolidityport,listenPort, sshPassword};
 
             String logName = String.format("> ".concat(Common.stopPortFormat), id+"");
             cmdArray = ArrayUtils.add(cmdArray, logName);
