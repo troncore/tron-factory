@@ -42,7 +42,7 @@ import wallet.Wallet;
 @Component
 @RequestMapping(value = "/")
 public class ConfigControlller {
-  String chainId;
+  long chainId;
   String chainName;
   // db
   DBConfig dbConfig;
@@ -85,7 +85,7 @@ public class ConfigControlller {
 
   private void initBaseSettingConfig() {
     JSONObject json = readJsonFile();
-    chainId = (String) json.get(Common.chainIdFiled);
+    chainId = (long) json.get(Common.chainIdFiled);
     chainName = (String) json.get(Common.chainNameFiled);
     baseSettingConfig = new BaseSettingConfig(Args.getBlockProducedTimeOut(config), Args.getMaintenanceTimeInterval(config),
             Args.getProposalExpireTime(config), Args.getMinParticipationRate(config));
