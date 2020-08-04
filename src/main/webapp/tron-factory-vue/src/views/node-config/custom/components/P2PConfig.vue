@@ -4,29 +4,29 @@
       <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
         <el-form-item prop="maxActiveNodes">
           <span slot="label">maxActiveNodes <i class="help-tips">({{ $t('nodeConfig.helpTips.maxActiveNodes') }})</i></span>
-          <el-input v-model.trim="form.maxActiveNodes" type="number" min="1" max="200" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.maxActiveNodes" type="number" min="1" max="200" clearable></el-input>
         </el-form-item>
 
         <el-form-item prop="maxActiveNodesWithSameIp">
           <span slot="label">maxActiveNodesWithSameIp <i class="help-tips">({{ $t('nodeConfig.helpTips.maxActiveNodesWithSameIp') }})</i></span>
-          <el-input v-model.trim="form.maxActiveNodesWithSameIp" type="number" min="1" max="50" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.maxActiveNodesWithSameIp" type="number" min="1" max="50" clearable></el-input>
         </el-form-item>
 
         <el-form-item prop="activeConnectFactor">
           <span slot="label">activeConnectFactor</span>
-          <el-input v-model.trim="form.activeConnectFactor" type="number" min="0" max="1" step="0.1" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.activeConnectFactor" type="number" min="0" max="1" step="0.1" clearable></el-input>
         </el-form-item>
 
         <el-form-item prop="connectFactor" class="margin-bottom-0">
           <span slot="label">connectFactor</span>
-          <el-input v-model.trim="form.connectFactor" type="number" min="0" max="1" step="0.1" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.connectFactor" type="number" min="0" max="1" step="0.1" clearable></el-input>
         </el-form-item>
       </el-form>
     </div>
 
-    <div class="box-footer">
-      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    <div class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
 
   </div>
@@ -56,22 +56,22 @@ export default {
     formRules() {
       return {
         maxActiveNodes: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
           { validator: formRules.numMax(200, this.$t('base.valid.maxNumberValue') + ': 200'), trigger: 'blur', },
         ],
         activeConnectFactor: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
           { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
         ],
         maxActiveNodesWithSameIp: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
           { validator: formRules.numMax(50, this.$t('base.valid.maxNumberValue') + ': 50'), trigger: 'blur', },
         ],
         connectFactor: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
           { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
         ],

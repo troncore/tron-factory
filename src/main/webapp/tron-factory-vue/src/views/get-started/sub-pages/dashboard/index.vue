@@ -5,9 +5,9 @@
       <div class="card-header">
         <div class="card-title">{{$t('getStarted.dashboard.chainInfo')}}</div>
         <div class="op-list">
-          <el-button class="im-button mini el-icon-edit" type="primary" :disabled="chainStatus !== 0 || deleteLoading" @click="handleUpdate"> {{ $t('base.edit') }}</el-button>
-          <el-button class="im-button mini el-icon-delete" :disabled="chainStatus !== 0 || deleteLoading" @click="handleDelete"> {{ $t('base.delete') }}</el-button>
-          <el-button class="im-button mini el-icon-view" :disabled="chainStatus !== 2" @click="handleExplorer"> {{ $t('getStarted.dashboard.explorer') }}</el-button>
+          <el-button class="im-button mini" type="primary" :disabled="chainStatus !== 0 || deleteLoading" @click="handleUpdate"><i class="el-icon-edit"></i> {{ $t('base.edit') }}</el-button>
+          <el-button class="im-button mini" :disabled="chainStatus !== 0 || deleteLoading" @click="handleDelete"><i class="el-icon-delete"></i> {{ $t('base.delete') }}</el-button>
+          <el-button class="im-button mini" :disabled="chainStatus !== 2" @click="handleExplorer"><i class="el-icon-view"></i> {{ $t('getStarted.dashboard.explorer') }}</el-button>
         </div>
       </div>
       <div class="card-body">

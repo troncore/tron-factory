@@ -6,13 +6,13 @@
     <div class="base-info im-card padding-20">
       <div class="card-header">{{ $t('getStarted.chainManage.baseInfo')}}</div>
       <div class="card-body">
-        <el-form :model="form" :rules="formRules" ref="form" label-width="220px" label-position="left" size="medium">
+        <el-form :model="form" :rules="formRules" ref="form" label-width="160px" label-position="left" size="medium">
           <el-form-item prop="chainName">
             <span slot="label" class="space-between">
               {{ $t('getStarted.chainManage.chainNameLabel') }}
               <im-tooltip :content="$t('getStarted.chainManage.chainNameTips')" />
             </span>
-            <el-input v-model.trim="form.chainName" tabindex="1" clearable maxlength="30" :placeholder="$t('base.pleaseInput')" />
+            <el-input v-model.trim="form.chainName" tabindex="1" clearable maxlength="30" />
           </el-form-item>
 
           <el-form-item prop="crypto" required>
@@ -31,7 +31,7 @@
               {{ $t('getStarted.chainManage.p2pVersionLabel') }}
               <im-tooltip :content="$t('getStarted.chainManage.p2pVersionTips')" />
             </span>
-            <el-input v-model.trim="form.p2pVersion" tabindex="2" clearable :placeholder="$t('base.pleaseInput')" />
+            <el-input v-model.trim="form.p2pVersion" tabindex="2" clearable />
           </el-form-item>
 
           <!-- todo -->
@@ -115,11 +115,11 @@
 
         return {
           chainName: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur' },
+            { required: true, message: ' ', trigger: 'blur' },
             { validator: checkName, trigger: 'blur' }
           ],
           p2pVersion: [
-            { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'blur', },
             { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
             { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
             { validator: formRules.numEqual(11111, this.$t('getStarted.chainManage.p2pVersionCheckMainNet')), trigger: 'blur', },

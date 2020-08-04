@@ -21,9 +21,9 @@
       </el-form>
     </div>
 
-    <div class="box-footer">
-      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.save') }}</el-button>
+    <div class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@
         }
         return {
           customTransaction: [
-            { required: this.checkCustomTransaction, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+            { required: this.checkCustomTransaction, message: ' ', trigger: 'blur', },
             { validator: pathEndJAR, trigger: 'blur', },
           ]
         }

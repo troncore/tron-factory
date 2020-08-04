@@ -41,9 +41,9 @@
       </el-form>
     </div>
 
-    <div class="box-footer">
-      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    <div class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>
@@ -82,12 +82,12 @@ export default {
       }
       return {
         backupFrequency: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), ), trigger: 'blur', },
           { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         dbCustom: [
-          { required: this.checkDBCustom, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: this.checkDBCustom, message: ' ', trigger: 'blur', },
           { validator: pathEndJAR, trigger: 'blur', },
         ]
       }

@@ -5,20 +5,20 @@
         <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
           <el-form-item prop="httpFullNodePort">
             <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('nodeConfig.helpTips.httpFullNodePort') }})</i></span>
-            <el-input v-model.trim="form.httpFullNodePort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.httpFullNodePort" type="number" min="0" max="65535" clearable />
           </el-form-item>
 
           <el-form-item prop="rpcPort" class="margin-bottom-0">
             <span slot="label">rpcPort <i class="help-tips">({{ $t('nodeConfig.helpTips.rpcPort') }})</i></span>
-            <el-input v-model.trim="form.rpcPort" type="number" min="0" max="65535" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+            <el-input v-model.trim="form.rpcPort" type="number" min="0" max="65535" clearable />
           </el-form-item>
         </el-form>
       </div>
     </div>
 
-    <div class="box-footer">
-      <el-button class="im-button large" :loading="loading" :disabled="disable" type="primary" @click="handleSubmit">{{ $t('base.save') }}</el-button>
+    <div class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="disable" type="primary" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
   </div>
 </template>
@@ -47,7 +47,7 @@
       },
       formRules() {
         let portLimit = [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
           { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
         ]

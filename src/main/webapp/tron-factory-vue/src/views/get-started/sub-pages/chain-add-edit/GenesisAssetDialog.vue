@@ -15,7 +15,7 @@
             {{ $t('getStarted.chainManage.accountNameLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.accountNameTips')" />
           </span>
-          <el-input v-model.trim="form.accountName" tabindex="26" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.accountName" tabindex="26" clearable></el-input>
         </el-form-item>
 
         <el-form-item prop="accountType">
@@ -23,7 +23,7 @@
             {{ $t('getStarted.chainManage.accountTypeLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.accountTypeTips')" />
           </span>
-          <el-select v-model="form.accountType" clearable :placeholder="$t('base.pleaseSelect')">
+          <el-select v-model="form.accountType" clearable placeholder=" ">
             <el-option
               v-for="item in accountTypeOptions"
               :key="item.value"
@@ -38,7 +38,7 @@
             {{ $t('getStarted.chainManage.addressLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.addressTips')" />
           </span>
-          <el-input v-model.trim="form.address" tabindex="27" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.address" tabindex="27" clearable />
         </el-form-item>
 
         <el-form-item label="balance" prop="balance">
@@ -46,7 +46,7 @@
             {{ $t('getStarted.chainManage.balanceLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.balanceTips')" />
           </span>
-          <el-input v-model.trim="form.balance" tabindex="28" clearable :placeholder="$t('base.pleaseInput')"></el-input>
+          <el-input v-model.trim="form.balance" tabindex="28" clearable />
         </el-form-item>
       </el-form>
     </div>
@@ -109,16 +109,16 @@ export default {
 
       return {
         accountName: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
         ],
         accountType: [
-          { required: true, message: this.$t('base.pleaseSelect'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
         ],
         address: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
         ],
         balance: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'blur', },
           { validator: longIntRange, trigger: 'blur', },
         ],
       }

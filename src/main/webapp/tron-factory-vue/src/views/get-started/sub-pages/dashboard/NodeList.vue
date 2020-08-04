@@ -3,8 +3,10 @@
     <div class="card-header">
       <div class="card-title">{{ $t('getStarted.dashboard.nodeInfo')}}</div>
       <div class="op-list">
-        <el-button class="im-button mini el-icon-plus" type="primary" @click="handleAddNode()"> {{ $t('getStarted.dashboard.addNode') }}</el-button>
-        <el-button class="im-button mini el-icon-caret-right" size="small" :disabled="!deployNodesIds" :loading="deployLoading" @click="handleDeploy()"> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}</el-button>
+        <el-button class="im-button mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
+        <el-button class="im-button mini" size="small" :disabled="!deployNodesIds || deployLoading" @click="handleDeploy()">
+          <i :class="deployLoading ? 'el-icon-loading' : 'el-icon-caret-right'"></i> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}
+        </el-button>
       </div>
     </div>
     <div class="card-body">
@@ -17,14 +19,9 @@
           border
           header-align="center"
           @selection-change="handleSelectionChange">
-          <el-table-column
-            type="selection" align="center"
-            width="60"
-            :selectable="handleSelectable">
-          </el-table-column>
+          <el-table-column type="selection" align="center" width="60" :selectable="handleSelectable"></el-table-column>
           <el-table-column prop="ip" :label="$t('getStarted.dashboard.ip')" align="center">
             <template slot-scope="scope">
-              <!--<span v-if="!scope.row.isDeployed">{{ scope.row.ip }}</span>-->
               <el-link type="primary" @click="handleDetail(scope.row)">{{ scope.row.ip }}</el-link>
             </template>
           </el-table-column>
@@ -44,20 +41,17 @@
 
           <el-table-column prop="createTime" width="240" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
 
-          <el-table-column prop="operate" width="240" :label="$t('base.operate')">
+          <el-table-column prop="operate" width="240" :label="$t('base.operate')" align="center">
             <template slot-scope="scope">
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('base.view') }}</el-button>
-
-              <el-button v-if="scope.row.deployStatus !== 1" type="text" @click="handleConfig(scope.row)">{{ $t('getStarted.dashboard.nodeConfig') }}</el-button>
-              <el-button
-                v-else
-                type="text"
-                :loading="stopIndexs.includes(scope.$index)"
-                @click="handleStop(scope.row, scope.$index)">
+              <el-divider direction="vertical"></el-divider>
+              <el-button :disabled="scope.row.deployStatus === 1" type="text" @click="handleConfig(scope.row)">{{ $t('getStarted.dashboard.nodeConfig') }}</el-button>
+              <el-divider direction="vertical"></el-divider>
+              <el-button :disabled="scope.row.deployStatus !== 2" type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.stopRunNode') }}
               </el-button>
-
-              <el-button v-if="scope.row.ifShowLog" type="text" @click="handleLog(scope.row)">
+              <el-divider direction="vertical"></el-divider>
+              <el-button :disabled="!scope.row.ifShowLog" type="text" @click="handleLog(scope.row)">
                 <span :class="{'color-danger': scope.row.isError}">{{ $t('base.logs') }}</span>
               </el-button>
             </template>

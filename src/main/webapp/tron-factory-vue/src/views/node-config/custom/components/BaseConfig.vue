@@ -13,8 +13,7 @@
             type="number"
             min="1"
             max="2147483647"
-            clearable
-            :placeholder="$t('base.pleaseInput')" />
+            clearable />
         </el-form-item>
 
         <div class="more-form">
@@ -36,8 +35,7 @@
                 type="number"
                 min="1"
                 max="2147483647"
-                clearable
-                :placeholder="$t('base.pleaseInput')" />
+                clearable />
             </el-form-item>
 
             <el-form-item prop="blockProducedTimeOut">
@@ -51,8 +49,7 @@
                 type="number"
                 min="0"
                 max="100"
-                clearable
-                :placeholder="$t('base.pleaseInput')" />
+                clearable />
             </el-form-item>
 
             <el-form-item prop="minParticipationRate" class="margin-bottom-0">
@@ -66,17 +63,16 @@
                 type="number"
                 min="0"
                 max="100"
-                clearable
-                :placeholder="$t('base.pleaseInput')" />
+                clearable />
             </el-form-item>
           </div>
         </el-collapse-transition>
       </el-form>
     </div>
 
-    <div  class="box-footer">
-      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
+    <div  class="box-footer align-right">
       <el-button class="im-button large" @click="handleCancel">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button large" :loading="loading" :disabled="disabled" type="primary" @click="handleSubmit">{{ $t('base.nextStep') }}</el-button>
     </div>
   </div>
 </template>

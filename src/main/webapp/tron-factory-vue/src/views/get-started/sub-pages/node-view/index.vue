@@ -60,10 +60,12 @@
       </div>
     </div>
     <div class="page-footer align-right">
+      <el-button class="im-button large" @click="handleCancel">
+        <i class="el-icon-back"></i> {{ $t('base.return') }}
+      </el-button>
       <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" :disabled="disabled" :loading="loading" @click="handleDelete">
         <i class="el-icon-delete"></i> {{ $t('base.delete') }}
       </el-button>
-      <el-button class="im-button large" @click="handleCancel">{{ $t('base.return') }}</el-button>
       <el-button v-if="nodeInfo.deployStatus === 0" class="im-button large" type="primary" :disabled="disabled" @click="handleSubmit">
         <i class="el-icon-edit"></i> {{ $t('base.edit') }}
       </el-button>
