@@ -1,37 +1,41 @@
 <template>
   <div class="node-add-edit">
     <div class="page-title">{{ $t(this.isAddPage ? 'getStarted.nodesManage.addNode': 'getStarted.nodesManage.editNode') }}</div>
-    <el-form ref="form" :rules="formRules" :model="form" size="medium" label-width="120px" label-position="left">
+    <el-form ref="form" :rules="formRules" :model="form" size="medium" label-width="150px" label-position="left">
       <div class="chain-info im-card">
         <div class="card-header">{{ $t('getStarted.nodesManage.serverInfo') }}</div>
         <div class="card-body">
           <el-form-item prop="ip">
             <span slot="label">{{ $t('getStarted.nodesManage.ip') }}</span>
-            <el-input v-model.trim="form.ip" class="width-300" tabindex="1" clearable :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" />
+            <el-input v-model.trim="form.ip" class="width-400" tabindex="1" clearable :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" />
           </el-form-item>
           <el-form-item prop="listenPort">
             <span slot="label">{{ $t('getStarted.nodesManage.listenPort') }}</span>
-            <el-input v-model.trim="form.listenPort" type="number" min="0" max="65535" class="width-300" tabindex="2" clearable :placeholder="$t('getStarted.nodesManage.listenPortPlaceholder')" />
+            <el-input v-model.trim="form.listenPort" type="number" min="1" max="65535" class="width-400" tabindex="2" clearable :placeholder="$t('getStarted.nodesManage.listenPortPlaceholder')" />
           </el-form-item>
         </div>
+
+        <!-- shh config -->
         <div class="card-header">{{ $t('getStarted.nodesManage.sshInfo') }}</div>
         <div class="card-body">
-          <el-form-item prop="port" >
-            <span slot="label">{{ $t('getStarted.nodesManage.port') }}</span>
-            <el-input v-model.trim="form.port" type="number" min="0" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('portPlaceholder')" />
-          </el-form-item>
           <el-form-item prop="sshConnectType">
             <span slot="label">{{ $t('getStarted.nodesManage.sshConnectType') }}</span>
-            <el-radio v-model="form.sshConnectType" :label="1">{{ $t('getStarted.nodesManage.byPassword') }}</el-radio>
             <el-radio v-model="form.sshConnectType" :label="2">{{ $t('getStarted.nodesManage.byPublicKey') }}</el-radio>
+            <el-radio v-model="form.sshConnectType" :label="1">{{ $t('getStarted.nodesManage.byPassword') }}</el-radio>
           </el-form-item>
-          <el-form-item prop="userName" :class="{'margin-bottom-0': form.sshConnectType !== 1}">
-            <span slot="label">{{ $t('getStarted.nodesManage.sshUserName') }}</span>
-            <el-input v-model.trim="form.userName" class="width-300" tabindex="4" clearable :placeholder="$t('getStarted.nodesManage.sshUserNamePlaceholder')" />
-          </el-form-item>
+          <div class="line-item" :class="{'margin-bottom-0': form.sshConnectType === 2}">
+            <el-form-item prop="userName" class="inline-block">
+              <span slot="label">{{ $t('getStarted.nodesManage.sshUserName') }}</span>
+              <el-input v-model.trim="form.userName" class="width-400" tabindex="4" clearable :placeholder="$t('getStarted.nodesManage.sshUserNamePlaceholder')" />
+            </el-form-item>
+            <el-form-item prop="port" class="inline-block" label-width="100px">
+              <span slot="label">{{ $t('getStarted.nodesManage.port') }}</span>
+              <el-input v-model.trim="form.port" type="number" min="1" max="65535" class="width-300" tabindex="3" clearable :placeholder="$t('getStarted.nodesManage.portPlaceholder')" />
+            </el-form-item>
+          </div>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
             <span slot="label">{{ $t('getStarted.nodesManage.sshPassword') }}</span>
-            <el-input v-model.trim="form.sshPassword" class="width-300" tabindex="5" clearable :placeholder="$t('getStarted.nodesManage.sshPasswordPlaceholder')" />
+            <el-input v-model.trim="form.sshPassword" class="width-400" tabindex="5" clearable :placeholder="$t('getStarted.nodesManage.sshPasswordPlaceholder')" />
           </el-form-item>
         </div>
       </div>
@@ -51,14 +55,14 @@
               {{ $t('getStarted.nodesManage.url') }}
               <im-tooltip :content="$t('getStarted.nodesManage.urlTips')" />
             </span>
-            <el-input v-model.trim="form.url" class="width-300" tabindex="6" clearable :placeholder="$t('getStarted.nodesManage.urlPlaceholder')" />
+            <el-input v-model.trim="form.url" class="width-400" tabindex="6" clearable :placeholder="$t('getStarted.nodesManage.urlPlaceholder')" />
           </el-form-item>
           <el-form-item prop="voteCount">
             <span slot="label" class="space-between">
               {{ $t('getStarted.nodesManage.voteCount') }}
               <im-tooltip :content="$t('getStarted.nodesManage.voteCountTips')" />
             </span>
-            <el-input v-model.trim="form.voteCount" class="width-300" tabindex="7" clearable :placeholder="$t('getStarted.nodesManage.voteCountPlaceholder')" />
+            <el-input v-model.trim="form.voteCount" class="width-400" tabindex="7" clearable :placeholder="$t('getStarted.nodesManage.voteCountPlaceholder')" />
           </el-form-item>
           <el-form-item class="address" prop="publicKey">
             <span slot="label" class="space-between">
@@ -67,6 +71,7 @@
             </span>
             <el-input v-model.trim="form.publicKey" class="width-600" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
           </el-form-item>
+
           <el-form-item class="private-key margin-bottom-0" prop="privateKey">
             <span slot="label" class="space-between">
               {{ $t('getStarted.nodesManage.privateKey') }}
@@ -104,7 +109,7 @@
           ip: '',
           listenPort: '',
           port: 22,
-          sshConnectType: 1, // 1 password, 2 key
+          sshConnectType: 2, // 1 password, 2 key
           userName: '',
           sshPassword: '',
           isSR: true,
@@ -372,11 +377,23 @@
     color: $black-light;
   }
 }
+.line-item {
+  margin-bottom: 20px;
+  .inline-block {
+    display: inline-block;
+    margin-right: 50px;
+    margin-bottom: 0;
+  }
+}
+
 .width-300 {
-  width: 300px
+  width: 200px
+}
+.width-400 {
+  width: 350px
 }
 .width-600 {
-  width: 600px
+  width: 700px
 }
 .margin-bottom-0 {
   margin-bottom: 0;

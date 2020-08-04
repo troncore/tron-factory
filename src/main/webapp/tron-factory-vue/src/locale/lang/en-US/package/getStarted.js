@@ -21,7 +21,8 @@ export default {
 
     // 创世账户
     genesisAccount: 'Genesis Accounts',
-    assetDialogTitle: 'Add Account',
+    assetDialogAddTitle: 'Add Account',
+    assetDialogEditTitle: 'Edit Account',
     accountNameLabel: 'accountName',
     accountNameTips: 'The name of account',
     accountTypeLabel: 'accountType',
@@ -92,7 +93,7 @@ export default {
 
   // 添加、修改、查看节点
   nodesManage: {
-    addNode: 'Add',
+    addNode: 'Add Node',
     editNode: 'Edit Node',
     nodeDetail: 'Node Details',
     opUnValidNode: 'Invalid node',
@@ -107,7 +108,7 @@ export default {
     listenPortPlaceholder: 'Please input listen port',
     sshInfo: 'SSH Configuration',
     port: 'SSH Port',
-    portPlaceholder: 'Please input the port enabled by ssh',
+    portPlaceholder: 'Please input ssh port',
     sshConnectType: 'Secure Authentication',
     byPassword: 'Password',
     byPublicKey: 'Public key',
