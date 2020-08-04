@@ -47,7 +47,7 @@
               <el-divider direction="vertical"></el-divider>
               <el-button :disabled="scope.row.deployStatus === 1" type="text" @click="handleConfig(scope.row)">{{ $t('getStarted.dashboard.nodeConfig') }}</el-button>
               <el-divider direction="vertical"></el-divider>
-              <el-button :disabled="scope.row.deployStatus !== 2" type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
+              <el-button :disabled="scope.row.deployStatus !== 1" type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.stopRunNode') }}
               </el-button>
               <el-divider direction="vertical"></el-divider>
