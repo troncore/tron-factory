@@ -12,6 +12,7 @@ import config.BlockSettingConfig;
 import config.ConfigGenerator;
 //import config.DBConfig;
 import config.P2PVersion;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -381,7 +382,7 @@ public class DeployController {
             return new Response(ResultCode.OK.code, statusObj).toJSONObject();
         }
         String ids = (String) data.get("ids");
-        String filePath = (String) data.get("filePath");
+        String filePath = StringUtils.deleteWhitespace((String) data.get("filePath"));
 
         //判断区块链是否已发布，未发布时判断SR节点数量是否>=1
         String[] split = ids.split(",");//以逗号分割
