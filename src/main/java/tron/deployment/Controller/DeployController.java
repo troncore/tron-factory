@@ -2,16 +2,12 @@ package tron.deployment.Controller;
 
 import static common.LogConfig.LOG;
 import static common.Util.*;
-import static wallet.Wallet.hexs2Bytes;
 
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
-import common.utils.Hash;
 import config.BlockSettingConfig;
 import config.ConfigGenerator;
-//import config.DBConfig;
-import config.P2PVersion;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,16 +118,7 @@ public class DeployController {
         }
         return Common.deployFailedStatus;
     }
-    //	private boolean isBlockNeedSync(JSONArray nodes, Long id) {
-//		for (int i = 0; i< nodes.size(); i++) {
-//			JSONObject node = (JSONObject) nodes.get(i);
-//			Long nodeID = (Long) node.get(Common.idFiled);
-//			if (id.compareTo(nodeID) > 0) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+
 //校验zip包路径是否正确
     private String checkZipPath(String path) {
         File file = new File(path);
@@ -194,13 +181,6 @@ public class DeployController {
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
-        //获取配置文件中listenPort
-        /*Util util = new Util();
-        util.parseConfig();
-        Config config = util.config;
-        Args args = new Args();
-        int listenPort = args.getListenPort(config);
-        ArrayList<String> seedNodeIpList = (ArrayList<String>)args.getSeedNode(config);*/
 
         ArrayList<String> deployedIpList = new ArrayList<>();
         //如果需要列出已成功部署的节点，则需要遍历所有节点，isDeployed=true时，添加到deployedIpList

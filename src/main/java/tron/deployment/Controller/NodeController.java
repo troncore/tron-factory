@@ -4,13 +4,10 @@ import static common.LogConfig.LOG;
 import static common.Util.*;
 import static wallet.Wallet.*;
 
-import ch.ethz.ssh2.Connection;
-import com.googlecode.cqengine.query.simple.In;
 import com.typesafe.config.Config;
 import common.Args;
 import common.Util;
 import common.Common;
-import common.utils.Hash;
 import common.utils.HttpUtil;
 import config.*;
 
@@ -29,7 +26,6 @@ import org.springframework.stereotype.Component;
 import org.tron.keystore.CipherException;
 import response.Response;
 import tron.deployment.shellExecutor.BashExecutor;
-import wallet.Wallet;
 
 @CrossOrigin
 @RestController
@@ -40,8 +36,6 @@ public class NodeController {
 
   private static boolean isEckey = true;
 
-//  private static int listenPort = 0;
-//  private static long id = 0L;
   static {
     refresh();
   }
@@ -270,15 +264,8 @@ public class NodeController {
       return new Response(ResultCode.FORBIDDEND.code, "ip&listenPort should be different").toJSONObject();
     }
 
-    //更新iplist
-//    ArrayList<ong,String> ipList = (ArrayList<long,String>) json.get(Common.ipListFiled);
-//    ipList.add(ip+":"+listenPort);
     HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
     ipList.put(id+"",ip+"\":\""+listenPort);
-
-    /*//初始化configStatus
-    HashMap<Long, Integer> configStatusMap = (HashMap<Long, Integer>) json.get(Common.configStatusMapFiled);
-    configStatusMap.put(id,0);*/
 
     JSONObject newNode = new JSONObject();
     if (isSR) {
@@ -321,7 +308,6 @@ public class NodeController {
     newNode.put(Common.userNameFiled, userName);
     newNode.put(Common.portFiled, port);
     newNode.put(Common.ipFiled, ip);
-//    newNode.put(Common.ipListFiled, ipList);
     newNode.put(Common.isSRFiled, isSR);
     newNode.put(Common.urlFiled, url);
     newNode.put(Common.voteCountFiled, voteCount);
@@ -399,8 +385,6 @@ public class NodeController {
     }
 
     //更新iplist
-//    ArrayList<String> ipList = (ArrayList<String>) json.get(Common.ipListFiled);
-//    ipList.add(ip+":"+listenPort);
     HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
     ipList.put(id+"",ip+"\":\""+listenPort);
 
@@ -643,7 +627,6 @@ public class NodeController {
     if (node == null) {
       return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
     }
-    String ip = (String) node.get(Common.ipFiled);
     int listenPort = 18889;
 
     HashMap<String,String> ipList = (HashMap<String,String>) json.get(Common.ipListFiled);
@@ -752,7 +735,6 @@ public class NodeController {
     if (status.equals(Common.stopNodeSuccessStatus)) {
       boolean flag = false;
       while(!flag){
-//        Thread.sleep(20000);
         if(!httpSolidityEnable){
           bashExecutor.callStopPortScript(ip, port, userName,id,httpPort+"","null",rpcPort+"","null",ListenPort+"",sshPassword);
         }else{
@@ -781,24 +763,6 @@ public class NodeController {
       updateNodesInfo(nowNodes, json);
 
     }
-    /*if (status.equals(Common.stopNodeSuccessStatus)) {
-      JSONObject oldNode = Util.getNodeInfo(nodes, id);
-      oldNode.put(Common.isDeployedFiled, false);
-      oldNode.put(Common.deployStatusFiled, 0);
-      deployController.deleteNode(id);
-      json = readJsonFile();
-      JSONArray nowNodes = (JSONArray) json.get(Common.nodesFiled);
-      if (Objects.isNull(nowNodes)) {
-        nowNodes = new JSONArray();
-      }
-      nowNodes.add(oldNode);
-      json.put(Common.nodesFiled, nowNodes);
-      if(id == firstId){
-        json.put(Common.firstIdFiled, -1);
-      }
-      updateNodesInfo(nowNodes, json);
-
-    }*/
 
       return new Response(ResultCode.OK.code, "").toJSONObject();
   }
