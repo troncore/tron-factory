@@ -4,7 +4,7 @@ export default {
   deployedNode: '已部署节点',
   defineNode: '自定义节点',
   validHttpStart: '请以"http://"或"https://"开头',
-  customNodePlaceholder: '请输入自定义节点对应的uri地址(如： https://api.trongird.io/)',
+  customNodePlaceholder: '请输入自定义节点对应的url地址(如： https://api.trongird.io/)',
   nodeIP: '节点IP',
   httpPort: 'HTTP端口',
   defineNodeLabel: '自定义节点URL',
