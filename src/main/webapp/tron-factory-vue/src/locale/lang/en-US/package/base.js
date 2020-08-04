@@ -39,12 +39,12 @@ export default {
   error: 'Error',
   cancel: 'Cancel',
   success: {
-    save: 'Save success',
-    edit: 'Edit success',
-    update: 'Update success',
-    modify: 'Edit success',
+    save: 'Save successfully',
+    edit: 'Edit successfully',
+    update: 'Update successfully',
+    modify: 'Edit successfully',
     operate: 'Success',
-    delete: 'Delete success',
+    delete: 'Delete successfully',
   },
   fail: {
     save: 'Save failed',

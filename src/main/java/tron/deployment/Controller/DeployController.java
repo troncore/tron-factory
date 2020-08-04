@@ -375,7 +375,7 @@ public class DeployController {
         if (Objects.isNull(nodes)) {
             nodes = new JSONArray();
         }
-        if((long)json.get(Common.deployStatusFiled) == 3){
+        if((int)json.get(Common.deployStatusFiled) == 3){
             JSONObject statusObj = new JSONObject();
             statusObj.put("status", 3);
             return new Response(ResultCode.OK.code, statusObj).toJSONObject();
@@ -402,7 +402,7 @@ public class DeployController {
         long idSR = -1;
         boolean success = false;
         if(publishStatus == 0) { //未发布时需随机选取1个SR作为初始节点，配置为不开启同步，启动该节点
-            for (int count = 0; count < idArr.length; count++) {
+            for (int count = 0; count < idSize; count++) {
                 int SRCount = 0;
                 JSONObject node = Util.getNodeInfo(nodes, idArr[count]);
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
