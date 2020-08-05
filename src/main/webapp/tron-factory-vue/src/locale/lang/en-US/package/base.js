@@ -26,7 +26,7 @@ export default {
   viewDetail: 'View Detail',
   viewLog: 'View Log',
   goBack: 'Go Back',
-  return: 'Return',
+  return: 'Back',
   prevStep: 'Previous step',
   nextStep: 'Next Step',
   continue: 'Continue',

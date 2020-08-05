@@ -1,6 +1,6 @@
 export default {
   explorer: 'Explorer',
-  configNode: 'Browse node',
+  configNode: 'Browse Node',
   selectNodeURLPlaceholder: 'Please select a node',
   nodeIP: 'Node IP',
   httpPort: 'HTTP port',
