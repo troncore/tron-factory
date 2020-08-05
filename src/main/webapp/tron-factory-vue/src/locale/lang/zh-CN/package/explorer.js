@@ -1,6 +1,6 @@
 export default {
   explorer: '浏览',
-  configNode: '配置节点',
+  configNode: '浏览节点',
   selectNodeURLPlaceholder: '请选择运行中的节点',
   nodeIP: '节点IP',
   httpPort: 'HTTP端口',

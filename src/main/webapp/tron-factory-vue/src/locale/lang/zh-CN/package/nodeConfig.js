@@ -4,8 +4,7 @@ export default {
   customConfig: '自定义配置',
   opUnValidNode: '当前所编辑的节点为无效节点',
 
-  moreSetting: '高级配置',
-
+  moreSetting: '更多',
   baseConfig: '基础配置',
   netWorkConfig: 'HTTP/RPC 配置',
   databaseConfig: '数据库基础配置',

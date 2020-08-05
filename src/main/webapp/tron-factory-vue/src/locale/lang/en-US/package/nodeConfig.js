@@ -1,23 +1,22 @@
 export default {
   configuration: 'Configuration',
-  quickConfig: 'Fast Config',
+  quickConfig: 'Quick Config',
   customConfig: 'Custom Config',
   opUnValidNode: 'Invalid node',
 
-  moreSetting: 'Advanced Config',
-
+  moreSetting: 'More',
   baseConfig: 'Basic Config',
   netWorkConfig: 'HTTP/RPC',
   databaseConfig: 'Database',
   p2pConfig: 'P2P',
   moduleFunction: 'Module',
 
-  selectDatabaseConfig: 'Database Engine',
-  isWriteSync: 'Write Synchronously',
-  isOpenTransaction: 'Storage of Transaction Receipt',
-  backupEnable: 'RocksDB Backup Settings',
-  backupFrequency: 'Backup Frequency(Unit:Block)',
-  dbCustomModule: 'Custom Chainbase Module',
+  selectDatabaseConfig: 'dbEngine',
+  isWriteSync: 'storageDBSync',
+  isOpenTransaction: 'storageTransHistory',
+  backupEnable: 'backupEnable',
+  backupFrequency: 'backupFrequency(Unit:Block)',
+  dbCustomModule: 'custom chainbase module',
 
   customTransactionModule: 'Custom Transaction Module',
 
