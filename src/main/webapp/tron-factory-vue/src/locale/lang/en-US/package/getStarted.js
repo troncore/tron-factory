@@ -1,8 +1,7 @@
 export default {
   startCreate: 'Get Started',
-  summaryChain: 'TRON Factory, customized blockchain based on TRON Framework',
-  descriptionChain: 'Quickly deploy customized blockchain based on TRON Framework, provide professional blockchain-related services for enterprise.',
-
+  summaryChain: 'TRON Factory, blockchain customization based on the TRON framework',
+  descriptionChain: 'Quickly deploy customized blockchain based on TRON Framework, TRON Factory provides professional blockchain-related services for enterprise.',
   // 创建/修改区块链
   chainManage: {
     startCreate: 'Get Started',

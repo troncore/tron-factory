@@ -44,7 +44,7 @@ export default {
     chainName: '名称',
     encryption: '签名算法',
     p2pVersion: 'p2pVersion',
-    status: '区块状态',
+    status: '区块链状态',
     unPublish: '未发布',
     publishing: '发布中',
     published: '已发布',
