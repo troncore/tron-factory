@@ -132,7 +132,7 @@ export default {
         .label {
           display: inline-block;
           /*color: black;*/
-          width: 120px;
+          width: 200px;
         }
 
         .value {
