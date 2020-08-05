@@ -464,9 +464,6 @@ public class ConfigControlller {
             (Long.parseLong((String)data.getOrDefault("id", "1"))) :
             (int) data.getOrDefault("id", 1);
     ArrayList<String> ipList = (ArrayList<String>) data.get("seed_node_ip_list");
-    int p2pVersion = data.getOrDefault("p2pVersion", "0") instanceof String ?
-            (Integer.parseInt((String) data.getOrDefault("p2pVersion", "0"))) :
-            (int) data.getOrDefault("p2pVersion", 0);
     int node_max_active_nodes = data.getOrDefault("maxActiveNodes", "30") instanceof String ?
             (Integer.parseInt((String) data.getOrDefault("maxActiveNodes", "30"))) :
             (int) data.getOrDefault("maxActiveNodes", 30);
@@ -485,6 +482,11 @@ public class ConfigControlller {
     int configStatus = data.getOrDefault("configStatus", "1") instanceof String ?
             (Integer.parseInt((String) data.getOrDefault("configStatus", "1"))) :
             (int) data.getOrDefault("configStatus", 1);
+
+    Util util = new Util();
+    util.parseConfig(id);
+    int p2pVersion = Args.getP2pVersionFromConfig(util.config);
+
     if (configStatus == 0) {
       JSONObject json = readJsonFile();
       json.put(Common.configStatusFiled, configStatus);
@@ -532,8 +534,6 @@ public class ConfigControlller {
     long id =jsonData.getOrDefault("id", "1") instanceof String ?
             (Long.parseLong((String)jsonData.getOrDefault("id", "1"))) :
             (int) jsonData.getOrDefault("id", 1);
-    String chainId = (String) jsonData.getOrDefault("chainId", "1");
-    String chainName = (String) jsonData.getOrDefault("chainName", "Parachain");
     int blockProducedTimeOut = jsonData.getOrDefault("blockProducedTimeOut", "75") instanceof String ?
             (Integer.parseInt((String) jsonData.getOrDefault("blockProducedTimeOut", "75"))) :
             (int) jsonData.getOrDefault("blockProducedTimeOut", 75);
@@ -547,15 +547,8 @@ public class ConfigControlller {
             (Integer.parseInt((String) jsonData.getOrDefault("minParticipationRate", "15"))) :
             (int) jsonData.getOrDefault("minParticipationRate", 15);
 
-    JSONObject jsonObject = readJsonFile();
-    jsonObject.put(Common.chainIdFiled, chainId);
-    jsonObject.put(Common.chainNameFiled, chainName);
-    boolean result = writeJsonFile(jsonObject);
-    if (!result) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update json file failed").toJSONObject();
-    }
     ConfigGenerator configGenerator = new ConfigGenerator();
-    result = configGenerator.updateConfig(new BaseSettingConfig(blockProducedTimeOut, maintenanceTimeInterval,
+    boolean result = configGenerator.updateConfig(new BaseSettingConfig(blockProducedTimeOut, maintenanceTimeInterval,
             proposalExpireTime, minParticipationRate), id, String.format("%s_%s", Common.configFiled, id+""));
     if (!result) {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();

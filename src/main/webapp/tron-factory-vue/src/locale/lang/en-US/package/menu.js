@@ -1,5 +1,5 @@
 export default {
-  getStarted: 'Block Chain',
+  getStarted: 'BlockChain',
   explorer: 'Explorer',
   nodesManage: 'Nodes Manage',
   configuration: 'Configuration',

@@ -30,21 +30,21 @@ export default {
   prevStep: 'Previous step',
   nextStep: 'Next Step',
   continue: 'Continue',
-  operate: 'operation',
+  operate: 'Operation',
   emptyData: 'No Data',
 
-  successful: 'Successful',
+  successful: 'Succeed',
   failure: 'Failure',
   warning: 'Warning',
   error: 'Error',
   cancel: 'Cancel',
   success: {
-    save: 'Save successfully',
-    edit: 'Edit successfully',
-    update: 'Update successfully',
-    modify: 'Edit successfully',
-    operate: 'Success',
-    delete: 'Delete successfully',
+    save: 'Successfully saved',
+    edit: 'Successfully editted',
+    update: 'Successfully updated',
+    modify: 'Successfully modified',
+    operate: 'Successfully',
+    delete: 'Successfully deleted',
   },
   fail: {
     save: 'Save failed',
@@ -68,6 +68,6 @@ export default {
     gtZeroNum: 'Please input a number greater than 0',
     maxNumberValue: 'Greater than maximum',
     minNumberValue: 'Less than minimum',
-    maxPortValue: 'Port number illegal',
+    maxPortValue: 'Illegal port number',
   }
 }

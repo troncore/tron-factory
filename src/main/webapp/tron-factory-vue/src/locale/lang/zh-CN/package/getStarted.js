@@ -7,7 +7,7 @@ export default {
   chainManage: {
     startCreate: '创建区块链',
     updateChain: '修改区块链',
-    baseInfo: '基本信息',
+    baseInfo: '基本配置',
     chainNameLabel: '区块链名称',
     chainNameTips: '命名你的区块链',
     chainNameCheckLength: '由字母与数字组成且长度不可超过30',
@@ -34,13 +34,13 @@ export default {
     balanceLabel: 'balance',
     balanceTips: '账户初始余额, 单位 SUN',
 
-    existChain: '当前已有创建的区块链链，不可继续创建',
+    existChain: '当前已有创建的区块链，不可继续创建',
   },
 
   // 区块链信息、节点列表信息
   dashboard: {
     dashboard: '看板',
-    chainInfo: '区块链信息',
+    chainInfo: '区块链配置',
     chainName: '名称',
     encryption: '签名算法',
     p2pVersion: 'p2pVersion',
@@ -48,7 +48,7 @@ export default {
     unPublish: '未发布',
     publishing: '发布中',
     published: '已发布',
-    statusTips: '已发布的区块可正常产块',
+    statusTips: '已发布的区块链可正常产块',
     explorer: '浏览器',
     stopDeleteChain: '有未停止的节点，无法删除',
     deleteChainWarningTips: '这将会删除此区块链，是否继续？',
