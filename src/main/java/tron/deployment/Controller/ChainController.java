@@ -6,7 +6,6 @@ import common.Common;
 import common.Util;
 import common.utils.HttpUtil;
 import config.*;
-import entity.WitnessEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,12 +15,8 @@ import org.tron.core.config.args.Account;
 import response.Response;
 import response.ResultCode;
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.*;
 
-import static common.LogConfig.LOG;
 import static common.Util.*;
 import static wallet.Wallet.*;
 
@@ -95,17 +90,12 @@ public class ChainController {
     ArrayList<LinkedHashMap> linkedHashMaps = new ArrayList<>();
 
     for (LinkedHashMap linkedHashMap : arrayList) {
-//      String address = (String) linkedHashMap.get("address");
-//    for(int i=0; i<genesisBlockAssets.size(); i++){
-//      JSONObject genesisBlockAsset = (JSONObject) genesisBlockAssets.get(i);
       String accountName = (String) linkedHashMap.get(Common.accountNameField);
       String accountType = (String) linkedHashMap.get(Common.accountTypeField);
       String address = (String) linkedHashMap.get(Common.addressFiled);
       String balance = (String) linkedHashMap.get(Common.balanceField);
 
-
       LinkedHashMap<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
-
       stringStringLinkedHashMap.put("accountName", accountName);
       stringStringLinkedHashMap.put("accountType", accountType);
       stringStringLinkedHashMap.put("address", address);
@@ -121,7 +111,7 @@ public class ChainController {
 
   //查询区块链信息
   @GetMapping(value = "/api/chainInfo")
-  public JSONObject getChainInfo() throws UnsupportedEncodingException {
+  public JSONObject getChainInfo() {
 
     JSONObject jsonObj = new JSONObject();
 
@@ -217,17 +207,12 @@ public class ChainController {
     ArrayList<LinkedHashMap> linkedHashMaps = new ArrayList<>();
 
     for (LinkedHashMap linkedHashMap : arrayList) {
-//      String address = (String) linkedHashMap.get("address");
-//    for(int i=0; i<genesisBlockAssets.size(); i++){
-//      JSONObject genesisBlockAsset = (JSONObject) genesisBlockAssets.get(i);
       String accountName = (String) linkedHashMap.get(Common.accountNameField);
       String accountType = (String) linkedHashMap.get(Common.accountTypeField);
       String address = (String) linkedHashMap.get(Common.addressFiled);
       String balance = (String) linkedHashMap.get(Common.balanceField);
 
-
       LinkedHashMap<String, String> stringStringLinkedHashMap = new LinkedHashMap<>();
-
       stringStringLinkedHashMap.put("accountName", accountName);
       stringStringLinkedHashMap.put("accountType", accountType);
       stringStringLinkedHashMap.put("address", address);
@@ -300,12 +285,11 @@ public class ChainController {
     return new Response(ResultCode.OK.code, statusObj).toJSONObject();
   }
 
-  /*@GetMapping(value = "/api/checkChainPublish")
-  public JSONObject checkChainPublish() throws InterruptedException {
+  @GetMapping(value = "/api/checkChainPublish")
+  public JSONObject checkChainPublish() {
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
     long firstId = (long) json.get(Common.firstIdFiled);
-    int status = -1;
     if(firstId != -1) {
       Map<String, Object> nowBlockInfo = new HashMap<>();
       JSONObject node = getNodeInfo(nodes, firstId);
@@ -315,69 +299,24 @@ public class ChainController {
       Config config = util.config;
       Args args = new Args();
       int httpPort = args.getHTTPFullNodePort(config);
-      if(isHostConnection(ip, httpPort)){
-        String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
-        HttpUtil httpUtil = new HttpUtil();
-        try {
-          nowBlockInfo = httpUtil.getInfo(url);
-          if (!nowBlockInfo.isEmpty()) {
-            status = 2;
-//            return new Response(ResultCode.OK.code, "", 2).toJSONObject();
-          }else{
-            status = 1;
-//            return new Response(ResultCode.OK.code, "", 1).toJSONObject();
-          }
-        } catch (Exception e) {
-          return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
-        }
+      if(!isHostConnection(ip, httpPort)){
+        return new Response(ResultCode.OK.code, "", 1).toJSONObject();
       }
-      status = 0;
-    }
-    return new Response(ResultCode.OK.code, "", status).toJSONObject();
-  }*/
-
-  @GetMapping(value = "/api/checkChainPublish")
-  public JSONObject checkChainPublish() throws InterruptedException {
-    boolean flag = false;
-    JSONObject json = readJsonFile();
-    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
-    long firstId = (long) json.get(Common.firstIdFiled);
-    int status = -1;
-    if(firstId != -1) {
-      Map<String, Object> nowBlockInfo = new HashMap<>();
-      JSONObject node = getNodeInfo(nodes, firstId);
-      /*boolean isSR = (boolean) node.get(Common.isSRFiled);
-      long id = (Long) node.get(Common.idFiled);
-      if (isSR) {*/
-        boolean isDepolyed = (boolean) node.get(Common.isDeployedFiled);
-        boolean ifShowLog = (boolean) node.get(Common.ifShowLogField);
-//        if (ifShowLog) {
-//        if (isDepolyed) {
-//            Thread.sleep(30000);
-          String ip = (String) node.get(Common.ipFiled);
-          Util util = new Util();
-          util.parseConfig(firstId);
-          Config config = util.config;
-          Args args = new Args();
-          int httpPort = args.getHTTPFullNodePort(config);
-          if(!isHostConnection(ip, httpPort)){
-            return new Response(ResultCode.OK.code, "", 1).toJSONObject();
-          }
-          String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
-          HttpUtil httpUtil = new HttpUtil();
-          try {
-            nowBlockInfo = httpUtil.getInfo(url);
-            if (!nowBlockInfo.isEmpty()) {
-              return new Response(ResultCode.OK.code, "", 2).toJSONObject();
-            }else {
-              return new Response(ResultCode.OK.code, "", 1).toJSONObject();
-            }
-          } catch (Exception e) {
-            return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
-          }
+      String url = "http://" + ip + ":" + httpPort + "/wallet/getnowblock";
+      HttpUtil httpUtil = new HttpUtil();
+      try {
+        nowBlockInfo = httpUtil.getInfo(url);
+        if (!nowBlockInfo.isEmpty()) {
+          return new Response(ResultCode.OK.code, "", 2).toJSONObject();
+        }else {
+          return new Response(ResultCode.OK.code, "", 1).toJSONObject();
         }
-    return new Response(ResultCode.OK.code, "", 0).toJSONObject();
+      } catch (Exception e) {
+        return new Response(ResultCode.NOT_FOUND.code, "Failed to get now block info, please check the url:" + url).toJSONObject();
+      }
     }
+    return new Response(ResultCode.OK.code, "", 0).toJSONObject();
+  }
 
   @GetMapping(value = "/api/checkNode")
   public JSONObject checkNode(@RequestParam String ids) {
@@ -408,5 +347,4 @@ public class ChainController {
     statusObj.put("status",status);
     return new Response(ResultCode.OK.code, statusObj).toJSONObject();
   }
-
 }

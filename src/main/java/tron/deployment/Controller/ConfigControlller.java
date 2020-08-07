@@ -212,23 +212,6 @@ public class ConfigControlller {
   }
 
   //获取数据库配置信息
- /* private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig) {
-//    loadConfig(loadConfig);
-    dbConfig = new DBConfig(getDbVersionSyncFromConfig(loadConfig),
-            getDbEngineFromConfig(loadConfig), Args.getBackupEnable(loadConfig), Args.getBackupFrequency(loadConfig),
-            Args.needToUpdateAsset(loadConfig), Args.getDBCustom(loadConfig));
-
-    JSONObject dbObject = generateJSONObject(dbConfig.getClass().getFields(), dbConfig);
-    if(getTransactionHistoreSwitchFromConfig(loadConfig).equals("on")){
-      dbObject.put("storage_transHistory_switch", true);
-    }else{
-      dbObject.put("storage_transHistory_switch", false);
-    }
-
-    return dbObject;
-  }*/
-
-  //获取数据库配置信息
   private JSONObject getDbConfigJsonObject(com.typesafe.config.Config loadConfig, long id) {
 //    loadConfig(loadConfig);
     dbConfig = new DBConfig(getDbVersionSyncFromConfig(loadConfig),
@@ -305,47 +288,6 @@ public class ConfigControlller {
     return configObject;
   }
 
-  /*@PostMapping(value = "/api/dbconfig")
-  public JSONObject dbConfig(@RequestBody LinkedHashMap<String, Object> data) {
-    long id =data.getOrDefault("id", "1") instanceof String ?
-            (Long.parseLong((String)data.getOrDefault("id", "1"))) :
-            (int) data.getOrDefault("id", 1);
-    boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
-    boolean OpenTransaction = (boolean) data.getOrDefault("isOpenTransaction", true);
-    String dbEngine = (String) data.getOrDefault("dbEngine", "LEVELDB");
-//    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");engine
-    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
-    boolean backupEnable = (boolean) data.getOrDefault("backupEnable", false);
-    int backupFrequency = (int) data.getOrDefault("backupFrequency", 10000);
-
-    String isOpenTransaction = "";
-    if(OpenTransaction){
-      isOpenTransaction = "on";
-    }else{
-      isOpenTransaction = "off";
-    }
-    // 自定义数据库配置
-    String dbCustom = (String) data.getOrDefault("dbCustom", " ");
-    //检查自定义数据库jar包路径是否正确
-    if(!" ".equals(dbCustom)){
-      BashExecutor bashExecutor = new BashExecutor();
-      bashExecutor.callDBJarPathScript(dbCustom);
-      String checkDBJarPath = checkDBJarPath(String.format(Common.dbJarPathFormat));
-      if (checkDBJarPath.equals(Common.canNotFindZip)) {
-        return new Response(ResultCode.NOT_FOUND.code, dbCustom+": "+Common.canNotFindZip).toJSONObject();
-      }
-    }
-
-    ConfigGenerator configGenerator = new ConfigGenerator();
-    boolean result = configGenerator.updateConfig(new DBConfig(isDBSync, dbEngine, backupEnable,
-            backupFrequency, needToUpdateAsset, dbCustom), id, String.format("%s_%s", Common.configFiled, id));
-
-    if (!result) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-    }
-    return new Response(ResultCode.OK.code, "").toJSONObject();
-  }*/
-
   @PostMapping(value = "/api/dbconfig")
   public JSONObject dbConfig(@RequestBody LinkedHashMap<String, Object> data) {
     long id =data.getOrDefault("id", "1") instanceof String ?
@@ -354,8 +296,6 @@ public class ConfigControlller {
     boolean isDBSync = (boolean) data.getOrDefault("isDBSync", false);
     boolean OpenTransaction = (boolean) data.getOrDefault("isOpenTransaction", true);
     String dbEngine = (String) data.getOrDefault("dbEngine", "LEVELDB");
-//    String indexDirectory = (String) data.getOrDefault("indexDirectory", "index");engine
-//    boolean needToUpdateAsset = (boolean) data.getOrDefault("needToUpdateAsset", true);
     boolean backupEnable = (boolean) data.getOrDefault("backupEnable", false);
     int backupFrequency = (int) data.getOrDefault("backupFrequency", 10000);
 
@@ -733,10 +673,6 @@ public class ConfigControlller {
 
     ConfigGenerator configGenerator = new ConfigGenerator();
     boolean result = configGenerator.updateConfig(new HttpRpcPortConfig(rpcPort,httpFullNodePort),id, String.format("%s_%s", Common.configFiled, id+""));
-
-
-    /*HashMap<Integer, Integer> configStatusMap = (HashMap<Integer, Integer>) json.get(Common.configStatusMapFiled);
-    configStatusMap.put(id,configStatus);*/
 
     //更新节点配置状态
     JSONObject json = readJsonFile();
