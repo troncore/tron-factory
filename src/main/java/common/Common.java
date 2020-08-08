@@ -132,6 +132,10 @@ public class Common {
 
   public static final String isError = "isError";
 
+  public static final String nodeHttpPortMapField = "nodeHttpPortMap";
+
+  public static final String nodeRpcPortMapField = "nodeRpcPortMap";
+
 //  public static final String configStatusMapFiled = "configStatusMap";
 
   // Node Status

@@ -210,20 +210,20 @@ public class NodeController {
     String privateKey = (String) data.getOrDefault("privateKey", "");
     String voteCount = (String) data.getOrDefault("voteCount", "");
     boolean needSyncCheck = (boolean) data.getOrDefault("needSyncCheck", true);
-    int port =data.getOrDefault("port", "8090") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("port", "8090"))) :
-            (int)data.getOrDefault("port", 8090);
+    int port =data.getOrDefault("port", "22") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("port", "22"))) :
+            (int)data.getOrDefault("port", 22);
     String sshPassword = (String) data.getOrDefault("sshPassword", "");
-    int sshPort = data.getOrDefault("sshPort", "") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("sshPort", "22"))) :
-            (int)data.getOrDefault("sshPort", 22);
     boolean isDeployed = (boolean) data.getOrDefault("isDeployed", false);
     String javaTronVersion = (String) data.getOrDefault("javaTronVersion", "4.1.0");
     int sshConnectType = data.getOrDefault("sshConnectType", "") instanceof String ?
             (Integer.parseInt((String)data.getOrDefault("sshConnectType", "0"))) :
             (int)data.getOrDefault("sshConnectType", 0);
     String publicKey = (String) data.getOrDefault("publicKey", "");
-    int listenPort = (Integer) data.getOrDefault("listenPort", 18889);
+    int listenPort = data.getOrDefault("listenPort", "18889") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("listenPort", "18889"))) :
+            (int)data.getOrDefault("listenPort", 18889);
+
     //获取请求数据 end
 
     //根据登录方式的不同，校验连通性 start
@@ -301,6 +301,26 @@ public class NodeController {
     }
     //为每个节点生成一个配置文件 .config.conf_id end
 
+    Util util = new Util();
+    util.parseConfig(id);
+    Config config = util.config;
+    Args args = new Args();
+    int rpcFullNodePort = args.getRPCFullNodePort(config);
+    int httpFullNodePort = args.getHTTPFullNodePort(config);
+    HashMap<String,Integer> nodeHttpPortMap = (HashMap<String,Integer>)json.get(Common.nodeHttpPortMapField);
+    if(nodeHttpPortMap.containsKey(ip)){
+      httpFullNodePort = Integer.parseInt(nodeHttpPortMap.get(ip)+"");
+    }
+    httpFullNodePort += 1;
+    nodeHttpPortMap.put(ip,httpFullNodePort);
+
+    HashMap<String,Integer> nodeRpcPortMap = (HashMap<String,Integer>)json.get(Common.nodeRpcPortMapField);
+    if(nodeRpcPortMap.containsKey(ip)){
+      rpcFullNodePort = Integer.parseInt(nodeRpcPortMap.get(ip)+"");
+    }
+    rpcFullNodePort += 1;
+    nodeRpcPortMap.put(ip,rpcFullNodePort);
+
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
     String createTime = df.format(new Date());// new Date()为获取当前系统时间
 
@@ -313,7 +333,7 @@ public class NodeController {
     newNode.put(Common.voteCountFiled, voteCount);
     newNode.put(Common.needSyncCheck, needSyncCheck);
     newNode.put(Common.sshPasswordFiled, sshPassword);
-    newNode.put(Common.sshPortFiled, sshPort);
+//    newNode.put(Common.sshPortFiled, sshPort);
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     newNode.put(Common.sshConnectTypeField, sshConnectType);
@@ -326,7 +346,7 @@ public class NodeController {
     newNode.put(Common.dbCustomFiled, "");
     newNode.put(Common.isError, false);
     nodes.add(newNode);
-    return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
+    return updateNodesInfo(nodes, json, id, ipList, listenPort, httpFullNodePort, rpcFullNodePort, false, nodeHttpPortMap, nodeRpcPortMap);
   }
 
   //编辑节点信息
@@ -549,6 +569,80 @@ public class NodeController {
   }
 
   //更新节点信息
+  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, long id , HashMap<String,String> ipList, int listenPort, int httpFullNodePort, int rpcFullNodePort, boolean isDeleteNode, HashMap<String,Integer> nodeHttpPortMap, HashMap<String,Integer> nodeRpcPortMap) {
+    ConfigGenerator configGenerator = new ConfigGenerator();
+
+    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      boolean isSR = (Boolean) node.get(Common.isSRFiled);
+
+      if (isSR) {
+        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
+                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
+      }
+    }
+
+    ArrayList<String> ipListAll = new ArrayList<>();
+    Collection<String> values = ipList.values() ;// 得到全部的value
+    Iterator<String> iter = values.iterator() ;
+    while(iter.hasNext()) {
+      ipListAll.add(iter.next());
+    }
+    //为每个节点的配置文件更新witness信息
+    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
+    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
+    for (int i = 0; i < nodes.size(); i++) {
+      JSONObject node = (JSONObject) nodes.get(i);
+      long idNode = (Long) node.get(Common.idFiled);
+      if (!configGenerator.updateConfig(witnessConfig, idNode, String.format("%s_%s", Common.configFiled, idNode+""))) {
+        LOG.error("update witness config file failed");
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
+      }
+      if(!configGenerator.updateConfig(new SeedNodeConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
+        LOG.error("update seedNode config file failed");
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update seedNode config file failed").toJSONObject();
+      }
+      if(!configGenerator.updateConfig(new ActiveConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
+        LOG.error("update active config file failed");
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update active config file failed").toJSONObject();
+      }
+    }
+
+    if(!configGenerator.updateConfig(new HttpRpcPortConfig(rpcFullNodePort, httpFullNodePort), id, String.format("%s_%s", Common.configFiled, id+""))){
+      LOG.error("update httpRpcPort config file failed");
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update httpRpcPort config file failed").toJSONObject();
+    }
+
+    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
+      LOG.error("update witness config file failed");
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
+    }
+
+    if(!isDeleteNode){
+      //更新listenPort信息
+      boolean result = configGenerator.updateConfig(
+              new ListenPortConfig((int) listenPort), id, String.format("%s_%s", Common.configFiled, id+""));
+
+      if (!result) {
+        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
+      }
+    }
+
+
+    json.put(Common.nodesFiled, nodes);
+    json.put(Common.ipListFiled, ipList);
+    json.put(Common.nodeHttpPortMapField, nodeHttpPortMap);
+    json.put(Common.nodeRpcPortMapField, nodeRpcPortMap);
+
+    if (!writeJsonFile(json)) {
+      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
+    }
+
+    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
+  }
+
+  //更新节点信息
   public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, long id , HashMap<String,String> ipList, int listenPort, boolean isDeleteNode) {
     ConfigGenerator configGenerator = new ConfigGenerator();
 
@@ -603,6 +697,7 @@ public class NodeController {
         return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
       }
     }
+
 
     json.put(Common.nodesFiled, nodes);
     json.put(Common.ipListFiled, ipList);
