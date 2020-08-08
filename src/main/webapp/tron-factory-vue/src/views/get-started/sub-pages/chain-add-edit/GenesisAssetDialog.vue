@@ -109,17 +109,17 @@ export default {
 
       return {
         accountName: [
-          { required: true, message: ' ', trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
         ],
         accountType: [
-          { required: true, message: ' ', trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
         ],
         address: [
-          { required: true, message: ' ', trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
         ],
         balance: [
-          { required: true, message: ' ', trigger: 'blur', },
-          { validator: longIntRange, trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: longIntRange, trigger: 'change', },
         ],
       }
     },

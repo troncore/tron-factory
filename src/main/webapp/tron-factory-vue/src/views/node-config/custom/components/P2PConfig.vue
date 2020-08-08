@@ -56,24 +56,24 @@ export default {
     formRules() {
       return {
         maxActiveNodes: [
-          { required: true, message: ' ', trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(200, this.$t('base.valid.maxNumberValue') + ': 200'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'change', },
+          { validator: formRules.numMax(200, this.$t('base.valid.maxNumberValue') + ': 200'), trigger: 'change', },
         ],
         activeConnectFactor: [
-          { required: true, message: ' ', trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
-          { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'change', },
+          { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'change', },
         ],
         maxActiveNodesWithSameIp: [
-          { required: true, message: ' ', trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(50, this.$t('base.valid.maxNumberValue') + ': 50'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'change', },
+          { validator: formRules.numMax(50, this.$t('base.valid.maxNumberValue') + ': 50'), trigger: 'change', },
         ],
         connectFactor: [
-          { required: true, message: ' ', trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'blur', },
-          { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroNum'), false, false), trigger: 'change', },
+          { validator: formRules.numMax(1, this.$t('base.valid.maxNumberValue') + ': 1', true, false), trigger: 'change', },
         ],
       }
     },

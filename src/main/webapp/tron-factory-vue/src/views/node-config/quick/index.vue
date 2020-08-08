@@ -5,12 +5,12 @@
         <el-form class="im-form" ref="p2p-config-form" :rules="formRules" :model="form" label-position="top">
           <el-form-item prop="httpFullNodePort">
             <span slot="label">httpFullNodePort <i class="help-tips">({{ $t('nodeConfig.helpTips.httpFullNodePort') }})</i></span>
-            <el-input v-model.trim="form.httpFullNodePort" type="number" min="0" max="65535" clearable />
+            <el-input v-model.trim="form.httpFullNodePort" type="number" min="1" max="65535" clearable />
           </el-form-item>
 
           <el-form-item prop="rpcPort" class="margin-bottom-0">
             <span slot="label">rpcPort <i class="help-tips">({{ $t('nodeConfig.helpTips.rpcPort') }})</i></span>
-            <el-input v-model.trim="form.rpcPort" type="number" min="0" max="65535" clearable />
+            <el-input v-model.trim="form.rpcPort" type="number" min="1" max="65535" clearable />
           </el-form-item>
         </el-form>
       </div>
@@ -47,9 +47,9 @@
       },
       formRules() {
         let portLimit = [
-          { required: true, message: ' ', trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
-          { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'change', },
+          { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'change', },
         ]
         return {
           httpFullNodePort: [...portLimit],

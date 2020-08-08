@@ -115,16 +115,16 @@
 
         return {
           chainName: [
-            { required: true, message: ' ', trigger: 'blur' },
-            { validator: checkName, trigger: 'blur' }
+            { required: true, message: ' ', trigger: 'change' },
+            { validator: checkName, trigger: 'change' }
           ],
           p2pVersion: [
-            { required: true, message: ' ', trigger: 'blur', },
-            { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
-            { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
-            { validator: formRules.numEqual(11111, this.$t('getStarted.chainManage.p2pVersionCheckMainNet')), trigger: 'blur', },
-            { validator: formRules.numEqual(20180622, this.$t('getStarted.chainManage.p2pVersionCheckTestNet')), trigger: 'blur', },
-            { validator: formRules.numEqual(1, this.$t('getStarted.chainManage.p2pVersionCheckSpecialNet')), trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
+            { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'change', },
+            { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'change', },
+            { validator: formRules.numEqual(11111, this.$t('getStarted.chainManage.p2pVersionCheckMainNet')), trigger: 'change', },
+            { validator: formRules.numEqual(20180622, this.$t('getStarted.chainManage.p2pVersionCheckTestNet')), trigger: 'change', },
+            { validator: formRules.numEqual(1, this.$t('getStarted.chainManage.p2pVersionCheckSpecialNet')), trigger: 'change', },
           ],
         }
       },

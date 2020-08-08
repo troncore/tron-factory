@@ -56,8 +56,8 @@
         }
         return {
           customTransaction: [
-            { required: this.checkCustomTransaction, message: ' ', trigger: 'blur', },
-            { validator: pathEndJAR, trigger: 'blur', },
+            { required: this.checkCustomTransaction, message: ' ', trigger: 'change', },
+            { validator: pathEndJAR, trigger: 'change', },
           ]
         }
       },

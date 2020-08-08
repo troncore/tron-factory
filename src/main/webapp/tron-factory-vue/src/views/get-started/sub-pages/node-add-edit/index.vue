@@ -170,43 +170,43 @@
         }
 
         let portBaseLimit = [
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'blur', },
-          { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'blur', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false ), trigger: 'change', },
+          { validator: formRules.numMax(65535, this.$t('base.valid.maxPortValue')), trigger: 'change', },
         ]
 
         return {
           ip: [
-            { required: true, message: ' ', trigger: 'blur', },
-            { validator: formRules.validIP(this.$t('getStarted.nodesManage.ipCheckRight'), ), trigger: 'blur', },
-            { required: true, validator: validLocalRule, trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
+            { validator: formRules.validIP(this.$t('getStarted.nodesManage.ipCheckRight'), ), trigger: 'change', },
+            { required: true, validator: validLocalRule, trigger: 'change', },
           ],
           listenPort: [
-            { required: true, message: ' ', trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
             ...portBaseLimit
           ],
           userName: [
-            { required: true, message: ' ', trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
           ],
           port: [
-            { required: true, message: ' ', trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
             ...portBaseLimit
           ],
           sshPassword: [
-            { required: true, message: ' ', trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
           ],
           url: [
-            { required: true, message: ' ', trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
           ],
           voteCount: [
-            { required: true, message: ' ', trigger: 'blur', },
-            { validator: longIntRange, trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
+            { validator: longIntRange, trigger: 'change', },
           ],
           publicKey: [
-            { required: true, message: ' ', trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
           ],
           privateKey: [
-            { required: true, message: ' ', trigger: 'blur', },
-            { required: true, validator: validPrivateKey, trigger: 'blur', },
+            { required: true, message: ' ', trigger: 'change', },
+            { required: true, validator: validPrivateKey, trigger: 'change', },
           ],
         }
       },

@@ -103,24 +103,24 @@ export default {
     formRules () {
       return {
         maintenanceTimeInterval: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'change', },
+          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'change', },
         ],
         proposalExpireTime: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'blur', },
-          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gtZeroInt'), false), trigger: 'change', },
+          { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'change', },
         ],
         blockProducedTimeOut: [
-          { required: true, message: this.$t('base.pleaseInput',), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'blur', },
-          { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'change', },
+          { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'change', },
         ],
         minParticipationRate: [
-          { required: true, message: this.$t('base.pleaseInput'), trigger: 'blur', },
-          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'blur', },
-          { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'blur', },
+          { required: true, message: ' ', trigger: 'change', },
+          { validator: formRules.numMin(0, this.$t('base.valid.gteZeroInt')), trigger: 'change', },
+          { validator: formRules.numMax(100, this.$t('base.valid.maxNumberValue') + ': 100'), trigger: 'change', },
         ],
       }
     }
