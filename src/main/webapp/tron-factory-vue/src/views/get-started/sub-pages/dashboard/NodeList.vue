@@ -51,9 +51,7 @@
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.stopRunNode') }}
               </el-button>
               <el-divider direction="vertical"></el-divider>
-              <el-button :disabled="!scope.row.ifShowLog" type="text" @click="handleLog(scope.row)">
-                <span :class="{'color-danger': scope.row.isError}">{{ $t('base.logs') }}</span>
-              </el-button>
+              <el-button type="text" @click="handleLog(scope.row)"><span :class="{'color-danger': scope.row.isError}">{{ $t('base.logs') }}</span></el-button>
             </template>
           </el-table-column>
         </el-table>

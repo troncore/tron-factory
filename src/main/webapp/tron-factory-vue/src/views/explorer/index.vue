@@ -3,7 +3,7 @@
     <div class="page-title">{{ $t('explorer.explorer')}}</div>
 
     <div class="im-card" v-if="hideExplorer">
-      <el-button class="add-node el-icon-plus" type="text" @click="dialogVisible = true">{{ $t('explorer.configNode')}}</el-button>
+      <el-button class="add-node" type="text" @click="dialogVisible = true"><i class="el-icon-plus"></i> {{ $t('explorer.configNode')}}</el-button>
     </div>
     <explorer-node
       v-else

@@ -66,7 +66,7 @@
     methods: {
       init () {
         this.getLogInfo()
-        this.timeID = setInterval(this.getLogInfo, 1000 * 5)
+        this.timeID = setInterval(this.getLogInfo, 300)
       },
       getLogInfo() {
         this.$_api.getStarted.getNodeLog({ id: this.currentRow.id }, (err, res = {}) => {
