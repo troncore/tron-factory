@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort, String chainId){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort, String chainId, String nodeId){
 
         try {
             String absolutePath = "";
@@ -37,7 +37,7 @@ public class BashExecutor {
             cmdArray = ArrayUtils.add(cmdArray, rpcsolidityPort);
 
 
-            String logName = String.format("> ".concat(logFormat), id.toString());
+            String logName = String.format("> ".concat(Common.logFormat),nodeId,id);
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");
             Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});

@@ -1,5 +1,6 @@
 package tron.deployment.Controller;
 
+import static common.Common.logFormat;
 import static common.LogConfig.LOG;
 import static common.Util.*;
 
@@ -278,21 +279,24 @@ public class DeployController {
 
         //获取chainId
         long chainId = (long) json.get(Common.chainIdFiled);
+
+        //获取节点唯一标识，即节点添加时的时间戳
+        long nodeId = (long) node.get(Common.nodeIdFiled);
         //执行部署脚本
         BashExecutor bashExecutor = new BashExecutor();
         boolean solidityEnable = args.getNodeHttpSolidityEnable(config);
 
         if (Objects.nonNull(privateKey)) {
             if(!solidityEnable){
-                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"");
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"", nodeId+"");
             }else{
-                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"");
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"", nodeId+"");
             }
         } else {
             if(!solidityEnable){
-                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"");
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"", nodeId+"");
             }else{
-                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"");
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"", nodeId+"");
             }
         }
         return new Response(ResultCode.OK.code, "").toJSONObject();
@@ -305,8 +309,9 @@ public class DeployController {
             nodes = new JSONArray();
         }
         JSONObject node = Util.getNodeInfo(nodes, id);
+        long nodeId = (long)node.get(Common.nodeIdFiled);
         boolean isDeployed = false;
-        String status = checkIsDeployed(String.format(Common.logFormat, id+""));
+        String status = checkIsDeployed(String.format(Common.logFormat, nodeId, id));
         if (status.equals(Common.deployFinishStatus)) isDeployed = true;
 
         if (isDeployed) { //如果部署成功，更新节点部署状态
@@ -543,7 +548,14 @@ public class DeployController {
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id
     ) {
         int status = 0;
-        String logName = String.format(Common.logFormat, id.toString());
+        JSONObject json = readJsonFile();
+        JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+        if (Objects.isNull(nodes)) {
+            nodes = new JSONArray();
+        }
+        JSONObject node = Util.getNodeInfo(nodes, id);
+        long nodeId = (long)node.get(Common.nodeIdFiled);
+        String logName = String.format(Common.logFormat, nodeId, id);
         File file = new File(logName);
         List<String> result = new ArrayList<>();
         if (file.isFile() && file.exists()) {

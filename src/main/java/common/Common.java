@@ -30,6 +30,8 @@ public class Common {
 
   public static final String idFiled = "id";
 
+  public static final String nodeIdFiled = "nodeId";
+
   public static final String idMaxFiled = "idMax";
 
   public static final String firstIdFiled = "firstId";
@@ -90,7 +92,7 @@ public class Common {
 
   public static final String balanceField = "balance";
 
-  public static final String logFormat = "logs/result_%s.log" ;
+  public static final String logFormat = "logs/result_%s_%s.log" ;
 
   public static final String sshLogFormat = "logs/sshTemp.log" ;
 

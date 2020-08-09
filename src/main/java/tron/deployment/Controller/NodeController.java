@@ -309,20 +309,20 @@ public class NodeController {
     int httpFullNodePort = args.getHTTPFullNodePort(config);
     HashMap<String,Integer> nodeHttpPortMap = (HashMap<String,Integer>)json.get(Common.nodeHttpPortMapField);
     if(nodeHttpPortMap.containsKey(ip)){
-      httpFullNodePort = Integer.parseInt(nodeHttpPortMap.get(ip)+"");
+      httpFullNodePort = Integer.parseInt(nodeHttpPortMap.get(ip)+"") + 1;
     }
-    httpFullNodePort += 1;
-    nodeHttpPortMap.put(ip,httpFullNodePort);
+    nodeHttpPortMap.put(ip, httpFullNodePort);
 
     HashMap<String,Integer> nodeRpcPortMap = (HashMap<String,Integer>)json.get(Common.nodeRpcPortMapField);
     if(nodeRpcPortMap.containsKey(ip)){
-      rpcFullNodePort = Integer.parseInt(nodeRpcPortMap.get(ip)+"");
+      rpcFullNodePort = Integer.parseInt(nodeRpcPortMap.get(ip)+"") + 1;
     }
-    rpcFullNodePort += 1;
-    nodeRpcPortMap.put(ip,rpcFullNodePort);
+    nodeRpcPortMap.put(ip, rpcFullNodePort);
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
     String createTime = df.format(new Date());// new Date()为获取当前系统时间
+
+    long nodeId = Calendar.getInstance().getTimeInMillis() / 1000; //创建时根据时间戳生成链的唯一标识chainId
 
     newNode.put(Common.idFiled, id);
     newNode.put(Common.userNameFiled, userName);
@@ -345,6 +345,7 @@ public class NodeController {
     newNode.put(Common.customTransactionFiled, "");
     newNode.put(Common.dbCustomFiled, "");
     newNode.put(Common.isError, false);
+    newNode.put(Common.nodeIdFiled, nodeId);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, id, ipList, listenPort, httpFullNodePort, rpcFullNodePort, false, nodeHttpPortMap, nodeRpcPortMap);
   }
