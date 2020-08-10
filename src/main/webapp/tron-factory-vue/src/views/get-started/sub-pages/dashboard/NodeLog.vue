@@ -1,38 +1,21 @@
 <template>
   <el-dialog
-      :title="$t('getStarted.dashboard.logDialogTitle')"
     :visible.sync="dialogVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false">
 
+    <div slot="title" class="dialog-header">
+      <div class="title"><b>{{ $t('getStarted.dashboard.logDialogTitle') }}</b></div>
+    </div>
+
     <div class="dialog-content">
       <div class="log-list">
-        <div class="log-item" v-for="(log, index) in logList" :key="index">
-          <div class="log-line">
-            <span v-if="!log.status" class="log-text">{{ log.text }}</span>
-            <template v-else>
-              <span class="log-status">[<span :class="log.status">{{ log.status.toLocaleUpperCase() }}</span>]</span>
-              <span class="log-title">
-                <span class="log-text" :class="{ hide: log.text === '-' }">{{ log.text }}</span>
-                <span v-if="log.status" class="divider-line">{{ dividerLine }}</span>
-              </span>
-            </template>
-          </div>
-
-          <div class="child-log-item" v-for="(childLog, childIndex) in log.children" :key="childIndex">
-            <div v-if="childLog.text" class="log-line">
-              <span v-if="childLog.status" class="log-status">[<span :class="childLog.status">{{ childLog.status.toLocaleUpperCase() }}</span>]</span>
-              <span class="log-text">{{ childLog.text }}</span>
-            </div>
-
-            <div class="child-child-log-item" v-for="(childChildLog, childChildIndex) in childLog.children" :key="childChildIndex">
-              <div class="log-line">
-                <span v-if="childChildLog.status" class="log-status">[<span :class="childChildLog.status">{{ childChildLog.status.toLocaleUpperCase() }}</span>]</span>
-                <span class="log-text" v-html="childChildLog.text"></span>
-              </div>
-            </div>
-          </div>
-
+        <div v-for="(log, index) in logList" :key="index" class="log-item">
+          <span v-if="log.status" class="log-status">[<span :class="log.status">{{ log.status.toLocaleUpperCase() }}</span>]</span>
+          <span class="log-text" :class="log.scope">
+            <span class="text" v-html="log.text"></span>
+            <span v-if="log.scope === 'title'">{{ dividerLine }}</span>
+          </span>
         </div>
       </div>
     </div>
@@ -49,7 +32,7 @@
     },
     data () {
       return {
-        logList: [
+        logList:[] /*[
           {
             "status":"",
             "text":"Start deployment"
@@ -61,82 +44,51 @@
           {
             "status":"info",
             "text":"Checking",
-            "children":[
-              {
-                "status":"info",
-                "text":"Checking connectivity",
-                "children":[
-                  {
-                    "status":"info",
-                    "text":"ssh 1.1.1.1"
-                  },
-                ]
-              },
-            ]
+            "scope": "title"
           },
           {
             "status":"info",
-            "text":"Checking",
-            "children":[
-              {
-                "status":"info",
-                "text":"Checking connectivity",
-                "children":[
-                  {
-                    "status":"info",
-                    "text":"ssh 1.1.1.1"
-                  }
-                ]
-              }
-            ]
+            "text":"Checking connectivity",
+            "scope": "sub-title"
           },
           {
             "status":"info",
-            "text":"-",
-            "children":[
-              {
-                "status":"info",
-                "text":"",
-                "children":[
-                  {
-                    "status":"info",
-                    "text":"<remark class='success'>Deploy SUCCESS</remark>"
-                  }
-                ]
-              }
-            ]
+            "text":"ssh 1.1.1.1"
           },
           {
             "status":"info",
-            "text":"-",
-            "children":[
-              {
-                "status":"info",
-                "text":"",
-                "children":[
-                  {
-                    "status":"info",
-                    "text":"Total time:  6.938 s"
-                  },
-                  {
-                    "status":"info",
-                    "text":"Finished at: 2020-08-10T14:39:36+08:00"
-                  }
-                ]
-              }
-            ]
+            "text":"",
+            "scope": "title"
           },
           {
             "status":"info",
-            "text":"-"
+            "text":"<remark class='success'>DEPLOY SUCCESS</remark>"
+          },
+          {
+            "status":"info",
+            "text":"",
+            "scope": "title"
+          },
+          {
+            "status":"info",
+            "text":"Total time:  6.938 s"
+          },
+          {
+            "status":"info",
+            "text":"Finished at: 2020-08-10T14:39:36+08:00"
+          },
+          {
+            "status":"info",
+            "text":"",
+            "scope": "title"
           }
-        ],
+        ]*/,
         initLoading: false,
         processingShow: false,
         processingLoading: false,
         processingText: this.$t('getStarted.dashboard.emptyLog'),
         timeID: null,
-        dividerLine: '-------------------------------------------------------------------------------------------------',
+        dividerLine: '------------------------------------------------------------------------',
       }
     },
     computed: {
@@ -151,7 +103,7 @@
     },
 
     created () {
-      // this.init()
+      this.init()
     },
     destroyed () {
       clearInterval(this.timeID)
@@ -182,8 +134,8 @@
             clearInterval(this.timeID)
           }
 
-          if (Array.isArray(res.logList)) {
-            this.logList = res.logList.map(log => log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2'))
+          if (Array.isArray(res.list)) {
+            this.logList = res.list
           } else {
             this.processingLoading = false
             this.processingText = this.$t('getStarted.dashboard.emptyLog')
@@ -200,11 +152,19 @@
 <style scoped lang="scss">
 ::v-deep .el-dialog {
   width: 800px;
+  .el-dialog__header {
+    padding: 8px;
+  }
   .el-dialog__body {
     padding: 0;
     .dialog-content {
       background-color: black;
     }
+  }
+  .el-dialog__headerbtn {
+    top: 6px;
+    right: 6px;
+    font-size: 24px;
   }
 
   .log-list {
@@ -215,6 +175,7 @@
     color: white;
     overflow: auto;
     font-size: 14px;
+    font-family: monospace;
 
     span {
       font-weight: normal;
@@ -227,9 +188,10 @@
       }
     }
 
-    .log-title {
+    .log-text {
       position: relative;
-      .log-text:not(.hide) {
+
+      &.title .text {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -237,10 +199,19 @@
         padding-left: 10px;
         padding-right: 10px;
         background-color: black;
+        font-weight: bold;
+      }
+
+
+      &.sub-title .text {
+        font-weight: bold;
       }
     }
   }
 
+  remark {
+    font-weight: bold;
+  }
   .success {
     color: #67C23A;
   }
