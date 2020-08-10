@@ -14,7 +14,7 @@
           <span v-if="log.status" class="log-status">[<span :class="log.status">{{ log.status.toLocaleUpperCase() }}</span>]</span>
           <span class="log-text" :class="log.scope">
             <span class="text" v-html="log.text"></span>
-            <span v-if="log.scope === 'title'">{{ dividerLine }}</span>
+            <span v-if="log.scope === 'title'">------------------------------------------------------------------------</span>
           </span>
         </div>
       </div>
@@ -32,63 +32,12 @@
     },
     data () {
       return {
-        logList:[] /*[
-          {
-            "status":"",
-            "text":"Start deployment"
-          },
-          {
-            "status":"",
-            "text":"Building in workspace /Users/tron/dev-1.4/tron-factory"
-          },
-          {
-            "status":"info",
-            "text":"Checking",
-            "scope": "title"
-          },
-          {
-            "status":"info",
-            "text":"Checking connectivity",
-            "scope": "sub-title"
-          },
-          {
-            "status":"info",
-            "text":"ssh 1.1.1.1"
-          },
-          {
-            "status":"info",
-            "text":"",
-            "scope": "title"
-          },
-          {
-            "status":"info",
-            "text":"<remark class='success'>DEPLOY SUCCESS</remark>"
-          },
-          {
-            "status":"info",
-            "text":"",
-            "scope": "title"
-          },
-          {
-            "status":"info",
-            "text":"Total time:  6.938 s"
-          },
-          {
-            "status":"info",
-            "text":"Finished at: 2020-08-10T14:39:36+08:00"
-          },
-          {
-            "status":"info",
-            "text":"",
-            "scope": "title"
-          }
-        ]*/,
+        logList:[],
         initLoading: false,
         processingShow: false,
         processingLoading: false,
         processingText: this.$t('getStarted.dashboard.emptyLog'),
         timeID: null,
-        dividerLine: '------------------------------------------------------------------------',
       }
     },
     computed: {
@@ -170,8 +119,7 @@
   .log-list {
     padding: 5px;
     line-height: 20px;
-    min-height: 500px;
-    max-height: 700px;
+    min-height: 600px;
     color: white;
     overflow: auto;
     font-size: 14px;
