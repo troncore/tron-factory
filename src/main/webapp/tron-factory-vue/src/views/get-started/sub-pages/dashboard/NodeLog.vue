@@ -1,28 +1,40 @@
 <template>
   <el-dialog
+      :title="$t('getStarted.dashboard.logDialogTitle')"
     :visible.sync="dialogVisible"
-    custom-class="im-dialog"
     :close-on-click-modal="false"
-    :close-on-press-escape="false"
-    width="680px"
-    top="200px"
-    center>
-    <div slot="title" class="dialog-header">
-      <div class="title">{{ $t('getStarted.dashboard.logDialogTitle') }}</div>
-    </div>
+    :close-on-press-escape="false">
 
-    <div class="dialog-content" style="min-height: 200px;" v-loading="initLoading">
+    <div class="dialog-content">
+      <div class="log-list">
+        <div class="log-item" v-for="(log, index) in logList" :key="index">
+          <div class="log-line">
+            <span v-if="!log.status" class="log-text">{{ log.text }}</span>
+            <template v-else>
+              <span class="log-status">[<span :class="log.status">{{ log.status.toLocaleUpperCase() }}</span>]</span>
+              <span class="log-title">
+                <span class="log-text" :class="{ hide: log.text === '-' }">{{ log.text }}</span>
+                <span v-if="log.status" class="divider-line">{{ dividerLine }}</span>
+              </span>
+            </template>
+          </div>
 
-      <el-timeline>
-        <el-timeline-item
-          v-for="(log, index) in logInfo"
-          :key="index"
-          type="primary">
-          <div class="log-content" v-html="log"></div>
-        </el-timeline-item>
-      </el-timeline>
+          <div class="child-log-item" v-for="(childLog, childIndex) in log.children" :key="childIndex">
+            <div v-if="childLog.text" class="log-line">
+              <span v-if="childLog.status" class="log-status">[<span :class="childLog.status">{{ childLog.status.toLocaleUpperCase() }}</span>]</span>
+              <span class="log-text">{{ childLog.text }}</span>
+            </div>
 
-      <el-button type="text" style="margin-left: 30px;" :loading="processingLoading" v-show="processingShow">{{ processingText }}</el-button>
+            <div class="child-child-log-item" v-for="(childChildLog, childChildIndex) in childLog.children" :key="childChildIndex">
+              <div class="log-line">
+                <span v-if="childChildLog.status" class="log-status">[<span :class="childChildLog.status">{{ childChildLog.status.toLocaleUpperCase() }}</span>]</span>
+                <span class="log-text" v-html="childChildLog.text"></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
   </el-dialog>
@@ -37,12 +49,94 @@
     },
     data () {
       return {
-        logInfo: [],
-        initLoading: true,
+        logList: [
+          {
+            "status":"",
+            "text":"Start deployment"
+          },
+          {
+            "status":"",
+            "text":"Building in workspace /Users/tron/dev-1.4/tron-factory"
+          },
+          {
+            "status":"info",
+            "text":"Checking",
+            "children":[
+              {
+                "status":"info",
+                "text":"Checking connectivity",
+                "children":[
+                  {
+                    "status":"info",
+                    "text":"ssh 1.1.1.1"
+                  },
+                ]
+              },
+            ]
+          },
+          {
+            "status":"info",
+            "text":"Checking",
+            "children":[
+              {
+                "status":"info",
+                "text":"Checking connectivity",
+                "children":[
+                  {
+                    "status":"info",
+                    "text":"ssh 1.1.1.1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "status":"info",
+            "text":"-",
+            "children":[
+              {
+                "status":"info",
+                "text":"",
+                "children":[
+                  {
+                    "status":"info",
+                    "text":"<remark class='success'>Deploy SUCCESS</remark>"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "status":"info",
+            "text":"-",
+            "children":[
+              {
+                "status":"info",
+                "text":"",
+                "children":[
+                  {
+                    "status":"info",
+                    "text":"Total time:  6.938 s"
+                  },
+                  {
+                    "status":"info",
+                    "text":"Finished at: 2020-08-10T14:39:36+08:00"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "status":"info",
+            "text":"-"
+          }
+        ],
+        initLoading: false,
         processingShow: false,
         processingLoading: false,
         processingText: this.$t('getStarted.dashboard.emptyLog'),
         timeID: null,
+        dividerLine: '-------------------------------------------------------------------------------------------------',
       }
     },
     computed: {
@@ -57,7 +151,7 @@
     },
 
     created () {
-      this.init()
+      // this.init()
     },
     destroyed () {
       clearInterval(this.timeID)
@@ -88,8 +182,8 @@
             clearInterval(this.timeID)
           }
 
-          if (Array.isArray(res.logInfo)) {
-            this.logInfo = res.logInfo.map(log => log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2'))
+          if (Array.isArray(res.logList)) {
+            this.logList = res.logList.map(log => log.replace(/^(\[.*\])(.*)/, '<i class="remark-time">$1</i>$2'))
           } else {
             this.processingLoading = false
             this.processingText = this.$t('getStarted.dashboard.emptyLog')
@@ -104,11 +198,60 @@
 </script>
 
 <style scoped lang="scss">
-  /deep/ .log-content {
-    .remark-time {
-      font-style: normal;
-      font-size: 13px;
-      color: font-color(.8);
+::v-deep .el-dialog {
+  width: 800px;
+  .el-dialog__body {
+    padding: 0;
+    .dialog-content {
+      background-color: black;
     }
   }
+
+  .log-list {
+    padding: 5px;
+    line-height: 20px;
+    min-height: 500px;
+    max-height: 700px;
+    color: white;
+    overflow: auto;
+    font-size: 14px;
+
+    span {
+      font-weight: normal;
+    }
+
+    .log-status {
+      margin-right: 5px;
+      span {
+        font-weight: bold;
+      }
+    }
+
+    .log-title {
+      position: relative;
+      .log-text:not(.hide) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: black;
+      }
+    }
+  }
+
+  .success {
+    color: #67C23A;
+  }
+  .info {
+    color: #409EFF;
+  }
+  .warning {
+    color: #E6A23C;
+  }
+  .error {
+    color: #F56C6C;
+  }
+}
 </style>

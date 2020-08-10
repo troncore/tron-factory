@@ -1,51 +1,51 @@
 let prefix = ''
-// prefix = '/__mock__'
+prefix = '/__mock__'
 
 export default {
   get: {
-    hasBlockChain: prefix + '/api/hasBlockChain',
-    getChainInfo: prefix + '/api/chainInfo',
-    checkBalance: prefix + '/api/checkBalance',
-    checkAddress: prefix + '/api/checkAddress',
-    checkChainPublish: prefix + '/api/checkChainPublish',
+    hasBlockChain: '/api/hasBlockChain',
+    getChainInfo: '/api/chainInfo',
+    checkBalance: '/api/checkBalance',
+    checkAddress: '/api/checkAddress',
+    checkChainPublish: '/api/checkChainPublish',
 
-    getNodeList: prefix + '/api/allNodeInfo',
-    getNodeInfo: prefix + '/api/nodeInfo',
-    canDeleteNode: prefix + '/api/canDeleteNode',
-    stopNode: prefix + '/api/stopNode',
-    getNodeLog: '/api/getLogInfo',
-    checkNode: prefix + '/api/checkNode',
+    getNodeList: '/api/allNodeInfo',
+    getNodeInfo: '/api/nodeInfo',
+    canDeleteNode: '/api/canDeleteNode',
+    stopNode: '/api/stopNode',
+    getNodeLog: prefix + '/api/getLogInfo',
+    checkNode: '/api/checkNode',
 
     // node-config
-    getQuickConfig: prefix + '/api/quickConfig',
-    getBaseConfig: prefix + '/api/baseSettingConfig',
-    getNetworkConfig: prefix + '/api/networkconfig',
-    getDBConfig: prefix + '/api/dbconfig',
-    getP2PConfig: prefix + '/api/p2pConfig',
-    getPluginConfig: prefix + '/api/pluginConfig',
+    getQuickConfig: '/api/quickConfig',
+    getBaseConfig: '/api/baseSettingConfig',
+    getNetworkConfig: '/api/networkconfig',
+    getDBConfig: '/api/dbconfig',
+    getP2PConfig: '/api/p2pConfig',
+    getPluginConfig: '/api/pluginConfig',
   },
 
   post: {
-    addChainInfo: prefix + '/api/chainInfo',
-    addNoteInfo: prefix + '/api/nodeInfo',
-    deployNode: prefix + '/api/deployNode',
+    addChainInfo: '/api/chainInfo',
+    addNoteInfo: '/api/nodeInfo',
+    deployNode: '/api/deployNode',
 
     // node-config
-    setQuickConfig: prefix + '/api/quickConfig',
-    setBaseConfig: prefix + '/api/baseSettingConfig',
-    setNetworkConfig: prefix + '/api/networkconfig',
-    setDBConfig: prefix + '/api/dbconfig',
-    setP2PConfig: prefix + '/api/p2pConfig',
-    setPluginConfig: prefix + '/api/pluginConfig',
+    setQuickConfig: '/api/quickConfig',
+    setBaseConfig: '/api/baseSettingConfig',
+    setNetworkConfig: '/api/networkconfig',
+    setDBConfig: '/api/dbconfig',
+    setP2PConfig: '/api/p2pConfig',
+    setPluginConfig: '/api/pluginConfig',
   },
 
   put: {
-    updateChainInfo: prefix + '/api/chainInfo',
-    editNoteInfo: prefix + '/api/nodeInfo',
+    updateChainInfo: '/api/chainInfo',
+    editNoteInfo: '/api/nodeInfo',
   },
 
   delete: {
-    deleteChain: prefix + '/api/deleteChain',
-    deleteNoteInfo: prefix + '/api/nodeInfo',
+    deleteChain: '/api/deleteChain',
+    deleteNoteInfo: '/api/nodeInfo',
   },
 }
