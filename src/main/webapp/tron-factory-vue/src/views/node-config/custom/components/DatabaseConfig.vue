@@ -87,8 +87,8 @@ export default {
           { validator: formRules.numMax(2147483647, this.$t('base.valid.maxNumberValue') + ': 2147483647'), trigger: 'blur', },
         ],
         dbCustom: [
-          { required: this.checkDBCustom, message: ' ', trigger: 'blur', },
-          { validator: pathEndJAR, trigger: 'blur', },
+          { required: this.checkDBCustom, message: ' ', trigger: 'change', },
+          { validator: pathEndJAR, trigger: 'change', },
         ]
       }
     },

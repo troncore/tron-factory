@@ -78,23 +78,23 @@ export default {
 
       return {
         httpFullNodePort: [
-          { required: this.form.fullNodeEnable, message: ' ', trigger: 'blur', },
+          { required: this.form.fullNodeEnable, message: ' ', trigger: 'change', },
           ...(this.form.fullNodeEnable ? validatePort : [])
         ],
         rpcPort: [
-          { required: this.form.fullNodeEnable, message: ' ', trigger: 'blur', },
+          { required: this.form.fullNodeEnable, message: ' ', trigger: 'change', },
           ...(this.form.fullNodeEnable ? validatePort : [])
         ],
         maxHttpConnectNumber: [
-          { required: this.form.fullNodeEnable, message: ' ', trigger: 'blur', },
+          { required: this.form.fullNodeEnable, message: ' ', trigger: 'change', },
           ...(this.form.fullNodeEnable ? validateHttpConnectNumber : [])
         ],
         httpSolidityPort: [
-          { required: this.form.solidityEnable, message: ' ', trigger: 'blur', },
+          { required: this.form.solidityEnable, message: ' ', trigger: 'change', },
           ...(this.form.solidityEnable ? validatePort : [])
         ],
         rpcSolidityPort: [
-          { required: this.form.solidityEnable, message: ' ', trigger: 'blur', },
+          { required: this.form.solidityEnable, message: ' ', trigger: 'change', },
           ...(this.form.solidityEnable ? validatePort : [])
         ],
       }
