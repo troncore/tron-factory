@@ -5,17 +5,18 @@
     :close-on-press-escape="false">
 
     <div slot="title" class="dialog-header">
-      <div class="title"><b>{{ $t('getStarted.dashboard.logDialogTitle') }}</b></div>
+      <div class="title">
+        <b>{{ $t('getStarted.dashboard.logDialogTitle') }} </b>
+        <i v-if="loading" class="el-icon-loading"></i>
+      </div>
     </div>
 
     <div class="dialog-content">
       <div class="log-list">
-        <div v-for="(log, index) in logList" :key="index" class="log-item">
-          <span v-if="log.status" class="log-status">[<span :class="log.status">{{ log.status.toLocaleUpperCase() }}</span>]</span>
-          <span class="log-text" :class="log.scope">
-            <span class="text" v-html="log.text"></span>
-            <span v-if="log.scope === 'title'">------------------------------------------------------------------------</span>
-          </span>
+        <div v-for="(log, index) in logList" :key="index" class="log-item" :class="log.scope">
+          <span class="log-index">{{ index + 1 }}</span>
+          <span class="log-text" :class="{ warning: !log.success }"><span class="text" v-html="log.content"></span></span>
+          <span class="log-time" v-if="log.duration"><span class="text">{{ log.duration }}</span></span>
         </div>
       </div>
     </div>
@@ -33,10 +34,9 @@
     data () {
       return {
         logList:[],
-        initLoading: false,
-        processingShow: false,
-        processingLoading: false,
-        processingText: this.$t('getStarted.dashboard.emptyLog'),
+        isEmptyLogs: true,
+        loading: true,
+        flag: true, // to request next log and avoid multi-request when net is slow
         timeID: null,
       }
     },
@@ -65,33 +65,42 @@
       },
       getLogInfo() {
         this.$_api.getStarted.getNodeLog({ id: this.currentRow.id }, (err, res = {}) => {
-          this.initLoading = false
-          this.processingShow = true
-          this.processingLoading = true
-          this.processingText = this.$t('getStarted.dashboard.loadingLog')
+          if (!this.flag) return
+          this.flag = false
 
           if (err) {
-            this.processingLoading = false
-            this.processingText = this.$t('getStarted.dashboard.emptyLog')
+            this.loading = false
             clearInterval(this.timeID)
             return
           }
 
-          if (res.status === -1 || res.status === 1) {
-            this.processingShow = false
-            this.processingLoading = false
+          if (res.status === 0) {
+            // empty log
+            this.loading = false
+            this.isEmptyLogs = true
+            this.logList = []
             clearInterval(this.timeID)
-          }
 
-          if (Array.isArray(res.list)) {
-            this.logList = res.list
+            this.$notify.info({
+              title: '提示',
+              message: '暂无日志',
+            })
+
+          } else if (res.status === 2) {
+            // loaded all log
+            this.loading = false
+            this.logList = res.list || []
+            clearInterval(this.timeID)
+
+          } else if (res.status === 1) {
+            // loading log
+            this.logList = res.list || []
+            this.flag = true
+
           } else {
-            this.processingLoading = false
-            this.processingText = this.$t('getStarted.dashboard.emptyLog')
-
+            this.loading = false
             clearInterval(this.timeID)
           }
-
         })
       },
     }
@@ -107,7 +116,7 @@
   .el-dialog__body {
     padding: 0;
     .dialog-content {
-      background-color: black;
+      background-color: #222;
     }
   }
   .el-dialog__headerbtn {
@@ -117,42 +126,78 @@
   }
 
   .log-list {
-    padding: 5px;
-    line-height: 20px;
-    min-height: 600px;
-    color: white;
+    padding: 5px 0 100px;
+    line-height: 18px;
+    height: 500px;
+    color: #f6f8fa;
     overflow: auto;
     font-size: 14px;
-    font-family: monospace;
+    font-family: Cousine,monospace;
 
     span {
       font-weight: normal;
     }
 
+    .log-item {
+      display: flex;
+      padding: 0 8px 0 4px;
+      &:hover {
+        background-color: #444;
+      }
+      &.title {
+        background-color: #2b2b2b;
+        .log-text {
+          .text {
+            color: #FFFF91;
+            font-weight: bold;
+          }
+        }
+      }
+      &.sub-title {
+        .log-text {
+          .text {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .log-index {
+      display: inline-block;
+      margin-right: 10px;
+      min-width: 22px;
+      text-align: right;
+      color: #666;
+    }
     .log-status {
       margin-right: 5px;
       span {
         font-weight: bold;
       }
     }
-
     .log-text {
-      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
 
-      &.title .text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding-left: 10px;
-        padding-right: 10px;
-        background-color: black;
-        font-weight: bold;
+      &.warning {
+        color: red;
       }
-
-
-      &.sub-title .text {
-        font-weight: bold;
+    }
+    .log-time {
+      margin-left: auto;
+      flex-basis: auto;
+      white-space: nowrap;
+      .text {
+        display: inline-block;
+        padding: 0 3px;
+        height: 14px;
+        line-height: 14px;
+        vertical-align: text-top;
+        font-size: 12px;
+        color: #bbb;
+        background-color: #666;
+        border-radius: 3px;
       }
     }
   }
