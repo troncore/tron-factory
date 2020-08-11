@@ -72,7 +72,7 @@
               {{ $t('getStarted.nodesManage.publicKey') }}
               <im-tooltip :content="$t('getStarted.nodesManage.publicKeyTips')" />
             </span>
-            <el-input v-model.trim="form.publicKey" class="width-600" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
+            <el-input v-model.trim="form.publicKey" class="width-400" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
           </el-form-item>
 
           <el-form-item class="private-key margin-bottom-0" prop="privateKey">
@@ -119,7 +119,7 @@
 
           // TODO：删除以下测试数据
           url: 'http://baidu.com',
-          voteCount: '1',
+          voteCount: '1000001',
           publicKey: 'TRD77TEoSW1Uo2Y4ukqdAtQP9WPgYTHshm',
           privateKey: '8452D502EC250C89704FCB2CA9CA5D0F1667A0194133553227D35BD6691B62A7',
         },

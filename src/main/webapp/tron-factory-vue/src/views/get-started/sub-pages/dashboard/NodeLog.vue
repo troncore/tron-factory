@@ -89,12 +89,12 @@
           } else if (res.status === 2) {
             // loaded all log
             this.loading = false
-            this.logList = res.list || []
+            this.logList = res.logInfo || []
             clearInterval(this.timeID)
 
           } else if (res.status === 1) {
             // loading log
-            this.logList = res.list || []
+            this.logList = res.logInfo || []
             this.flag = true
 
           } else {
