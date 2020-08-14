@@ -16,17 +16,6 @@ export const validate = new Validate()
 
 /* form rules validate */
 export class FormRules {
-  validIP (msg) {
-    return (rule, value, callback) => {
-      let invalid = false
-
-      if(!validate.isIP(value)) invalid = true
-
-      if (invalid) callback(new Error(msg))
-      else callback()
-    }
-  }
-
   numEqual(num, msg, isEqual = true,) {
     return (rule, value, callback) => {
       let invalid = false

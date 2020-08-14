@@ -25,6 +25,7 @@ export default {
     assetDialogEditTitle: 'Edit Account',
     accountNameLabel: 'accountName',
     accountNameTips: 'The name of account',
+    accountNameCheckRepeat: '该账户已添加',
     accountTypeLabel: 'accountType',
     accountTypeTips: 'The type of account',
     addressLabel: 'address',
@@ -33,6 +34,8 @@ export default {
     balanceLabel: 'balance',
     balanceTips: 'Initial balance of account',
 
+    needBlackhole: '必须添加 Blackhole 账户',
+    needMoreAsset: '至少再添加一个除 Blackhole 之外的账户',
     existChain: 'The blockchain have been created',
   },
 
@@ -100,10 +103,9 @@ export default {
     viewUnValidNode: 'Invalid node',
 
     serverInfo: 'Server Setting',
-    ip: 'Server IP',
-    ipPlaceholder: 'Please input the server ip address',
-    ipCheckRight: 'Please input a valid IP address',
-    ipCheckLocalhost: 'Local IP is not supported now',
+    ip: '服务器地址',
+    ipPlaceholder: 'IP/主机名',
+    ipCheckRight: '请输入有效的服务器地址',
     listenPort: 'Listen Port',
     listenPortTips: 'P2P listen port',
     listenPortPlaceholder: 'Please input listen port',

@@ -15,7 +15,7 @@
             {{ $t('getStarted.chainManage.accountNameLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.accountNameTips')" />
           </span>
-          <el-input v-model.trim="form.accountName" tabindex="26" clearable></el-input>
+          <el-input v-model.trim="form.accountName" tabindex="26" :disabled="asset.accountName === 'Blackhole'" clearable></el-input>
         </el-form-item>
 
         <el-form-item prop="accountType">
@@ -51,9 +51,9 @@
       </el-form>
     </div>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
+    <div slot="footer" class="dialog-footer align-right">
       <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -64,7 +64,7 @@ import ImTooltip from "@/components/ImTooltip";
 export default {
   name: 'genesis-asset-dialog',
   components: { ImTooltip },
-  props: [ 'visible', 'asset', 'isAdd'],
+  props: [ 'visible', 'asset', 'isAdd', 'assetList'],
   data() {
     return {
       form: {
@@ -107,9 +107,16 @@ export default {
         else callback()
       }
 
+      let repeatAssetName  = (rule, value, callback) => {
+        let errorMessage = this.$t('getStarted.chainManage.accountNameCheckRepeat')
+        if (this.assetList.findIndex(asset => asset.accountName === this.form.accountName) !== -1) callback(new Error(errorMessage))
+        else callback()
+      }
+
       return {
         accountName: [
           { required: true, message: ' ', trigger: 'change', },
+          { validator: repeatAssetName, trigger: 'change', },
         ],
         accountType: [
           { required: true, message: ' ', trigger: 'change', },

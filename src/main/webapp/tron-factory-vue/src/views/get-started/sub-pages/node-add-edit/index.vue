@@ -7,7 +7,7 @@
         <div class="card-body">
           <el-form-item prop="ip">
             <span slot="label">{{ $t('getStarted.nodesManage.ip') }}</span>
-            <el-input v-model.trim="form.ip" class="width-400" tabindex="1" clearable />
+            <el-input v-model.trim="form.ip" class="width-400" tabindex="1" :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" clearable />
           </el-form-item>
           <el-form-item prop="listenPort">
             <span slot="label" class="space-between">
@@ -102,7 +102,7 @@
 <script>
   import ImTooltip from "@/components/ImTooltip"
   import { transferBigIntToString } from "@/utils/common";
-  import { formRules } from "@/utils/validate"
+  import { formRules, validate } from "@/utils/validate"
   export default {
     name: "node-add-edit",
     components: { ImTooltip },
@@ -128,7 +128,6 @@
         safePrivateKey: Array(64).fill('*').join(''),
         disabled: false,
         loading: false,
-        disableLocalhost: false, // 是否允许使用127.0.0.1
       }
     },
     computed: {
@@ -154,19 +153,19 @@
           else callback()
         }
 
-        const validLocalRule = (rule, value, callback) => {
-          if (this.disableLocalhost && value === '127.0.0.1') {
-            callback(new Error(this.$t('getStarted.nodesManage.ipCheckLocalhost')))
-          } else {
-            callback()
-          }
-        }
         const validPrivateKey = (rule, value, callback) => {
           if (value.length !== 64) {
             callback(new Error(this.$t('getStarted.nodesManage.privateKeyCheck')))
           } else {
             callback()
           }
+        }
+        const validServerAddress = (rule, value, callback) => {
+          const validIP =  /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(value)
+          const validName = /^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$/.test(value)
+
+          if(validIP || validName) callback()
+          else callback(new Error(this.$t('getStarted.nodesManage.ipCheckRight')))
         }
 
         let portBaseLimit = [
@@ -177,8 +176,7 @@
         return {
           ip: [
             { required: true, message: ' ', trigger: 'change', },
-            { validator: formRules.validIP(this.$t('getStarted.nodesManage.ipCheckRight'), ), trigger: 'change', },
-            { required: true, validator: validLocalRule, trigger: 'change', },
+            { validator: validServerAddress, trigger: 'change', },
           ],
           listenPort: [
             { required: true, message: ' ', trigger: 'change', },

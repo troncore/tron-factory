@@ -52,7 +52,7 @@
         <div class="asset-list">
           <div class="asset-item" v-for="(item, index) in genesisBlockAssets" :key="index">
             <el-button class="op-btn" @click="openGenesisAssetDialog(false, item, index)"><i class="el-icon-edit"></i> {{ item.accountName }}</el-button>
-            <i class="op-icon el-icon-delete" @click="handleDeleteAssets(index)"></i>
+            <i v-if="item.accountName !== 'Blackhole'" class="op-icon el-icon-delete" @click="handleDeleteAssets(index)"></i>
           </div>
           <div class="asset-item new-add" @click="openGenesisAssetDialog()">
             <el-button class="op-btn">{{ $t('base.add') }}</el-button>
@@ -65,6 +65,7 @@
           :visible.sync="genesisAssetDialogVisible"
           :is-add="isAddGenesisAsset"
           :asset="currentGenesisAsset"
+          :asset-list="genesisBlockAssets"
           @submit="handleSubmitGenesisAsset" />
 
       </div>
@@ -200,6 +201,23 @@
       handleSubmit () {
         this.$refs['form'].validate(async valid => {
           if (valid) {
+            if (this.genesisBlockAssets.findIndex(asset => asset.accountName === 'Blackhole') === -1) {
+              this.$notify({
+                type: 'warning',
+                title: this.$t('base.warning'),
+                message: this.$t('getStarted.chainManage.needBlackhole')
+              })
+              return
+            }
+            if (this.genesisBlockAssets.length <= 1) {
+              this.$notify({
+                type: 'warning',
+                title: this.$t('base.warning'),
+                message: this.$t('getStarted.chainManage.needMoreAsset')
+              })
+              return
+            }
+
             this.loading = true
 
             this.$_api.getStarted.addChainInfo({

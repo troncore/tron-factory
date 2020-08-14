@@ -1,5 +1,5 @@
 let prefix = ''
-prefix = '/__mock__'
+// prefix = '/__mock__'
 
 export default {
   get: {

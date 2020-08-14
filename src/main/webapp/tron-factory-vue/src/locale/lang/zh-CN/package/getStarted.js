@@ -26,6 +26,7 @@ export default {
     assetDialogEditTitle: '编辑账户',
     accountNameLabel: 'accountName',
     accountNameTips: '账户名',
+    accountNameCheckRepeat: '该账户已添加',
     accountTypeLabel: 'accountType',
     accountTypeTips: '账户类型',
     addressLabel: 'address',
@@ -34,6 +35,8 @@ export default {
     balanceLabel: 'balance',
     balanceTips: '账户初始余额, 单位 SUN',
 
+    needBlackhole: '必须添加 Blackhole 账户',
+    needMoreAsset: '至少再添加一个除 Blackhole 之外的账户',
     existChain: '当前已有创建的区块链，不可继续创建',
   },
 
@@ -101,10 +104,9 @@ export default {
     viewUnValidNode: '当前所查看的节点为无效节点',
 
     serverInfo: '服务器配置',
-    ip: '服务器IP',
-    ipPlaceholder: '请输入服务器ip地址',
-    ipCheckRight: '请输入有效的 IP 地址',
-    ipCheckLocalhost: '暂不支持本地 IP',
+    ip: '服务器地址',
+    ipPlaceholder: 'IP/主机名',
+    ipCheckRight: '请输入有效的服务器地址',
     listenPort: '监听端口',
     listenPortTips: 'P2P 监听端口',
     listenPortPlaceholder: '请输入监听端口',
