@@ -15,9 +15,9 @@
       <div class="el-upload__tip">{{ $t('getStarted.dashboard.checkFilePath') }}</div>
     </div>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button class="im-button" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button" type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
+    <div slot="footer" class="dialog-footer align-right">
+      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
     </div>
   </el-dialog>
 </template>
