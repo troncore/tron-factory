@@ -64,7 +64,7 @@ import ImTooltip from "@/components/ImTooltip";
 export default {
   name: 'genesis-asset-dialog',
   components: { ImTooltip },
-  props: [ 'visible', 'asset', 'isAdd', 'assetList'],
+  props: [ 'visible', 'isAdd', 'asset', 'assetList'],
   data() {
     return {
       form: {
@@ -109,7 +109,8 @@ export default {
 
       let repeatAssetName  = (rule, value, callback) => {
         let errorMessage = this.$t('getStarted.chainManage.accountNameCheckRepeat')
-        if (this.assetList.findIndex(asset => asset.accountName === this.form.accountName) !== -1) callback(new Error(errorMessage))
+        let existAssets = this.assetList.filter(asset => this.asset !== asset && asset.accountName === this.form.accountName)
+        if ( existAssets.length) callback(new Error(errorMessage))
         else callback()
       }
 
