@@ -547,7 +547,7 @@ public class DeployController {
     public JSONObject deploy(
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id
     ) {
-        int status = 0;
+        int status = -1;
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -567,13 +567,15 @@ public class DeployController {
 
                 while ((lineTxt = bufferedReader.readLine()) != null) {
                     result.add(lineTxt);
-                    if(lineTxt.contains(Common.deploySuccessStatus)) {
-                        status = 1;
-                    }
-                    if(lineTxt.contains(Common.deployFailStatus)) {
-                        status = -1;
-                    }
+                    status = 1;
+//                    if(lineTxt.contains(Common.deploySuccessStatus)) {
+
+//                    }
+//                    if(lineTxt.contains(Common.deployFailStatus)) {
+//                        status = -1;
+//                    }
                 }
+                status = 2;
                 bufferedReader.close();
                 read.close();
 
@@ -582,7 +584,7 @@ public class DeployController {
                 return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "read log info failed").toJSONObject();
             }
         } else {
-            return new Response(ResultCode.OK.code, "").toJSONObject();
+            status = 0;
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(Common.logInfoFiled, result);
