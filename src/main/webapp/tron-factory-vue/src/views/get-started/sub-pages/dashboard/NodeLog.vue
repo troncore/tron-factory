@@ -94,7 +94,11 @@
 
           } else if (res.status === 1) {
             // loading log
-            this.logList = (res.logInfo || []).map(log => JSON.parse(log))
+            try {
+              this.logList = (res.logInfo || []).map(log => JSON.parse(log))
+            } catch (e) {
+              console.log('error: ', e)
+            }
             this.flag = true
 
           } else {
