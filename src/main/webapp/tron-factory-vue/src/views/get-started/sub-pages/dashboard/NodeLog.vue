@@ -61,7 +61,10 @@
     methods: {
       init () {
         this.getLogInfo()
-        this.timeID = setInterval(this.getLogInfo, 300)
+        this.timeID = setInterval(() => {
+          if (!this.flag) return
+          this.getLogInfo()
+        }, 300)
       },
       getLogInfo() {
         this.$_api.getStarted.getNodeLog({ id: this.currentRow.id }, (err, res = {}) => {
