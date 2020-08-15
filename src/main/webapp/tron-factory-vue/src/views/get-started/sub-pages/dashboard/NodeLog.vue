@@ -69,17 +69,17 @@
           this.flag = false
 
           if (err) {
-            this.loading = false
             clearInterval(this.timeID)
+            this.loading = false
             return
           }
 
           if (res.status === 0) {
+            clearInterval(this.timeID)
             // empty log
             this.loading = false
             this.isEmptyLogs = true
             this.logList = []
-            clearInterval(this.timeID)
 
             this.$notify.info({
               title: '提示',
@@ -89,9 +89,15 @@
           } else if (res.status === 2) {
             // loaded all log
             this.loading = false
-            this.logList = (res.logInfo || []).map(log => JSON.parse(log))
+            try {
+              this.logList = (res.logInfo || []).map((log, index) => {
+                console.log('log - ', index, ' : ', log)
+                return JSON.parse(log)
+              })
+            } catch (e) {
+              console.log('error: ', e)
+            }
             clearInterval(this.timeID)
-
           } else if (res.status === 1) {
             // loading log
             try {
@@ -100,7 +106,6 @@
               console.log('error: ', e)
             }
             this.flag = true
-
           } else {
             this.loading = false
             clearInterval(this.timeID)
