@@ -90,10 +90,7 @@
             // loaded all log
             this.loading = false
             try {
-              this.logList = (res.logInfo || []).map((log, index) => {
-                console.log('log - ', index, ' : ', log)
-                return JSON.parse(log)
-              })
+              this.logList = (res.logInfo || []).map(log => JSON.parse(log))
             } catch (e) {
               console.log('error: ', e)
             }
