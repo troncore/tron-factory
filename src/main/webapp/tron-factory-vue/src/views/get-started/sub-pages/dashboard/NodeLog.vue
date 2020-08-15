@@ -8,6 +8,7 @@
       <div class="title">
         <b>{{ $t('getStarted.dashboard.logDialogTitle') }} </b>
         <i v-if="loading" class="el-icon-loading"></i>
+        <span v-else-if="!logList.length && isEmptyLogs" class="empty-log"> ( {{ $t('getStarted.dashboard.emptyLog') }} )</span>
       </div>
     </div>
 
@@ -52,64 +53,46 @@
     },
 
     created () {
-      this.init()
+      this.pollLogInfo()
     },
     destroyed () {
+      this.flag = false
       clearInterval(this.timeID)
     },
 
     methods: {
-      init () {
-        this.getLogInfo()
-        this.timeID = setInterval(() => {
-          if (!this.flag) return
-          this.getLogInfo()
-        }, 300)
+      pollLogInfo () {
+        this.timeID = setTimeout(this.getLogInfo, 300)
       },
+
       getLogInfo() {
+        if (!this.flag) return
+
+        this.loading = true
         this.$_api.getStarted.getNodeLog({ id: this.currentRow.id }, (err, res = {}) => {
-          if (!this.flag) return
+          this.loading = false
           this.flag = false
 
-          if (err) {
-            clearInterval(this.timeID)
-            this.loading = false
-            return
-          }
+          if (err) return
 
-          if (res.status === 0) {
-            clearInterval(this.timeID)
-            // empty log
-            this.loading = false
-            this.isEmptyLogs = true
-            this.logList = []
-
-            this.$notify.info({
-              title: '提示',
-              message: '暂无日志',
-            })
-
-          } else if (res.status === 2) {
-            // loaded all log
-            this.loading = false
-            try {
-              this.logList = (res.logInfo || []).map(log => JSON.parse(log))
-            } catch (e) {
-              console.log('error: ', e)
-            }
-            clearInterval(this.timeID)
-          } else if (res.status === 1) {
-            // loading log
-            try {
-              this.logList = (res.logInfo || []).map(log => JSON.parse(log))
-            } catch (e) {
-              console.log('error: ', e)
-            }
+          if (res.status === 1) {
             this.flag = true
-          } else {
-            this.loading = false
-            clearInterval(this.timeID)
+            this.pollLogInfo()
           }
+
+          if (res.status === 0) this.isEmptyLogs = true
+
+          this.logList = (res.logInfo || []).map((log, index) => {
+            try {
+              return typeof log === 'string' && JSON.parse(log)
+            } catch (e) {
+              console.log('log: ', index, log)
+              console.log()
+              console.log('error: ', e)
+              return false
+            }
+          }).filter(Boolean)
+
         })
       },
     }
@@ -121,6 +104,11 @@
   width: 800px;
   .el-dialog__header {
     padding: 8px;
+
+    .empty-log {
+      font-size: 12px;
+      color: $black-light(.8);
+    }
   }
   .el-dialog__body {
     padding: 0;
