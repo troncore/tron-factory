@@ -35,7 +35,7 @@
     data () {
       return {
         logList:[],
-        isEmptyLogs: true,
+        isEmptyLogs: false,
         loading: true,
         flag: true, // to request next log and avoid multi-request when net is slow
         timeID: null,
