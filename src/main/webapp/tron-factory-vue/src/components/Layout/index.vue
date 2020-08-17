@@ -11,9 +11,7 @@
 
       <div class="app-main">
         <transition name="fade" mode="out-in">
-          <keep-alive :include="['explorer']">
-            <router-view />
-          </keep-alive>
+          <router-view />
         </transition>
       </div>
     </div>

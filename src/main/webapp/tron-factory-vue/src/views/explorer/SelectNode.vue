@@ -1,10 +1,10 @@
 <template>
   <el-dialog
     :visible.sync="dialogVisible"
-    custom-class="im-dialog"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    width="680px"
+    custom-class="im-dialog"
+    width="600px"
     center>
     <div slot="title" class="dialog-header">
       <div class="title">{{ $t('explorer.configNode') }}</div>
@@ -15,7 +15,7 @@
         <el-form-item prop="nodeURL">
           <el-select v-model="form.nodeURL" style="width: 100%;" clearable filterable :placeholder="$t('explorer.selectNodeURLPlaceholder')">
             <el-option
-              v-for="item in deployedNodeList"
+              v-for="item in nodeList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -25,10 +25,11 @@
       </el-form>
     </div>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button class="im-button" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button class="im-button" type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
+    <div slot="footer" class="dialog-footer align-right">
+      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
+
   </el-dialog>
 </template>
 
@@ -48,12 +49,9 @@
           nodeURL: '',
         },
         formRules: {
-          nodeURL: [
-            { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change' }
-          ]
+          nodeURL: { required: true, message: this.$t('base.pleaseSelect'), trigger: 'change' }
         },
-        nodeInfo: '',
-        deployedNodeList: [],
+        nodeList: [],
         loading: false
       }
     },
@@ -67,7 +65,7 @@
         }
       }
     },
-    activated () {
+    created () {
       this.getDeployedNode()
     },
     methods: {
@@ -75,7 +73,7 @@
         this.$_api.explorer.getDeployedNode({}, (err, res = {}) => {
           if (err) return
           let deployedIpList = res && res.deployedIpList || []
-          this.deployedNodeList = deployedIpList.map(item => ({ label: item, value: item, }))
+          this.nodeList = deployedIpList.map(item => ({ label: item, value: item, }))
         })
       },
       handleSubmit () {

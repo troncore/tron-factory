@@ -1,5 +1,5 @@
 <template>
-  <div class="block-chain-info">
+  <div class="chain-info">
     <div class="info-header">
       <div class="line-item">
         <div class="info-item"></div>
@@ -47,7 +47,7 @@
 <script>
 const TIME_IDs = []
 export default {
-  name: "block-chain-info",
+  name: "chain-info",
   props: {
     configForm: Object,
   },
@@ -68,12 +68,6 @@ export default {
   },
   created () {
     this.getBlockChainInfo()
-  },
-  activated () {
-    this.getBlockChainInfo()
-  },
-  deactivated () {
-    this.clearAllTimeout()
   },
   destroyed() {
     this.clearAllTimeout()
@@ -144,7 +138,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.block-chain-info {
+.chain-info {
   font-size: 14px;
   color: font-color();
 
