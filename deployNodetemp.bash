@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 APP="java-tron-1.0.0"
 success="<remark class='success'>DEPLOY SUCCESS</remark>"
-failed="<remark class='success'>DEPLOY FAILED</remark>"
+failed="DEPLOY FAILED"
 noCheck="StrictHostKeyChecking no"
 Program="program.FullNode"
 

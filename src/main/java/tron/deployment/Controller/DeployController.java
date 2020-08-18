@@ -565,17 +565,13 @@ public class DeployController {
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt;
 
-                while ((lineTxt = bufferedReader.readLine()) != null) {
+                while ((lineTxt = bufferedReader.readLine()) != null ) {
                     result.add(lineTxt);
                     status = 1;
-//                    if(lineTxt.contains(Common.deploySuccessStatus)) {
-
-//                    }
-//                    if(lineTxt.contains(Common.deployFailStatus)) {
-//                        status = -1;
-//                    }
+                    if(lineTxt.contains("DEPLOY SUCCESS") || lineTxt.contains("DEPLOY FAILED")){
+                        status = 2;
+                    }
                 }
-                status = 2;
                 bufferedReader.close();
                 read.close();
 
