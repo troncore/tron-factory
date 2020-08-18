@@ -1,7 +1,7 @@
 <template>
   <div class="node-add-edit">
     <div class="page-title">{{ $t(this.isAddPage ? 'getStarted.nodesManage.addNode': 'getStarted.nodesManage.editNode') }}</div>
-    <el-form ref="form" :rules="formRules" :model="form" size="medium" label-width="150px" label-position="left">
+    <el-form ref="form" :rules="formRules" :model="form" size="medium" label-width="160px" label-position="left">
       <div class="chain-info im-card">
         <div class="card-header">{{ $t('getStarted.nodesManage.serverInfo') }}</div>
         <div class="card-body">
@@ -21,7 +21,7 @@
         <!-- shh config -->
         <div class="card-header">{{ $t('getStarted.nodesManage.sshInfo') }}</div>
         <div class="card-body">
-          <el-form-item prop="sshConnectType">
+          <el-form-item prop="sshConnectType" class="is-required">
             <span slot="label">{{ $t('getStarted.nodesManage.sshConnectType') }}</span>
             <el-radio v-model="form.sshConnectType" :label="2">{{ $t('getStarted.nodesManage.byPublicKey') }}</el-radio>
             <el-radio v-model="form.sshConnectType" :label="1">{{ $t('getStarted.nodesManage.byPassword') }}</el-radio>
