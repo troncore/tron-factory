@@ -74,7 +74,7 @@ log "" "<br/>"
 
 #创建java-tron目录
 start_create=${timestamp}
-log title "Creating the directory"
+log title "Creating the directory..."
 log sub-title "delete the original java-tron file"
 log "" "$ ssh -p $2 $3@$1 -o ${noCheck} rm -rf java-tron-${10}-$7"
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron-${10}-$7"
@@ -94,7 +94,7 @@ log "" "<br/>"
 
 #上传文件
 start_upload=${timestamp}
-log title "Uploading files"
+log title "Uploading files..."
 
 #上传java-tron-1.0.0.zip
 log sub-title "uploading java-tron-1.0.0.zip"
@@ -185,7 +185,7 @@ log "" "<br/>"
 
 #部署节点
 start_deploy=${timestamp}
-log title "Deploying node"
+log title "Deploying node..."
 
 #判断节点类型
 log sub-title "Determining the node type"
