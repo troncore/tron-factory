@@ -74,7 +74,7 @@ log "" "<br/>"
 
 #创建java-tron目录
 start_create=${timestamp}
-log title "Creating the directory"
+log title "Creating the directory..."
 log sub-title "delete the original java-tron file"
 log "" "$ ssh -p $2 $3@$1 -o ${noCheck} rm -rf java-tron-${11}-$8"
 /usr/bin/expect <<lsp
@@ -132,7 +132,7 @@ if [ "$port" = "null" ];then
 continue
 else
 #远程检查端口占用
-log "" "ssh -p $2 $3@$1 netstat -an|grep $port > ~/java-tron-${11}-$8/checkPort.log"
+log "" "$ ssh -p $2 $3@$1 netstat -an|grep $port > ~/java-tron-${11}-$8/checkPort.log"
 /usr/bin/expect <<lsp
 log_user 0
 spawn ssh -p $2 $3@$1
@@ -149,7 +149,7 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 #检查结果传到本地
-log "" "scp -P $2 $3@$1:~/java-tron-${11}-$8/checkPort.log /tmp/"
+log "" "$ scp -P $2 $3@$1:~/java-tron-${11}-$8/checkPort.log /tmp/"
 /usr/bin/expect <<lsp
   log_user 0
   set timeout 60
@@ -164,7 +164,7 @@ log "" "scp -P $2 $3@$1:~/java-tron-${11}-$8/checkPort.log /tmp/"
   }
   expect eof
 lsp
-log "" "cat /tmp/checkPort.log"
+log "" "$ cat /tmp/checkPort.log"
 result=`cat /tmp/checkPort.log`
 if [ ! -z "$result" ]; then
   log_error "" "The port '$port' is occupied!"
@@ -193,7 +193,7 @@ log "" "<br/>"
 
 #上传文件
 start_upload=${timestamp}
-log title "Uploading files"
+log title "Uploading files..."
 
 #上传java-tron-1.0.0.zip
 log sub-title "uploading java-tron-1.0.0.zip"
@@ -416,7 +416,7 @@ log "" "<br/>"
 
 #部署节点
 start_deploy=${timestamp}
-log title "Deploying node"
+log title "Deploying node..."
 
 #判断节点类型
 log sub-title "Determining the node type"
