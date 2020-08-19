@@ -78,7 +78,7 @@ log title "Creating the directory"
 log sub-title "delete the original java-tron file"
 log "" "$ ssh -p $2 $3@$1 -o ${noCheck} rm -rf java-tron-${10}-$7"
 ssh -p $2 $3@$1 -o "${noCheck}" "rm -rf java-tron-${10}-$7"
-log sub-title "creating the directory: java-tron-${10}-$7"
+log sub-title "creating the directory: ~/java-tron-${10}-$7"
 log "" "$ ssh -p $2 $3@$1 mkdir java-tron-${10}-$7"
 result=`ssh -p $2 $3@$1 "mkdir java-tron-${10}-$7" 2>&1`
 if [ -z "$result" ];then

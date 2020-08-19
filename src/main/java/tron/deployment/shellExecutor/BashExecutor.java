@@ -23,7 +23,7 @@ public class BashExecutor {
             if(sshPassword.equals("")){
                 absolutePath = System.getProperty("user.dir").concat("/deployNodetemp.bash");
             }else{
-                absolutePath = System.getProperty("user.dir").concat("/deployNodePWD.bash");
+                absolutePath = System.getProperty("user.dir").concat("/deployNodePWDtemp.bash");
             }
             String configPath = String.format("%s_%s", Common.configFiled, id.toString());
             String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword, id.toString()};
