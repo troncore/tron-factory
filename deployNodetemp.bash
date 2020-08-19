@@ -108,6 +108,18 @@ else
   exit
 fi
 
+#解压java-tron-1.0.0.zip
+log sub-title "unzipping java-tron-1.0.0.zip"
+log "" "$ ssh -p $2 $3@$1 cd java-tron-${10}-$7&&unzip -o ./${APP}.zip"
+result=`ssh -p $2 $3@$1 "cd java-tron-${10}-$7&&unzip -o ./${APP}.zip > /dev/null"`
+if [ "$?" != "0" ]; then
+  log_error "" "unzip java-tron-1.0.0.zip failed, unzip cmd is not installed!"
+  log_error "" "${failed}"
+  exit
+else
+  log "" "unzip java-tron-1.0.0.zip successfully"
+fi
+
 #上传config.conf
 log sub-title "Uploading config.conf"
 log "" "$ scp -P $2 $5 $3@$1:./java-tron-${10}-$7/config.conf"
@@ -169,22 +181,6 @@ else
 fi
 end_upload=${timestamp}
 log sub-title "finish uploading" "$((end_upload-start_upload))"s
-log "" "<br/>"
-
-#解压java-tron-1.0.0.zip
-start_unzip=${timestamp}
-log title "Unzipping java-tone-1.0.0.zip"
-log "" "$ ssh -p $2 $3@$1 cd java-tron-${10}-$7&&unzip -o ./${APP}.zip"
-result=`ssh -p $2 $3@$1 "cd java-tron-${10}-$7&&unzip -o ./${APP}.zip > /dev/null"`
-if [ "$?" != "0" ]; then
-  log_error "" "unzip java-tron-1.0.0.zip failed, unzip cmd is not installed!"
-  log_error "" "${failed}"
-  exit
-else
-  log "" "unzip java-tron-1.0.0.zip successfully"
-fi
-end_unzip=${timestamp}
-log sub-title "finish unzipping" "$((end_unzip-start_unzip))"s
 log "" "<br/>"
 
 #部署节点
