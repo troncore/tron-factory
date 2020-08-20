@@ -42,6 +42,8 @@ public class DeployController {
     protected static final Logger logger = LoggerFactory.getLogger("DeployController");
     String[] portOccupied = null;
     NodeController nc  = new NodeController();
+    boolean startDeploy = false;
+
     private String checkNodeStatus(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -299,6 +301,7 @@ public class DeployController {
                 bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"", nodeId+"");
             }
         }
+        startDeploy = false;
         return new Response(ResultCode.OK.code, "").toJSONObject();
 
     }
@@ -356,6 +359,7 @@ public class DeployController {
     @PostMapping(value = "/api/deployNode")
     public JSONObject deploy(@RequestBody LinkedHashMap<String,Object> data) throws CipherException, IOException, InterruptedException {
 //0: 节点已成功启动； 1: 发布失败，节点未启动成功，请查看日志; 2: 部分节点未启动成功，请查看日志； 3: 当前存在正在启动中的节点，请稍后再试；
+        startDeploy = true;
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -543,6 +547,9 @@ public class DeployController {
     }
 
     //查看部署日志
+    //开始时 startDeploy=false,开始部署时startDeploy=true
+    // 查看日志时，当文件存在且startDeploy=false时，表示日志完成，status=2；当文件存在且startDeploy=true时，表示日志正在加载中，status=1
+    //当文件不存在时，status=0
     @GetMapping(value = "/api/getLogInfo")
     public JSONObject deploy(
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id
@@ -559,6 +566,8 @@ public class DeployController {
         File file = new File(logName);
         List<String> result = new ArrayList<>();
         if (file.isFile() && file.exists()) {
+            if(startDeploy) status = 1;
+            else status = 2;
             try {
                 InputStreamReader read = new InputStreamReader(
                         new FileInputStream(file), Common.encoding);
@@ -567,10 +576,6 @@ public class DeployController {
 
                 while ((lineTxt = bufferedReader.readLine()) != null ) {
                     result.add(lineTxt);
-                    status = 1;
-                    if(lineTxt.contains("DEPLOY SUCCESS") || lineTxt.contains("DEPLOY FAILED")){
-                        status = 2;
-                    }
                 }
                 bufferedReader.close();
                 read.close();
