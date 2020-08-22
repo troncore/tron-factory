@@ -88,6 +88,27 @@ export default {
     },
 
     getNowBlockInfo (oldTimeID) {
+
+      /*this.$_request({
+        url: '/api/proxy',
+        methods: 'get',
+        params: {
+          url: this.configForm.nodeURL + '/wallet/getnowblock',
+          params: {
+            type: this.configForm.nodeType,
+          },
+        },
+        timeout: 10000,
+      }).then(res => {
+
+
+      }).catch(err => {
+
+      })
+
+
+      return*/
+
       this.$_api.explorer.getNowBlockInfo({
         type: this.configForm.nodeType,
         url: this.configForm.nodeURL,

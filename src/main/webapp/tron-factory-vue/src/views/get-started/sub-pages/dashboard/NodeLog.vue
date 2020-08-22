@@ -77,6 +77,7 @@
 
           if (res.status === 1) {
             this.flag = true
+            this.loading = true
             this.pollLogInfo()
           }
 

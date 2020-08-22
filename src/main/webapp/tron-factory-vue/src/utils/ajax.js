@@ -110,5 +110,5 @@ export default {
   },
   delete(url, params, config, callback) {
     this.$http('delete', url, params, config, callback)
-  },
+  }
 }
