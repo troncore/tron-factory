@@ -39,13 +39,15 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="createTime" width="240" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
+          <el-table-column prop="createTime" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
 
-          <el-table-column prop="operate" width="240" :label="$t('base.operate')" align="center">
+          <el-table-column prop="operate" :label="$t('base.operate')" align="center">
             <template slot-scope="scope">
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('base.view') }}</el-button>
               <el-divider direction="vertical"></el-divider>
               <el-button :disabled="scope.row.deployStatus === 1" type="text" @click="handleConfig(scope.row)">{{ $t('getStarted.dashboard.nodeConfig') }}</el-button>
+              <el-divider direction="vertical"></el-divider>
+              <el-button type="text" disabled @click="handleReset(scope.row)">{{ $t('base.reset') }}</el-button>
               <el-divider direction="vertical"></el-divider>
               <el-button :disabled="scope.row.deployStatus !== 1" type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.stopRunNode') }}

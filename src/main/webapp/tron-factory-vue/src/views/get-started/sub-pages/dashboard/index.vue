@@ -7,7 +7,6 @@
         <div class="op-list">
           <el-button class="im-button mini" type="primary" :disabled="chainStatus !== 0 || deleteLoading" @click="handleUpdate"><i class="el-icon-edit"></i> {{ $t('base.edit') }}</el-button>
           <el-button class="im-button mini" :disabled="chainStatus !== 0 || deleteLoading" @click="handleDelete"><i class="el-icon-delete"></i> {{ $t('base.delete') }}</el-button>
-          <el-button class="im-button mini" :disabled="chainStatus !== 2" @click="handleExplorer"><i class="el-icon-view"></i> {{ $t('getStarted.dashboard.explorer') }}</el-button>
         </div>
       </div>
       <div class="card-body">
@@ -140,11 +139,6 @@
       getNodeList (list) {
         this.nodeList = list
       },
-
-      handleExplorer () {
-        this.$router.push('/explorer')
-      }
-
     }
   }
 </script>
