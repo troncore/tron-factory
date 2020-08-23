@@ -7,14 +7,14 @@
         <div class="card-body">
           <el-form-item prop="ip">
             <span slot="label">{{ $t('getStarted.nodesManage.ip') }}</span>
-            <el-input v-model.trim="form.ip" class="width-400" tabindex="1" :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" clearable />
+            <el-input v-model.trim="form.ip" class="width-350" tabindex="1" :placeholder="$t('getStarted.nodesManage.ipPlaceholder')" clearable />
           </el-form-item>
           <el-form-item prop="listenPort">
             <span slot="label" class="space-between">
               {{ $t('getStarted.nodesManage.listenPort') }}
               <im-tooltip :content="$t('getStarted.nodesManage.listenPortTips')" />
             </span>
-            <el-input v-model.trim="form.listenPort" type="number" min="1" max="65535" class="width-400" tabindex="2" clearable />
+            <el-input v-model.trim="form.listenPort" type="number" min="1" max="65535" class="width-350" tabindex="2" clearable />
           </el-form-item>
         </div>
 
@@ -29,16 +29,16 @@
           <div class="line-item" :class="{'margin-bottom-0': form.sshConnectType === 2}">
             <el-form-item prop="userName" class="inline-block">
               <span slot="label">{{ $t('getStarted.nodesManage.sshUserName') }}</span>
-              <el-input v-model.trim="form.userName" class="width-400" tabindex="3" clearable />
+              <el-input v-model.trim="form.userName" class="width-350" tabindex="3" clearable />
             </el-form-item>
             <el-form-item prop="port" class="inline-block" label-width="100px">
               <span slot="label">{{ $t('getStarted.nodesManage.port') }}</span>
-              <el-input v-model.trim="form.port" type="number" min="1" max="65535" class="width-300" tabindex="4" clearable />
+              <el-input v-model.trim="form.port" class="port-item" type="number" min="1" max="65535" tabindex="4" clearable />
             </el-form-item>
           </div>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
             <span slot="label">{{ $t('getStarted.nodesManage.sshPassword') }}</span>
-            <el-input v-model.trim="form.sshPassword" class="width-400" tabindex="5" clearable />
+            <el-input v-model.trim="form.sshPassword" class="width-350" tabindex="5" clearable />
           </el-form-item>
         </div>
       </div>
@@ -58,35 +58,39 @@
               {{ $t('getStarted.nodesManage.url') }}
               <im-tooltip :content="$t('getStarted.nodesManage.urlTips')" />
             </span>
-            <el-input v-model.trim="form.url" class="width-400" tabindex="6" clearable />
+            <el-input v-model.trim="form.url" class="width-350" tabindex="6" clearable />
           </el-form-item>
           <el-form-item prop="voteCount">
             <span slot="label" class="space-between">
               {{ $t('getStarted.nodesManage.voteCount') }}
               <im-tooltip :content="$t('getStarted.nodesManage.voteCountTips')" />
             </span>
-            <el-input v-model.trim="form.voteCount" class="width-400" tabindex="7" clearable />
+            <el-input v-model.trim="form.voteCount" class="width-350" tabindex="7" clearable />
           </el-form-item>
-          <el-form-item class="address" prop="publicKey">
+          <el-form-item prop="publicKey">
             <span slot="label" class="space-between">
               {{ $t('getStarted.nodesManage.publicKey') }}
               <im-tooltip :content="$t('getStarted.nodesManage.publicKeyTips')" />
             </span>
-            <el-input v-model.trim="form.publicKey" class="width-400" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
+            <div class="address-item">
+              <el-input v-model.trim="form.publicKey" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')">
+                <el-button slot="append" type="primary" class="one-key" @click="handleOneKey">{{ $t('getStarted.nodesManage.oneKey') }}</el-button>
+              </el-input>
+            </div>
           </el-form-item>
 
-          <el-form-item class="private-key margin-bottom-0" prop="privateKey">
+          <el-form-item class="margin-bottom-0" prop="privateKey">
             <span slot="label" class="space-between">
               {{ $t('getStarted.nodesManage.privateKey') }}
               <im-tooltip :content="$t('getStarted.nodesManage.privateKeyTips')" />
             </span>
             <el-input
-              v-model.trim="form.privateKey"
-              class="width-600"
-              tabindex="9"
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4}"
-              :placeholder="$t('getStarted.nodesManage.privateKeyPlaceholder')"/>
+                v-model.trim="form.privateKey"
+                tabindex="9"
+                class="private-key"
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                :placeholder="$t('getStarted.nodesManage.privateKeyPlaceholder')"/>
           </el-form-item>
         </div>
       </div>
@@ -120,8 +124,8 @@
           // TODO：删除以下测试数据
           url: 'http://baidu.com',
           voteCount: '1000001',
-          publicKey: 'TRD77TEoSW1Uo2Y4ukqdAtQP9WPgYTHshm',
-          privateKey: '8452D502EC250C89704FCB2CA9CA5D0F1667A0194133553227D35BD6691B62A7',
+          publicKey: '',
+          privateKey: '',
         },
         nodeInfo: {}, // assign when edit
         tempPublicKey: '', // to compare whether it change origin publicKey
@@ -350,6 +354,17 @@
 
       handleCancel () {
         history.back()
+      },
+
+      handleOneKey () {
+        if (this.form.publicKey || this.form.privateKey) return
+
+        this.$_api.getStarted.getOneKey({ }, (err, res = {}) => {
+          if (err) return
+          this.form.publicKey = res.publicKey
+          this.form.privateKey = res.privateKey
+        })
+
       }
     }
   }
@@ -384,16 +399,32 @@
   }
 }
 
-.width-300 {
-  width: 200px
+.el-form {
+  .address-item {
+
+    .el-input {
+      width: 450px
+    }
+    .one-key {
+      width: 100px;
+    }
+  }
+
+  .port-item {
+    width: 200px
+  }
+
+  .private-key {
+    width: 700px;
+  }
+
+  .margin-bottom-0 {
+    margin-bottom: 0;
+  }
+
+  .width-350 {
+    width: 350px
+  }
 }
-.width-400 {
-  width: 350px
-}
-.width-600 {
-  width: 700px
-}
-.margin-bottom-0 {
-  margin-bottom: 0;
-}
+
 </style>

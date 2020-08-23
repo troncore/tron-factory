@@ -132,6 +132,7 @@ export default {
     voteCountTips: 'Enter the number of votes for the SR. The number of votes determines the block producing order.',
     voteCountPlaceholder: 'Please input vote count',
     voteCountCheckMax: 'Vote Count exceeds maximum',
+    oneKey: '自动生成',
     publicKey: 'Address',
     publicKeyTips: 'Enter the address of the SR. The address must be Base58Check encoding.',
     publicKeyPlaceholder: 'Please input the address with Base58Check encoded',

@@ -13,8 +13,9 @@ export default {
     getNodeInfo: '/api/nodeInfo',
     canDeleteNode: '/api/canDeleteNode',
     stopNode: '/api/stopNode',
-    getNodeLog: prefix + '/api/getLogInfo',
+    getNodeLog: '/api/getLogInfo',
     checkNode: '/api/checkNode',
+    getOneKey: '/api/convertKey',
 
     // node-config
     getQuickConfig: '/api/quickConfig',

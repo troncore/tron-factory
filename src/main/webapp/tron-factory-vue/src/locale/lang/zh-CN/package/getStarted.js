@@ -133,6 +133,7 @@ export default {
     voteCountTips: '超级代表的投票数量，确定超级代表的排序',
     voteCountPlaceholder: '请输入对应投票数量',
     voteCountCheckMax: 'Vote Count 填写额超过最大值',
+    oneKey: '自动生成',
     publicKey: 'Address',
     publicKeyTips: 'Base58Check 地址',
     publicKeyPlaceholder: '请输入格式为 Base58Check 的地址',
