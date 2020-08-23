@@ -41,7 +41,7 @@
 
           <el-table-column prop="createTime" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
 
-          <el-table-column prop="operate" :label="$t('base.operate')" align="center">
+          <el-table-column prop="operate" :label="$t('base.operate')" align="center"  width="300">
             <template slot-scope="scope">
               <el-button type="text" @click="handleDetail(scope.row)">{{ $t('base.view') }}</el-button>
               <el-divider direction="vertical"></el-divider>
