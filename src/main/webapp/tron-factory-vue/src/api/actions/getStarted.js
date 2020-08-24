@@ -24,6 +24,9 @@ export default {
     getDBConfig: '/api/dbconfig',
     getP2PConfig: '/api/p2pConfig',
     getPluginConfig: '/api/pluginConfig',
+
+    resetNode: '/api/resetNode',
+    runNodeAgain: '/api/runNodeAgain',
   },
 
   post: {

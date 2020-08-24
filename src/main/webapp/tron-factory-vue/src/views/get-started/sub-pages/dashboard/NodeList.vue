@@ -35,7 +35,8 @@
           <el-table-column prop="deployStatus" :label="$t('getStarted.dashboard.deployStatus')" align="center">
             <template slot-scope="scope">
               <el-tag size="mini" type="success" v-if="scope.row.deployStatus === 1">{{$t('getStarted.dashboard.deploySuccess')}}</el-tag>
-              <el-tag size="mini" type="info" v-else>{{$t('getStarted.dashboard.deployStop')}}</el-tag>
+              <el-tag size="mini" type="info"  v-else-if="scope.row.deployStatus === 0">{{$t('getStarted.dashboard.deployStop')}}</el-tag>
+              <el-tag size="mini" type="warning"  v-else>ERROR</el-tag>
             </template>
           </el-table-column>
 
@@ -43,16 +44,30 @@
 
           <el-table-column prop="operate" :label="$t('base.operate')" align="center"  width="300">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleDetail(scope.row)">{{ $t('base.view') }}</el-button>
-              <el-divider direction="vertical"></el-divider>
-              <el-button :disabled="scope.row.deployStatus === 1" type="text" @click="handleConfig(scope.row)">{{ $t('getStarted.dashboard.nodeConfig') }}</el-button>
-              <el-divider direction="vertical"></el-divider>
-              <el-button type="text" disabled @click="handleReset(scope.row)">{{ $t('base.reset') }}</el-button>
-              <el-divider direction="vertical"></el-divider>
-              <el-button :disabled="scope.row.deployStatus !== 1" type="text" :loading="stopIndexs.includes(scope.$index)" @click="handleStop(scope.row, scope.$index)">
+              <!-- 停止/继续 -->
+              <el-button  v-if="!scope.row.isRunned" :disabled="scope.row.deployStatus !== 1" type="text" @click="handleStop(scope.row, scope.$index)" :loading="stopIndexs.includes(scope.$index)">
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.stopRunNode') }}
               </el-button>
+              <el-button v-else type="text" :disabled="deployLoading" @click="handleRerun(scope.row, scope.$index)" :loading="reRunIndexs.includes(scope.$index)">
+                {{ $t(reRunIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.continueRunNode') }}
+              </el-button>
               <el-divider direction="vertical"></el-divider>
+
+              <!-- 详情 -->
+              <el-button type="text" @click="handleDetail(scope.row)">{{ $t('base.detail') }}</el-button>
+              <el-divider direction="vertical"></el-divider>
+
+              <!-- 配置 -->
+              <el-button :disabled="scope.row.deployStatus === 1" type="text" @click="handleConfig(scope.row)">{{ $t('getStarted.dashboard.nodeConfig') }}</el-button>
+              <el-divider direction="vertical"></el-divider>
+
+              <!-- 重置 -->
+              <el-button :disabled="scope.row.deployStatus === 1" type="text" @click="handleReset(scope.row, scope.$index)" :loading="resetIndexs.includes(scope.$index)">
+                {{ $t(resetIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.resetNode') }}
+              </el-button>
+              <el-divider direction="vertical"></el-divider>
+
+              <!-- 日记 -->
               <el-button type="text" @click="handleLog(scope.row)"><span :class="{'color-danger': scope.row.isError}">{{ $t('base.logs') }}</span></el-button>
             </template>
           </el-table-column>
@@ -90,6 +105,8 @@
         deployNodes: [],
         deployNodesIds: '',
         stopIndexs: [],
+        reRunIndexs: [],
+        resetIndexs: [],
         logDialogVisible: false,
         deployDialogVisible: false,
         deployLoading: false,
@@ -168,8 +185,6 @@
           cancelButtonText: this.$t('base.cancel'),
           center: true,
           customClass: 'im-message-box',
-          cancelButtonClass: 'im-message-cancel-button',
-          confirmButtonClass: 'im-message-confirm-button',
         }).then(() => this.stopNode(row, index))
           .catch(err => console.log('err: ', err))
       },
@@ -188,6 +203,38 @@
         this.logDialogVisible = true
         this.currentRow = row
       },
+
+      handleReset(row, index) {
+        this.$confirm(this.$t('getStarted.dashboard.resetNodeTips'), this.$t('base.tips'), {
+          confirmButtonText: this.$t('base.confirm'),
+          cancelButtonText: this.$t('base.cancel'),
+          center: true,
+          customClass: 'im-message-box',
+        }).then(() => {
+
+          this.resetIndexs.push(index)
+          this.$_api.getStarted.resetNode({ id: row.id }, err => {
+            let _index = this.resetIndexs.indexOf(index)
+            this.resetIndexs.splice(_index, 1)
+
+            if (err) return
+
+            this.getNodeList()
+          })
+
+        }).catch(err => console.log('err: ', err))
+      },
+
+      handleRerun (row, index) {
+        this.reRunIndexs.push(index)
+        this.$_api.getStarted.runNodeAgain({ id: row.id }, err => {
+          let _index = this.reRunIndexs.indexOf(index)
+          this.reRunIndexs.splice(_index, 1)
+
+          if (err) return
+          this.getNodeList()
+        })
+      }
 
     }
   }

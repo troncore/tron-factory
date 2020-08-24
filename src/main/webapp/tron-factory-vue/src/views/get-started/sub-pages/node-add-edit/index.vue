@@ -58,7 +58,7 @@
               {{ $t('getStarted.nodesManage.url') }}
               <im-tooltip :content="$t('getStarted.nodesManage.urlTips')" />
             </span>
-            <el-input v-model.trim="form.url" class="width-350" tabindex="6" clearable />
+            <el-input v-model.trim="form.url" class="width-350" tabindex="6" clearable placeholder="http://" />
           </el-form-item>
           <el-form-item prop="voteCount">
             <span slot="label" class="space-between">
@@ -120,9 +120,7 @@
           userName: '',
           sshPassword: '',
           isSR: true,
-
-          // TODO：删除以下测试数据
-          url: 'http://baidu.com',
+          url: 'http://',
           voteCount: '1000001',
           publicKey: '',
           privateKey: '',
@@ -357,8 +355,6 @@
       },
 
       handleOneKey () {
-        if (this.form.publicKey || this.form.privateKey) return
-
         this.$_api.getStarted.getOneKey({ }, (err, res = {}) => {
           if (err) return
           this.form.publicKey = res.publicKey

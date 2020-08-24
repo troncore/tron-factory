@@ -69,8 +69,11 @@ export default {
     deployStatus: 'Node Status',
     deploySuccess: 'Running',
     deployStop: 'Stopped',
+    continueRunNode: 'Start',
     createNodeTime: 'Created Time',
     nodeConfig: 'Config',
+    resetNode: 'Reset',
+    resetNodeTips: '重置节点配置为默认配置',
     stopRunNode: 'Stop',
 
     runNode: 'Deploy',

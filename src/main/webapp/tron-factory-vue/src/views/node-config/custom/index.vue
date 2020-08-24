@@ -11,7 +11,7 @@
 
     <div class="config-title">{{ activeIndex + '. ' + activeStep.title }}</div>
 
-    <component :is="activeStep.component" @prev-step="handlePrevStep" @next-step="handleNextStep"/>
+    <component :is="activeStep.component" :node-info="nodeInfo" @prev-step="handlePrevStep" @next-step="handleNextStep"/>
 
   </div>
 </template>
@@ -25,6 +25,9 @@
       DatabaseConfig: () => import('./components/DatabaseConfig'),
       P2PConfig: () => import('./components/P2PConfig'),
       ModulesConfig: () => import('./components/ModulesConfig'),
+    },
+    props: {
+      nodeInfo: Object,
     },
     data () {
       return {

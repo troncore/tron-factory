@@ -4,7 +4,7 @@
       <el-form ref="database-config-form" :model="form" :rules="formRules" label-position="left" label-width="200px">
 
         <el-form-item :label="$t('nodeConfig.selectDatabaseConfig')" prop="dbEngine">
-          <el-radio-group v-model="form.dbEngine">
+          <el-radio-group v-model="form.dbEngine" :disabled="nodeInfo.isRunned">
             <el-radio :label="'LEVELDB'">LevelDB</el-radio>
             <el-radio :label="'ROCKSDB'">RocksDB</el-radio>
           </el-radio-group>
@@ -51,6 +51,9 @@
 import { formRules } from "@/utils/validate";
 export default {
   name: 'database-config',
+  props: {
+    nodeInfo: Object,
+  },
   data() {
     return {
       form: {

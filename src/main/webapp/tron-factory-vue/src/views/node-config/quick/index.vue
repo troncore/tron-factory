@@ -30,6 +30,9 @@
   export default {
     name: "quick-config",
     components: { ImTooltip },
+    props: {
+      nodeInfo: Object,
+    },
     data () {
       return {
         form: {

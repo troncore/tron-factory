@@ -8,7 +8,7 @@
         <el-tab-pane :label="$t('nodeConfig.customConfig')" name="custom"></el-tab-pane>
       </el-tabs>
 
-      <component :is="activeComponent" />
+      <component :is="activeComponent" :node-info="nodeInfo" />
     </div>
   </div>
 </template>
@@ -21,7 +21,9 @@ export default {
     CustomConfig: () => import('./custom'),
   },
   data () {
-    return {}
+    return {
+      nodeInfo: {},
+    }
   },
   computed: {
     opNodeId () {
@@ -58,9 +60,21 @@ export default {
     hasBlockChain () {
       this.$_api.getStarted.hasBlockChain({}, (err, res) => {
         if (err) return
+
         if (res !== true) this.$router.push('/get-started')
+        else this.getNodeInfo()
+
       })
-    }
+    },
+
+    getNodeInfo () {
+      if (!/\d+/.test(this.opNodeId)) return
+
+      this.$_api.getStarted.getNodeInfo({id: this.opNodeId}, (err, res = {}) => {
+        if (err) return
+        this.nodeInfo = res
+      })
+    },
   }
 }
 </script>
