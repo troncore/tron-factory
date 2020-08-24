@@ -5,8 +5,8 @@
       <div class="card-header">
         <div class="card-title">{{$t('getStarted.dashboard.chainInfo')}}</div>
         <div class="op-list">
-          <el-button class="im-button mini" type="primary" :disabled="chainStatus !== 0 || deleteLoading" @click="handleUpdate"><i class="el-icon-edit"></i> {{ $t('base.edit') }}</el-button>
-          <el-button class="im-button mini" :disabled="chainStatus !== 0 || deleteLoading" @click="handleDelete"><i class="el-icon-delete"></i> {{ $t('base.delete') }}</el-button>
+          <el-button class="im-button mini" type="primary" :disabled="!canOPChain || deleteLoading" @click="handleUpdate"><i class="el-icon-edit"></i> {{ $t('base.edit') }}</el-button>
+          <el-button class="im-button mini" :disabled="!canOPChain || deleteLoading" @click="handleDelete"><i class="el-icon-delete"></i> {{ $t('base.delete') }}</el-button>
         </div>
       </div>
       <div class="card-body">
@@ -53,12 +53,19 @@
           crypto: '',
           p2pVersion: '',
         },
+
         chainStatus: -1, // 0 unrun、1 running、2 runned
         nodeList: [],
         deleteLoading: false,
         timeoutID: null
       }
     },
+    computed: {
+      canOPChain () {
+        return !this.nodeList.length || this.nodeList.every(node => node.deployStatus !== 1 && node.showStop)
+      }
+    },
+
     created () {
       this.getChainInfo()
       this.pollChainStatus()

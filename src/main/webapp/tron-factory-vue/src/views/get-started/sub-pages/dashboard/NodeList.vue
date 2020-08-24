@@ -43,10 +43,11 @@
 
           <el-table-column prop="operate" :label="$t('base.operate')" align="center"  width="300">
             <template slot-scope="scope">
-              <!-- 停止/继续 -->
-              <el-button  v-if="!scope.row.isRunned" :disabled="scope.row.deployStatus !== 1" type="text" @click="handleStop(scope.row, scope.$index)" :loading="stopIndexs.includes(scope.$index)">
+              <!-- 停止 -->
+              <el-button  v-if="scope.row.showStop" :disabled="scope.row.deployStatus !== 1" type="text" @click="handleStop(scope.row, scope.$index)" :loading="stopIndexs.includes(scope.$index)">
                 {{ $t(stopIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.stopRunNode') }}
               </el-button>
+              <!-- 继续 -->
               <el-button v-else type="text" :disabled="deployLoading" @click="handleRerun(scope.row, scope.$index)" :loading="reRunIndexs.includes(scope.$index)">
                 {{ $t(reRunIndexs.includes(scope.$index) ? '' : 'getStarted.dashboard.continueRunNode') }}
               </el-button>
