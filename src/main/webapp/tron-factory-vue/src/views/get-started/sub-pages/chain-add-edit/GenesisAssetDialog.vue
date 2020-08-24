@@ -25,7 +25,7 @@
             {{ $t('getStarted.chainManage.accountTypeLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.accountTypeTips')" />
           </span>
-          <el-select v-model="form.accountType" clearable placeholder=" ">
+          <el-select v-model="form.accountType" style="width: 100%;" clearable placeholder=" ">
             <el-option
               v-for="item in accountTypeOptions"
               :key="item.value"
@@ -43,7 +43,7 @@
           <el-input v-model.trim="form.address" tabindex="27" clearable />
         </el-form-item>
 
-        <el-form-item label="balance" prop="balance">
+        <el-form-item label="balance" prop="balance" class="margin-bottom-0">
           <span slot="label" class="space-between">
             {{ $t('getStarted.chainManage.balanceLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.balanceTips')" />
@@ -54,8 +54,8 @@
     </div>
 
     <div slot="footer" class="dialog-footer align-right">
-      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
+      <el-button class="im-button mini" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button mini" type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
   </el-dialog>
 </template>

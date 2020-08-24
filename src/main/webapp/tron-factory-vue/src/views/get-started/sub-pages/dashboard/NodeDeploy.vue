@@ -16,8 +16,8 @@
     </div>
 
     <div slot="footer" class="dialog-footer align-right">
-      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
+      <el-button class="im-button mini" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button mini" type="primary" @click="handleSubmit" :loading="loading">{{ $t('base.save') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -90,6 +90,7 @@
         this.$_api.getStarted.deployNode({
           ids: this.ids,
           filePath: this.form.filePath,
+          runAgain: false,
         }, (err, res = {}) => {
           this.$emit('update:deployLoading', false)
           this.loading = false

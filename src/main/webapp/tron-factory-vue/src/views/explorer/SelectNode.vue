@@ -26,8 +26,8 @@
     </div>
 
     <div slot="footer" class="dialog-footer align-right">
-      <el-button @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
-      <el-button type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
+      <el-button class="im-button mini" @click="dialogVisible = false">{{ $t('base.cancel') }}</el-button>
+      <el-button class="im-button mini" type="primary" :loading="loading" @click="handleSubmit">{{ $t('base.save') }}</el-button>
     </div>
 
   </el-dialog>
@@ -95,11 +95,8 @@
 
 <style scoped lang="scss">
 .el-dialog {
-  .dialog-content {
-    margin-bottom: 30px;
-  }
-  .node-type {
-    margin-bottom: 10px;
+  .el-form-item {
+    margin-bottom: 0;
   }
 }
 </style>

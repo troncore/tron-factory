@@ -58,7 +58,7 @@ export default {
 
     // 节点列表
     nodeInfo: '节点列表',
-    addNode: '添加节点',
+    addNode: '添加',
     ip: 'IP',
     listenPort: '监听端口',
     nodeType: '节点类型',

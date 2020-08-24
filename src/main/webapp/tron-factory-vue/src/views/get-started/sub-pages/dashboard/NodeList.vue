@@ -4,7 +4,7 @@
       <div class="card-title">{{ $t('getStarted.dashboard.nodeInfo')}}</div>
       <div class="op-list">
         <el-button class="im-button mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
-        <el-button class="im-button mini" size="small" :disabled="!deployNodesIds || deployLoading" @click="handleDeploy()">
+        <el-button class="im-button mini" size="small" :disabled="!deployNodesIds || reRunIndexs.length || deployLoading" @click="handleDeploy()">
           <i :class="deployLoading ? 'el-icon-loading' : 'el-icon-caret-right'"></i> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}
         </el-button>
       </div>
@@ -208,7 +208,6 @@
         this.$confirm(this.$t('getStarted.dashboard.resetNodeTips'), this.$t('base.tips'), {
           confirmButtonText: this.$t('base.confirm'),
           cancelButtonText: this.$t('base.cancel'),
-          center: true,
           customClass: 'im-message-box',
         }).then(() => {
 
@@ -227,11 +226,48 @@
 
       handleRerun (row, index) {
         this.reRunIndexs.push(index)
-        this.$_api.getStarted.runNodeAgain({ id: row.id }, err => {
+
+        this.$_api.getStarted.deployNode({
+          ids: row.id,
+          filePath: 'null',
+          runAgain: true,
+        }, (err, res = {}) => {
+
           let _index = this.reRunIndexs.indexOf(index)
           this.reRunIndexs.splice(_index, 1)
 
           if (err) return
+
+          if (res.hasOwnProperty('status')) {
+            let message = ''
+            switch (res.status) {
+              case 0:
+                message = 'getStarted.dashboard.runSuccessTips'
+                break
+              case 1:
+                message = 'getStarted.dashboard.runFailTips'
+                break
+              case 2:
+                message = 'getStarted.dashboard.runFailSomeTips'
+                break
+              case 3:
+                message = 'getStarted.dashboard.runExistTips'
+                break
+            }
+
+            if (res.status === 0) {
+              this.$notify.success({
+                title: this.$t('base.successful'),
+                message: this.$t(message),
+              })
+            } else {
+              this.$notify.error({
+                title: this.$t('base.warning'),
+                message: this.$t(message),
+              })
+            }
+          }
+
           this.getNodeList()
         })
       }

@@ -36,7 +36,11 @@
       </div>
     </div>
 
-    <node-list :chain-status="chainStatus" @nodeList="getNodeList" @checkChainPublish="checkChainPublish()"/>
+    <node-list
+        :chain-status="chainStatus"
+        @nodeList="getNodeList"
+        @checkChainPublish="checkChainPublish()"
+    />
   </div>
 </template>
 
