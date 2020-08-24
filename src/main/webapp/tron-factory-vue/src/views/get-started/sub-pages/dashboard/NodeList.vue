@@ -35,8 +35,7 @@
           <el-table-column prop="deployStatus" :label="$t('getStarted.dashboard.deployStatus')" align="center">
             <template slot-scope="scope">
               <el-tag size="mini" type="success" v-if="scope.row.deployStatus === 1">{{$t('getStarted.dashboard.deploySuccess')}}</el-tag>
-              <el-tag size="mini" type="info"  v-else-if="scope.row.deployStatus === 0">{{$t('getStarted.dashboard.deployStop')}}</el-tag>
-              <el-tag size="mini" type="warning"  v-else>ERROR</el-tag>
+              <el-tag size="mini" type="info"  v-else>{{$t('getStarted.dashboard.deployStop')}}</el-tag>
             </template>
           </el-table-column>
 

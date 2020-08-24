@@ -103,14 +103,6 @@
       },
 
       handleDelete () {
-        if (~this.nodeList.findIndex(node => node.deployStatus !== 0)) {
-          this.$notify.warning({
-            title: this.$t('base.warning'),
-            message: this.$t('getStarted.dashboard.stopDeleteChain')
-          })
-          return
-        }
-
         this.$confirm(this.$t('getStarted.dashboard.deleteChainWarningTips'), this.$t('base.tips'), {
           cancelButtonText: this.$t('base.cancel'),
           confirmButtonText: this.$t('base.delete'),
