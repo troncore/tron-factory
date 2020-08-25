@@ -228,7 +228,7 @@
         this.reRunIndexs.push(index)
 
         this.$_api.getStarted.deployNode({
-          ids: row.id,
+          ids: row.id + '',
           filePath: 'null',
           runAgain: true,
         }, (err, res = {}) => {
