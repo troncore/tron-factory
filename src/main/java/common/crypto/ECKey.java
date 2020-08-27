@@ -39,6 +39,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 import javax.crypto.KeyAgreement;
+
+import common.crypto.sm2.SM2;
 import lombok.extern.slf4j.Slf4j;
 import org.spongycastle.asn1.ASN1InputStream;
 import org.spongycastle.asn1.ASN1Integer;
@@ -1276,6 +1278,16 @@ public class ECKey implements Serializable, SignInterface {
   @SuppressWarnings("serial")
   public static class MissingPrivateKeyException extends RuntimeException {
 
+  }
+
+  public static SignInterface getGeneratedRandomSign(
+          SecureRandom secureRandom, boolean isECKeyCryptoEngine) {
+    if (isECKeyCryptoEngine) {
+      org.tron.common.crypto.ECKey e = new org.tron.common.crypto.ECKey();
+
+      return new ECKey(secureRandom);
+    }
+    return new SM2(secureRandom);
   }
 
 }

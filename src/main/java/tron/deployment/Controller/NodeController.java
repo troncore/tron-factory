@@ -2,12 +2,14 @@ package tron.deployment.Controller;
 
 import static common.LogConfig.LOG;
 import static common.Util.*;
+import static common.crypto.ECKey.getGeneratedRandomSign;
 import static wallet.Wallet.*;
 
 import com.typesafe.config.Config;
 import common.Args;
 import common.Util;
 import common.Common;
+import common.crypto.SignInterface;
 import common.utils.HttpUtil;
 import config.*;
 
@@ -15,6 +17,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import entity.WitnessEntity;
@@ -862,6 +865,22 @@ public class NodeController {
 
       return new Response(ResultCode.OK.code, "").toJSONObject();
   }
+
+  @GetMapping(value = "/api/convertKey")
+  public JSONObject convertKey() {
+    refresh();
+    SignInterface sign = getGeneratedRandomSign(org.tron.common.utils.Utils.getRandom(),
+            isEckey);
+    byte[] priKey = sign.getPrivateKey();
+    byte[] address = sign.getAddress();
+    String privateKey = Hex.encodeHexString(priKey);
+    String publicKey = encode58Check(address);
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("privateKey", privateKey);
+    jsonObject.put("publicKey", publicKey);
+    return new Response(ResultCode.OK.code, "",jsonObject).toJSONObject();
+  }
+
 
   //查询节点是否成功停止
   private String checkIsStoped(String path) {
