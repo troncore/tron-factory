@@ -48,7 +48,14 @@
             {{ $t('getStarted.chainManage.balanceLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.balanceTips')" />
           </span>
-          <el-input v-model.trim="form.balance" tabindex="28" clearable />
+          <el-input v-model.trim="form.balance" tabindex="28" clearable >
+            <!--
+            <el-select v-model="form.unit" slot="append" style="width:80px;">
+              <el-option label="SUN" value="SUN"></el-option>
+              <el-option label="TRX" value="TRX"></el-option>
+            </el-select>
+            -->
+          </el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -74,6 +81,7 @@ export default {
         accountType: '',
         address: '',
         balance: '',
+        // unit: 'SUN',
       },
       accountTypeOptions: [
         {

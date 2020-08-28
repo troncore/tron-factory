@@ -16,57 +16,47 @@
             clearable />
         </el-form-item>
 
-        <div class="more-form">
-          <el-button type="text" @click="showMore = !showMore">
-            <i class="el-icon-arrow-right"></i>{{ $t('nodeConfig.moreSetting') }}
-          </el-button>
-        </div>
-
-        <el-collapse-transition>
-          <div v-if="showMore">
-            <el-form-item prop="proposalExpireTime">
+        <el-form-item prop="proposalExpireTime">
               <span slot="label">
                 proposalExpireTime
                 <i class="help-tips">({{ $t('nodeConfig.helpTips.blockProposalExpireTime') }}: ms)</i>
               </span>
-              <el-input
-                v-model.trim="form.proposalExpireTime"
-                tabindex="1"
-                type="number"
-                min="1"
-                max="2147483647"
-                clearable />
-            </el-form-item>
+          <el-input
+              v-model.trim="form.proposalExpireTime"
+              tabindex="1"
+              type="number"
+              min="1"
+              max="2147483647"
+              clearable />
+        </el-form-item>
 
-            <el-form-item prop="blockProducedTimeOut">
+        <el-form-item prop="blockProducedTimeOut">
               <span slot="label">
                 producedTimeOut
                 <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i>
               </span>
-              <el-input
-                v-model.trim="form.blockProducedTimeOut"
-                tabindex="1"
-                type="number"
-                min="0"
-                max="100"
-                clearable />
-            </el-form-item>
+          <el-input
+              v-model.trim="form.blockProducedTimeOut"
+              tabindex="1"
+              type="number"
+              min="0"
+              max="100"
+              clearable />
+        </el-form-item>
 
-            <el-form-item prop="minParticipationRate" class="margin-bottom-0">
+        <el-form-item prop="minParticipationRate" class="margin-bottom-0">
               <span slot="label">
                 minParticipationRate
                 <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i>
               </span>
-              <el-input
-                v-model.trim="form.minParticipationRate"
-                tabindex="1"
-                type="number"
-                min="0"
-                max="100"
-                clearable />
-            </el-form-item>
-          </div>
-        </el-collapse-transition>
+          <el-input
+              v-model.trim="form.minParticipationRate"
+              tabindex="1"
+              type="number"
+              min="0"
+              max="100"
+              clearable />
+        </el-form-item>
       </el-form>
     </div>
 
