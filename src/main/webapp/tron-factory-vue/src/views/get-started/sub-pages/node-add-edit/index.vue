@@ -73,9 +73,8 @@
               <im-tooltip :content="$t('getStarted.nodesManage.publicKeyTips')" />
             </span>
             <div class="address-item">
-              <el-input v-model.trim="form.publicKey" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')">
-                <el-button slot="append" type="primary" class="one-key" @click="handleOneKey">{{ $t('getStarted.nodesManage.oneKey') }}</el-button>
-              </el-input>
+              <el-input v-model.trim="form.publicKey" class="width-350" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
+              <el-button @click="handleOneKey">{{ $t('getStarted.nodesManage.oneKey') }}</el-button>
             </div>
           </el-form-item>
 
@@ -399,10 +398,7 @@
   .address-item {
 
     .el-input {
-      width: 450px
-    }
-    .one-key {
-      width: 100px;
+      margin-right: 10px;
     }
   }
 
