@@ -238,7 +238,7 @@
           port: nodeInfo.port || 22,
           sshPassword: nodeInfo.sshPassword || '',
           isSR: nodeInfo.hasOwnProperty('isSR') ? Boolean(nodeInfo.isSR) : true,
-          url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || 'http://',
+          url: JSON.stringify(nodeInfo.url).slice(3).slice(0, -3) || '',
           voteCount: nodeInfo.voteCount || '',
           publicKey: nodeInfo.publicKey || '',
           privateKey: nodeInfo.publicKey ? this.safePrivateKey : '',
