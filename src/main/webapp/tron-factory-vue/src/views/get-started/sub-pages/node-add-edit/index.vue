@@ -193,6 +193,9 @@
           sshPassword: [
             { required: true, message: ' ', trigger: 'change', },
           ],
+          url: [
+            { required: true, message: ' ', trigger: 'change', },
+          ],
           voteCount: [
             { required: true, message: ' ', trigger: 'change', },
             { validator: longIntRange, trigger: 'change', },
