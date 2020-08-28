@@ -8,7 +8,7 @@
       <div class="title">
         <b>{{ $t('getStarted.dashboard.logDialogTitle') }} </b>
         <i v-if="loading" class="el-icon-loading"></i>
-        <span v-else-if="!logList.length && isEmptyLogs" class="empty-log"> ( {{ $t('getStarted.dashboard.emptyLog') }} )</span>
+        <span v-else-if="!logList.length && (logStatus === 0 || logStatus === 2)" class="empty-log"> ( {{ $t('getStarted.dashboard.emptyLog') }} )</span>
       </div>
     </div>
 
@@ -35,6 +35,7 @@
     data () {
       return {
         logList:[],
+        logStatus: '',
         isEmptyLogs: false,
         loading: true,
         flag: true, // to request next log and avoid multi-request when net is slow
@@ -74,6 +75,7 @@
           this.flag = false
 
           if (err) return
+          this.logStatus = res.status
 
           if (res.status === 1) {
             this.flag = true

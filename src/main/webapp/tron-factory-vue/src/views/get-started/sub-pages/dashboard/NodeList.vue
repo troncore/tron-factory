@@ -208,6 +208,7 @@
         this.$confirm(this.$t('getStarted.dashboard.resetNodeTips'), this.$t('base.tips'), {
           confirmButtonText: this.$t('base.confirm'),
           cancelButtonText: this.$t('base.cancel'),
+          center: true,
           customClass: 'im-message-box',
         }).then(() => {
 

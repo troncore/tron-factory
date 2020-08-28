@@ -21,7 +21,7 @@
         <!-- shh config -->
         <div class="card-header">{{ $t('getStarted.nodesManage.sshInfo') }}</div>
         <div class="card-body">
-          <el-form-item prop="sshConnectType" class="is-required">
+          <el-form-item prop="sshConnectType">
             <span slot="label">{{ $t('getStarted.nodesManage.sshConnectType') }}</span>
             <el-radio v-model="form.sshConnectType" :label="2">{{ $t('getStarted.nodesManage.byPublicKey') }}</el-radio>
             <el-radio v-model="form.sshConnectType" :label="1">{{ $t('getStarted.nodesManage.byPassword') }}</el-radio>
@@ -119,7 +119,7 @@
           userName: '',
           sshPassword: '',
           isSR: true,
-          url: 'http://',
+          url: '',
           voteCount: '1000001',
           publicKey: '',
           privateKey: '',
@@ -191,9 +191,6 @@
             ...portBaseLimit
           ],
           sshPassword: [
-            { required: true, message: ' ', trigger: 'change', },
-          ],
-          url: [
             { required: true, message: ' ', trigger: 'change', },
           ],
           voteCount: [

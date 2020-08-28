@@ -13,49 +13,53 @@
             type="number"
             min="1"
             max="2147483647"
+            :disabled="!nodeInfo.showStop"
             clearable />
         </el-form-item>
 
         <el-form-item prop="proposalExpireTime">
-              <span slot="label">
-                proposalExpireTime
-                <i class="help-tips">({{ $t('nodeConfig.helpTips.blockProposalExpireTime') }}: ms)</i>
-              </span>
+          <span slot="label">
+            proposalExpireTime
+            <i class="help-tips">({{ $t('nodeConfig.helpTips.blockProposalExpireTime') }}: ms)</i>
+          </span>
           <el-input
-              v-model.trim="form.proposalExpireTime"
-              tabindex="1"
-              type="number"
-              min="1"
-              max="2147483647"
-              clearable />
+            v-model.trim="form.proposalExpireTime"
+            tabindex="1"
+            type="number"
+            min="1"
+            max="2147483647"
+            :disabled="!nodeInfo.showStop"
+            clearable />
         </el-form-item>
 
         <el-form-item prop="blockProducedTimeOut">
-              <span slot="label">
-                producedTimeOut
-                <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i>
-              </span>
+          <span slot="label">
+            producedTimeOut
+            <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeBlockProducedTimeOut') }}: 0 - 100)</i>
+          </span>
           <el-input
-              v-model.trim="form.blockProducedTimeOut"
-              tabindex="1"
-              type="number"
-              min="0"
-              max="100"
-              clearable />
+            v-model.trim="form.blockProducedTimeOut"
+            tabindex="1"
+            type="number"
+            min="0"
+            max="100"
+            :disabled="!nodeInfo.showStop"
+            clearable />
         </el-form-item>
 
         <el-form-item prop="minParticipationRate" class="margin-bottom-0">
-              <span slot="label">
-                minParticipationRate
-                <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i>
-              </span>
+          <span slot="label">
+            minParticipationRate
+            <i class="help-tips">({{ $t('nodeConfig.helpTips.nodeMinParticipationRate') }}: 0 - 100)</i>
+          </span>
           <el-input
-              v-model.trim="form.minParticipationRate"
-              tabindex="1"
-              type="number"
-              min="0"
-              max="100"
-              clearable />
+            v-model.trim="form.minParticipationRate"
+            tabindex="1"
+            type="number"
+            min="0"
+            max="100"
+            :disabled="!nodeInfo.showStop"
+            clearable />
         </el-form-item>
       </el-form>
     </div>
@@ -70,6 +74,9 @@
 import { formRules } from "@/utils/validate";
 export default {
   name: 'base-config',
+  props: {
+    nodeInfo: Object,
+  },
   data() {
     return {
       form: {
