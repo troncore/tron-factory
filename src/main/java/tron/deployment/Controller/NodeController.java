@@ -349,6 +349,8 @@ public class NodeController {
     newNode.put(Common.dbCustomFiled, "");
     newNode.put(Common.isError, false);
     newNode.put(Common.nodeIdFiled, nodeId);
+//    newNode.put(Common.isFristStart,false);
+    newNode.put(Common.showStop, true);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, id, ipList, listenPort, httpFullNodePort, rpcFullNodePort, false, nodeHttpPortMap, nodeRpcPortMap);
   }
@@ -813,9 +815,10 @@ public class NodeController {
     Long port = (Long) node.get(Common.portFiled);
     String userName = (String) node.get(Common.userNameFiled);
     String sshPassword = (String) node.get(Common.sshPasswordFiled);
+    long nodeId = (long) node.get(Common.nodeIdFiled);
 
     //执行部署脚本
-    bashExecutor.callStopNodeScript(ip, port, userName,id,chainId+"",sshPassword);
+    bashExecutor.callStopNodeScript(ip, port, userName,id,nodeId,sshPassword);
 
     Util util = new Util();
     util.parseConfig(id);
@@ -848,6 +851,8 @@ public class NodeController {
       JSONObject oldNode = Util.getNodeInfo(nodes, id);
       oldNode.put(Common.isDeployedFiled, false);
       oldNode.put(Common.deployStatusFiled, 0);
+      //显示停止按钮
+      oldNode.put(Common.showStop, false);
       deployController.deleteNode(id);
       json = readJsonFile();
       JSONArray nowNodes = (JSONArray) json.get(Common.nodesFiled);

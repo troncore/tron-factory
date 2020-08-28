@@ -204,7 +204,7 @@ public class DeployController {
         return new Response(ResultCode.OK.code, deployedIpObj).toJSONObject();
     }
 
-    public JSONObject deployNode(long id, String filePath){
+    public JSONObject deployNode(long id, String filePath, boolean runAgain){
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
         if (Objects.isNull(nodes)) {
@@ -224,6 +224,12 @@ public class DeployController {
         //更新节点部署日志查看状态
         JSONObject node = Util.getNodeInfo(nodes, id);
         boolean isSR = (Boolean) node.get(Common.isSRFiled);
+//        boolean isFirstStart = (boolean) node.get(Common.isFristStart);
+        //判断节点是否启动过，若启动过，则可以出现继续运行节点
+        /*if(!isFirstStart){
+            node.put(Common.isFristStart, true);
+            node.put(Common.showStop, true);
+        }*/
         node.put(Common.ifShowLogField, true);
         deleteNode(id);
         json = readJsonFile();
@@ -290,15 +296,15 @@ public class DeployController {
 
         if (Objects.nonNull(privateKey)) {
             if(!solidityEnable){
-                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"", nodeId+"");
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null",nodeId+"", runAgain);
             }else{
-                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"", nodeId+"");
+                bashExecutor.callScript(ip, port, userName, path, privateKey, id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"",nodeId+"", runAgain);
             }
         } else {
             if(!solidityEnable){
-                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null", chainId+"", nodeId+"");
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", "null", listenPort+"", rpcPort+"", "null",nodeId+"", runAgain);
             }else{
-                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"", chainId+"", nodeId+"");
+                bashExecutor.callScript(ip, port, userName, path, "null", id, plugin, sshPassword, dbCustom, fullNodePort+"", solidityPort+"", listenPort+"", rpcPort+"", rpcsolidityPort+"",nodeId+"", runAgain);
             }
         }
         startDeploy = false;
@@ -372,6 +378,7 @@ public class DeployController {
         }
         String ids = (String) data.get("ids");
         String filePath = StringUtils.deleteWhitespace((String) data.get("filePath"));
+        boolean runAgain = (boolean) data.get("runAgain");
 
         //判断区块链是否已发布，未发布时判断SR节点数量是否>=1
         String[] split = ids.split(",");//以逗号分割
@@ -396,6 +403,7 @@ public class DeployController {
                 int SRCount = 0;
                 JSONObject node = Util.getNodeInfo(nodes, idArr[count]);
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
+//                boolean isFirstStart = (boolean) node.get(Common.isFristStart);
                 if (isSR) {
                     SRCount += 1;
                     if (SRCount == 1) {//初始节点
@@ -420,7 +428,7 @@ public class DeployController {
                             return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
                         }
 
-                        deployNode(idArr[count], filePath);
+                        deployNode(idArr[count], filePath, runAgain);
                         if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                             HashMap<Object, Object> map = new HashMap<>();
                             map.put(Common.isError, true);
@@ -442,6 +450,9 @@ public class DeployController {
                             map.put(Common.isDeployedFiled, true);
                             map.put(Common.deployStatusFiled, 1);
                             map.put(Common.isError, false);
+                            //显示停止按钮
+                            map.put(Common.showStop, true);
+
                             updateNodeInfo(idArr[count], map, idSR);
 
                         }
@@ -459,7 +470,7 @@ public class DeployController {
 
                 for (int count = 0; count < idArr.length ; count++) {
                     if(idArr[count] != idSR){
-                        deployNode(idArr[count], filePath);
+                        deployNode(idArr[count], filePath, runAgain);
                         if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                             map.put(Common.isError, true);
                             updateNodeInfo(idArr[count], map, firstId);
@@ -469,6 +480,8 @@ public class DeployController {
                             map.put(Common.isDeployedFiled, true);
                             map.put(Common.deployStatusFiled, 1);
                             map.put(Common.isError, false);
+                            //显示停止按钮
+                            map.put(Common.showStop, true);
                             updateNodeInfo(idArr[count], map, firstId);
                         }
                         if(count == idArr.length-1 && deployStatus != 2){
@@ -505,7 +518,7 @@ public class DeployController {
                     return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
                 }
 
-                deployNode(idArr[count], filePath);
+                deployNode(idArr[count], filePath, runAgain);
                 if (!checkIsDeploy(idArr[count])) {//如果未成功启动
                     HashMap<Object, Object> map = new HashMap<>();
                     map.put(Common.isError, true);
@@ -517,6 +530,8 @@ public class DeployController {
                     map.put(Common.isDeployedFiled, true);
                     map.put(Common.deployStatusFiled, 1);
                     map.put(Common.isError, false);
+                    //显示停止按钮
+                    map.put(Common.showStop, true);
                     updateNodeInfo(idArr[count], map, firstId);
                 }
                 if(count == idArr.length-1 && deployStatus != 2){
@@ -628,4 +643,90 @@ public class DeployController {
 
         return nc.updateNodesInfo(newNodes, json, ipList);
     }
+
+    @GetMapping(value = "/api/runNodeAgain")
+    public JSONObject runNodeAgain(
+            @RequestParam(value = "id", required = false, defaultValue = "1") Long id
+    ) {
+        return deployNode(id, "null", true);
+    }
+
+    @GetMapping(value = "/api/resetNode")
+    public JSONObject resetNode(
+            @RequestParam(value = "id", required = true, defaultValue = "1") Long id
+    ) {
+        //重置节点的配置文件
+        ConfigGenerator configGenerator = new ConfigGenerator();
+        boolean result = configGenerator.generateConfig(String.format("%s_%s", Common.configFiled, id+""));
+        if (!result) {
+            return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.generateConfigFileFailed).toJSONObject();
+        }
+        //删除节点的java-tron目录及文件
+        JSONObject json = readJsonFile();
+        JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+        if (Objects.isNull(nodes)) {
+            nodes = new JSONArray();
+        }
+        JSONObject node = Util.getNodeInfo(nodes, id);
+        if (node == null) {
+            return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
+        }
+        String ip = (String) node.get(Common.ipFiled);
+        Long port = (Long) node.get(Common.portFiled);
+        String userName = (String) node.get(Common.userNameFiled);
+        String sshPassword = (String) node.get(Common.sshPasswordFiled);
+        long nodeId = (long) node.get(Common.nodeIdFiled);
+        BashExecutor bashExecutor = new BashExecutor();
+        bashExecutor.callResetScript(ip, port, userName, id, nodeId, sshPassword);
+        String status = checkIsReseted(String.format(Common.resetNodeFormat, id+""));
+
+        if (status.equals(Common.resetNodeSuccessStatus)) {
+            node.put(Common.showStop, true);
+            node.put(Common.deployStatusFiled, 0);
+            deleteNode(id);
+            json = readJsonFile();
+            JSONArray newNodes = (JSONArray) json.get(Common.nodesFiled);
+            if (Objects.isNull(newNodes)) {
+                newNodes = new JSONArray();
+            }
+            newNodes.add(node);
+            json.put(Common.nodesFiled, newNodes);
+            nc.updateNodesInfo(newNodes, json);
+        }
+
+        return new Response(ResultCode.OK.code, "success").toJSONObject();
+    }
+
+    //查询节点是否成功停止
+    private String checkIsReseted(String path) {
+        File file = new File(path);
+        if (file.isFile() && file.exists()) {
+            try {
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), Common.encoding);
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt;
+
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    if(lineTxt.contains("successfully")){
+                        return Common.resetNodeSuccessStatus;
+                    }
+                    if (lineTxt.contains("failed")) {
+                        return Common.resetNodeFailStatus;
+                    }
+
+                }
+
+                bufferedReader.close();
+                read.close();
+
+            } catch (Exception e) {
+                LOG.error(e.toString());
+            }
+        } else {
+            return Common.notFoundStatus;
+        }
+        return Common.resetNodeFailStatus;
+    }
+
 }

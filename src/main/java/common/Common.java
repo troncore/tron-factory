@@ -104,6 +104,8 @@ public class Common {
 
   public static final String stopPortFormat = "logs/stopPort_%s.log" ;
 
+  public static final String resetNodeFormat = "logs/resetNode_%s.log" ;
+
   public static final String allNodesField = "allNodes";
 
   public static final String serviceTypeFiled = "serviceType";
@@ -138,6 +140,10 @@ public class Common {
 
   public static final String nodeRpcPortMapField = "nodeRpcPortMap";
 
+  public static final String isFristStart = "isFristStart";
+
+  public static final String showStop = "showStop";
+
 //  public static final String configStatusMapFiled = "configStatusMap";
 
   // Node Status
@@ -160,6 +166,10 @@ public class Common {
   public static final String stopNodeSuccessStatus = "stop node successfully";
 
   public static final String stopNodeFailStatus = "stop node failed";
+
+  public static final String resetNodeSuccessStatus = "reset node successfully";
+
+  public static final String resetNodeFailStatus = "reset node failed";
 
   public static final String pid = "start java-tron with pid";
 

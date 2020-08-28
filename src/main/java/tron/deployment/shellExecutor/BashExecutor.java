@@ -15,21 +15,32 @@ import java.util.ArrayList;
 @Slf4j
 public class BashExecutor {
 
-    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort, String chainId, String nodeId){
+    public void callScript(String ip, Long port, String userName, String jarPath, String privateKey, Long id, String plugin, String sshPassword, String dbCustom, String fullNodePort, String solidityPort, String listenPort, String rpcPort, String rpcsolidityPort, String nodeId, boolean runAgain){
 
         try {
             String absolutePath = "";
             //密码登录：deployNodePWD.bash  密钥登录：deployNode.bash
-            if(sshPassword.equals("")){
-                absolutePath = System.getProperty("user.dir").concat("/deployNodetemp.bash");
+
+            //如果是继续运行节点
+            if(runAgain){
+                if(sshPassword.equals("")){
+                    absolutePath = System.getProperty("user.dir").concat("/restartNodetemp.bash");
+                }else{
+                    absolutePath = System.getProperty("user.dir").concat("/restartNodePWDtemp.bash");
+                }
             }else{
-                absolutePath = System.getProperty("user.dir").concat("/deployNodePWDtemp.bash");
+                if(sshPassword.equals("")){
+                    absolutePath = System.getProperty("user.dir").concat("/deployNodetemp.bash");
+                }else{
+                    absolutePath = System.getProperty("user.dir").concat("/deployNodePWDtemp.bash");
+                }
             }
+
             String configPath = String.format("%s_%s", Common.configFiled, id.toString());
             String[] cmdArray = {absolutePath, ip, port.toString(), userName, jarPath, configPath, plugin, sshPassword, id.toString()};
             cmdArray = ArrayUtils.add(cmdArray, privateKey);
             cmdArray = ArrayUtils.add(cmdArray, dbCustom);
-            cmdArray = ArrayUtils.add(cmdArray, chainId);
+            cmdArray = ArrayUtils.add(cmdArray, nodeId);
             cmdArray = ArrayUtils.add(cmdArray, fullNodePort);
             cmdArray = ArrayUtils.add(cmdArray, solidityPort);
             cmdArray = ArrayUtils.add(cmdArray, listenPort);
@@ -118,7 +129,7 @@ public class BashExecutor {
         }
     }
 
-    public void callStopNodeScript(String ip, Long port, String userName, Long id,  String chainId, String sshPassword){
+    public void callStopNodeScript(String ip, Long port, String userName, Long id,  long nodeId, String sshPassword){
 
         try {
             String absolutePath = "";
@@ -129,7 +140,7 @@ public class BashExecutor {
                 absolutePath = System.getProperty("user.dir").concat("/stopNodePWD.bash");
             }
 //            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
-            String[] cmdArray = {absolutePath, ip, port.toString(), userName, id.toString(), chainId, sshPassword};
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, id.toString(), nodeId+"", sshPassword};
 
             String logName = String.format("> ".concat(Common.stopNodeFormat), id.toString());
             cmdArray = ArrayUtils.add(cmdArray, logName);
@@ -158,6 +169,32 @@ public class BashExecutor {
             String[] cmdArray = {absolutePath, ip, port.toString(), userName, httpPort,httpSolidityPort,rpcPort,rpcSolidityport,listenPort, sshPassword};
 
             String logName = String.format("> ".concat(Common.stopPortFormat), id+"");
+            cmdArray = ArrayUtils.add(cmdArray, logName);
+            String cmd = StringUtils.join(cmdArray, " ");
+            Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
+            LOG.info("deploy cmd: {}", cmd);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void callResetScript(String ip, Long port, String userName, long id, long nodeId, String sshPassword){
+
+        try {
+            String absolutePath = "";
+            //密码登录：deployNodePWD.bash  密钥登录：deployNode.bash
+            if(sshPassword.equals("")){
+                absolutePath = System.getProperty("user.dir").concat("/resetNode.bash");
+            }else{
+                absolutePath = System.getProperty("user.dir").concat("/resetNodePWD.bash");
+            }
+//            String configPath = String.format("%s_%s", Common.configFiled, id.toString());
+            String[] cmdArray = {absolutePath, ip, port.toString(), userName, id+"", nodeId+"", sshPassword};
+
+            String logName = String.format("> ".concat(Common.resetNodeFormat), id+"");
             cmdArray = ArrayUtils.add(cmdArray, logName);
             String cmd = StringUtils.join(cmdArray, " ");
             Process process= Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
