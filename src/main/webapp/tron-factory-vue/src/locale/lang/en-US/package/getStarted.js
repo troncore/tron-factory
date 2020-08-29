@@ -1,7 +1,16 @@
 export default {
   startCreate: 'Get Started',
-  summaryChain: 'TRON Factory, blockchain customization based on the TRON framework. ',
-  descriptionChain: 'Build your wishes blockchain with the TRON framework. TRON Factory comes with everything professional for enterprise users.',
+  summaryChain: 'TRON Factory， 一键式部署区块链',
+  descriptionChain: '基于 java-tron 快速创建并部署区块链，为企业用户提供专业的区块链相关服务',
+  guideTitle: '操作流程',
+  firstStepTitle: '基本配置',
+  firstStepContext: '初步配置区块链基本信息，如p2p版本号，创世账户等',
+  secondStepTitle: '添加节点',
+  secondStepContext: '快速创建区块链节点，可创建超级代表或普通节点',
+  thirdStepTitle: '配置管理',
+  thirdStepContext: '节点配置管理，如网络配置，数据库配置，模块定制化等',
+  fourthStepTitle: '节点部署',
+  fourthStepContext: '部署节点，发布区块链，浏览节点产块信息',
   // 创建/修改区块链
   chainManage: {
     startCreate: 'Get Started',

@@ -146,7 +146,7 @@ export default {
   created () {
     this.form = {
       accountName: this.asset.accountName,
-      accountType: this.asset.accountType,
+      accountType: this.asset.accountType || 'AssetIssue',
       address: this.asset.address,
       balance: this.asset.balance,
     }

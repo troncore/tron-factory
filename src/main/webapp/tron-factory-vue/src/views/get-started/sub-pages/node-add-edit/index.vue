@@ -74,7 +74,7 @@
             </span>
             <div class="address-item">
               <el-input v-model.trim="form.publicKey" class="width-350" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
-              <el-button @click="handleOneKey">{{ $t('getStarted.nodesManage.oneKey') }}</el-button>
+              <el-button :disabled="keyLoading" @click="handleOneKey">{{ $t('getStarted.nodesManage.oneKey') }}</el-button>
             </div>
           </el-form-item>
 
@@ -127,6 +127,7 @@
         nodeInfo: {}, // assign when edit
         tempPublicKey: '', // to compare whether it change origin publicKey
         safePrivateKey: Array(64).fill('*').join(''),
+        keyLoading: false,
         disabled: false,
         loading: false,
       }
@@ -354,7 +355,9 @@
       },
 
       handleOneKey () {
+        this.keyLoading = true
         this.$_api.getStarted.getOneKey({ }, (err, res = {}) => {
+          this.keyLoading = false
           if (err) return
           this.form.publicKey = res.publicKey
           this.form.privateKey = res.privateKey
