@@ -3,10 +3,10 @@
     <div class="card-header">
       <div class="card-title">{{ $t('getStarted.dashboard.nodeInfo')}}</div>
       <div class="op-list">
-        <el-button class="im-button mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
         <el-button class="im-button mini" size="small" :disabled="!deployNodesIds || reRunIndexs.length || deployLoading" @click="handleDeploy()">
           <i :class="deployLoading ? 'el-icon-loading' : 'el-icon-caret-right'"></i> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}
         </el-button>
+        <el-button class="im-button mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
       </div>
     </div>
     <div class="card-body">
