@@ -39,9 +39,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="createTime" :label="$t('getStarted.dashboard.createNodeTime')" align="center"></el-table-column>
+          <el-table-column prop="createTime" :label="$t('getStarted.dashboard.createNodeTime')" align="center" width="200"></el-table-column>
 
-          <el-table-column prop="operate" :label="$t('base.operate')" align="center"  width="300">
+          <el-table-column prop="operate" :label="$t('base.operate')" align="center" width="280">
             <template slot-scope="scope">
               <!-- 停止 -->
               <el-button  v-if="scope.row.showStop" :disabled="scope.row.deployStatus !== 1" type="text" @click="handleStop(scope.row, scope.$index)" :loading="stopIndexs.includes(scope.$index)">
