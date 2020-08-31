@@ -67,7 +67,7 @@ export default {
     // 节点列表
     nodeInfo: 'Node List',
     addNode: 'Add',
-    ip: 'IP',
+    ip: 'Host',
     listenPort: 'Listen Port',
     nodeType: 'Node Type',
     superNode: 'SR',

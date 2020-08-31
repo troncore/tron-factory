@@ -1,7 +1,7 @@
 export default {
   startCreate: '开始',
-  summaryChain: 'TRON Factory， 一键式部署区块链',
-  descriptionChain: '基于 java-tron 快速创建并部署区块链，为企业用户提供专业的区块链相关服务',
+  summaryChain: 'TRON Factory - 区块链的企业级解决方案',
+  descriptionChain: '只需要简单的几步操作即可快速体验TRON网络',
   guideTitle: '操作流程',
   firstStepTitle: '基本配置',
   firstStepContext: '初步配置区块链基本信息，如p2p版本号，创世账户等',
@@ -68,7 +68,7 @@ export default {
     // 节点列表
     nodeInfo: '节点列表',
     addNode: '添加',
-    ip: 'IP',
+    ip: 'Host',
     listenPort: '监听端口',
     nodeType: '节点类型',
     superNode: '超级代表',
