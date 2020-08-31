@@ -14,8 +14,8 @@ export default {
 
   // 创建/修改区块链
   chainManage: {
-    startCreate: '创建区块链',
-    updateChain: '编辑区块链',
+    startCreate: '准备工作',
+    updateChain: '准备工作',
     baseInfo: '基本配置',
     chainNameLabel: '区块链名称',
     chainNameTips: '命名你的区块链',

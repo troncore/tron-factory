@@ -14,7 +14,7 @@ export default {
   // 创建/修改区块链
   chainManage: {
     startCreate: 'Get Started',
-    updateChain: 'Edit',
+    updateChain: 'Get Started',
     baseInfo: 'Basics',
     chainNameLabel: 'Chain Name',
     chainNameTips: 'The name of your blockchain',
