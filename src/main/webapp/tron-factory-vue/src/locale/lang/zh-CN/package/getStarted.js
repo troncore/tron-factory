@@ -1,8 +1,8 @@
 export default {
   startCreate: '开始',
   summaryChain: 'TRON Factory - 区块链的企业级解决方案',
-  descriptionChain: '只需要简单的几步操作即可快速体验TRON网络',
-  guideTitle: '操作流程',
+  descriptionChain: '只需要简单的几步操作即可快速体验TRON协议',
+  guideTitle: '入门指南',
   firstStepTitle: '基本配置',
   firstStepContext: '初步配置区块链基本信息，如p2p版本号，创世账户等',
   secondStepTitle: '添加节点',
