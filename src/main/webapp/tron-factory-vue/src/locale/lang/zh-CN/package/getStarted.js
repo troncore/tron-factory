@@ -42,7 +42,7 @@ export default {
     addressTips: '地址编码为Base58Check',
     addressCheckValid: '无效的 address 地址',
     balanceLabel: 'balance',
-    balanceTips: '账户初始余额, 单位 SUN',
+    balanceTips: '账户初始余额, 当前填入的是最小单位',
 
     needBlackhole: '必须添加 Blackhole 账户',
     needMoreAsset: '至少再添加一个除 Blackhole 之外的账户',
@@ -53,7 +53,7 @@ export default {
   dashboard: {
     dashboard: '区块链',
     chainInfo: '区块链配置',
-    chainName: '名称',
+    chainName: '区块链名称',
     encryption: '签名算法',
     p2pVersion: 'p2pVersion',
     status: '区块链状态',
@@ -115,7 +115,7 @@ export default {
     opUnValidNode: '当前所编辑的节点为无效节点',
     viewUnValidNode: '当前所查看的节点为无效节点',
 
-    serverInfo: '服务器配置',
+    serverInfo: '节点服务器配置',
     ip: '服务器地址',
     ipPlaceholder: 'IP/主机名',
     ipCheckRight: '请输入有效的服务器地址',

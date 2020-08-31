@@ -33,14 +33,14 @@ export default {
   operate: 'Operation',
   emptyData: 'No Data',
 
-  successful: 'Succeed',
+  successful: 'Success',
   failure: 'Failure',
   warning: 'Warning',
   error: 'Error',
   cancel: 'Cancel',
   success: {
     save: 'Successfully saved',
-    edit: 'Successfully editted',
+    edit: 'Successfully edited',
     update: 'Successfully updated',
     modify: 'Successfully modified',
     operate: 'Successfully',

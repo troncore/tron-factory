@@ -34,6 +34,6 @@
 
 <style lang="scss" scoped>
 .icon-question {
-  color: font-color();
+  color: font-color(.5);
 }
 </style>

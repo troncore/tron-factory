@@ -8,7 +8,7 @@ export default {
   baseConfig: 'Basic Config',
   netWorkConfig: 'HTTP/RPC',
   databaseConfig: 'Database',
-  p2pConfig: 'P2P',
+  p2pConfig: 'P2P Protocol',
   moduleFunction: 'Modularization',
 
   selectDatabaseConfig: 'dbEngine',

@@ -229,7 +229,7 @@
               this.$notify({
                 type: 'success',
                 title: this.$t('base.successful'),
-                message: this.$t('base.success.operate')
+                message: this.$t('base.success.save')
               })
               this.$router.push('/get-started/dashboard')
             })
