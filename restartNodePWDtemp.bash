@@ -72,58 +72,10 @@ end_basiccheck=${timestamp}
 log sub-title "finish basic checking" "$((end_basiccheck-start_basiccheck))"s
 log "" "<br/>"
 
-#创建java-tron目录
-start_create=${timestamp}
-log title "Creating the directory..."
-log sub-title "delete the original java-tron file"
-log "" "$ ssh -p $2 $3@$1 -o ${noCheck} rm -rf java-tron-${11}-$8"
-/usr/bin/expect <<lsp
-log_user 0
-spawn ssh -p $2 $3@$1 -o "${noCheck}"
-expect {
-"*assword*" {
-send "$7\r"
-expect "]*"
-send "rm -rf java-tron-${11}-$8\r"
-expect "]*"
-send "exit\r"
-}
-timeout { send_error "expect_timeout\n";exit 1 }
-}
-expect eof
-lsp
-
-log sub-title "creating the directory: ~/java-tron-${11}-$8"
-log "" "$ ssh -p $2 $3@$1 mkdir java-tron-${11}-$8"
-/usr/bin/expect <<lsp
-log_user 0
-spawn ssh -p $2 $3@$1
-expect {
-"*assword*" {
-send "$7\r"
-expect "]*"
-send "mkdir java-tron-${11}-$8\r"
-expect "]*"
-send "exit\r"
-}
-timeout { send_error "expect_timeout\n";exit 1 }
-}
-expect eof
-lsp
-if [ $? = 0 ];then
-  log "" "created the directory: ~/java-tron-${11}-$8"
-else
-  log_error "" "create the directory failed!"
-  log_error "" "${failed}"
-  exit
-fi
-end_create=${timestamp}
-log sub-title "finish creating" "$((end_create-start_create))"s
-log "" "<br/>"
-
+#校验端口是否被占用
 start_othercheck=${timestamp}
 log title "Other Checking..."
-#校验端口是否被占用
+
 log sub-title "Checking port availability"
 portArray=(${12} ${13} ${14} ${15} ${16})
 for port in ${portArray[@]}
@@ -176,17 +128,6 @@ fi
 fi
 done
 log "" "No port is occupied."
-
-#检验压缩包是否存在
-log sub-title "Checking the path to the zip file"
-log "" "$ find $4"
-find $4  > /dev/null
-if [ $? != 0 ];then
-  log_error "" "There is an error in the path to the zip file, please check it."
-  log_error "" "${failed}"
-  exit
-fi
-log "" "The path to the zip file is correct."
 end_othercheck=${timestamp}
 log sub-title "finish other checking" "$((end_othercheck-start_othercheck))"s
 log "" "<br/>"
@@ -194,58 +135,6 @@ log "" "<br/>"
 #上传文件
 start_upload=${timestamp}
 log title "Uploading files..."
-
-#上传java-tron-1.0.0.zip
-log sub-title "uploading java-tron-1.0.0.zip"
-log "" "$ scp -P $2  $4 $3@$1:./java-tron-${11}-$8/"
-/usr/bin/expect <<lsp
-log_user 0
-set timeout 3600
-spawn scp -P $2  $4 $3@$1:./java-tron-${11}-$8/
-expect {
-"*assword*" {
-send "$7\r"
-expect "100%"
-send "\r"
-}
-timeout { send_error "expect_timeout\n";exit 1 }
-}
-expect eof
-lsp
-if [ $? = 0 ];then
-  log "" "upload java-tron-1.0.0.zip successfully"
-else
-  log_error "" "upload java-tron-1.0.0.zip failed!"
-  log_error "" "${failed}"
-  exit
-fi
-
-#解压java-tron-1.0.0.zip
-log sub-title "unzipping java-tron-1.0.0.zip"
-log "" "$ ssh -p $2 $3@$1 cd java-tron-${11}-$8&&unzip -o ./${APP}.zip"
-/usr/bin/expect <<lsp
-log_user 0
-#set timeout 3600
-spawn ssh -p $2 $3@$1
-expect {
-"*assword*" {
-send "$7\r"
-expect "]*"
-send "cd java-tron-${11}-$8&&unzip -o ./${APP}.zip > /dev/null \r"
-expect "]*"
-send "exit\r"
-}
-timeout { send_error "expect_timeout\n";exit 1 }
-}
-expect eof
-lsp
-if [ $? = 0 ];then
-  log "" "unzip java-tron-1.0.0.zip successfully"
-else
-  log_error "" "unzip java-tron-1.0.0.zip failed, unzip cmd is not installed!"
-  log_error "" "${failed}"
-  exit
-fi
 
 #上传config.conf
 log sub-title "Uploading config.conf"
@@ -273,7 +162,6 @@ else
 fi
 
 #上传用户自定义jar包
-
 if [ ${10} != "null" ]; then
   log sub-title "Uploading custom chainbase jar"
   #获取原chainbase.java名字，并保存在远程服务器~/java-tron/dbJarName文件中
@@ -344,9 +232,7 @@ lsp
   fi
 fi
 
-
 #上传用户自定义交易模块plugin
-
 if [ $6 != "null" ]; then
   log sub-title "Uploading custom transaction plugin"
   log "" "$ scp -P $2 $6 $3@$1:./java-tron-${11}-$8/$APP/lib/"
@@ -373,31 +259,6 @@ lsp
   fi
 fi
 
-#上传启动脚本
-log sub-title "Uploading startup scripts"
-log "" "$ scp -P $2 ./.startNode.sh $3@$1:./java-tron-${11}-$8/start.sh"
-
-/usr/bin/expect <<lsp
-log_user 0
-set timeout 60
-spawn scp -P $2 ./.startNode.sh $3@$1:./java-tron-${11}-$8/start.sh
-expect {
-"*assword*" {
-send "$7\r"
-expect "100%"
-send "\r"
-}
-timeout { send_error "expect_timeout\n";exit 1 }
-}
-expect eof
-lsp
-if [ $? = 0 ];then
-  log "" "upload startup scripts successfully"
-else
-  log_error "" "upload startup scripts failed!"
-  log_error "" "${failed}"
-  exit
-fi
 end_upload=${timestamp}
 log sub-title "finish uploading" "$((end_upload-start_upload))"s
 log "" "<br/>"
