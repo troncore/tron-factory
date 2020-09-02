@@ -22,7 +22,8 @@ timeout { send_error "expect_timeout\n";exit 1 }
 expect eof
 lsp
 
-if [ $? != 0 ];then
+result=$?
+if [ $result != 0 ];then
   echo "delete java-tron-${5}-$4 failed"
 else
   echo "delete java-tron-${5}-$4 successfully"
