@@ -7,7 +7,7 @@ export default {
   tips: 'Tips',
   add: 'Add',
 
-  document: 'Document',
+  document: 'Documentation',
   helpDocument: 'Help Document',
   viewDocument: 'View Document',
 

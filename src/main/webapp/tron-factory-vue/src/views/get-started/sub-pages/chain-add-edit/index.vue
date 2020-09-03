@@ -91,7 +91,7 @@
       return {
         form: {
           chainName: '',
-          crypto: '', // eckey、sm2
+          crypto: '', // eckey, sm2
           p2pVersion: '',
           consensus: '', // dpos
         },

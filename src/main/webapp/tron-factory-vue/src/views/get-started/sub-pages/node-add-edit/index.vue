@@ -38,7 +38,7 @@
           </div>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
             <span slot="label">{{ $t('getStarted.nodesManage.sshPassword') }}</span>
-            <el-input v-model.trim="form.sshPassword" class="width-350" tabindex="5" clearable />
+            <el-input v-model.trim="form.sshPassword" class="width-350" tabindex="5" clearable show-password />
           </el-form-item>
         </div>
       </div>
@@ -399,9 +399,17 @@
 
 .el-form {
   .address-item {
-
     .el-input {
-      margin-right: 10px;
+      margin-right: 20px;
+      /deep/ .el-input__inner {
+        font-family: "Lucida Console", Monaco, monospace !important;
+      }
+    }
+  }
+
+  .private-key {
+    /deep/ .el-textarea__inner {
+      font-family: "Lucida Console", Monaco, monospace !important;
     }
   }
 

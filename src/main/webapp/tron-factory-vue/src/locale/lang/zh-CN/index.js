@@ -5,7 +5,7 @@ import menu from './package/menu'
 import getStarted from './package/getStarted'
 import nodeConfig from './package/nodeConfig'
 import explorer from './package/explorer'
-import walletCLI from './package/walletCLI'
+import walletCli from './package/walletCli'
 import tronLink from './package/tronLink'
 
 export default {
@@ -15,6 +15,6 @@ export default {
   getStarted,
   nodeConfig,
   explorer,
-  walletCLI,
+  walletCli,
   tronLink,
 }

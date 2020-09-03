@@ -4,6 +4,6 @@ export default {
   nodesManage: 'Nodes Manage',
   configuration: 'Configuration',
   ecologyApp: 'Ecology App',
-  walletCLI: 'Wallet CLI',
+  walletCli: 'Wallet CLI',
   tronLink: 'TronLink',
 }
