@@ -21,7 +21,7 @@
               <im-tooltip :content="$t('getStarted.chainManage.encryptionTips')" />
             </span>
             <el-radio-group v-model="form.crypto" :disabled="!canChangeCrypto">
-              <el-radio :label="'eckey'">ECKey</el-radio>
+              <el-radio :label="'eckey'">ECKey (Secp256k1)</el-radio>
               <el-radio :label="'sm2'">SM2</el-radio>
             </el-radio-group>
           </el-form-item>

@@ -38,7 +38,7 @@
           </div>
           <el-form-item prop="sshPassword" class="margin-bottom-0" v-if="form.sshConnectType === 1">
             <span slot="label">{{ $t('getStarted.nodesManage.sshPassword') }}</span>
-            <el-input v-model.trim="form.sshPassword" class="width-350" tabindex="5" clearable show-password />
+            <el-input v-model.trim="form.sshPassword" class="width-350" tabindex="5" clearable show-password autocomplete="off" />
           </el-form-item>
         </div>
       </div>
@@ -116,7 +116,7 @@
           listenPort: '18888',
           port: 22,
           sshConnectType: 2, // 1 password, 2 key
-          userName: '',
+          userName: 'root',
           sshPassword: '',
           isSR: true,
           url: '',

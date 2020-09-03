@@ -40,7 +40,7 @@
             {{ $t('getStarted.chainManage.addressLabel') }}
             <im-tooltip :content="$t('getStarted.chainManage.addressTips')" />
           </span>
-          <el-input v-model.trim="form.address" tabindex="27" clearable />
+          <el-input v-model.trim="form.address" tabindex="27" clearable class="address-input" />
         </el-form-item>
 
         <el-form-item label="balance" prop="balance" class="margin-bottom-0">
@@ -195,6 +195,11 @@ export default {
 .item {
   i {
     font-size: 12px;
+  }
+}
+.address-input {
+  /deep/ .el-input__inner {
+    font-family: "Lucida Console", Monaco, monospace !important;
   }
 }
 </style>
