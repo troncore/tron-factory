@@ -75,6 +75,7 @@
             <div class="address-item">
               <el-input v-model.trim="form.publicKey" class="width-350" tabindex="8" clearable :placeholder="$t('getStarted.nodesManage.publicKeyPlaceholder')" />
               <el-button :disabled="keyLoading" @click="handleOneKey">{{ $t('getStarted.nodesManage.oneKey') }}</el-button>
+              <el-button :disabled="!enableDownloadKey" @click="handleDownloadKey">{{ $t('getStarted.nodesManage.downloadKey') }}</el-button>
             </div>
           </el-form-item>
 
@@ -104,7 +105,7 @@
 
 <script>
   import ImTooltip from "@/components/ImTooltip"
-  import { transferBigIntToString } from "@/utils/common";
+  import { webDownload, transferBigIntToString } from "@/utils/common";
   import { formRules, validate } from "@/utils/validate"
   export default {
     name: "node-add-edit",
@@ -139,6 +140,9 @@
       opNodeId () {
         let id = this.$route.query.id
         return /\d+/.test(id) ? Number(id) : undefined
+      },
+      enableDownloadKey () {
+        return this.form.publicKey && this.form.privateKey.length === 64 && this.form.publicKey !== this.tempPublicKey
       },
       formRules() {
         // for back-end data limit
@@ -362,8 +366,28 @@
           this.form.publicKey = res.publicKey
           this.form.privateKey = res.privateKey
         })
+      },
 
-      }
+      handleDownloadKey () {
+        this.$confirm(this.$t('getStarted.nodesManage.downloadWarning'), this.$t('base.tips'), {
+          cancelButtonText: this.$t('base.cancel'),
+          confirmButtonText: this.$t('base.confirm'),
+          center: true,
+          customClass: 'im-message-box',
+          cancelButtonClass: 'im-message-cancel-button primary',
+          confirmButtonClass: 'im-message-confirm-button primary',
+        }).then(() => {
+
+          let data = {
+            address: this.form.publicKey,
+            privateKey: this.form.privateKey
+          }
+          let dataBlob = new Blob([ JSON.stringify(data, null, 2) ], { type: 'application/json' })
+
+          webDownload(dataBlob, this.form.publicKey)
+
+        }).catch(() =>{})
+      },
     }
   }
 </script>

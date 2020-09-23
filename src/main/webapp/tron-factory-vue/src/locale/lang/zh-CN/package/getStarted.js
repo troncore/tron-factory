@@ -105,6 +105,9 @@ export default {
     logDialogTitle: '部署日志',
     emptyLog: '暂无日志',
     loadingLog: '加载日志中，请稍等...',
+
+    importList: '导入列表',
+    exportList: '导出列表'
   },
 
   // 添加、修改、查看节点
@@ -146,6 +149,8 @@ export default {
     voteCountPlaceholder: '请输入对应投票数量',
     voteCountCheckMax: 'Vote Count 填写额超过最大值',
     oneKey: '自动生成',
+    downloadKey: '导出',
+    downloadWarning: '请妥善保存好你的地址和私钥，避免丢失或泄露，是否确定导出？',
     publicKey: 'Address',
     publicKeyTips: 'Base58Check 地址',
     publicKeyPlaceholder: '请输入格式为 Base58Check 的地址',

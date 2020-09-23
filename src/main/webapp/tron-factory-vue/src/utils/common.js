@@ -32,3 +32,22 @@ export function initActions(actions) {
 export function transferBigIntToString (value = '') {
   return String(BigInt(value))
 }
+
+
+export function webDownload (blob, name) {
+  // 创建一个 DOMString
+  let blobURL = URL.createObjectURL(blob)
+
+  // 创建 a元素 点击下载
+  let aElement = document.createElement('a')
+  aElement.href= blobURL
+  // 下载名字
+  aElement.download = name
+
+  document.body.append(aElement)
+  aElement.click()
+  document.body.append(aElement)
+
+  // 释放内存占用
+  URL.revokeObjectURL(blobURL)
+}

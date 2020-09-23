@@ -3,10 +3,14 @@
     <div class="card-header">
       <div class="card-title">{{ $t('getStarted.dashboard.nodeInfo')}}</div>
       <div class="op-list">
-        <el-button class="im-button mini" size="small" :disabled="!deployNodesIds || reRunIndexs.length || deployLoading" @click="handleDeploy()">
-          <i :class="deployLoading ? 'el-icon-loading' : 'el-icon-caret-right'"></i> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}
-        </el-button>
-        <el-button class="im-button mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
+        <div class="left">
+        </div>
+        <div class="right">
+          <el-button class="im-button mini" :disabled="!deployNodesIds || reRunIndexs.length || deployLoading" @click="handleDeploy()">
+            <i :class="deployLoading ? 'el-icon-loading' : 'el-icon-caret-right'"></i> {{ $t(deployLoading ? 'getStarted.dashboard.runningNode' : 'getStarted.dashboard.runNode') }}
+          </el-button>
+          <el-button class="im-button mini" type="primary" @click="handleAddNode()"><i class="el-icon-plus"></i> {{ $t('getStarted.dashboard.addNode') }}</el-button>
+        </div>
       </div>
     </div>
     <div class="card-body">
@@ -73,6 +77,10 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="table-footer">
+        <el-button class="im-button mini" @click="handleImportTable"><i class="el-icon-upload2"></i> {{ $t('getStarted.dashboard.importList') }}</el-button>
+        <el-button class="im-button mini" :disabled="!tableData.length" @click="handleExportTable"><i class="el-icon-download"></i> {{ $t('getStarted.dashboard.exportList') }}</el-button>
+      </div>
     </div>
 
     <node-deploy
@@ -81,18 +89,22 @@
       :deploy-loading.sync="deployLoading"
       @getNodeList="() => getNodeList(true)"/>
 
-
     <!-- view deploy log-->
     <node-log v-if="logDialogVisible" :visible.sync="logDialogVisible" :current-row="currentRow" />
+
+    <import-table :visible.sync="importDialogVisible" @success="handleImportData" />
+
   </div>
 </template>
 
 <script>
   import NodeLog from "./NodeLog"
   import NodeDeploy from "./NodeDeploy";
+  import { webDownload } from "@/utils/common";
+  import ImportTable from "./ImportTable";
   export default {
     name: "node-list",
-    components: { NodeDeploy, NodeLog },
+    components: { ImportTable, NodeDeploy, NodeLog },
     props: {
       nodeList: Function,
       chainStatus: Number,
@@ -110,6 +122,7 @@
         logDialogVisible: false,
         deployDialogVisible: false,
         deployLoading: false,
+        importDialogVisible: false,
         timeID: null,
       }
     },
@@ -127,7 +140,7 @@
           if (err) return
           this.tableData = Array.isArray(res) ? res : []
 
-          this.tableData.sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime())
+          this.tableData.sort((a, b) => new Date(a.createTime).getTime() - new Date(b.createTime).getTime())
 
           // when all nodes stopped, it needs to re-check the chain status
           if (isCheckChainStatus) this.$emit('checkChainPublish')
@@ -271,16 +284,33 @@
 
           this.getNodeList()
         })
-      }
+      },
 
+      handleImportTable () {
+        this.importDialogVisible = true
+      },
+      handleImportData (data = []) {
+
+      },
+
+      handleExportTable () {
+        let data = this.tableData
+
+        let dataBlob = new Blob([ JSON.stringify(data, null, 2) ], { type: 'application/json' })
+
+        webDownload(dataBlob, 'TRON-Factory 节点列表 - ' + this.$_moment(Date.now()).format('YYYY-MM-DD HH_mm_ss'))
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
 .node-list {
-  .table-header {
-    margin-bottom: 20px;
+  .table-footer {
+    margin-top: 20px;
+    .el-button + .el-button {
+      margin-left: 20px;
+    }
   }
 }
 
@@ -297,6 +327,8 @@
       color: $black-light;
     }
     .op-list {
+      //display: flex;
+      //justify-content: space-between;
       float: right;
       display: inline-block;
 
@@ -305,5 +337,6 @@
       }
     }
   }
+
 }
 </style>

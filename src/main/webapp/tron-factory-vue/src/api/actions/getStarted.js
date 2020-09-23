@@ -17,6 +17,7 @@ export default {
     checkNode: '/api/checkNode',
     getOneKey: '/api/convertKey',
 
+
     // node-config
     getQuickConfig: '/api/quickConfig',
     getBaseConfig: '/api/baseSettingConfig',
