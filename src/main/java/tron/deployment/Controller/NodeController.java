@@ -919,4 +919,61 @@ public class NodeController {
     return Common.stopNodeFailStatus;
   }
 
+  //检测节点是否正常产块
+  @GetMapping(value = "/api/isAlive")
+  public JSONObject isAlive(@RequestParam long id) {
+    HttpUtil httpUtil = new HttpUtil();
+    Map<String, Object> nowBlockInfo = new HashMap<>();
+    JSONObject json = readJsonFile();
+    JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
+    if (Objects.isNull(nodes)) {
+      nodes = new JSONArray();
+    }
+    JSONObject node = Util.getNodeInfo(nodes, id);
+    String ip = (String) node.get(Common.ipFiled);
+    long httpPort = (long) node.get(Common.httpPortFiled);
+    try {
+      nowBlockInfo = httpUtil.getInfo("http://" + ip + ":" + httpPort + "/wallet/getnowblock");
+      if(nowBlockInfo.isEmpty()){
+        Thread.sleep(3000);
+        nowBlockInfo = httpUtil.getInfo("http://" + ip + ":" + httpPort + "/wallet/getnowblock");
+        if(nowBlockInfo.isEmpty()){
+          return new Response(ResultCode.OK.code, false).toJSONObject();
+        }else{
+          return new Response(ResultCode.OK.code, true).toJSONObject();
+        }
+      }else{
+        return new Response(ResultCode.OK.code, true).toJSONObject();
+      }
+    } catch (Exception e) {
+      return new Response(ResultCode.NOT_FOUND.code, "Failed to get node info, please check if the URL is correct.").toJSONObject();
+    }
+  }
+
+  @GetMapping(value = "/api/checkSSH")
+  public JSONObject checkSSH(@RequestBody LinkedHashMap<String,Object> data) {
+    String ip = (String) data.getOrDefault("ip", "127.0.0.1");
+    int sshConnectType = data.getOrDefault("sshConnectType", "") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("sshConnectType", "0"))) :
+            (int)data.getOrDefault("sshConnectType", 0);
+    String userName = (String) data.getOrDefault("userName", "node1");
+    int port =data.getOrDefault("port", "22") instanceof String ?
+            (Integer.parseInt((String)data.getOrDefault("port", "22"))) :
+            (int)data.getOrDefault("port", 22);
+    String sshPassword = (String) data.getOrDefault("sshPassword", "");
+    //根据登录方式的不同，校验连通性 start
+    BashExecutor bashExecutor = new BashExecutor();
+    if(sshConnectType == 1 ){
+      bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
+    }
+    if(sshConnectType == 2){
+      bashExecutor.callSSHScript(ip, port, userName);
+    }
+    String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+    if(sshStatus.equals(Common.connectFailedStatus)) {
+      return new Response(ResultCode.OK.code, false).toJSONObject();
+    }
+    return new Response(ResultCode.OK.code, true).toJSONObject();
+  }
+
 }
