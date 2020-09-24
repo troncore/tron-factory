@@ -951,16 +951,7 @@ public class NodeController {
   }
 
   @GetMapping(value = "/api/checkSSH")
-  public JSONObject checkSSH(@RequestBody LinkedHashMap<String,Object> data) {
-    String ip = (String) data.getOrDefault("ip", "127.0.0.1");
-    int sshConnectType = data.getOrDefault("sshConnectType", "") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("sshConnectType", "0"))) :
-            (int)data.getOrDefault("sshConnectType", 0);
-    String userName = (String) data.getOrDefault("userName", "node1");
-    int port =data.getOrDefault("port", "22") instanceof String ?
-            (Integer.parseInt((String)data.getOrDefault("port", "22"))) :
-            (int)data.getOrDefault("port", 22);
-    String sshPassword = (String) data.getOrDefault("sshPassword", "");
+  public JSONObject checkSSH(@RequestParam String ip, int sshConnectType, String userName, int port, String sshPassword) {
     //根据登录方式的不同，校验连通性 start
     BashExecutor bashExecutor = new BashExecutor();
     if(sshConnectType == 1 ){
@@ -970,7 +961,7 @@ public class NodeController {
       bashExecutor.callSSHScript(ip, port, userName);
     }
     String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
-    if(sshStatus.equals(Common.connectFailedStatus)) {
+    if (sshStatus.equals(Common.connectFailedStatus)) {
       return new Response(ResultCode.OK.code, false).toJSONObject();
     }
     return new Response(ResultCode.OK.code, true).toJSONObject();
