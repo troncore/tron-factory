@@ -16,6 +16,7 @@ export default {
     getNodeLog: '/api/getLogInfo',
     checkNode: '/api/checkNode',
     getOneKey: '/api/convertKey',
+    checkSSH: '/api/checkSSH',
 
 
     // node-config
