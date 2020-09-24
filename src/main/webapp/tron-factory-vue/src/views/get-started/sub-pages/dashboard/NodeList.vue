@@ -92,7 +92,7 @@
     <!-- view deploy log-->
     <node-log v-if="logDialogVisible" :visible.sync="logDialogVisible" :current-row="currentRow" />
 
-    <import-table :visible.sync="importDialogVisible" @success="handleImportData" />
+    <import-table :visible.sync="importDialogVisible" @refresh="getNodeList" />
 
   </div>
 </template>
