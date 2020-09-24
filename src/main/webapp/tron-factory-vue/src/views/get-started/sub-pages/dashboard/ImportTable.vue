@@ -46,6 +46,14 @@ export default {
           userName: 'ssh user name',
         },
         {
+          ip: 'IPv4 or Hostname',
+          userName: 'ssh user name',
+        },
+        {
+          ip: '127.0.0.1',
+          userName: 'root',
+        },
+        {
           ip: '127.0.0.1',
           userName: 'root',
         },
@@ -128,7 +136,8 @@ export default {
       for(let i = 0; i < data.length; i++) {
         // 第一条数据 检查 网络情况；
         // 之后 并发剩余所有的请求
-        awaitList.push(this.checkSSH(data[i]))
+        console.log(i)
+        awaitList.push(this.checkSSH(data, data[i]))
       }
 
       let result = []
@@ -138,10 +147,11 @@ export default {
       console.log('result: ', result)
     },
 
-    checkSSH (params) {
+    checkSSH (data, params) {
       return new Promise(resolve => {
-        let paramsStatus = this.checkParams(params)
+        let paramsStatus = this.checkParams(data, params)
         if (paramsStatus) return resolve(paramsStatus)
+        console.log(3)
 
         this.$_api.getStarted.checkSSH({
           ip: params.ip,
@@ -152,16 +162,17 @@ export default {
         }, (err, res) => {
           if (err) return resolve('') // network error
 
-          resolve(res === true ? 'OK' : this.$t('SSH 连接失败'))
+          resolve(res === true ? 'OK' : this.$t('检测 SSH 连接失败'))
         })
       })
     },
 
-    checkParams (params) {
+    checkParams (data, params) {
       const validIPv4 =  /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(params.ip)
       const validHostname = /^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$/.test(params.ip)
 
       if(validIPv4 || validHostname) {
+        // if (data.filter(node => node.ip === params.ip).length > 1) return this.$t('IP 不可重复')
         if (!params.userName) {
           return this.$t('SSH username 不可以为空')
         }
