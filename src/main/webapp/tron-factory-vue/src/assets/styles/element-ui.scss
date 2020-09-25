@@ -33,8 +33,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   .el-table__body {
     tr {
       td {
-        padding: 5px 0;
-        background-color: white;
+        padding: 8px 0;
         &.el-table-column--selection {
           padding: 0;
           .cell {

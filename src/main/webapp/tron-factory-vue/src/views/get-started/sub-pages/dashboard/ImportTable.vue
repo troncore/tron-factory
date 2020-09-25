@@ -11,11 +11,11 @@
     </div>
 
     <div class="dialog-content">
-      <dl>
+      <!-- <dl>
         <dt>{{ $t('getStarted.dashboard.importTips1')}}</dt>
         <dd>{{ $t('getStarted.dashboard.importTips2')}}</dd>
         <dd>{{ $t('getStarted.dashboard.importTips3')}}</dd>
-      </dl>
+      </dl> -->
 
       <div class="table-header">
         <div class="left">
@@ -24,13 +24,21 @@
         </div>
         <div class="right">
           <el-button type="text" size="medium" @click="handleDownloadTPL">{{ $t('getStarted.dashboard.downloadImportTpl') }}</el-button>
+
+          <el-tooltip placement="top">
+            <div slot="content">
+              <div>{{ $t('getStarted.dashboard.importTips1')}}</div>
+              <div>{{ $t('getStarted.dashboard.importTips2')}}</div>
+            </div>
+            <el-button type="text" size="medium">{{ $t('getStarted.dashboard.importHelp')}}</el-button>
+          </el-tooltip>
         </div>
       </div>
 
       <el-table
           :data="importData"
           :empty-text="$t('base.emptyData')"
-
+          class="custom-table"
           border
           header-align="center"
           v-loading="tableLoading"
@@ -350,8 +358,7 @@ export default {
   margin-bottom: 20px;
 }
 dl {
-  margin-top: 0;
-  color: font-color(.8);
+  margin: 0;
 }
 ::v-deep .el-table {
   .error-node {
