@@ -311,7 +311,7 @@
 
         let dataBlob = new Blob([ JSON.stringify(data, null, 2) ], { type: 'application/json' })
 
-        webDownload(dataBlob, 'TRON-Factory 节点列表 - ' + this.$_moment(Date.now()).format('YYYY-MM-DD HH_mm_ss'))
+        webDownload(dataBlob, this.$t('getStarted.dashboard.exportFileName') + ' - ' + this.$_moment(Date.now()).format('YYYY-MM-DD HH_mm_ss'))
       }
     }
   }

@@ -12,18 +12,18 @@
 
     <div class="dialog-content">
       <dl>
-        <dt>批量导入节点数据时:</dt>
-        <dd>节点 IP 不能重复或在表格中已存在；</dd>
-        <dd>节点 SSH 服务默认支持口令登录，端口号为 22。</dd>
+        <dt>{{ $t('getStarted.dashboard.importTips1')}}</dt>
+        <dd>{{ $t('getStarted.dashboard.importTips2')}}</dd>
+        <dd>{{ $t('getStarted.dashboard.importTips3')}}</dd>
       </dl>
 
       <div class="table-header">
         <div class="left">
           <input v-if="isReset" v-show="false" ref="import-file" type="file" accept="application/json" @change="handleChange" />
-          <el-button class="im-button mini" type="primary" :disabled="tableLoading" @click="handleUploadFile"><i class="el-icon-upload2"></i> 选择文件</el-button>
+          <el-button class="im-button mini" type="primary" :disabled="tableLoading" @click="handleUploadFile"><i class="el-icon-upload2"></i> {{ $t('getStarted.dashboard.selectFile') }}</el-button>
         </div>
         <div class="right">
-          <el-button type="text" size="medium" @click="handleDownloadTPL">下载导入模板</el-button>
+          <el-button type="text" size="medium" @click="handleDownloadTPL">{{ $t('getStarted.dashboard.downloadImportTpl') }}</el-button>
         </div>
       </div>
 
@@ -54,7 +54,7 @@
         </el-table-column>
         <el-table-column
             prop="userName"
-            label="是否规范"
+            :label="$t('getStarted.dashboard.isStandard')"
             align="center"
             width="120">
           <template slot-scope="scope">
@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column
             prop="address"
-            label="错误信息"
+            :label="$t('getStarted.dashboard.errorMessage')"
             align="center">
           <template slot-scope="scope">
             <span v-show="scope.row.status !== true">{{ scope.row.status }}</span>
@@ -72,7 +72,7 @@
         </el-table-column>
       </el-table>
 
-      <div class="table-footer"><i>*</i> {{ $t('请选择要导入的节点') }}</div>
+      <div class="table-footer"><i>*</i> {{ $t('getStarted.dashboard.selectImportNodes') }}</div>
 
     </div>
 
@@ -137,7 +137,7 @@ export default {
   methods: {
     handleDownloadTPL() {
       let dataBlob = new Blob([ JSON.stringify(this.template, null, 2) ], { type: 'application/json' })
-      webDownload(dataBlob, 'TRON-Factory 导入列表模板')
+      webDownload(dataBlob, this.$t('getStarted.dashboard.importTplName'))
     },
 
 
@@ -165,7 +165,7 @@ export default {
           } catch (e) {
             this.$notify.error({
               title: this.$t('base.warning'),
-              message: this.$t('文件内容格式不符合 JSON 规范'),
+              message: this.$t('getStarted.dashboard.unvalidFileForJSON'),
             })
             return
           }
@@ -175,7 +175,7 @@ export default {
         } else {
           this.$notify.error({
             title: this.$t('base.warning'),
-            message: this.$t('文件内容为空'),
+            message: this.$t('getStarted.dashboard.emptyFile'),
           })
         }
       }
@@ -231,7 +231,7 @@ export default {
         }, (err, res) => {
           if (err) return resolve('network error') // network error
 
-          resolve(res === true ? true : this.$t('SSH连接失败'))
+          resolve(res === true ? true : this.$t('getStarted.dashboard.SSHConnectFail'))
         })
       })
     },
@@ -240,16 +240,16 @@ export default {
       const validIPv4 =  /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(params.ip)
       const validHostname = /^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$/.test(params.ip)
 
-      if (!params.ip) return this.$t('节点IP不可为空')
+      if (!params.ip) return this.$t('getStarted.dashboard.emptyIP')
       if(validIPv4 || validHostname) {
-        if (this.existList.some(node => node.ip === params.ip)) return this.$t('节点IP已存在')
-        if (this.rawData.filter(node => node.ip === params.ip).length > 1) return this.$t('节点IP不可重复')
+        if (this.existList.some(node => node.ip === params.ip)) return this.$t('getStarted.dashboard.existIP')
+        if (this.rawData.filter(node => node.ip === params.ip).length > 1) return this.$t('getStarted.dashboard.repeatIP')
         if (!params.userName) {
-          return this.$t('节点SSH username不可为空')
+          return this.$t('getStarted.dashboard.emptySSHUsername')
         }
       }
       else {
-        return this.$t('节点IP格式不符合规范')
+        return this.$t('getStarted.dashboard.unValidIP')
       }
       return false
     },
@@ -283,7 +283,7 @@ export default {
       if (resultList.every(Boolean)) {
         this.$notify.success({
           title: this.$t('base.successful'),
-          message: this.$t('节点列表导入成功'),
+          message: this.$t('getStarted.dashboard.importSuccess'),
         })
         this.dialogVisible = false
       } else {
