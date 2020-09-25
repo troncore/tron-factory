@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     custom-class="im-dialog"
-    width="800px"
+    width="900px"
     center>
     <div slot="title" class="dialog-header">
       <div class="title">{{ $t('getStarted.dashboard.importList') }}</div>
@@ -30,10 +30,11 @@
       <el-table
           :data="importData"
           :empty-text="$t('base.emptyData')"
-          class="custom-table"
+
           border
           header-align="center"
           v-loading="tableLoading"
+          :row-class-name="tableRowClassName"
           @selection-change="handleSelectionChange">
         <el-table-column
             type="selection"
@@ -52,11 +53,21 @@
             align="center">
         </el-table-column>
         <el-table-column
+            prop="userName"
+            label="是否规范"
+            align="center"
+            width="120">
+          <template slot-scope="scope">
+            <el-tag type="success" size="mini" v-if="scope.row.status === true">YES</el-tag>
+            <el-tag type="danger" size="mini" v-else>NO</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
             prop="address"
-            label="Status"
+            label="错误信息"
             align="center">
           <template slot-scope="scope">
-            <span v-show="scope.row.status !== true" class="red">{{ scope.row.status }}</span>
+            <span v-show="scope.row.status !== true">{{ scope.row.status }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -178,7 +189,10 @@ export default {
       if(!this.rawData.length) return
       this.tableLoading = true
       this.$_api.getStarted.getNodeList({}, (err, res) => {
-        if (err) return
+        if (err) {
+          this.tableLoading = false
+          return 
+        }
         this.existList = Array.isArray(res) ? res : []
         this.handleRawData()
       })
@@ -215,9 +229,9 @@ export default {
           port: 22,
           sshPassword: '',
         }, (err, res) => {
-          if (err) return resolve('接口异常') // network error
+          if (err) return resolve('network error') // network error
 
-          resolve(res === true ? true : this.$t('检测 SSH 连接失败'))
+          resolve(res === true ? true : this.$t('SSH连接失败'))
         })
       })
     },
@@ -226,15 +240,16 @@ export default {
       const validIPv4 =  /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/.test(params.ip)
       const validHostname = /^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$/.test(params.ip)
 
+      if (!params.ip) return this.$t('节点IP不可为空')
       if(validIPv4 || validHostname) {
-        if (this.existList.some(node => node.ip === params.ip)) return this.$t('IP 已添加')
-        if (this.rawData.filter(node => node.ip === params.ip).length > 1) return this.$t('IP 重复')
+        if (this.existList.some(node => node.ip === params.ip)) return this.$t('节点IP已存在')
+        if (this.rawData.filter(node => node.ip === params.ip).length > 1) return this.$t('节点IP不可重复')
         if (!params.userName) {
-          return this.$t('SSH username 不可以为空')
+          return this.$t('节点SSH username不可为空')
         }
       }
       else {
-        return this.$t('IP 格式不符合规范')
+        return this.$t('节点IP格式不符合规范')
       }
       return false
     },
@@ -244,6 +259,9 @@ export default {
     },
     handleSelectionChange (rows) {
       this.selectedNodes = rows
+    },
+    tableRowClassName({row, rowIndex}) {
+      return row.status === true ? '' : 'error-node'
     },
 
     async handleSubmit () {
@@ -335,8 +353,10 @@ dl {
   margin-top: 0;
   color: font-color(.8);
 }
-.red {
-  color: red;
+::v-deep .el-table {
+  .error-node {
+    background-color: rgba(255, 0, 0, 0.03);
+  }
 }
 .table-footer {
   margin-top: 10px;

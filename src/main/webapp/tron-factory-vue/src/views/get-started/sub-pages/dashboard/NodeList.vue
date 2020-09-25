@@ -294,7 +294,20 @@
       },
 
       handleExportTable () {
-        let data = this.tableData
+        let data = this.tableData.map(node => ({
+          "ip": node.ip,
+          "sshPassword": node.sshPassword,
+          "javaTronVersion": node.javaTronVersion,
+          "userName": node.userName,
+          "url": node.url,
+          "port": node.port,
+          "createTime": node.createTime,
+          "isSR": node.isSR,
+          "id": node.id,
+          "voteCount": node.voteCount,
+          "listenPort": node.listenPort,
+          "needSyncCheck": node.needSyncCheck,
+        }))
 
         let dataBlob = new Blob([ JSON.stringify(data, null, 2) ], { type: 'application/json' })
 
