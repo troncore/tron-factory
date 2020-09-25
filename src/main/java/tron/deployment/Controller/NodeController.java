@@ -101,18 +101,7 @@ public class NodeController {
     return newNodes;
   }
 
-  //判断数据库中是否已存在相同ip
-  private boolean isIpExist(JSONArray nodes, String ip) {
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      String nodeIp = (String) node.get(Common.ipFiled);
-      if (nodeIp.equals(ip)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
+  //判断数据库中是否存在两个相同的节点，节点唯一标识：ip,listenPort
   private boolean isIpListenPortExist(JSONArray nodes, String ip, long listenPort) {
     for (int i = 0; i < nodes.size(); i++) {
       JSONObject node = (JSONObject) nodes.get(i);
@@ -140,37 +129,8 @@ public class NodeController {
     return false;
   }
 
-  //公钥登录，校验连通性：sshConnetct.bash，读取日志，判断是否ssh成功
+  //SSH登录，校验连通性：sshConnetct.bash，读取日志，判断是否ssh成功
   private String checkSSHStatus(String path) {
-    File file = new File(path);
-    if (file.isFile() && file.exists()) {
-      try {
-        InputStreamReader read = new InputStreamReader(
-                new FileInputStream(file), Common.encoding);
-        BufferedReader bufferedReader = new BufferedReader(read);
-        String lineTxt;
-
-        while ((lineTxt = bufferedReader.readLine()) != null) {
-          if (lineTxt.contains(Common.connectSuccessStatus)) {
-            return Common.connectSuccessStatus;
-          }
-          if (lineTxt.contains(Common.connectFailedStatus)) {
-            return Common.connectFailedStatus;
-          }
-        }
-        bufferedReader.close();
-        read.close();
-
-      } catch (Exception e) {
-        LOG.error(e.toString());
-      }
-    } else {
-      return Common.notFoundStatus;
-    }
-    return Common.connectFailedStatus;
-  }
-
-  private String checkSSHPWDStatus(String path) {
     File file = new File(path);
     if (file.isFile() && file.exists()) {
       try {
@@ -204,7 +164,7 @@ public class NodeController {
   public JSONObject addNode(@RequestBody LinkedHashMap<String,Object> data) {
     //获取链的加密方式
     refresh();
-    int status = 0;
+    int status;
     //获取请求数据 start
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "127.0.0.1");
@@ -230,15 +190,8 @@ public class NodeController {
     //获取请求数据 end
 
     //根据登录方式的不同，校验连通性 start
-    BashExecutor bashExecutor = new BashExecutor();
-    if(sshConnectType == 1 ){
-      bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
-    }
-    if(sshConnectType == 2){
-      bashExecutor.callSSHScript(ip, port, userName);
-    }
     JSONObject statusObj = new JSONObject();
-    String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+    String sshStatus = checkSSHConnect(ip, sshConnectType, userName, port, sshPassword);
     if(sshStatus.equals(Common.connectFailedStatus)) {
       status = 1;
       statusObj.put("status",status);
@@ -336,7 +289,6 @@ public class NodeController {
     newNode.put(Common.voteCountFiled, voteCount);
     newNode.put(Common.needSyncCheck, needSyncCheck);
     newNode.put(Common.sshPasswordFiled, sshPassword);
-//    newNode.put(Common.sshPortFiled, sshPort);
     newNode.put(Common.isDeployedFiled, isDeployed);
     newNode.put(Common.javaTronVersionFiled, javaTronVersion);
     newNode.put(Common.sshConnectTypeField, sshConnectType);
@@ -349,7 +301,6 @@ public class NodeController {
     newNode.put(Common.dbCustomFiled, "");
     newNode.put(Common.isError, false);
     newNode.put(Common.nodeIdFiled, nodeId);
-//    newNode.put(Common.isFristStart,false);
     newNode.put(Common.showStop, true);
     nodes.add(newNode);
     return updateNodesInfo(nodes, json, id, ipList, listenPort, httpFullNodePort, rpcFullNodePort, false, nodeHttpPortMap, nodeRpcPortMap);
@@ -358,7 +309,7 @@ public class NodeController {
   //编辑节点信息
   @PutMapping(value = "/api/nodeInfo")
   public JSONObject updateNode(@RequestBody LinkedHashMap<String,Object> data) {
-    int status = 0;
+    int status;
     String userName = (String) data.getOrDefault("userName", "node1");
     String ip = (String) data.getOrDefault("ip", "");
     boolean isSR = (boolean) data.getOrDefault("isSR", false);
@@ -385,14 +336,7 @@ public class NodeController {
     int listenPort = (Integer) data.getOrDefault("listenPort", "18889");
 
     JSONObject statusObj = new JSONObject();
-    BashExecutor bashExecutor = new BashExecutor();
-    if(sshConnectType ==1 ){
-      bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
-    }
-    if(sshConnectType == 2){
-      bashExecutor.callSSHScript(ip, port, userName);
-    }
-    String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
+    String sshStatus = checkSSHConnect(ip, sshConnectType, userName, port, sshPassword);
     if(sshStatus.equals(Common.connectFailedStatus)) {
       status = 1;
       statusObj.put("status",status);
@@ -953,6 +897,15 @@ public class NodeController {
   @GetMapping(value = "/api/checkSSH")
   public JSONObject checkSSH(@RequestParam String ip, int sshConnectType, String userName, int port, String sshPassword) {
     //根据登录方式的不同，校验连通性 start
+    String sshStatus = checkSSHConnect(ip, sshConnectType, userName, port, sshPassword);
+    if (sshStatus.equals(Common.connectFailedStatus)) {
+      return new Response(ResultCode.OK.code, false).toJSONObject();
+    }
+    return new Response(ResultCode.OK.code, true).toJSONObject();
+  }
+
+
+  public String checkSSHConnect(String ip, int sshConnectType, String userName, int port, String sshPassword){
     BashExecutor bashExecutor = new BashExecutor();
     if(sshConnectType == 1 ){
       bashExecutor.callSSHPWDScript(ip, port, userName, sshPassword);
@@ -961,10 +914,7 @@ public class NodeController {
       bashExecutor.callSSHScript(ip, port, userName);
     }
     String sshStatus = checkSSHStatus(String.format(Common.sshLogFormat));
-    if (sshStatus.equals(Common.connectFailedStatus)) {
-      return new Response(ResultCode.OK.code, false).toJSONObject();
-    }
-    return new Response(ResultCode.OK.code, true).toJSONObject();
+    return sshStatus;
   }
 
 }
