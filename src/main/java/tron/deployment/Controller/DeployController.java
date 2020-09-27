@@ -1,12 +1,12 @@
 package tron.deployment.Controller;
 
-import static common.Common.logFormat;
 import static common.LogConfig.LOG;
 import static common.Util.*;
 
 import com.typesafe.config.Config;
 import common.Args;
 import common.Common;
+import common.utils.NodeUtil;
 import config.BlockSettingConfig;
 import config.ConfigGenerator;
 import org.apache.commons.lang3.StringUtils;
@@ -41,9 +41,11 @@ import tron.deployment.shellExecutor.BashExecutor;
 public class DeployController {
     protected static final Logger logger = LoggerFactory.getLogger("DeployController");
     String[] portOccupied = null;
-    NodeController nc  = new NodeController();
     boolean startDeploy = false;
+    NodeController nodeController  = new NodeController();
+    NodeUtil nodeUtil = new NodeUtil();
 
+    //检测节点是否部署成功
     private String checkNodeStatus(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -69,6 +71,7 @@ public class DeployController {
         }
         return Common.deployFailedStatus;
     }
+
     //查询节点是否部署成功
     private String checkIsDeployed(String path) {
         boolean isDeployed = true;
@@ -90,7 +93,6 @@ public class DeployController {
                             }
                         }
                         if(isDeployed){
-
                             return Common.deployFinishStatus;
                         }
                     }
@@ -109,7 +111,6 @@ public class DeployController {
                     }
 
                 }
-
                 bufferedReader.close();
                 read.close();
 
@@ -122,7 +123,7 @@ public class DeployController {
         return Common.deployFailedStatus;
     }
 
-//校验zip包路径是否正确
+    //校验zip包路径是否正确
     private String checkZipPath(String path) {
         File file = new File(path);
         if (file.isFile() && file.exists()) {
@@ -152,6 +153,7 @@ public class DeployController {
         return Common.connectFailedStatus;
     }
 
+    //节点是否成功部署
     @GetMapping(value = "/api/checkDeployStatus")
     public JSONObject checkDeployStatus() {
         boolean isDeployed = true;
@@ -168,6 +170,7 @@ public class DeployController {
 
     }
 
+    //节点是否完成配置
     @GetMapping(value = "/api/checkConfigStatus")
     public JSONObject checkConfigStatus() {
         JSONObject json = readJsonFile();
@@ -177,6 +180,7 @@ public class DeployController {
         return new Response(ResultCode.OK.code, statusObj).toJSONObject();
     }
 
+    //获取所有已部署节点
     @GetMapping(value = "/api/getDeployedNode")
     public JSONObject getDeployedNode(@RequestParam(value = "isDeployedNode", required = true, defaultValue = "true") boolean isDeployedNode) {
         JSONObject json = readJsonFile();
@@ -224,12 +228,7 @@ public class DeployController {
         //更新节点部署日志查看状态
         JSONObject node = Util.getNodeInfo(nodes, id);
         boolean isSR = (Boolean) node.get(Common.isSRFiled);
-//        boolean isFirstStart = (boolean) node.get(Common.isFristStart);
         //判断节点是否启动过，若启动过，则可以出现继续运行节点
-        /*if(!isFirstStart){
-            node.put(Common.isFristStart, true);
-            node.put(Common.showStop, true);
-        }*/
         node.put(Common.ifShowLogField, true);
         deleteNode(id);
         json = readJsonFile();
@@ -239,7 +238,7 @@ public class DeployController {
         }
         newNodes.add(node);
         json.put(Common.nodesFiled, newNodes);
-        nc.updateNodesInfo(newNodes, json);
+        nodeUtil.updateNodesInfo(newNodes, json, null);
 
         //部署所有节点
         String path = filePath;
@@ -257,7 +256,7 @@ public class DeployController {
         }
         newNodeHttp.add(nodeOldHttp);
         json.put(Common.nodesFiled, newNodeHttp);
-        nc.updateNodesInfo(newNodeHttp, json);
+        nodeUtil.updateNodesInfo(newNodeHttp, json, null);
 
         if (isSR) {
             try {
@@ -284,9 +283,6 @@ public class DeployController {
         if (dbCustom.equals("")) {
             dbCustom = "null";
         }
-
-        //获取chainId
-        long chainId = (long) json.get(Common.chainIdFiled);
 
         //获取节点唯一标识，即节点添加时的时间戳
         long nodeId = (long) node.get(Common.nodeIdFiled);
@@ -335,7 +331,7 @@ public class DeployController {
             }
             nowNodes.add(oldNode);
             json.put(Common.nodesFiled, nowNodes);
-            nc.updateNodesInfo(nowNodes, json);
+            nodeUtil.updateNodesInfo(nowNodes, json, null);
         }
         return isDeployed;
     }
@@ -359,12 +355,12 @@ public class DeployController {
         nowNodes.add(oldNode);
         json.put(Common.nodesFiled, nowNodes);
         json.put(Common.firstIdFiled, firstId);
-        nc.updateNodesInfo(nowNodes, json);
+        nodeUtil.updateNodesInfo(nowNodes, json, null);
     }
 
     @PostMapping(value = "/api/deployNode")
-    public JSONObject deploy(@RequestBody LinkedHashMap<String,Object> data) throws CipherException, IOException, InterruptedException {
-//0: 节点已成功启动； 1: 发布失败，节点未启动成功，请查看日志; 2: 部分节点未启动成功，请查看日志； 3: 当前存在正在启动中的节点，请稍后再试；
+    public JSONObject deploy(@RequestBody LinkedHashMap<String,Object> data) {
+//0: 节点已成功启动； 1: 发布失败，节点未启动成功，请查看日志; 2: 部分节点未启动成功，请查看日志； 3: 当前存在正在启动中的节点，请稍后再试
         startDeploy = true;
         JSONObject json = readJsonFile();
         JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -391,7 +387,6 @@ public class DeployController {
         ChainController chainController = new ChainController();
         JSONObject jsonObject = chainController.checkChainPublish();
         int publishStatus = (int) jsonObject.get("data");
-        int SRNum = 0;
         JSONObject statusObj = new JSONObject();
         int deployStatus = -1;
         boolean ifCheckZipPath = false;
@@ -403,13 +398,13 @@ public class DeployController {
                 int SRCount = 0;
                 JSONObject node = Util.getNodeInfo(nodes, idArr[count]);
                 boolean isSR = (Boolean) node.get(Common.isSRFiled);
-//                boolean isFirstStart = (boolean) node.get(Common.isFristStart);
                 if (isSR) {
                     SRCount += 1;
                     if (SRCount == 1) {//初始节点
                         idSR = idArr[count];
                         ConfigGenerator configGenerator = new ConfigGenerator();
-                        boolean result = configGenerator.updateConfig(new BlockSettingConfig(false), idSR, String.format("%s_%s", Common.configFiled, idSR + ""));
+                        //设置needSyncCheck
+                        configGenerator.updateConfig(new BlockSettingConfig(false), idSR, String.format("%s_%s", Common.configFiled, idSR + ""));
                         //执行checkZipPath.bash，判断zip包路径正确性，仅第一次循环时校验
                         if (!ifCheckZipPath) {
                             ifCheckZipPath = true;
@@ -452,9 +447,7 @@ public class DeployController {
                             map.put(Common.isError, false);
                             //显示停止按钮
                             map.put(Common.showStop, true);
-
                             updateNodeInfo(idArr[count], map, idSR);
-
                         }
                     }
                     if (count == idArr.length - 1) {
@@ -620,7 +613,6 @@ public class DeployController {
             return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
         }
         String ip = (String) node.get(Common.ipFiled);
-        NodeController nc = new NodeController();
         //获取配置文件中listenPort
         Util util = new Util();
         util.parseConfig(id);
@@ -636,14 +628,15 @@ public class DeployController {
                 ipList.add(nodeIp+"\":\""+listenPort);
             }
         }
-        JSONArray newNodes = nc.removeNodeInfo(nodes, id, false);
+        JSONArray newNodes = nodeController.removeNodeInfo(nodes, id, false);
         if (newNodes.size() == nodes.size()) {
             return new Response(ResultCode.NOT_FOUND.code, Common.nodeIdNotExistFailed).toJSONObject();
         }
 
-        return nc.updateNodesInfo(newNodes, json, ipList);
+        return nodeUtil.updateNodesInfo(newNodes, json, ipList);
     }
 
+    //继续启动节点
     @GetMapping(value = "/api/runNodeAgain")
     public JSONObject runNodeAgain(
             @RequestParam(value = "id", required = false, defaultValue = "1") Long id
@@ -651,6 +644,7 @@ public class DeployController {
         return deployNode(id, "null", true);
     }
 
+    //重置节点
     @GetMapping(value = "/api/resetNode")
     public JSONObject resetNode(
             @RequestParam(value = "id", required = true, defaultValue = "1") Long id
@@ -691,7 +685,7 @@ public class DeployController {
             }
             newNodes.add(node);
             json.put(Common.nodesFiled, newNodes);
-            nc.updateNodesInfo(newNodes, json);
+            nodeUtil.updateNodesInfo(newNodes, json, null);
         }
 
         return new Response(ResultCode.OK.code, "success").toJSONObject();
@@ -714,7 +708,6 @@ public class DeployController {
                     if (lineTxt.contains("failed")) {
                         return Common.resetNodeFailStatus;
                     }
-
                 }
 
                 bufferedReader.close();

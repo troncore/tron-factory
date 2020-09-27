@@ -3,18 +3,13 @@ package tron.deployment.Controller;
 import static common.Util.parseConfig;
 import static common.Util.readJsonFile;
 import static common.Util.writeJsonFile;
-import static org.tron.core.config.args.Storage.getDbEngineFromConfig;
-
-import common.Args;
 import common.Common;
 import common.Util;
+import common.utils.NodeUtil;
 import config.ActuatorConfig;
-//import config.BlockSettingConfig;
 import config.ConfigGenerator;
 import config.CryptoConfig;
-//import config.NetworkConfig;
 import org.json.simple.JSONArray;
-import org.spongycastle.util.Strings;
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
 import java.util.ArrayList;
@@ -31,6 +26,8 @@ import response.Response;
 @Component
 @RequestMapping(value = "/")
 public class PluginConfig {
+
+  NodeUtil nodeUtil = new NodeUtil();
 
   @PostMapping(value = "/api/consensus")
   public JSONObject consensus(@RequestBody JSONObject jsonData){
@@ -169,8 +166,7 @@ public class PluginConfig {
     }
     newNodes.add(nodeOld);
     json.put(Common.nodesFiled, newNodes);
-    NodeController nodeController = new NodeController();
-    nodeController.updateNodesInfo(newNodes, json);
+    nodeUtil.updateNodesInfo(newNodes, json, null);
 
     return new Response(ResultCode.OK.code, "").toJSONObject();
   }

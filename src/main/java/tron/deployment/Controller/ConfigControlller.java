@@ -9,25 +9,18 @@ import static org.tron.core.config.args.Storage.getDbEngineFromConfig;
 import static org.tron.core.config.args.Storage.getDbVersionSyncFromConfig;
 import static org.tron.core.config.args.Storage.getIndexDirectoryFromConfig;
 import static org.tron.core.config.args.Storage.getTransactionHistoreSwitchFromConfig;
-
-
-//import com.google.inject.internal.cglib.core.$CodeGenerationException;
 import com.typesafe.config.Config;
 import common.Util;
+import common.utils.NodeUtil;
 import config.*;
 import entity.AssetsEntity;
 import common.Args;
 import common.Common;
-
 import java.io.*;
 import java.util.*;
-
 import org.springframework.web.bind.annotation.*;
-//import response.ResultCode;
-
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -64,6 +57,8 @@ public class ConfigControlller {
 
   // genesisWitnessConfig
   GenesisWitnessConfig genesisWitnessConfig;
+
+  NodeUtil nodeUtil = new NodeUtil();
 
   private void refresh() {
     Util util = new Util();
@@ -333,8 +328,7 @@ public class ConfigControlller {
     }
     nowNodes.add(oldNode);
     json.put(Common.nodesFiled, nowNodes);
-    NodeController nodeController = new NodeController();
-    nodeController.updateNodesInfo(nowNodes, json);
+    nodeUtil.updateNodesInfo(nowNodes, json, null);
 
     ConfigGenerator configGenerator = new ConfigGenerator();
     if(dbEngine.equals("LEVELDB")){
@@ -689,8 +683,7 @@ public class ConfigControlller {
     }
     newNodes.add(nodeOld);
     json.put(Common.nodesFiled, newNodes);
-    NodeController nodeController = new NodeController();
-    nodeController.updateNodesInfo(newNodes, json);
+    nodeUtil.updateNodesInfo(newNodes, json, null);
 
     if(result){
       return new Response(ResultCode.OK.code, "保存成功").toJSONObject();

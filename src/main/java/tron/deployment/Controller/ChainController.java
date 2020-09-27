@@ -27,6 +27,7 @@ import static wallet.Wallet.*;
 @Slf4j
 public class ChainController {
 
+  //判断是否存在私链
   @GetMapping(value = "/api/hasBlockChain")
   public JSONObject HasBlockChain() {
     JSONObject json = readJsonFile();
@@ -64,9 +65,6 @@ public class ChainController {
       return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
     }
     //把链的名称和共识信息写入数据库 end
-
-    //把chainId写入数据库
-
 
     //把加密算法写入配置文件 start
     JSONObject jsonData = new JSONObject();
@@ -285,6 +283,7 @@ public class ChainController {
     return new Response(ResultCode.OK.code, statusObj).toJSONObject();
   }
 
+  //检测私链是否发布
   @GetMapping(value = "/api/checkChainPublish")
   public JSONObject checkChainPublish() {
     JSONObject json = readJsonFile();

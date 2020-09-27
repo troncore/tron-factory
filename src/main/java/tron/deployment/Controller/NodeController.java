@@ -4,24 +4,20 @@ import static common.LogConfig.LOG;
 import static common.Util.*;
 import static common.crypto.ECKey.getGeneratedRandomSign;
 import static wallet.Wallet.*;
-
 import com.typesafe.config.Config;
 import common.Args;
 import common.Util;
 import common.Common;
 import common.crypto.SignInterface;
 import common.utils.HttpUtil;
+import common.utils.NodeUtil;
 import config.*;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.web.bind.annotation.*;
 import response.ResultCode;
-import entity.WitnessEntity;
-
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,7 +34,7 @@ import tron.deployment.shellExecutor.BashExecutor;
 public class NodeController {
 
   private static boolean isEckey = true;
-
+  NodeUtil nodeUtil = new NodeUtil();
   static {
     refresh();
   }
@@ -49,39 +45,7 @@ public class NodeController {
       isEckey = Util.config.getString("crypto.engine").equalsIgnoreCase("eckey");
     }
   }
-  //更新节点信息
-  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, ArrayList<String> ipList) {
-    ConfigGenerator configGenerator = new ConfigGenerator();
 
-    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      boolean isSR = (Boolean) node.get(Common.isSRFiled);
-
-      if (isSR) {
-        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
-                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
-      }
-    }
-    configGenerator.updateConfig(new SeedNodeConfig(ipList), Common.configFiled);
-    configGenerator.updateConfig(new ActiveConfig(ipList), Common.configFiled);
-
-    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
-    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
-
-    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
-      LOG.error("update witness config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
-    }
-
-    json.put(Common.nodesFiled, nodes);
-
-    if (!writeJsonFile(json)) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
-    }
-
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-  }
   //删除节点信息
   public JSONArray removeNodeInfo(JSONArray nodes, Long id, boolean flag) {
     JSONArray newNodes = new JSONArray();
@@ -303,7 +267,7 @@ public class NodeController {
     newNode.put(Common.nodeIdFiled, nodeId);
     newNode.put(Common.showStop, true);
     nodes.add(newNode);
-    return updateNodesInfo(nodes, json, id, ipList, listenPort, httpFullNodePort, rpcFullNodePort, false, nodeHttpPortMap, nodeRpcPortMap);
+    return nodeUtil.updateNodesInfo(nodes, json, id, ipList, listenPort, httpFullNodePort, rpcFullNodePort, false, nodeHttpPortMap, nodeRpcPortMap);
   }
 
   //编辑节点信息
@@ -415,7 +379,7 @@ public class NodeController {
     nodes.add(node);
     json.put(Common.nodesFiled, nodes);
 
-    return updateNodesInfo(nodes, json, id, ipList, listenPort, false);
+    return nodeUtil.updateNodesInfo(nodes, json, id, ipList, listenPort, false);
   }
 
   //编辑节点，查看节点详情
@@ -441,10 +405,10 @@ public class NodeController {
     }
     return new Response(ResultCode.OK.code, node).toJSONObject();
   }
+
   //获取节点列表
   @GetMapping(value = "/api/allNodeInfo")
-  public JSONObject getAllNode(
-  ) {
+  public JSONObject getAllNode() {
 
     JSONObject json = readJsonFile();
     JSONArray nodes = (JSONArray) json.get(Common.nodesFiled);
@@ -482,179 +446,6 @@ public class NodeController {
 
     configControlller.genesisSettingConfig(jsonObject);
 
-
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-  }
-
-  //更新节点信息，不含iplist
-  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json) {
-    ConfigGenerator configGenerator = new ConfigGenerator();
-
-    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      boolean isSR = (Boolean) node.get(Common.isSRFiled);
-
-      if (isSR) {
-        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
-                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
-      }
-    }
-
-    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
-    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
-
-    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
-      LOG.error("update witness config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
-    }
-
-    json.put(Common.nodesFiled, nodes);
-
-    if (!writeJsonFile(json)) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
-    }
-
-    return new Response(ResultCode.OK.code, "").toJSONObject();
-  }
-
-  //更新节点信息
-  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, long id , HashMap<String,String> ipList, int listenPort, int httpFullNodePort, int rpcFullNodePort, boolean isDeleteNode, HashMap<String,Integer> nodeHttpPortMap, HashMap<String,Integer> nodeRpcPortMap) {
-    ConfigGenerator configGenerator = new ConfigGenerator();
-
-    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      boolean isSR = (Boolean) node.get(Common.isSRFiled);
-
-      if (isSR) {
-        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
-                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
-      }
-    }
-
-    ArrayList<String> ipListAll = new ArrayList<>();
-    Collection<String> values = ipList.values() ;// 得到全部的value
-    Iterator<String> iter = values.iterator() ;
-    while(iter.hasNext()) {
-      ipListAll.add(iter.next());
-    }
-    //为每个节点的配置文件更新witness信息
-    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
-    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      long idNode = (Long) node.get(Common.idFiled);
-      if (!configGenerator.updateConfig(witnessConfig, idNode, String.format("%s_%s", Common.configFiled, idNode+""))) {
-        LOG.error("update witness config file failed");
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
-      }
-      if(!configGenerator.updateConfig(new SeedNodeConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
-        LOG.error("update seedNode config file failed");
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update seedNode config file failed").toJSONObject();
-      }
-      if(!configGenerator.updateConfig(new ActiveConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
-        LOG.error("update active config file failed");
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update active config file failed").toJSONObject();
-      }
-    }
-
-    if(!configGenerator.updateConfig(new HttpRpcPortConfig(rpcFullNodePort, httpFullNodePort), id, String.format("%s_%s", Common.configFiled, id+""))){
-      LOG.error("update httpRpcPort config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update httpRpcPort config file failed").toJSONObject();
-    }
-
-    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
-      LOG.error("update witness config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
-    }
-
-    if(!isDeleteNode){
-      //更新listenPort信息
-      boolean result = configGenerator.updateConfig(
-              new ListenPortConfig((int) listenPort), id, String.format("%s_%s", Common.configFiled, id+""));
-
-      if (!result) {
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-      }
-    }
-
-
-    json.put(Common.nodesFiled, nodes);
-    json.put(Common.ipListFiled, ipList);
-    json.put(Common.nodeHttpPortMapField, nodeHttpPortMap);
-    json.put(Common.nodeRpcPortMapField, nodeRpcPortMap);
-
-    if (!writeJsonFile(json)) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
-    }
-
-    return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
-  }
-
-  //更新节点信息
-  public JSONObject updateNodesInfo(JSONArray nodes, JSONObject json, long id , HashMap<String,String> ipList, int listenPort, boolean isDeleteNode) {
-    ConfigGenerator configGenerator = new ConfigGenerator();
-
-    ArrayList<WitnessEntity> witnessnodes = new ArrayList<>();
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      boolean isSR = (Boolean) node.get(Common.isSRFiled);
-
-      if (isSR) {
-        witnessnodes.add(new WitnessEntity((String) node.get(Common.publicKeyFiled),
-                (String) node.get(Common.urlFiled), (String) node.get(Common.voteCountFiled)));
-      }
-    }
-
-    ArrayList<String> ipListAll = new ArrayList<>();
-    Collection<String> values = ipList.values() ;// 得到全部的value
-    Iterator<String> iter = values.iterator() ;
-    while(iter.hasNext()) {
-      ipListAll.add(iter.next());
-    }
-    //为每个节点的配置文件更新witness信息
-    GenesisWitnessConfig witnessConfig = new GenesisWitnessConfig();
-    witnessConfig.setGenesisBlockWitnesses(witnessnodes);
-    for (int i = 0; i < nodes.size(); i++) {
-      JSONObject node = (JSONObject) nodes.get(i);
-      long idNode = (Long) node.get(Common.idFiled);
-      if (!configGenerator.updateConfig(witnessConfig, idNode, String.format("%s_%s", Common.configFiled, idNode+""))) {
-        LOG.error("update witness config file failed");
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
-      }
-      if(!configGenerator.updateConfig(new SeedNodeConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
-        LOG.error("update seedNode config file failed");
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update seedNode config file failed").toJSONObject();
-      }
-      if(!configGenerator.updateConfig(new ActiveConfig(ipListAll), idNode, String.format("%s_%s", Common.configFiled, idNode+""))){
-        LOG.error("update active config file failed");
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update active config file failed").toJSONObject();
-      }
-    }
-
-    if (!configGenerator.updateConfig(witnessConfig, Common.configFiled)) {
-      LOG.error("update witness config file failed");
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, "update witness config file failed").toJSONObject();
-    }
-
-    if(!isDeleteNode){
-      //更新listenPort信息
-      boolean result = configGenerator.updateConfig(
-              new ListenPortConfig(listenPort), id, String.format("%s_%s", Common.configFiled, id+""));
-
-      if (!result) {
-        return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.updateConfigFileFailed).toJSONObject();
-      }
-    }
-
-
-    json.put(Common.nodesFiled, nodes);
-    json.put(Common.ipListFiled, ipList);
-
-    if (!writeJsonFile(json)) {
-      return new Response(ResultCode.INTERNAL_SERVER_ERROR.code, Common.writeJsonFileFailed).toJSONObject();
-    }
 
     return new Response(ResultCode.OK_NO_CONTENT.code, "").toJSONObject();
   }
@@ -702,9 +493,10 @@ public class NodeController {
       json = readJsonFile();
       json.put(Common.chainNameFiled, "");
     }
-    return updateNodesInfo(newNodes, json, id, ipList, listenPort, true);
+    return nodeUtil.updateNodesInfo(newNodes, json, id, ipList, listenPort, true);
   }
 
+  //获取已部署节点的信息，即浏览器功能
   @GetMapping(value = "/api/getDeployedNodeInfo")
   public JSONObject getDeployedNodeInfo(@RequestParam String url, int type) {
     HttpUtil httpUtil = new HttpUtil();
@@ -725,6 +517,7 @@ public class NodeController {
 
   }
 
+  //获取已部署节点的产块信息，即浏览器功能
   @GetMapping(value = "/api/getNowBlockInfo")
   public JSONObject getNowBlockInfo(@RequestParam String url, int type) {
     HttpUtil httpUtil = new HttpUtil();
@@ -744,6 +537,7 @@ public class NodeController {
     }
   }
 
+  //停止节点
   @GetMapping(value = "/api/stopNode")
   public JSONObject stopNode(@RequestParam long id) throws InterruptedException {
     BashExecutor bashExecutor = new BashExecutor();
@@ -808,13 +602,14 @@ public class NodeController {
       if(id == firstId){
         json.put(Common.firstIdFiled, -1);
       }
-      updateNodesInfo(nowNodes, json);
+      nodeUtil.updateNodesInfo(nowNodes, json, null);
 
     }
 
       return new Response(ResultCode.OK.code, "").toJSONObject();
   }
 
+  //自动生成地址私钥对
   @GetMapping(value = "/api/convertKey")
   public JSONObject convertKey() {
     refresh();
@@ -829,7 +624,6 @@ public class NodeController {
     jsonObject.put("publicKey", publicKey);
     return new Response(ResultCode.OK.code, "",jsonObject).toJSONObject();
   }
-
 
   //查询节点是否成功停止
   private String checkIsStoped(String path) {
@@ -894,6 +688,7 @@ public class NodeController {
     }
   }
 
+  //检测节点SSH认证信息是否正确
   @GetMapping(value = "/api/checkSSH")
   public JSONObject checkSSH(@RequestParam String ip, int sshConnectType, String userName, int port, String sshPassword) {
     //根据登录方式的不同，校验连通性 start
@@ -903,7 +698,6 @@ public class NodeController {
     }
     return new Response(ResultCode.OK.code, true).toJSONObject();
   }
-
 
   public String checkSSHConnect(String ip, int sshConnectType, String userName, int port, String sshPassword){
     BashExecutor bashExecutor = new BashExecutor();

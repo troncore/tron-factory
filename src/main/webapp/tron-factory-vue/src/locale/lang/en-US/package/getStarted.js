@@ -113,7 +113,7 @@ export default {
     importTips1: '1. IP cannot be duplicated or already exist in the list',
     importTips2: '2. The SSH security authentication method defaults to public key, the SSH port is 22',
     selectFile: 'Select a file',
-    downloadImportTpl: 'Import Templates',
+    downloadImportTpl: 'Import Template',
     importTplName: 'TRON-Factory Import Templates',
     isStandard: 'Standard or not',
     errorMessage: 'Error messages',
