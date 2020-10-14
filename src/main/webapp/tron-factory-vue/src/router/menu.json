@@ -3,14 +3,18 @@
     "path": "/get-started",
     "name": "get-started",
     "title": "menu.getStarted",
-    "icon": "iconfont iconpeizhi",
-    "disabled": false
+    "icon": "iconfont iconpeizhi"
   },
   {
     "path": "/explorer",
     "name": "explorer",
     "title": "menu.explorer",
-    "icon": "el-icon-s-data",
-    "disabled": false
+    "icon": "el-icon-s-data"
+  },
+  {
+    "path": "/token-diy",
+    "name": "token-diy",
+    "title": "menu.tokenDIY",
+    "icon": "el-icon-coin"
   }
 ]

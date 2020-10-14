@@ -1,45 +1,31 @@
 [
   {
     "path": "/get-started/:status(chain-add|chain-edit|dashboard|node-add|node-edit|node-view)?",
-    "name": "get-started",
-    "meta": {
-      "auth": true
-    }
+    "name": "get-started"
   },
   {
     "path": "/node-config/:type(quick|custom)/:step(base|network|database|p2p|modules)?",
-    "name": "node-config",
-    "meta": {
-      "auth": true
-    }
+    "name": "node-config"
   },
   {
     "path": "/explorer",
-    "name": "explorer",
-    "meta": {
-      "auth": true
-    }
+    "name": "explorer"
+  },
+  {
+    "path": "/token-diy",
+    "name": "token-diy"
   },
   {
     "path": "/ecology-app",
-    "name": "ecology-app",
-    "meta": {
-      "auth": true
-    }
+    "name": "ecology-app"
   },
   {
     "path": "/wallet-cli",
-    "name": "wallet-cli",
-    "meta": {
-      "auth": true
-    }
+    "name": "wallet-cli"
   },
   {
     "path": "/tron-link",
-    "name": "tron-link",
-    "meta": {
-      "auth": true
-    }
+    "name": "tron-link"
   },
   {
     "path": "/404",
