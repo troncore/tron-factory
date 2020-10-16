@@ -1,6 +1,12 @@
 $media1680: 1680px;
 $black-light: #111;
 
+$--color-primary: #409EFF;
+$--color-success: #67c23a;
+$--color-warning: #e6a23c;
+$--color-danger: #f56c6c;
+$--color-info: #909399;
+
 @function theme-color($alpha: 1) {
   //@return rgba(197, 49, 40, $alpha)
   //@return rgba(56, 106, 246, $alpha)
