@@ -15,8 +15,8 @@
           <p>请登录TronLink并刷新页面后再继续后面的操作</p>
         </div>
         <div v-else class="help-tips">
-          <p class="middle success-connect"><i class="success el-icon-circle-check"></i> 连接 TronLink 成功</p>
-          <p class="normal">代币所有者 <im-tooltip content="代币所有者账号将持有本次发行的全部代币" />：{{ connectAddress }}</p>
+<!--          <p class="middle success-connect"><i class="success el-icon-circle-check"></i> 连接 TronLink 成功</p>-->
+          <p class="account">代币所有者账号 <im-tooltip content="代币所有者账号将持有本次发行的全部代币" />：{{ tokenAccount }}</p>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@ export default {
       disable: false,
       isInstallTronLink: false,
       isConnectedTronLink: false,
-      connectAddress: '',
+      tokenAccount: '', // 代币所有者账号
       timeID: null,
     }
   },
@@ -53,19 +53,20 @@ export default {
       this.timeID = setInterval(this.getTronWeb, 300)
     },
     getTronWeb(){
+      // 浏览器成功安装tronlink扩展后，会自动添加全局变量 tronWeb
       if(window.tronWeb){
         this.isInstallTronLink = true
         if (window.tronWeb.defaultAddress.base58) {
           this.isConnectedTronLink = true
-          this.connectAddress = window.tronWeb.defaultAddress.base58
+          this.tokenAccount = window.tronWeb.defaultAddress.base58
         } else {
           this.isConnectedTronLink = false
-          this.connectAddress = ''
+          this.tokenAccount = ''
         }
       } else{
         this.isInstallTronLink = false
         this.isConnectedTronLink = false
-        this.connectAddress = ''
+        this.tokenAccount = ''
       }
     },
 
@@ -77,6 +78,12 @@ export default {
       this.$emit('step', -1)
     },
     handleSubmit () {
+      let tokenDIY = JSON.parse(localStorage.getItem('tokenDIY')) || {}
+
+      tokenDIY.tokenAccount = this.tokenAccount
+
+      localStorage.setItem('tokenDIY', JSON.stringify(tokenDIY))
+
       this.$emit('step', 1)
     }
   }
@@ -95,7 +102,8 @@ export default {
         font-size: 18px;
         font-weight: bold;
 
-        &.normal {
+        &.account {
+          margin: 40px 0;
           font-weight: normal;
         }
       }
@@ -105,7 +113,6 @@ export default {
         vertical-align: baseline;
       }
       .success-connect {
-        margin: 40px 0;
       }
 
       .success {

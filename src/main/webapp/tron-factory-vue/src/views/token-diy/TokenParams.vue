@@ -9,7 +9,7 @@
           <el-form-item prop="tokenName">
             <span slot="label">{{ $t('代币名称') }}</span>
             <div class="item-inner">
-              <el-input v-model.trim="form.tokenName" size="large" clearable />
+              <el-input v-model.trim="form.tokenName" size="large" maxlength="25" clearable />
               <span class="help-info">{{ $t('代币的名称，3 ~ 25个英文字符') }}</span>
             </div>
           </el-form-item>
@@ -17,7 +17,7 @@
           <el-form-item prop="tokenSymbol">
             <span slot="label">{{ $t('代币符号') }}</span>
             <div class="item-inner">
-              <el-input v-model.trim="form.tokenSymbol" size="large" clearable />
+              <el-input v-model.trim="form.tokenSymbol" size="large" maxlength="4" clearable />
               <span class="help-info">{{ $t('3 ~ 4英文字符，例如ETH, BTC, BAT 等，不可包含空格') }}</span>
             </div>
           </el-form-item>
@@ -25,7 +25,7 @@
           <el-form-item prop="decimals">
             <span slot="label">{{ $t('小数位数') }}</span>
             <div class="item-inner">
-              <el-input v-model.trim="form.decimals" size="large" clearable />
+              <el-input v-model.trim="form.decimals" size="large" maxlength="2" clearable />
               <span class="help-info">{{ $t('代币的小数位数，0 ~ 18位，大多数代币选择18位小数') }}</span>
             </div>
           </el-form-item>
@@ -59,7 +59,8 @@ export default {
         tokenSymbol : '',
         decimals : '18',           //发行token的精度
         totalSupply : '',   //Token发行总量
-        tokenType: 'trc20'
+        tokenType: 'trc20',
+        tokenAccount: '', // 代币所有者
       },
       loading: false,
       disable: false,
