@@ -2,14 +2,9 @@
   <div class="verify-params card-view">
     <div class="im-card card-main">
       <div class="card-header">
-        <span class="card-title">确认发行参数</span>
+        <span class="card-title">{{ $t('确认发行参数') }}</span>
       </div>
       <div class="card-body">
-
-<!--        确认发行参数-->
-<!--        批准发行-->
-<!--        发币成功-->
-
         <ul class="param-list">
           <li class="param-item">
             <span class="name">{{ $t('代币类型') }}: </span>
@@ -46,6 +41,7 @@
 </template>
 
 <script>
+
 export default {
   name: "verify-params",
   data () {
@@ -75,30 +71,30 @@ export default {
       this.$emit('step', -1)
     },
     handleSubmit () {
-      window.tronWeb.transactionBuilder.createToken({
-        name : this.form.tokenName,//token名称,string格式
-        abbreviation : this.form.tokenSymbol,//token简称,  string格式
-        totalSupply : this.form.totalSupply,//Token发行总量
-        precision : this.form.decimals,//发行token的精度
+      const abi = ''
+      const bytecode = ''
 
-        description : "token-diy 一键发币",//Token 说明,  string格式
-        url : "www.baidu.com",//Token 发行方的官网，string格式
-        trxRatio : 1, // 定义token和trx的最小单位兑换比
-        tokenRatio : 1, // 定义token和trx的最小单位兑换比
-        saleStart : 1613176665206,//开启时间
-        saleEnd : 1681047110000,//结束时间
-        freeBandwidth : 0, // 是Token的总的免费带宽
-        freeBandwidthLimit : 0, // 是每个token拥护者能使用本token的免费带宽
-        frozenAmount : 0, //是token发行者可以在发行的时候指定冻结的token的数量
-        frozenDuration : 0,
-        // 是token发行者可以在发行的时候指定冻结的token的时间
-        permission_id : 1//可选用于多重签名
-      }, this.form.tokenAccount)
+      // https://cn.developers.tron.network/reference#createsmartcontract-1
+      const options = {
+        feeLimit: 1000000000, //能够燃烧的trx的阀值，最大1000000000sun（1TRX = 1,000,000SUN）
+        callValue: 0,         //本次调用往合约转账的trx（1TRX = 1,000,000SUN）
+        tokenId:"",           //本次调用往合约中转账10币的id，如果没有，不需要设置
+        tokenValue:0,         //本次调用往合约中转账10币的数量，如果不设置token_id，这项设置为0或者不设置
+        userFeePercentage: 10,//指定的使用该合约用户的资源占比，是[0, 100]之间的整数。如果是0，则表示用户不会消耗资源。如果开发者资源消耗完了，才会完全使用用户的资源。
+        originEnergyLimit: 10,//创建者设置的，在一次合约执行或创建过程中创建者自己消耗的最大的energy，是大于0的整数
+        abi,                  //Abi 字符串格式
+        bytecode,             //bytecode，需要是hexString格式
+        parameter: "",        //构造函数的参数列表，需要按照ABI encoder编码后转话为hexString格式。如果构造函数没有参数，该参数可以不用设置。
+        name:"Foo",           //合约名
+        permissionId:1        //可选参数，多重签名时使用
+      }
 
+      const issuerAddress = ''
+
+      window.tronWeb.transactionBuilder.createSmartContract(issuerAddress, options)
         .then(result=> {
           console.log(result)
         })
-
         .catch(error => {
           this.$notify({
             type: 'error',
