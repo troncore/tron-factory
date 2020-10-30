@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import * as wrapper from 'solc/wrapper'
+import contract from './contract'
 
 export default {
   name: "verify-params",
@@ -71,8 +73,8 @@ export default {
       this.$emit('step', -1)
     },
     handleSubmit () {
-      const abi = ''
-      const bytecode = ''
+      this.loading = true
+      const { abi, bytecode } = this.compile()
 
       // https://cn.developers.tron.network/reference#createsmartcontract-1
       const options = {
@@ -94,6 +96,7 @@ export default {
       window.tronWeb.transactionBuilder.createSmartContract(issuerAddress, options)
         .then(result=> {
           console.log(result)
+          this.loading = false
         })
         .catch(error => {
           this.$notify({
@@ -101,8 +104,53 @@ export default {
             title: this.$t('base.error'),
             message: error
           })
+          this.loading = false
         })
-    }
+    },
+
+    compile () {
+      let abi = ''
+      let bytecode = ''
+
+      try {
+        const solc = wrapper(window.Module);
+        const contractFile = 'tokenDIY.sol'
+        const contractName = 'TokenDIY'
+        const contractCode = contract(contractName)
+
+        let input = {
+          language: 'Solidity',
+          sources: {
+            [contractFile]: {
+              content: contractCode
+            }
+          },
+          settings: {
+            outputSelection: {
+              '*': {
+                '*': ['*']
+              }
+            }
+          }
+        }
+
+        let output = JSON.parse(solc.compile(JSON.stringify(input)))
+
+        abi = JSON.stringify(output.contracts[contractFile][contractName].abi)
+
+        bytecode = output.contracts[contractFile][contractName].evm.bytecode.object
+
+        console.log('\nabi: \n\n', abi)
+        console.log('\nbytecode: \n', bytecode)
+
+      } catch (e) {
+        abi = ''
+        bytecode = ''
+        console.log('Solidity compiler error: ', e)
+      }
+
+      return { abi, bytecode }
+    },
   }
 }
 </script>

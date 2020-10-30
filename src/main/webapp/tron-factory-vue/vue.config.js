@@ -11,6 +11,9 @@ function resolve (dir) {
 }
 const isProduction = process.env.NODE_ENV === 'production'
 
+
+console.log('process.version: ', process.version)
+
 module.exports = {
   publicPath: '/',
   outputDir: isProduction ? '../../resources/static' : 'dist',
@@ -37,7 +40,7 @@ module.exports = {
     host: '127.0.0.1',
     port: 8090,
     overlay: {
-      warnings: true,
+      warnings: false,
       errors: true,
       open: true,
     },
@@ -55,6 +58,9 @@ module.exports = {
       .plugin('define')
         .tap(args => {
           args[0]['process.env.GIT_BRANCH'] = JSON.stringify(branch)
+          // 默认情况下： process.version = undefined
+          // vue 引入solidity 编译器 solc 会校验npm包graceful-fs 中的 process.version
+          args[0]['process.version'] = JSON.stringify('')
           return args
         })
 
