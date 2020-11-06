@@ -86,14 +86,15 @@ export default {
   },
   created () {
     this.init()
+    window.addEventListener('message', this.checkTronLinkNodeNet)
   },
   destroyed () {
     clearInterval(this.timeId)
+    window.removeEventListener('message', this.checkTronLinkNodeNet)
   },
   methods: {
     init () {
       let tokenDIY = JSON.parse(localStorage.getItem('tokenDIY')) || {}
-
       // 已经有合约了
       if (tokenDIY.contract?.id) {
         this.deploySuccess = true
@@ -109,8 +110,20 @@ export default {
           tokenAccount: tokenDIY.tokenAccount || '--', // 代币所有者
         }
       }
-
     },
+
+    // 检测节点网络切换
+    checkTronLinkNodeNet (e) {
+      if (e.data.message?.action == "setNode") {
+        let fullnode = e.data.message.data.node.fullNode
+        console.log("setNode event", e.data.message)
+        if (fullnode.includes('api.trongrid')) this.chain = ''
+        else if (fullnode.includes('nile')) this.chain = 'nile.'
+      }
+
+      console.log('chain: ', this.chain)
+    },
+
     handleCancel () {
       this.$emit('step', -1)
     },
