@@ -2,40 +2,61 @@
   <div class="verify-params card-view">
     <div class="im-card card-main">
       <div class="card-header">
-        <span class="card-title">{{ $t('确认发行参数') }}</span>
+        <span class="card-title">{{ $t(deploySuccess ? '发行成功' : '确认发行参数') }}</span>
       </div>
       <div class="card-body">
-        <ul class="param-list">
-          <li class="param-item">
+        <ul class="param-list" v-if="!deploySuccess">
+          <li class="item">
             <span class="name">{{ $t('代币类型') }}: </span>
             <span class="value">{{ form.tokenType }}</span>
           </li>
-          <li class="param-item">
+          <li class="item">
             <span class="name">{{ $t('代币名称') }}: </span>
             <span class="value">{{ form.tokenName }}</span>
           </li>
-          <li class="param-item">
+          <li class="item">
             <span class="name">{{ $t('代币符号') }}: </span>
             <span class="value">{{ form.tokenSymbol }}</span>
           </li>
-          <li class="param-item">
+          <li class="item">
             <span class="name">{{ $t('小数位数') }}: </span>
             <span class="value">{{ form.decimals }}</span>
           </li>
-          <li class="param-item">
+          <li class="item">
             <span class="name">{{ $t('总发行量') }}: </span>
             <span class="value">{{ form.totalSupply }}</span>
           </li>
-          <li class="param-item">
+          <li class="item">
             <span class="name">{{ $t('代币所有者账号') }}: </span>
             <span class="value">{{ form.tokenAccount }}</span>
           </li>
         </ul>
+        <ul class="success-list" v-else>
+          <li class="item">
+            <span class="name">{{ $t('合约名称') }}: </span>
+            <span class="value">{{ contract.name }}</span>
+          </li>
+          <li class="item">
+            <span class="name">{{ $t('合约创建者') }}: </span>
+            <el-link class="value" type="danger" target="_blank" :underline="false" :href="`https://${chain}tronscan.org/#/address/${contract.account}`">{{ contract.account }}</el-link>
+          </li>
+          <li class="item">
+            <span class="name">{{ $t('合约地址') }}: </span>
+            <el-link class="value" type="danger" target="_blank" :underline="false" :href="`https://${chain}tronscan.org/#/contract/${contract.address}/code`">{{ contract.address }}</el-link>
+          </li>
+          <li class="item">
+            <span class="name">{{ $t('交易哈希值') }}: </span>
+            <el-link class="value" type="danger" target="_blank" :underline="false" :href="`https://${chain}tronscan.org/#/transaction/${contract.id}`">{{ contract.id }}</el-link>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="card-footer space-between">
+    <div class="card-footer space-between" v-if="!deploySuccess">
       <el-button class="im-button largest" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
       <el-button class="im-button largest" :loading="loading" :disabled="disable" type="primary" @click="handleSubmit">{{ $t('base.submit') }}</el-button>
+    </div>
+    <div class="card-footer center" v-else>
+      <el-button class="im-button largest" type="primary" @click="handleReDeploy"><i class="el-icon-coin"></i> {{ $t('继续发行') }}</el-button>
     </div>
   </div>
 </template>
@@ -49,63 +70,133 @@ export default {
   data () {
     return {
       form: {},
+      deploySuccess: false,
+      contract: {
+        name: '',
+        account: '',
+        address: '',
+        id: '',
+      },
+      chain: 'nile.',
+      signed: '',
       loading: false,
       disable: false,
+      timeId: null,
     }
   },
   created () {
     this.init()
   },
+  destroyed () {
+    clearInterval(this.timeId)
+  },
   methods: {
     init () {
       let tokenDIY = JSON.parse(localStorage.getItem('tokenDIY')) || {}
 
-      this.form = {
-        tokenType: tokenDIY.tokenType || '--',
-        tokenName : tokenDIY.tokenName || '--',     //token名称
-        tokenSymbol : tokenDIY.tokenSymbol || '--',
-        decimals : tokenDIY.decimals || '--',           //发行token的精度
-        totalSupply : tokenDIY.totalSupply || '--',   //Token发行总量
-        tokenAccount: tokenDIY.tokenAccount || '--', // 代币所有者
+      // 已经有合约了
+      if (tokenDIY.contract?.id) {
+        this.deploySuccess = true
+        this.contract = tokenDIY.contract
       }
+      else {
+        this.form = {
+          tokenType: tokenDIY.tokenType || '--',
+          tokenName : tokenDIY.tokenName || '--',     //token名称
+          tokenSymbol : tokenDIY.tokenSymbol || '--',
+          decimals : tokenDIY.decimals || '--',           //发行token的精度
+          totalSupply : tokenDIY.totalSupply || '--',   //Token发行总量
+          tokenAccount: tokenDIY.tokenAccount || '--', // 代币所有者
+        }
+      }
+
     },
     handleCancel () {
       this.$emit('step', -1)
     },
     handleSubmit () {
       this.loading = true
-      const { abi, bytecode } = this.compile()
 
-      // https://cn.developers.tron.network/reference#createsmartcontract-1
-      const options = {
-        feeLimit: 1000000000, //能够燃烧的trx的阀值，最大1000000000sun（1TRX = 1,000,000SUN）
-        callValue: 0,         //本次调用往合约转账的trx（1TRX = 1,000,000SUN）
-        tokenId:"",           //本次调用往合约中转账10币的id，如果没有，不需要设置
-        tokenValue:0,         //本次调用往合约中转账10币的数量，如果不设置token_id，这项设置为0或者不设置
-        userFeePercentage: 10,//指定的使用该合约用户的资源占比，是[0, 100]之间的整数。如果是0，则表示用户不会消耗资源。如果开发者资源消耗完了，才会完全使用用户的资源。
-        originEnergyLimit: 10,//创建者设置的，在一次合约执行或创建过程中创建者自己消耗的最大的energy，是大于0的整数
-        abi,                  //Abi 字符串格式
-        bytecode,             //bytecode，需要是hexString格式
-        parameter: "",        //构造函数的参数列表，需要按照ABI encoder编码后转话为hexString格式。如果构造函数没有参数，该参数可以不用设置。
-        name:"Foo",           //合约名
-        permissionId:1        //可选参数，多重签名时使用
-      }
+      // 在下一个宏任务中编译部署，避免编译过久，卡住主线程
+      setTimeout(async () => {
+        const { abi, bytecode } = this.compile()
+        const options = {
+          name: this.form.tokenName, //合约名
+          abi: abi,
+          bytecode: '0x' + bytecode,
+          feeLimit: 1000000000, //能够燃烧的trx的阀值
+          parameters: [this.form.totalSupply, this.form.tokenName, this.form.tokenSymbol], // 合约的构造函数的参数列表
+          userFeePercentage: 10,  //指定的使用该合约用户的资源占比
+          originEnergyLimit: 10000000,
+        }
 
-      const issuerAddress = ''
+        try{
+          // 创建合约
+          const unsigned = await window.tronWeb.transactionBuilder.createSmartContract(options, this.form.tokenAccount)
+          console.log('unsigned:',unsigned)
+          // 签名
+          const signed = await window.tronWeb.trx.sign(unsigned)
+          console.log('sign:',signed)
+          // 广播交易
+          const broadcastResult = await window.tronWeb.trx.sendRawTransaction(signed)
+          // console.log('broadcastResult: ', broadcastResult)
 
-      window.tronWeb.transactionBuilder.createSmartContract(issuerAddress, options)
-        .then(result=> {
-          console.log(result)
-          this.loading = false
-        })
-        .catch(error => {
+          // 查询交易
+          if (broadcastResult.result) {
+            this.$notify.success({
+              title: this.$t('base.successful'),
+              message: this.$t('广播交易成功!')
+            })
+
+            this.timeId = setInterval(() => this.checkDeploy(signed.txID), 3000)
+          } else {
+            throw new Error(window.tronWeb.toAscii(broadcastResult.message))
+          }
+
+        } catch (error) {
           this.$notify({
             type: 'error',
             title: this.$t('base.error'),
             message: error
           })
           this.loading = false
+        }
+
+      }, 0)
+
+    },
+
+    // 验证发行结果
+    async checkDeploy (txID) {
+      const transactionInfo = await window.tronWeb.trx.getTransactionInfo(txID)
+      console.log('transactionInfo: ', transactionInfo)
+
+      if (!transactionInfo) {
+        clearInterval(this.timeId)
+        throw new Error('Not getting transaction info!')
+      }
+      else if (transactionInfo.id && transactionInfo.receipt?.result === 'SUCCESS') {
+        clearInterval(this.timeId)
+        this.loading = false
+        this.$notify.success({
+          title: this.$t('base.successful'),
+          message: this.$t('Successful deployed contract!')
         })
+
+
+        this.deploySuccess = true
+        this.contract = {
+          name: this.form.tokenName,
+          account: this.form.tokenAccount,
+          address: window.tronWeb.address.fromHex(transactionInfo.contract_address),
+          id: transactionInfo.id,
+        }
+
+        // 存储
+        let tokenDIY = JSON.parse(localStorage.getItem('tokenDIY')) || {}
+        tokenDIY.contract = this.contract
+        localStorage.setItem('tokenDIY', JSON.stringify(tokenDIY))
+      }
     },
 
     compile () {
@@ -140,9 +231,6 @@ export default {
 
         bytecode = output.contracts[contractFile][contractName].evm.bytecode.object
 
-        console.log('\nabi: \n\n', abi)
-        console.log('\nbytecode: \n', bytecode)
-
       } catch (e) {
         abi = ''
         bytecode = ''
@@ -151,6 +239,11 @@ export default {
 
       return { abi, bytecode }
     },
+
+    handleReDeploy () {
+      localStorage.removeItem('tokenDIY')
+      this.$emit('step', -2)
+    }
   }
 }
 </script>
@@ -162,7 +255,7 @@ export default {
     padding: 0;
     list-style: none;
 
-    .param-item {
+    .item {
       display: flex;
       line-height: 40px;
       .name {
@@ -172,6 +265,27 @@ export default {
       }
       .value {
         flex: 1;
+        margin-left: 10px;
+        text-align: left;
+      }
+    }
+  }
+  .success-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .item {
+      display: flex;
+      line-height: 40px;
+
+      .name {
+        width: 120px;
+        text-align: right;
+        font-weight: bold;
+      }
+
+      .value {
         margin-left: 10px;
         text-align: left;
       }

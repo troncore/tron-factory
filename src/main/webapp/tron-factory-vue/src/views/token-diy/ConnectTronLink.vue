@@ -15,7 +15,6 @@
           <p>请登录TronLink并刷新页面后再继续后面的操作</p>
         </div>
         <div v-else class="help-tips">
-<!--          <p class="middle success-connect"><i class="success el-icon-circle-check"></i> 连接 TronLink 成功</p>-->
           <p class="account">代币所有者账号 <im-tooltip content="代币所有者账号将持有本次发行的全部代币" />：{{ tokenAccount }}</p>
         </div>
       </div>
