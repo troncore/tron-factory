@@ -11,11 +11,14 @@
           <el-button plain type="primary" round class="im-button largest" @click="handleExtend">Chrome 扩展</el-button>
         </div>
         <div v-else-if="!isConnectedTronLink" class="help-tips">
-          <p>TronLink插件已安装，但未登录！</p>
+          <p class="warning">TronLink插件已安装，但未登录！</p>
           <p>请登录TronLink并刷新页面后再继续后面的操作</p>
         </div>
         <div v-else class="help-tips">
-          <p class="account">代币所有者账号 <im-tooltip content="代币所有者账号将持有本次发行的全部代币" />：{{ tokenAccount }}</p>
+          <div class="result">
+            <div><b>代币所有者</b>：{{ tokenAccount }}</div>
+            <div class="help-info">* 代币所有者将持有本次发行的全部代币</div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,18 +41,29 @@ export default {
       isConnectedTronLink: false,
       tokenAccount: '', // 代币所有者账号
       timeID: null,
+      chain: '',
     }
   },
   created () {
     this.init()
+    window.addEventListener('message', this.checkTronLinkNodeNet)
   },
   destroyed () {
     clearInterval(this.timeID)
+    window.removeEventListener('message', this.checkTronLinkNodeNet)
   },
   methods: {
     init () {
       this.getTronWeb()
       this.timeID = setInterval(this.getTronWeb, 300)
+    },
+    // 检测节点网络切换
+    checkTronLinkNodeNet (e) {
+      if (e.data.message?.action == "setNode") {
+        let fullnode = e.data.message.data.node.fullNode
+        if (fullnode.includes('api.trongrid')) this.chain = '波场主网络 / 主链'
+        else if (fullnode.includes('nile')) this.chain = '尼罗河测试网 / 主链.'
+      }
     },
     getTronWeb(){
       // 浏览器成功安装tronlink扩展后，会自动添加全局变量 tronWeb
@@ -92,30 +106,31 @@ export default {
 <style lang="scss" scoped>
 .connect-tronlink {
   .card-body {
-    text-align: center;
-    min-height: 100px;
-
     .help-tips {
+      padding: 30px 0;
+      font-size: 18px;
+      text-align: center;
       p {
         margin-bottom: 10px;
-        font-size: 18px;
-        font-weight: bold;
-
-        &.account {
-          margin: 40px 0;
-          font-weight: normal;
-        }
       }
       .el-link {
         font-size: 18px;
         font-weight: normal;
         vertical-align: baseline;
       }
-      .success-connect {
-      }
-
       .success {
         color: $--color-success;
+      }
+      .warning {
+        color: #d0021b;
+      }
+
+      .result {
+        //text-align: left;
+        .help-info {
+          margin-top: 20px;
+          font-size: 14px;
+        }
       }
     }
   }

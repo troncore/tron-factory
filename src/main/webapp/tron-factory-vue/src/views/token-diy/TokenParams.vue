@@ -23,7 +23,7 @@
           </el-form-item>
 
           <el-form-item prop="decimals">
-            <span slot="label">{{ $t('小数位数') }}</span>
+            <span slot="label">{{ $t('代币精度') }}</span>
             <div class="item-inner">
               <el-input v-model.trim="form.decimals" size="large" maxlength="2" clearable />
               <span class="help-info">{{ $t('代币的小数位数，0 ~ 18位，大多数代币选择18位小数') }}</span>

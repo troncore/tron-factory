@@ -8,27 +8,27 @@
         <!-- 发行参数 -->
         <ul class="param-list" v-if="!deployLoading && !deploySuccess">
           <li class="item">
-            <span class="name">{{ $t('代币类型') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('代币类型') }}</span>: </span>
             <span class="value">{{ form.tokenType }}</span>
           </li>
           <li class="item">
-            <span class="name">{{ $t('代币名称') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('代币名称') }}</span>: </span>
             <span class="value">{{ form.tokenName }}</span>
           </li>
           <li class="item">
-            <span class="name">{{ $t('代币符号') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('代币符号') }}</span>: </span>
             <span class="value">{{ form.tokenSymbol }}</span>
           </li>
           <li class="item">
-            <span class="name">{{ $t('小数位数') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('小数位数') }}</span>: </span>
             <span class="value">{{ form.decimals }}</span>
           </li>
           <li class="item">
-            <span class="name">{{ $t('总发行量') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('总发行量') }}</span>: </span>
             <span class="value">{{ form.totalSupply }}</span>
           </li>
           <li class="item">
-            <span class="name">{{ $t('代币所有者账号') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('代币所有者') }}</span>: </span>
             <span class="value">{{ form.tokenAccount }}</span>
           </li>
         </ul>
@@ -39,19 +39,19 @@
         <!-- 发行结果 -->
         <ul class="success-list" v-else>
           <li class="item">
-            <span class="name">{{ $t('合约名称') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('合约名称') }}</span>: </span>
             <span class="value">{{ contract.name }}</span>
           </li>
           <li class="item">
-            <span class="name">{{ $t('合约创建者') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('合约创建者') }}</span>: </span>
             <el-link class="value" type="danger" target="_blank" :underline="false" :href="`https://${chain}tronscan.org/#/address/${contract.account}`">{{ contract.account }}</el-link>
           </li>
           <li class="item">
-            <span class="name">{{ $t('合约地址') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('合约地址') }}</span>: </span>
             <el-link class="value" type="danger" target="_blank" :underline="false" :href="`https://${chain}tronscan.org/#/contract/${contract.address}/code`">{{ contract.address }}</el-link>
           </li>
           <li class="item">
-            <span class="name">{{ $t('交易哈希值') }}: </span>
+            <span class="name"><span class="align-justify">{{ $t('交易哈希值') }}</span>: </span>
             <el-link class="value" type="danger" target="_blank" :underline="false" :href="`https://${chain}tronscan.org/#/transaction/${contract.id}`">{{ contract.id }}</el-link>
           </li>
         </ul>
@@ -299,8 +299,6 @@ export default {
       line-height: 40px;
 
       .name {
-        width: 120px;
-        text-align: right;
         font-weight: bold;
       }
 
@@ -309,6 +307,11 @@ export default {
         text-align: left;
       }
     }
+  }
+  .align-justify {
+    display: inline-block;
+    width: 80px;
+    text-align-last: justify;
   }
 }
 </style>
