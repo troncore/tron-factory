@@ -7,12 +7,8 @@
     <!-- 连接钱包 -->
     <connect-tronlink v-if="step === 2" @step="handleStep"/>
 
-    <!-- 确认参数 -->
+    <!-- 确认参数、发行结果 -->
     <verify-params  v-if="step === 3" @step="handleStep"/>
-
-    <!-- 发行结果 -->
-    <deploy-result  v-if="step === 4" @step="handleStep"/>
-
   </div>
 </template>
 
@@ -20,7 +16,6 @@
 import TokenParams from "./TokenParams"
 import VerifyParams from "./VerifyParams";
 import ConnectTronlink from "./ConnectTronLink";
-import DeployResult from "./DeployResult";
 
 export default {
   name: "token-diy",
@@ -28,7 +23,6 @@ export default {
     ConnectTronlink,
     VerifyParams,
     TokenParams,
-    DeployResult
   },
   data () {
     return {

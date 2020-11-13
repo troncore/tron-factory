@@ -2,10 +2,11 @@
   <div class="verify-params card-view">
     <div class="im-card card-main">
       <div class="card-header">
-        <span class="card-title">{{ $t(deploySuccess ? '发行成功' : '确认发行参数') }}</span>
+        <span class="card-title">{{ $t(!deployLoading && !deploySuccess ? '确认发行参数' : (!deploySuccess ? '正在发行' : '发行完成')) }}</span>
       </div>
       <div class="card-body">
-        <ul class="param-list" v-if="!deploySuccess">
+        <!-- 发行参数 -->
+        <ul class="param-list" v-if="!deployLoading && !deploySuccess">
           <li class="item">
             <span class="name">{{ $t('代币类型') }}: </span>
             <span class="value">{{ form.tokenType }}</span>
@@ -31,6 +32,11 @@
             <span class="value">{{ form.tokenAccount }}</span>
           </li>
         </ul>
+        <!-- 发行进度 -->
+        <div class="deploy-progress" v-else-if="!deploySuccess">
+          {{ progressText }}
+        </div>
+        <!-- 发行结果 -->
         <ul class="success-list" v-else>
           <li class="item">
             <span class="name">{{ $t('合约名称') }}: </span>
@@ -53,7 +59,7 @@
     </div>
     <div class="card-footer space-between" v-if="!deploySuccess">
       <el-button class="im-button largest" @click="handleCancel">{{ $t('base.prevStep') }}</el-button>
-      <el-button class="im-button largest" :loading="loading" :disabled="disable" type="primary" @click="handleSubmit">{{ $t('base.submit') }}</el-button>
+      <el-button class="im-button largest" :loading="deployLoading" :disabled="disable" type="primary" @click="handleSubmit">{{ $t('base.submit') }}</el-button>
     </div>
     <div class="card-footer center" v-else>
       <el-button class="im-button largest" type="primary" @click="handleReDeploy"><i class="el-icon-coin"></i> {{ $t('继续发行') }}</el-button>
@@ -79,7 +85,8 @@ export default {
       },
       chain: 'nile.',
       signed: '',
-      loading: false,
+      deployLoading: false,
+      progressText: '',
       disable: false,
       timeId: null,
     }
@@ -116,21 +123,19 @@ export default {
     checkTronLinkNodeNet (e) {
       if (e.data.message?.action == "setNode") {
         let fullnode = e.data.message.data.node.fullNode
-        console.log("setNode event", e.data.message)
         if (fullnode.includes('api.trongrid')) this.chain = ''
         else if (fullnode.includes('nile')) this.chain = 'nile.'
       }
-
-      console.log('chain: ', this.chain)
     },
 
     handleCancel () {
       this.$emit('step', -1)
     },
     handleSubmit () {
-      this.loading = true
+      this.deployLoading = true
+      this.progressText = this.$t('合约编译中...')
 
-      // 在下一个宏任务中编译部署，避免编译过久，卡住主线程
+      // 在下一个宏任务中编译部署，避免编译过久，卡住当前主线程任务
       setTimeout(async () => {
         const { abi, bytecode } = this.compile()
         const options = {
@@ -146,23 +151,19 @@ export default {
         try{
           // 创建合约
           const unsigned = await window.tronWeb.transactionBuilder.createSmartContract(options, this.form.tokenAccount)
-          console.log('unsigned:',unsigned)
+          this.progressText = this.$t('合约完成部署，请进行合约签名！')
           // 签名
           const signed = await window.tronWeb.trx.sign(unsigned)
-          console.log('sign:',signed)
+          this.progressText = this.$t('签名完成')
           // 广播交易
           const broadcastResult = await window.tronWeb.trx.sendRawTransaction(signed)
-          // console.log('broadcastResult: ', broadcastResult)
 
           // 查询交易
           if (broadcastResult.result) {
-            this.$notify.success({
-              title: this.$t('base.successful'),
-              message: this.$t('广播交易成功!')
-            })
-
+            this.progressText = this.$t('交易广播成功，正在查询交易，请稍等...')
             this.timeId = setInterval(() => this.checkDeploy(signed.txID), 3000)
           } else {
+            this.progressText = this.$t('交易广播失败')
             throw new Error(window.tronWeb.toAscii(broadcastResult.message))
           }
 
@@ -172,25 +173,23 @@ export default {
             title: this.$t('base.error'),
             message: error
           })
-          this.loading = false
+          this.deployLoading = false
         }
 
       }, 0)
 
     },
 
-    // 验证发行结果
+    // 查询发行结果
     async checkDeploy (txID) {
       const transactionInfo = await window.tronWeb.trx.getTransactionInfo(txID)
-      console.log('transactionInfo: ', transactionInfo)
-
       if (!transactionInfo) {
         clearInterval(this.timeId)
         throw new Error('Not getting transaction info!')
       }
       else if (transactionInfo.id && transactionInfo.receipt?.result === 'SUCCESS') {
         clearInterval(this.timeId)
-        this.loading = false
+        this.deployLoading = false
         this.$notify.success({
           title: this.$t('base.successful'),
           message: this.$t('Successful deployed contract!')
@@ -212,6 +211,7 @@ export default {
       }
     },
 
+    // 合约编译
     compile () {
       let abi = ''
       let bytecode = ''
@@ -248,6 +248,7 @@ export default {
         abi = ''
         bytecode = ''
         console.log('Solidity compiler error: ', e)
+        this.progressText = this.$t('合约编译错误：', e)
       }
 
       return { abi, bytecode }
@@ -282,6 +283,11 @@ export default {
         text-align: left;
       }
     }
+  }
+  .deploy-progress {
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
   }
   .success-list {
     margin: 0;
